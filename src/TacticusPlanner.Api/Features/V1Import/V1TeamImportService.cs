@@ -298,7 +298,10 @@ public sealed class V1TeamImportService(PlannerDbContext db, IGameCatalogProvide
         if (importKey.Length > TeamValidation.MaxImportKeyLength)
             importKey = importKey[..TeamValidation.MaxImportKeyLength];
 
-        var draft = new TeamDraft(name, modes, characters, flexStart, mows, campaign, incursions, notes);
+        // V1 has no MoW roles: the first MoW is core and any later ones flex (design D12), so a V1 war team with
+        // several MoWs imports valid instead of flagged. V1 has no rarity cap.
+        int? mowFlexStart = mows.Count > 1 ? 1 : null;
+        var draft = new TeamDraft(name, modes, characters, flexStart, mows, campaign, incursions, notes, mowFlexStart);
         return new(source.Name, draft, importKey, issues, null);
     }
 

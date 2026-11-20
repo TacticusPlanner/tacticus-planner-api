@@ -185,11 +185,15 @@ public sealed record StagingTransferTeam
 
     public List<string> MowIds { get; init; } = [];
 
+    public int? MowFlexStartIndex { get; init; }
+
     public string? CampaignGroupId { get; init; }
 
     public List<string> IncursionMowIds { get; init; } = [];
 
     public string? Notes { get; init; }
+
+    public TeamRarityCap? RarityCap { get; init; }
 
     /// <summary>Set on a team imported from V1, so a V1 import re-run on staging still skips it.</summary>
     public string? ImportKey { get; init; }

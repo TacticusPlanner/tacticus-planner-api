@@ -21,8 +21,10 @@ public sealed class TeamRulesTests
         string[]? mows = null,
         string? campaign = null,
         string[]? incursions = null,
-        string name = "Test team") =>
-        new(name, modes, characters ?? ["ultraCalgar"], flex, mows ?? [], campaign, incursions ?? [], null);
+        string name = "Test team",
+        int? mowFlex = null,
+        TeamRarityCap? cap = null) =>
+        new(name, modes, characters ?? ["ultraCalgar", "ultraTitus", "ultraApothecary"], flex, mows ?? [], campaign, incursions ?? [], null, mowFlex, cap);
 
     private static IReadOnlyList<TeamRuleCode> Evaluate(TeamDraft draft) => TeamRules.Evaluate(draft, Facts);
 
@@ -41,13 +43,18 @@ public sealed class TeamRulesTests
     public void AModeIsRequired() =>
         Assert.Equal([TeamRuleCode.NoMode], Evaluate(Draft([])));
 
-    [Fact]
-    public void AUnitIsRequired() =>
-        Assert.Equal([TeamRuleCode.NoUnits], Evaluate(Draft([TeamMode.Horde], characters: [])));
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(2)]
+    public void ThreeCharactersAreRequired(int count) =>
+        Assert.Equal([TeamRuleCode.TooFewCharacters], Evaluate(Draft([TeamMode.Horde], characters: Ultras[..count])));
 
     [Fact]
-    public void AMowAloneIsAUnit() =>
-        Assert.Empty(Evaluate(Draft([TeamMode.Horde], characters: [], mows: ["ultraDreadnought"])));
+    public void MowsDoNotCountTowardThree() =>
+        Assert.Equal(
+            [TeamRuleCode.TooFewCharacters],
+            Evaluate(Draft([TeamMode.Horde], characters: Ultras[..2], mows: ["ultraDreadnought", "tauBroadside"])));
 
     [Theory]
     [InlineData("notAUnit", null)]
@@ -55,7 +62,7 @@ public sealed class TeamRulesTests
     public void UnitsMustExist(string character, string? mow) =>
         Assert.Equal(
             [TeamRuleCode.UnknownUnit],
-            Evaluate(Draft([TeamMode.Horde], characters: [character], mows: mow is null ? [] : [mow])));
+            Evaluate(Draft([TeamMode.Horde], characters: [character, "ultraTitus", "ultraApothecary"], mows: mow is null ? [] : [mow])));
 
     [Fact]
     public void SixCoreCharactersInGuildWar() =>
@@ -67,10 +74,27 @@ public sealed class TeamRulesTests
             [TeamMode.WarDefense], [.. Ultras, "bloodDante"], flex: 5)));
 
     [Fact]
-    public void TournamentArenaAllowsOneMow() =>
+    public void TwoCoreMowsInTournamentArena() =>
         Assert.Equal(
-            [TeamRuleCode.TooManyMows],
+            [TeamRuleCode.TooManyCoreMows],
             Evaluate(Draft([TeamMode.TournamentArena], mows: ["ultraDreadnought", "tauBroadside"])));
+
+    [Fact]
+    public void FlexMowsDoNotCountTowardOne() =>
+        Assert.Empty(Evaluate(Draft(
+            [TeamMode.WarOffense], mows: ["ultraDreadnought", "tauBroadside", "orksRukkatrukk"], mowFlex: 1)));
+
+    [Fact]
+    public void EveryMowFlex() =>
+        Assert.Empty(Evaluate(Draft([TeamMode.WarDefense], mows: ["ultraDreadnought", "tauBroadside"], mowFlex: 0)));
+
+    [Theory]
+    [InlineData(TeamRarityCap.Common)]
+    [InlineData(TeamRarityCap.Mythic)]
+    public void TheRarityCapChangesNoRule(TeamRarityCap cap) =>
+        Assert.Equal(
+            Evaluate(Draft([TeamMode.WarOffense], Ultras)),
+            Evaluate(Draft([TeamMode.WarOffense], Ultras, cap: cap)));
 
     [Fact]
     public void GuildRaidHasNoSizeLimit() =>
@@ -126,7 +150,7 @@ public sealed class TeamRulesTests
     public void CampaignCoreCharacters() =>
         Assert.Equal(
             [TeamRuleCode.CoreCharacterMissing],
-            Evaluate(Draft([TeamMode.Campaign], ["ultraTigurius", "ultraEliminatorSgt"], campaign: "campaign1")));
+            Evaluate(Draft([TeamMode.Campaign], ["ultraTigurius", "ultraEliminatorSgt", "adeptCanoness"], campaign: "campaign1")));
 
     [Fact]
     public void CoreCharacterListedAsFlex() =>
@@ -156,23 +180,23 @@ public sealed class TeamRulesTests
     public void IncursionFactionIsOutsideWhatTheMowAllows() =>
         Assert.Equal(
             [TeamRuleCode.FactionNotAllowed],
-            Evaluate(Draft([TeamMode.Incursion], ["ultraCalgar", "adeptCanoness"], incursions: ["orksRukkatrukk"])));
+            Evaluate(Draft([TeamMode.Incursion], ["ultraCalgar", "ultraTitus", "adeptCanoness"], incursions: ["orksRukkatrukk"])));
 
     [Fact]
     public void ATeamForTwoIncursions() =>
         Assert.Equal(
             [TeamRuleCode.FactionNotAllowed],
-            Evaluate(Draft([TeamMode.Incursion], ["adeptCanoness"], incursions: ["tauBroadside", "orksRukkatrukk"])));
+            Evaluate(Draft([TeamMode.Incursion], ["ultraCalgar", "ultraTitus", "adeptCanoness"], incursions: ["tauBroadside", "orksRukkatrukk"])));
 
     [Fact]
     public void ATeamForTwoCompatibleIncursions() =>
-        Assert.Empty(Evaluate(Draft([TeamMode.Incursion], ["ultraCalgar"], incursions: ["tauBroadside", "orksRukkatrukk"])));
+        Assert.Empty(Evaluate(Draft([TeamMode.Incursion], Ultras[..3], incursions: ["tauBroadside", "orksRukkatrukk"])));
 
     [Fact]
     public void IncursionsWithNoFactionInCommon() =>
         Assert.Contains(
             TeamRuleCode.NoSharedIncursionFaction,
-            Evaluate(Draft([TeamMode.Incursion], ["ultraCalgar"], incursions: ["ultraDreadnought", "tauBroadside"])));
+            Evaluate(Draft([TeamMode.Incursion], Ultras[..3], incursions: ["ultraDreadnought", "tauBroadside"])));
 
     [Fact]
     public void AnIncursionTeamNeedsAnIncursion() =>
@@ -186,12 +210,12 @@ public sealed class TeamRulesTests
     public void IncursionsMustBeServed() =>
         Assert.Equal(
             [TeamRuleCode.UnknownIncursion],
-            Evaluate(Draft([TeamMode.Incursion], ["ultraCalgar"], incursions: ["orksRukkatrukk", "notAnIncursion"])));
+            Evaluate(Draft([TeamMode.Incursion], Ultras[..3], incursions: ["orksRukkatrukk", "notAnIncursion"])));
 
     [Fact]
     public void CodesAreReportedInRulesTableOrder() =>
         Assert.Equal(
-            [TeamRuleCode.NameLength, TeamRuleCode.NoMode, TeamRuleCode.NoUnits],
+            [TeamRuleCode.NameLength, TeamRuleCode.NoMode, TeamRuleCode.TooFewCharacters],
             Evaluate(Draft([], characters: [], name: "x")));
 
     [Fact]

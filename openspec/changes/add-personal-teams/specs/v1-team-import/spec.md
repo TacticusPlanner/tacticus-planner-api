@@ -27,7 +27,7 @@ The `POST /api/v1/account/v1-import` selection SHALL include `teams`, default `f
 
 ### Requirement: Each V1 team becomes a V2 team
 
-Units SHALL be resolved onto catalog ids by the same id, alias and name rules as the Legendary Event import. V1 `chars` SHALL resolve to characters and `mows` and `incursionMows` to MoWs. An unresolved unit SHALL be dropped and reported. A unit repeated within `chars`, `mows` or `incursionMows` SHALL be kept once and each repeat reported. `flexStartIndex` SHALL be the number of kept characters before V1 `flexIndex`, or null when no kept character follows it or V1 `flexIndex` is out of range. When no kept character comes before V1 `flexIndex`, including V1 `flexIndex` 0 (an all-flex V1 team), every character SHALL become core and the dropped flex section SHALL be reported, because a V2 team has at least one core character. V1 flags SHALL map to modes:
+Units SHALL be resolved onto catalog ids by the same id, alias and name rules as the Legendary Event import. V1 `chars` SHALL resolve to characters and `mows` and `incursionMows` to MoWs. An unresolved unit SHALL be dropped and reported. A unit repeated within `chars`, `mows` or `incursionMows` SHALL be kept once and each repeat reported. `flexStartIndex` SHALL be the number of kept characters before V1 `flexIndex`, or null when no kept character follows it or V1 `flexIndex` is out of range. When no kept character comes before V1 `flexIndex`, including V1 `flexIndex` 0 (an all-flex V1 team), every character SHALL become core and the dropped flex section SHALL be reported, because a V2 team has at least one core character. V1 has no MoW roles, so the first kept MoW SHALL be core and any later ones flex: `mowFlexStartIndex` SHALL be 1 when more than one MoW is kept, and null otherwise. V1 has no rarity cap, so `rarityCap` SHALL be null. V1 flags SHALL map to modes:
 
 | V1 | V2 |
 |---|---|
@@ -93,7 +93,7 @@ A resolved V1 team SHALL be imported even when it breaks a team rule, and SHALL 
 
 - **GIVEN** a V1 `warOffense` team with 2 MoWs
 - **WHEN** it is imported
-- **THEN** it is imported with both MoWs and its outcome lists `tooManyMows`
+- **THEN** it is imported with both MoWs, the first core and the second flex (`mowFlexStartIndex` 1), and its outcome lists no rule issue
 
 #### Scenario: V1 Incursion team outside the allowed factions
 

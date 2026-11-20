@@ -15,13 +15,15 @@ A team SHALL belong to exactly one profile and SHALL be readable and writable on
 - `modes` (string array): any of `warOffense`, `warDefense`, `guildRaid`, `tournamentArena`, `horde`, `campaign`, `incursion`
 - `characterIds` (string array): catalog character ids, in lineup order
 - `flexStartIndex` (integer or null): the index of the first flex character in `characterIds`; null when the team has no flex characters
-- `mowIds` (string array): catalog MoW ids
+- `mowIds` (string array): catalog MoW ids, core MoWs first
+- `mowFlexStartIndex` (integer or null): the index of the first flex MoW in `mowIds`; null when every MoW is core, and 0 when every MoW is flex
 - `campaignGroupId` (string or null): a catalog campaign group id
 - `incursionMowIds` (string array): the catalog MoW ids of the Incursions the team is built for
 - `notes` (string or null)
+- `rarityCap` (string or null): the rarity the team is prepared for, one of `Common`, `Uncommon`, `Rare`, `Epic`, `Legendary` and `Mythic`; null when it has none
 - `issues` (rule code array): the rule codes the team currently breaks
 
-The server SHALL send ids and codes only, never display names or icons. The rule codes SHALL be one closed enum in the API contract, used by `issues` and by the codes of a refused save, so a client generated from the contract knows every code the server can send. The V1 import key (see `v1-team-import`) SHALL NOT be sent.
+The server SHALL send ids and codes only, never display names or icons. The rule codes SHALL be one closed enum in the API contract, used by `issues` and by the codes of a refused save, so a client generated from the contract knows every code the server can send. The V1 import key (see `v1-team-import`) SHALL NOT be sent. The rarity cap SHALL be stored and returned as sent, and SHALL NOT affect any team rule: it only tells clients what to preview the lineup at.
 
 #### Scenario: Rule codes are in the contract
 
@@ -33,6 +35,12 @@ The server SHALL send ids and codes only, never display names or icons. The rule
 - **GIVEN** a team owned by another profile
 - **WHEN** the caller updates or deletes it
 - **THEN** the API responds `404`
+
+#### Scenario: A saved rarity cap is returned
+
+- **GIVEN** a team saved with `rarityCap` `Epic`
+- **WHEN** teams are read
+- **THEN** that team has `rarityCap` `Epic`, and its `issues` are the same as without a cap
 
 #### Scenario: Rename keeps the id
 
@@ -83,17 +91,17 @@ A team name SHALL be trimmed and SHALL be 3 to 40 characters. It SHALL be unique
 
 ### Requirement: Every save satisfies the team rules
 
-Every create and update SHALL satisfy the rules below and SHALL otherwise be refused with `400` naming each broken rule by its code. The refusal SHALL carry `issueCode` `teamRulesBroken` and the codes, in the table's order, in a `rules` array typed by the contract's `TeamRuleCode` enum; its `errors` SHALL hold only a general message under `rules`, so clients read the codes from `rules`. Locked and unowned units SHALL be allowed: the rules do not read the player's roster. A unit SHALL appear at most once in `characterIds`, and `flexStartIndex`, when present, SHALL be between 1 and the last index of `characterIds`.
+Every create and update SHALL satisfy the rules below and SHALL otherwise be refused with `400` naming each broken rule by its code. The refusal SHALL carry `issueCode` `teamRulesBroken` and the codes, in the table's order, in a `rules` array typed by the contract's `TeamRuleCode` enum; its `errors` SHALL hold only a general message under `rules`, so clients read the codes from `rules`. Locked and unowned units SHALL be allowed: the rules do not read the player's roster. A unit SHALL appear at most once in `characterIds`, and `flexStartIndex`, when present, SHALL be between 1 and the last index of `characterIds`, because a team keeps at least one core character. A MoW SHALL appear at most once in `mowIds`, and `mowFlexStartIndex`, when present, SHALL be between 0 and the last index of `mowIds`: every MoW may be flex. A `rarityCap` outside the six rarities SHALL be refused as invalid input.
 
 | Code | The rule |
 |---|---|
 | `nameLength` | The name is 3 to 40 characters |
 | `noMode` | At least one mode is selected |
-| `noUnits` | The team has at least one character or MoW |
+| `tooFewCharacters` | The team has at least 3 characters, in every mode; MoWs do not count |
 | `unknownUnit` | Every character and MoW id exists in the catalog |
 | `modeNotCombinable` | `campaign` and `incursion` are each the team's only mode |
 | `tooManyCoreCharacters` | A team with `warOffense`, `warDefense` or `tournamentArena` has at most 5 core characters |
-| `tooManyMows` | A team with `warOffense`, `warDefense` or `tournamentArena` has at most 1 MoW |
+| `tooManyCoreMows` | A team with `warOffense`, `warDefense` or `tournamentArena` has at most 1 core MoW; flex MoWs do not count |
 | `mowsNotAllowed` | A `campaign` or `incursion` team has no `mowIds` |
 | `campaignRequired` | A `campaign` team has a `campaignGroupId`, and any other team has none |
 | `unknownCampaign` | The `campaignGroupId` is an existing Standard, Mirror or event campaign group, not an Elite one |
@@ -103,7 +111,7 @@ Every create and update SHALL satisfy the rules below and SHALL otherwise be ref
 | `unknownIncursion` | Every `incursionMowIds` entry has a served Incursion |
 | `noSharedIncursionFaction` | The team's Incursions have at least one allowed faction in common |
 
-Assumptions: a mode's limits are V1's, plus this change's stricter `noUnits`, `tooManyMows`, `campaignRequired`, `coreCharacterMissing` and `incursionRequired`. A campaign's allowed factions and core characters are the served group's, and an Incursion's are the `allowedFactions` of its `incursions` record. The record's `minUnitsOfGrandAllianceNeeded` SHALL NOT be enforced, because V1 does not read it and its in-game meaning has not been verified.
+Assumptions: a mode's limits are V1's, plus this change's stricter `tooFewCharacters`, `tooManyCoreMows`, `campaignRequired`, `coreCharacterMissing` and `incursionRequired`. A campaign's allowed factions and core characters are the served group's, and an Incursion's are the `allowedFactions` of its `incursions` record. The record's `minUnitsOfGrandAllianceNeeded` SHALL NOT be enforced, because V1 does not read it and its in-game meaning has not been verified.
 
 #### Scenario: Six core characters in Guild War
 
@@ -114,6 +122,24 @@ Assumptions: a mode's limits are V1's, plus this change's stricter `noUnits`, `t
 #### Scenario: Flex characters do not count toward five
 
 - **GIVEN** a `warDefense` team with 7 characters and `flexStartIndex` 5
+- **WHEN** it is saved
+- **THEN** it is saved
+
+#### Scenario: Flex MoWs do not count toward one
+
+- **GIVEN** a `warOffense` team with 3 MoWs and `mowFlexStartIndex` 1
+- **WHEN** it is saved
+- **THEN** it is saved
+
+#### Scenario: Two core MoWs in Tournament Arena
+
+- **GIVEN** a `tournamentArena` team with 2 MoWs and a null `mowFlexStartIndex`
+- **WHEN** it is saved
+- **THEN** the API responds `400` naming `tooManyCoreMows`
+
+#### Scenario: Every MoW flex
+
+- **GIVEN** a `warDefense` team with 2 MoWs and `mowFlexStartIndex` 0
 - **WHEN** it is saved
 - **THEN** it is saved
 

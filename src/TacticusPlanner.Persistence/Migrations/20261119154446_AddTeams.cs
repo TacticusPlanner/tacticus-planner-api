@@ -27,9 +27,11 @@ namespace TacticusPlanner.Persistence.Migrations
                     character_ids = table.Column<List<string>>(type: "text[]", nullable: false),
                     flex_start_index = table.Column<int>(type: "integer", nullable: true),
                     mow_ids = table.Column<List<string>>(type: "text[]", nullable: false),
+                    mow_flex_start_index = table.Column<int>(type: "integer", nullable: true),
                     campaign_group_id = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
                     incursion_mow_ids = table.Column<List<string>>(type: "text[]", nullable: false),
                     notes = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
+                    rarity_cap = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },

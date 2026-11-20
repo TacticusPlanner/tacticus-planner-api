@@ -9038,9 +9038,11 @@
           "characterIds",
           "flexStartIndex",
           "mowIds",
+          "mowFlexStartIndex",
           "campaignGroupId",
           "incursionMowIds",
-          "notes"
+          "notes",
+          "rarityCap"
         ],
         "type": "object",
         "properties": {
@@ -9067,6 +9069,14 @@
           "mowIds": {
             "$ref": "#/components/schemas/IReadOnlyListOfString"
           },
+          "mowFlexStartIndex": {
+            "const": null,
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
           "campaignGroupId": {
             "const": null,
             "maxLength": 64,
@@ -9086,6 +9096,18 @@
             "type": [
               "null",
               "string"
+            ]
+          },
+          "rarityCap": {
+            "const": null,
+            "oneOf": [
+              {
+                "const": null,
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TeamRarityCap"
+              }
             ]
           }
         }
@@ -9823,6 +9845,157 @@
           }
         }
       },
+      "GameCatalogCharacterAbilityCostView": {
+        "required": [
+          "level",
+          "gold",
+          "badges"
+        ],
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "badges": {
+            "$ref": "#/components/schemas/GameCatalogAmountByRarity"
+          }
+        }
+      },
+      "GameCatalogCharacterRankUp": {
+        "required": [
+          "rank",
+          "upgradeIds"
+        ],
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "string"
+          },
+          "upgradeIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          }
+        }
+      },
+      "GameCatalogCharacterView": {
+        "required": [
+          "id",
+          "name",
+          "faction",
+          "alliance",
+          "health",
+          "damage",
+          "armour",
+          "initialRarity",
+          "meleeDamage",
+          "meleeHits",
+          "rangedDamage",
+          "rangedHits",
+          "rangeDistance",
+          "movement",
+          "traits",
+          "activeAbilityDamage",
+          "activeAbilityNames",
+          "passiveAbilityDamage",
+          "passiveAbilityNames",
+          "equipmentSlots",
+          "rankUpUpgrades",
+          "shardLocations",
+          "eligibleEquipment"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "faction": {
+            "type": "string"
+          },
+          "alliance": {
+            "type": "string"
+          },
+          "health": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "damage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "armour": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "initialRarity": {
+            "type": "string"
+          },
+          "meleeDamage": {
+            "type": "string"
+          },
+          "meleeHits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rangedDamage": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "rangedHits": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "rangeDistance": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "movement": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "traits": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "activeAbilityDamage": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "activeAbilityNames": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "passiveAbilityDamage": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "passiveAbilityNames": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "equipmentSlots": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "rankUpUpgrades": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogCharacterRankUp"
+          },
+          "shardLocations": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogFarmLocation"
+          },
+          "eligibleEquipment": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEquipmentSlot"
+          }
+        }
+      },
       "GameCatalogDamageProfileModifier": {
         "required": [
           "damageType",
@@ -10107,6 +10280,90 @@
             ],
             "items": {
               "$ref": "#/components/schemas/GameCatalogCampaignDefinitionView"
+            }
+          }
+        }
+      },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogCharacterAbilityCostView": {
+        "required": [
+          "version",
+          "schemaHash",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaHash": {
+            "type": "string"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "const": null,
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/GameCatalogCharacterAbilityCostView"
+            }
+          }
+        }
+      },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogCharacterView": {
+        "required": [
+          "version",
+          "schemaHash",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaHash": {
+            "type": "string"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "const": null,
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/GameCatalogCharacterView"
             }
           }
         }
@@ -10443,90 +10700,6 @@
             ],
             "items": {
               "$ref": "#/components/schemas/GameCatalogHre"
-            }
-          }
-        }
-      },
-      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogCharacterAbilityCostView": {
-        "required": [
-          "version",
-          "schemaHash",
-          "gameVersion",
-          "sourceHash",
-          "datasetKey",
-          "datasetHash",
-          "data"
-        ],
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string"
-          },
-          "schemaHash": {
-            "type": "string"
-          },
-          "gameVersion": {
-            "type": "string"
-          },
-          "sourceHash": {
-            "type": "string"
-          },
-          "datasetKey": {
-            "type": "string"
-          },
-          "datasetHash": {
-            "type": "string"
-          },
-          "data": {
-            "const": null,
-            "type": [
-              "null",
-              "array"
-            ],
-            "items": {
-              "$ref": "#/components/schemas/GameCatalogCharacterAbilityCostView"
-            }
-          }
-        }
-      },
-      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogCharacterView": {
-        "required": [
-          "version",
-          "schemaHash",
-          "gameVersion",
-          "sourceHash",
-          "datasetKey",
-          "datasetHash",
-          "data"
-        ],
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string"
-          },
-          "schemaHash": {
-            "type": "string"
-          },
-          "gameVersion": {
-            "type": "string"
-          },
-          "sourceHash": {
-            "type": "string"
-          },
-          "datasetKey": {
-            "type": "string"
-          },
-          "datasetHash": {
-            "type": "string"
-          },
-          "data": {
-            "const": null,
-            "type": [
-              "null",
-              "array"
-            ],
-            "items": {
-              "$ref": "#/components/schemas/GameCatalogCharacterView"
             }
           }
         }
@@ -12184,23 +12357,6 @@
           }
         }
       },
-      "GameCatalogHreDailyReward": {
-        "required": [
-          "position",
-          "currency"
-        ],
-        "type": "object",
-        "properties": {
-          "position": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "currency": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "GameCatalogHreChest": {
         "required": [
           "chestId",
@@ -12222,6 +12378,23 @@
             "format": "int32"
           },
           "maxShards": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogHreDailyReward": {
+        "required": [
+          "position",
+          "currency"
+        ],
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currency": {
             "type": "integer",
             "format": "int32"
           }
@@ -12401,157 +12574,6 @@
           }
         }
       },
-      "GameCatalogCharacterAbilityCostView": {
-        "required": [
-          "level",
-          "gold",
-          "badges"
-        ],
-        "type": "object",
-        "properties": {
-          "level": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "gold": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "badges": {
-            "$ref": "#/components/schemas/GameCatalogAmountByRarity"
-          }
-        }
-      },
-      "GameCatalogCharacterRankUp": {
-        "required": [
-          "rank",
-          "upgradeIds"
-        ],
-        "type": "object",
-        "properties": {
-          "rank": {
-            "type": "string"
-          },
-          "upgradeIds": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          }
-        }
-      },
-      "GameCatalogCharacterView": {
-        "required": [
-          "id",
-          "name",
-          "faction",
-          "alliance",
-          "health",
-          "damage",
-          "armour",
-          "initialRarity",
-          "meleeDamage",
-          "meleeHits",
-          "rangedDamage",
-          "rangedHits",
-          "rangeDistance",
-          "movement",
-          "traits",
-          "activeAbilityDamage",
-          "activeAbilityNames",
-          "passiveAbilityDamage",
-          "passiveAbilityNames",
-          "equipmentSlots",
-          "rankUpUpgrades",
-          "shardLocations",
-          "eligibleEquipment"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "faction": {
-            "type": "string"
-          },
-          "alliance": {
-            "type": "string"
-          },
-          "health": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "damage": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "armour": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "initialRarity": {
-            "type": "string"
-          },
-          "meleeDamage": {
-            "type": "string"
-          },
-          "meleeHits": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "rangedDamage": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "rangedHits": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "format": "int32"
-          },
-          "rangeDistance": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "format": "int32"
-          },
-          "movement": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "traits": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          },
-          "activeAbilityDamage": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          },
-          "activeAbilityNames": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          },
-          "passiveAbilityDamage": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          },
-          "passiveAbilityNames": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          },
-          "equipmentSlots": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          },
-          "rankUpUpgrades": {
-            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogCharacterRankUp"
-          },
-          "shardLocations": {
-            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogFarmLocation"
-          },
-          "eligibleEquipment": {
-            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEquipmentSlot"
-          }
-        }
-      },
       "GameCatalogIncursion": {
         "required": [
           "mowId",
@@ -12644,6 +12666,25 @@
           }
         }
       },
+      "GameCatalogIncursionChest": {
+        "required": [
+          "id",
+          "type",
+          "rewards"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          }
+        }
+      },
       "GameCatalogIncursionEnemy": {
         "required": [
           "npcId",
@@ -12692,25 +12733,6 @@
           },
           "stacks": {
             "type": "boolean"
-          }
-        }
-      },
-      "GameCatalogIncursionChest": {
-        "required": [
-          "id",
-          "type",
-          "rewards"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "rewards": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
           }
         }
       },
@@ -12874,6 +12896,23 @@
           }
         }
       },
+      "GameCatalogLreChestsMilestone": {
+        "required": [
+          "chestLevel",
+          "engramCost"
+        ],
+        "type": "object",
+        "properties": {
+          "chestLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "engramCost": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "GameCatalogLreEnemy": {
         "required": [
           "id",
@@ -12911,23 +12950,6 @@
           },
           "exclude": {
             "type": "boolean"
-          }
-        }
-      },
-      "GameCatalogLreChestsMilestone": {
-        "required": [
-          "chestLevel",
-          "engramCost"
-        ],
-        "type": "object",
-        "properties": {
-          "chestLevel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "engramCost": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },
@@ -16131,6 +16153,12 @@
           "$ref": "#/components/schemas/GameCatalogCampaignPotentialRewardView"
         }
       },
+      "IReadOnlyListOfGameCatalogCharacterRankUp": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogCharacterRankUp"
+        }
+      },
       "IReadOnlyListOfGameCatalogDamageProfileModifier": {
         "type": "array",
         "items": {
@@ -16245,16 +16273,16 @@
           "$ref": "#/components/schemas/GameCatalogHordeModeTier"
         }
       },
-      "IReadOnlyListOfGameCatalogHreDailyReward": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/GameCatalogHreDailyReward"
-        }
-      },
       "IReadOnlyListOfGameCatalogHreChest": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogHreChest"
+        }
+      },
+      "IReadOnlyListOfGameCatalogHreDailyReward": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogHreDailyReward"
         }
       },
       "IReadOnlyListOfGameCatalogHreMilestone": {
@@ -16287,12 +16315,6 @@
           "$ref": "#/components/schemas/GameCatalogHrePhaseChest"
         }
       },
-      "IReadOnlyListOfGameCatalogCharacterRankUp": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/GameCatalogCharacterRankUp"
-        }
-      },
       "IReadOnlyListOfGameCatalogIncursionBattle": {
         "type": "array",
         "items": {
@@ -16317,6 +16339,12 @@
           "$ref": "#/components/schemas/GameCatalogIncursionTier"
         }
       },
+      "IReadOnlyListOfGameCatalogLreChestsMilestone": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogLreChestsMilestone"
+        }
+      },
       "IReadOnlyListOfGameCatalogLreEnemy": {
         "type": "array",
         "items": {
@@ -16327,12 +16355,6 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogLreFilter"
-        }
-      },
-      "IReadOnlyListOfGameCatalogLreChestsMilestone": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/GameCatalogLreChestsMilestone"
         }
       },
       "IReadOnlyListOfGameCatalogLreMission": {
@@ -16668,16 +16690,16 @@
           "$ref": "#/components/schemas/RosterAbilityResponse"
         }
       },
-      "IReadOnlyListOfRosterEquipmentSlotResponse": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/RosterEquipmentSlotResponse"
-        }
-      },
       "IReadOnlyListOfRosterCharacterResponse": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/RosterCharacterResponse"
+        }
+      },
+      "IReadOnlyListOfRosterEquipmentSlotResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/RosterEquipmentSlotResponse"
         }
       },
       "IReadOnlyListOfRosterMowResponse": {
@@ -17917,26 +17939,6 @@
           }
         }
       },
-      "RosterEquipmentSlotResponse": {
-        "required": [
-          "slotId",
-          "equipmentId",
-          "level"
-        ],
-        "type": "object",
-        "properties": {
-          "slotId": {
-            "type": "string"
-          },
-          "equipmentId": {
-            "type": "string"
-          },
-          "level": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "RosterCharacterResponse": {
         "required": [
           "unitId",
@@ -17985,6 +17987,26 @@
           },
           "equippedItems": {
             "$ref": "#/components/schemas/IReadOnlyListOfRosterEquipmentSlotResponse"
+          }
+        }
+      },
+      "RosterEquipmentSlotResponse": {
+        "required": [
+          "slotId",
+          "equipmentId",
+          "level"
+        ],
+        "type": "object",
+        "properties": {
+          "slotId": {
+            "type": "string"
+          },
+          "equipmentId": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -18075,6 +18097,17 @@
         ],
         "type": "string"
       },
+      "TeamRarityCap": {
+        "enum": [
+          "Common",
+          "Uncommon",
+          "Rare",
+          "Epic",
+          "Legendary",
+          "Mythic"
+        ],
+        "type": "string"
+      },
       "TeamResponse": {
         "required": [
           "id",
@@ -18085,9 +18118,11 @@
           "characterIds",
           "flexStartIndex",
           "mowIds",
+          "mowFlexStartIndex",
           "campaignGroupId",
           "incursionMowIds",
           "notes",
+          "rarityCap",
           "issues"
         ],
         "type": "object",
@@ -18123,6 +18158,13 @@
           "mowIds": {
             "$ref": "#/components/schemas/IReadOnlyListOfString"
           },
+          "mowFlexStartIndex": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
           "campaignGroupId": {
             "type": [
               "null",
@@ -18138,6 +18180,16 @@
               "string"
             ]
           },
+          "rarityCap": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TeamRarityCap"
+              }
+            ]
+          },
           "issues": {
             "$ref": "#/components/schemas/IReadOnlyListOfTeamRuleCode"
           }
@@ -18147,11 +18199,11 @@
         "enum": [
           "nameLength",
           "noMode",
-          "noUnits",
+          "tooFewCharacters",
           "unknownUnit",
           "modeNotCombinable",
           "tooManyCoreCharacters",
-          "tooManyMows",
+          "tooManyCoreMows",
           "mowsNotAllowed",
           "campaignRequired",
           "unknownCampaign",
@@ -18909,9 +18961,11 @@
           "characterIds",
           "flexStartIndex",
           "mowIds",
+          "mowFlexStartIndex",
           "campaignGroupId",
           "incursionMowIds",
           "notes",
+          "rarityCap",
           "revision"
         ],
         "type": "object",
@@ -18939,6 +18993,14 @@
           "mowIds": {
             "$ref": "#/components/schemas/IReadOnlyListOfString"
           },
+          "mowFlexStartIndex": {
+            "const": null,
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
           "campaignGroupId": {
             "const": null,
             "maxLength": 64,
@@ -18958,6 +19020,18 @@
             "type": [
               "null",
               "string"
+            ]
+          },
+          "rarityCap": {
+            "const": null,
+            "oneOf": [
+              {
+                "const": null,
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TeamRarityCap"
+              }
             ]
           },
           "revision": {

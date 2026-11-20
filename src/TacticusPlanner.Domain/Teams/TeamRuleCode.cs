@@ -12,11 +12,11 @@ public enum TeamRuleCode
 {
     [JsonStringEnumMemberName("nameLength")] NameLength,
     [JsonStringEnumMemberName("noMode")] NoMode,
-    [JsonStringEnumMemberName("noUnits")] NoUnits,
+    [JsonStringEnumMemberName("tooFewCharacters")] TooFewCharacters,
     [JsonStringEnumMemberName("unknownUnit")] UnknownUnit,
     [JsonStringEnumMemberName("modeNotCombinable")] ModeNotCombinable,
     [JsonStringEnumMemberName("tooManyCoreCharacters")] TooManyCoreCharacters,
-    [JsonStringEnumMemberName("tooManyMows")] TooManyMows,
+    [JsonStringEnumMemberName("tooManyCoreMows")] TooManyCoreMows,
     [JsonStringEnumMemberName("mowsNotAllowed")] MowsNotAllowed,
     [JsonStringEnumMemberName("campaignRequired")] CampaignRequired,
     [JsonStringEnumMemberName("unknownCampaign")] UnknownCampaign,

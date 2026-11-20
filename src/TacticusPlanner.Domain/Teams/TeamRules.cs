@@ -34,8 +34,8 @@ public static class TeamRules
             broken.Add(TeamRuleCode.NameLength);
         if (modes.Count == 0)
             broken.Add(TeamRuleCode.NoMode);
-        if (draft.CharacterIds.Count == 0 && draft.MowIds.Count == 0)
-            broken.Add(TeamRuleCode.NoUnits);
+        if (draft.CharacterIds.Count < TeamValidation.MinCharacters)
+            broken.Add(TeamRuleCode.TooFewCharacters);
         if (draft.CharacterIds.Any(id => !facts.CharacterFactions.ContainsKey(id)) || draft.MowIds.Any(id => !facts.MowIds.Contains(id)))
             broken.Add(TeamRuleCode.UnknownUnit);
         if ((campaign || incursion) && modes.Count > 1)
@@ -45,8 +45,8 @@ public static class TeamRules
         {
             if (draft.CoreCount > TeamValidation.MaxWarCoreCharacters)
                 broken.Add(TeamRuleCode.TooManyCoreCharacters);
-            if (draft.MowIds.Count > TeamValidation.MaxWarMows)
-                broken.Add(TeamRuleCode.TooManyMows);
+            if (draft.CoreMowCount > TeamValidation.MaxWarCoreMows)
+                broken.Add(TeamRuleCode.TooManyCoreMows);
         }
 
         if ((campaign || incursion) && draft.MowIds.Count > 0)

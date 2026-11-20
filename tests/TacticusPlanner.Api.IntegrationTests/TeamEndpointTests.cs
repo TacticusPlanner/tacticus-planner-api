@@ -23,12 +23,15 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
         string[]? characters = null,
         int? flex = null,
         string[]? mows = null,
-        string? notes = null) =>
-        new(name, modes ?? [TeamMode.Horde], characters ?? ["ultraCalgar", "ultraTitus"], flex, mows ?? [], null, [], notes);
+        string? notes = null,
+        int? mowFlex = null,
+        TeamRarityCap? cap = null) =>
+        new(name, modes ?? [TeamMode.Horde], characters ?? ["ultraCalgar", "ultraTitus", "ultraApothecary"], flex, mows ?? [], mowFlex, null, [], notes,
+            cap);
 
     private static UpdateTeamRequest Update(TeamResponse team, string? name = null, string[]? characters = null) =>
         new(name ?? team.Name, team.Modes, characters ?? team.CharacterIds, team.FlexStartIndex, team.MowIds,
-            team.CampaignGroupId, team.IncursionMowIds, team.Notes, team.Revision);
+            team.MowFlexStartIndex, team.CampaignGroupId, team.IncursionMowIds, team.Notes, team.RarityCap, team.Revision);
 
     private async Task<(HttpClient Client, string Subject)> ClientAsync()
     {
@@ -66,7 +69,7 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
     }
 
     private static TeamDraft Seeded(string name, string[]? characters = null, TeamMode mode = TeamMode.Horde) =>
-        new(name, [mode], characters ?? ["ultraCalgar"], null, [], null, [], null);
+        new(name, [mode], characters ?? ["ultraCalgar", "ultraTitus", "ultraApothecary"], null, [], null, [], null);
 
     [Fact]
     public async Task ACreatedTeamIsReturnedAsListed()
@@ -108,7 +111,7 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
     public async Task AUnitNoLongerInTheCatalogIsReportedOnRead()
     {
         var (client, subject) = await ClientAsync();
-        await SeedAsync(subject, Seeded("Retired unit", ["ultraCalgar", "notAUnitAnyMore"]));
+        await SeedAsync(subject, Seeded("Retired unit", ["ultraCalgar", "ultraTitus", "notAUnitAnyMore"]));
 
         Assert.Equal([TeamRuleCode.UnknownUnit], Assert.Single(await ListAsync(client)).Issues);
     }
@@ -123,6 +126,56 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
 
         Assert.Equal(["nameLength", "tooManyCoreCharacters"], rules.Select(rule => rule!.GetValue<string>()));
         Assert.Empty(await ListAsync(client));
+    }
+
+    [Fact]
+    public async Task ASavedRarityCapAndMowFlexAreReturned()
+    {
+        var (client, _) = await ClientAsync();
+
+        var created = await CreateAsync(client, Create(
+            "Capped war", [TeamMode.WarOffense], mows: ["ultraDreadnought", "tauBroadside"], mowFlex: 1, cap: TeamRarityCap.Epic));
+
+        var team = Assert.Single(await ListAsync(client));
+        Assert.Equal(created.Id, team.Id);
+        Assert.Equal(TeamRarityCap.Epic, team.RarityCap);
+        Assert.Equal(1, team.MowFlexStartIndex);
+        Assert.Empty(team.Issues);
+    }
+
+    [Fact]
+    public async Task TwoCoreMowsInWarAreRefused()
+    {
+        var (client, _) = await ClientAsync();
+
+        var rules = await RulesAsync(await client.PostAsJsonAsync(Url, Create(
+            "Two core", [TeamMode.WarDefense], mows: ["ultraDreadnought", "tauBroadside"]), Ct));
+
+        Assert.Equal(["tooManyCoreMows"], rules.Select(rule => rule!.GetValue<string>()));
+    }
+
+    [Fact]
+    public async Task AnUnknownRarityCapIsRefused()
+    {
+        var (client, _) = await ClientAsync();
+
+        var response = await client.PostAsync(Url, new StringContent(
+            """{"name":"Shiny","modes":["horde"],"characterIds":["ultraCalgar"],"mowIds":[],"incursionMowIds":[],"rarityCap":"Shiny"}""",
+            System.Text.Encoding.UTF8, "application/json"), Ct);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Empty(await ListAsync(client));
+    }
+
+    [Fact]
+    public async Task AMowFlexIndexPastTheMowsIsAnInvalidShape()
+    {
+        var (client, _) = await ClientAsync();
+
+        var response = await client.PostAsJsonAsync(Url, Create("Past", mows: ["ultraDreadnought"], mowFlex: 1), Ct);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("validation", await response.ReadIssueCodeAsync());
     }
 
     [Fact]

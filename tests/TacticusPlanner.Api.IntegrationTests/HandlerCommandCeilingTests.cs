@@ -201,7 +201,7 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     }
 
     private static CreateTeamRequest Team(string name) =>
-        new(name, [TeamMode.Horde], ["ultraCalgar"], null, [], null, [], null);
+        new(name, [TeamMode.Horde], ["ultraCalgar", "ultraTitus", "ultraApothecary"], null, [], null, null, [], null, null);
 
     private static async Task<TeamResponse> CreateTeamAsync(HttpClient client, string name)
     {
@@ -222,7 +222,7 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
         var second = (await client.GetFromJsonAsync<ListTeamsResponse>("/api/v1/teams", ct))!.Teams[1];
         AssertWithin(UpdateTeam, await client.PutAsJsonAsync(
             $"/api/v1/teams/{first.Id}",
-            new UpdateTeamRequest("Renamed team", first.Modes, first.CharacterIds, null, [], null, [], null, first.Revision),
+            new UpdateTeamRequest("Renamed team", first.Modes, first.CharacterIds, null, [], null, null, [], null, null, first.Revision),
             ct));
         AssertWithin(ReorderTeams, await client.PutAsJsonAsync(
             "/api/v1/teams/order", new UpdateTeamOrderRequest([second.Id, first.Id]), ct));

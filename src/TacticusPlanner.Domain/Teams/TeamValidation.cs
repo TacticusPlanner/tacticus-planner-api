@@ -14,11 +14,14 @@ public static class TeamValidation
     /// <summary>The default per-profile team limit; the API reads the configured value (<c>TeamOptions.Limit</c>).</summary>
     public const int DefaultLimit = 20;
 
+    /// <summary>Fewest characters a team has, in every mode; MoWs do not count.</summary>
+    public const int MinCharacters = 3;
+
     /// <summary>Most war and Tournament Arena core characters.</summary>
     public const int MaxWarCoreCharacters = 5;
 
-    /// <summary>Most war and Tournament Arena MoWs.</summary>
-    public const int MaxWarMows = 1;
+    /// <summary>Most war and Tournament Arena core MoWs; flex MoWs do not count.</summary>
+    public const int MaxWarCoreMows = 1;
 
     /// <summary>Generous bounds on list sizes, so a request cannot carry an unbounded array.</summary>
     public const int MaxCharacters = 30;

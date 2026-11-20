@@ -78,7 +78,7 @@ public sealed class OpenApiDocumentTests(GameCatalogApiFactory factory) : IClass
     {
         string[] rulesTable =
         [
-            "nameLength", "noMode", "noUnits", "unknownUnit", "modeNotCombinable", "tooManyCoreCharacters", "tooManyMows",
+            "nameLength", "noMode", "tooFewCharacters", "unknownUnit", "modeNotCombinable", "tooManyCoreCharacters", "tooManyCoreMows",
             "mowsNotAllowed", "campaignRequired", "unknownCampaign", "coreCharacterMissing", "factionNotAllowed",
             "incursionRequired", "unknownIncursion", "noSharedIncursionFaction",
         ];

@@ -949,6 +949,10 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("text[]")
                         .HasColumnName("modes");
 
+                    b.Property<int?>("MowFlexStartIndex")
+                        .HasColumnType("integer")
+                        .HasColumnName("mow_flex_start_index");
+
                     b.PrimitiveCollection<List<string>>("MowIds")
                         .IsRequired()
                         .HasColumnType("text[]")
@@ -974,6 +978,11 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("uuid")
                         .HasColumnName("profile_id");
+
+                    b.Property<string>("RarityCap")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("rarity_cap");
 
                     b.Property<long>("Revision")
                         .IsConcurrencyToken()

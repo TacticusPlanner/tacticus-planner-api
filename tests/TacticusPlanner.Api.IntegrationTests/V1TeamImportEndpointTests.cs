@@ -34,7 +34,7 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
 
     private static string Teams(params string[] entries) => $$"""{"teams2": [{{string.Join(",", entries)}}]}""";
 
-    private static string Team(string name, string chars = """["ultraCalgar"]""", string extra = """, "horde": true""") =>
+    private static string Team(string name, string chars = """["ultraCalgar", "ultraTitus", "ultraApothecary"]""", string extra = """, "horde": true""") =>
         $$"""{"name": {{JsonSerializer.Serialize(name)}}, "chars": {{chars}}{{extra}}}""";
 
     private static async Task<ImportV1ProfileResponse> ImportAsync(
@@ -126,11 +126,11 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
         var client = await ClientAsync();
 
         var body = await ImportAsync(client, Configure(Teams(Team(
-            "All flex", """["ultraTigurius", "ultraTitus"]""", """, "flexIndex": 0, "horde": true """))));
+            "All flex", """["ultraTigurius", "ultraTitus", "ultraApothecary"]""", """, "flexIndex": 0, "horde": true """))));
 
         Assert.Equal([("flex_dropped", (string?)null)], Issues(Assert.Single(body.TeamOutcomes)));
         var team = Assert.Single(await ListAsync(client));
-        Assert.Equal(["ultraTigurius", "ultraTitus"], team.CharacterIds);
+        Assert.Equal(["ultraTigurius", "ultraTitus", "ultraApothecary"], team.CharacterIds);
         Assert.Null(team.FlexStartIndex);
     }
 
@@ -140,7 +140,7 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
         var client = await ClientAsync();
 
         var body = await ImportAsync(client, Configure(Teams(Team(
-            "Lost core", """["notAUnit", "ultraTitus"]""", """, "flexIndex": 1, "horde": true """))));
+            "Lost core", """["notAUnit", "ultraTitus", "ultraApothecary", "ultraCalgar"]""", """, "flexIndex": 1, "horde": true """))));
 
         Assert.Equal(
             [("unit_not_recognised", (string?)"notAUnit"), ("flex_dropped", null)],
@@ -231,15 +231,43 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
         var client = await ClientAsync();
 
         var body = await ImportAsync(client, Configure(Teams(
-            Team("Two MoWs", extra: """, "warOffense": true, "mows": ["ultraDreadnought", "tauBroadside"]"""),
-            Team("Rukka sisters", """["ultraCalgar", "adeptCanoness"]""", """, "incursion": true, "incursionMows": ["orksRukkatrukk"]"""))));
+            Team("Six core", """["ultraCalgar", "ultraTitus", "ultraTigurius", "ultraEliminatorSgt", "ultraInceptorSgt", "ultraApothecary"]""",
+                """, "warOffense": true"""),
+            Team("Rukka sisters", """["ultraCalgar", "ultraTitus", "adeptCanoness"]""", """, "incursion": true, "incursionMows": ["orksRukkatrukk"]"""))));
 
-        Assert.Equal([("tooManyMows", (string?)null)], Issues(body.TeamOutcomes[0]));
+        Assert.Equal([("tooManyCoreCharacters", (string?)null)], Issues(body.TeamOutcomes[0]));
         Assert.Equal([("factionNotAllowed", (string?)null)], Issues(body.TeamOutcomes[1]));
         var teams = await ListAsync(client);
-        Assert.Equal(["ultraDreadnought", "tauBroadside"], teams[0].MowIds);
-        Assert.Equal([TeamRuleCode.TooManyMows], teams[0].Issues);
+        Assert.Equal(6, teams[0].CharacterIds.Count);
+        Assert.Equal([TeamRuleCode.TooManyCoreCharacters], teams[0].Issues);
         Assert.Equal([TeamRuleCode.FactionNotAllowed], teams[1].Issues);
+    }
+
+    [Fact]
+    public async Task AV1TeamOfTwoCharactersIsImportedWithItsIssue()
+    {
+        var client = await ClientAsync();
+
+        var body = await ImportAsync(client, Configure(Teams(Team("Pair", """["ultraCalgar", "ultraTitus"]"""))));
+
+        Assert.Equal([("tooFewCharacters", (string?)null)], Issues(Assert.Single(body.TeamOutcomes)));
+        Assert.Equal([TeamRuleCode.TooFewCharacters], Assert.Single(await ListAsync(client)).Issues);
+    }
+
+    [Fact]
+    public async Task AV1TeamWithSeveralMowsKeepsTheFirstAsCoreAndTheRestAsFlex()
+    {
+        var client = await ClientAsync();
+
+        var body = await ImportAsync(client, Configure(Teams(
+            Team("Two MoWs", extra: """, "warOffense": true, "mows": ["ultraDreadnought", "tauBroadside"]"""))));
+
+        Assert.Empty(Issues(body.TeamOutcomes[0]));
+        var team = Assert.Single(await ListAsync(client));
+        Assert.Equal(["ultraDreadnought", "tauBroadside"], team.MowIds);
+        Assert.Equal(1, team.MowFlexStartIndex);
+        Assert.Null(team.RarityCap);
+        Assert.Empty(team.Issues);
     }
 
     [Fact]
@@ -249,7 +277,7 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
 
         var body = await ImportAsync(client, Configure(Teams(
             Team("Ghosts", """["notAUnit"]"""),
-            """{"chars": ["ultraCalgar"], "horde": true}""",
+            """{"chars": ["ultraCalgar", "ultraTitus", "ultraApothecary"], "horde": true}""",
             Team("First valid"),
             Team("Second valid"))));
 
@@ -266,7 +294,7 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await ClientAsync();
         (await client.PostAsJsonAsync("/api/v1/teams",
-            new CreateTeamRequest("Made in V2", [TeamMode.Horde], ["ultraCalgar"], null, [], null, [], null), Ct))
+            new CreateTeamRequest("Made in V2", [TeamMode.Horde], ["ultraCalgar", "ultraTitus", "ultraApothecary"], null, [], null, null, [], null, null), Ct))
             .EnsureSuccessStatusCode();
 
         await ImportAsync(client, Configure(Teams(
@@ -301,7 +329,7 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
         await ImportAsync(client, username);
         var team = Assert.Single(await ListAsync(client));
         (await client.PutAsJsonAsync($"/api/v1/teams/{team.Id}", new UpdateTeamRequest(
-            "Ultra D1", team.Modes, team.CharacterIds, null, [], null, [], null, team.Revision), Ct)).EnsureSuccessStatusCode();
+            "Ultra D1", team.Modes, team.CharacterIds, null, [], null, null, [], null, null, team.Revision), Ct)).EnsureSuccessStatusCode();
 
         var body = await ImportAsync(client, username);
 
@@ -330,7 +358,7 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await ClientAsync();
         (await client.PostAsJsonAsync("/api/v1/teams",
-            new CreateTeamRequest("Horde", [TeamMode.Horde], ["ultraCalgar"], null, [], null, [], null), Ct))
+            new CreateTeamRequest("Horde", [TeamMode.Horde], ["ultraCalgar", "ultraTitus", "ultraApothecary"], null, [], null, null, [], null, null), Ct))
             .EnsureSuccessStatusCode();
 
         var body = await ImportAsync(client, Configure(Teams(Team("horde"))));
@@ -344,12 +372,12 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await ClientAsync();
 
-        var body = await ImportAsync(client, Configure(Teams(Team("Twins"), Team("  twins ", """["ultraTitus"]"""))));
+        var body = await ImportAsync(client, Configure(Teams(Team("Twins"), Team("  twins ", """["ultraTitus", "ultraTigurius", "ultraApothecary"]"""))));
 
         Assert.Equal(
             [(ImportPartStatus.Imported, null), (ImportPartStatus.Skipped, "already_imported")],
             body.TeamOutcomes.Select(outcome => (outcome.Status, outcome.Code)));
-        Assert.Equal(["ultraCalgar"], Assert.Single(await ListAsync(client)).CharacterIds);
+        Assert.Equal(["ultraCalgar", "ultraTitus", "ultraApothecary"], Assert.Single(await ListAsync(client)).CharacterIds);
     }
 
     [Fact]

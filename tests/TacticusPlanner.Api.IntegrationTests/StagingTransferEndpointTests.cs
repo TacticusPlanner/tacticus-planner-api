@@ -132,6 +132,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         Assert.DoesNotContain(teams, team => seeded.TeamIds.Contains(team.Id));
         Assert.Equal(["ultraCalgar", "ultraTitus"], teams[0].CharacterIds);
         Assert.Equal((1, "prod notes"), (teams[0].FlexStartIndex, teams[0].Notes));
+        Assert.Equal((1, TeamRarityCap.Legendary), (teams[0].MowFlexStartIndex, teams[0].RarityCap));
         Assert.Equal([TeamMode.WarDefense], teams[0].Modes);
 
         var settings = await db.UserSettings.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Id == profile.Id, Ct);
@@ -358,7 +359,8 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         // Three ordered teams, stored out of insertion order; the second came from a V1 import.
         Team SeedTeam(string name, int position, string? importKey = null) => Team.Create(
             profileId,
-            new TeamDraft(name, [TeamMode.WarDefense], ["ultraCalgar", "ultraTitus"], 1, ["ultraDreadnought"], null, [], "prod notes"),
+            new TeamDraft(name, [TeamMode.WarDefense], ["ultraCalgar", "ultraTitus"], 1, ["ultraDreadnought", "tauBroadside"], null, [],
+                "prod notes", MowFlexStartIndex: 1, RarityCap: TeamRarityCap.Legendary),
             position,
             importKey);
         var teams = new[] { SeedTeam("Third team", 3), SeedTeam("First team", 1), SeedTeam("V1 team", 2, "gw ultras") };

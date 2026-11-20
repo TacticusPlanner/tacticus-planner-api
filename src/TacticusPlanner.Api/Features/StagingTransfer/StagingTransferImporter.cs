@@ -209,7 +209,8 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
                 db.Teams.Add(Team.Create(
                     profileId,
                     new TeamDraft(source.Name, source.Modes, source.CharacterIds, source.FlexStartIndex, source.MowIds,
-                        source.CampaignGroupId, source.IncursionMowIds, source.Notes),
+                        source.CampaignGroupId, source.IncursionMowIds, source.Notes, source.MowFlexStartIndex,
+                        source.RarityCap),
                     index + 1,
                     importKey));
             }

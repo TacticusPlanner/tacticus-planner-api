@@ -33,3 +33,18 @@
 - [x] 5.1 Build, then verify the regenerated `artifacts/openapi/TacticusPlanner.Api.json` contains the teams endpoints and import fields, and that the working-tree change already present in that file is not swept in unintentionally.
 - [x] 5.2 Confirm the contract with the companion `add-personal-teams` change in `tacticus-planner-apps`.
 - [x] 5.3 Run `dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore`, `dotnet build TacticusPlanner.slnx -c Release --no-restore` and `dotnet test TacticusPlanner.slnx -c Release --no-build`, and verify all pass.
+
+## 6. MoW roles and the rarity cap
+
+- [x] 6.1 Add `MowFlexStartIndex` and `RarityCap` to `Team` and `TeamValidation` (index 0 to the last MoW, a known rarity), and rename `tooManyMows` to `tooManyCoreMows` in `TeamRules`, counting core MoWs only; verify unit tests for the three MoW scenarios in the `personal-teams` spec and that the cap changes no rule result.
+- [x] 6.2 Regenerate the `AddTeams` migration with `mow_flex_start_index` and `rarity_cap`, and verify the persistence tests pass and a local database that already applied it is recreated cleanly.
+- [x] 6.3 Carry both fields through `GET`, `POST` and `PUT /api/v1/teams`, and verify integration tests for a saved cap, an invalid cap refused, and `tooManyCoreMows` in the regenerated `TeamRuleCode` enum.
+- [x] 6.4 Map V1 MoWs as first core, the rest flex, with a null cap, and verify the "V1 team with several MoWs" scenario.
+- [x] 6.5 Carry both fields in `StagingTransferBundle`, and verify the 3-team round trip keeps them.
+- [x] 6.6 Re-run the 5.3 gate and regenerate `artifacts/openapi/TacticusPlanner.Api.json` under en-US, and verify both pass.
+
+## 7. At least three characters
+
+- [x] 7.1 Replace `noUnits` with `tooFewCharacters` (`TeamValidation.MinCharacters` = 3; MoWs do not count), keeping its place in the rule order, and verify 0, 1 and 2 characters, MoWs not counting, and the order test.
+- [x] 7.2 Import a V1 team of 1 or 2 characters with the `tooFewCharacters` issue (a team with no unit is still skipped as `no_units`), and verify it.
+- [x] 7.3 Move the endpoint, import, ceiling and staging fixtures to 3 or more characters, regenerate the OpenAPI document under en-US, and verify the format check, the Release build and the team tests.

@@ -144,9 +144,11 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
                 CharacterIds = team.CharacterIds,
                 FlexStartIndex = team.FlexStartIndex,
                 MowIds = team.MowIds,
+                MowFlexStartIndex = team.MowFlexStartIndex,
                 CampaignGroupId = team.CampaignGroupId,
                 IncursionMowIds = team.IncursionMowIds,
                 Notes = team.Notes,
+                RarityCap = team.RarityCap,
                 ImportKey = team.ImportKey,
             }).ToList(),
         };

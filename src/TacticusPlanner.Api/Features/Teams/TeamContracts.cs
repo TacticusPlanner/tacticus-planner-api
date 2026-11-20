@@ -15,9 +15,11 @@ public sealed record TeamResponse(
     IReadOnlyList<string> CharacterIds,
     int? FlexStartIndex,
     IReadOnlyList<string> MowIds,
+    int? MowFlexStartIndex,
     string? CampaignGroupId,
     IReadOnlyList<string> IncursionMowIds,
     string? Notes,
+    TeamRarityCap? RarityCap,
     IReadOnlyList<TeamRuleCode> Issues
 )
 {
@@ -30,9 +32,11 @@ public sealed record TeamResponse(
         team.CharacterIds,
         team.FlexStartIndex,
         team.MowIds,
+        team.MowFlexStartIndex,
         team.CampaignGroupId,
         team.IncursionMowIds,
         team.Notes,
+        team.RarityCap,
         TeamRules.Evaluate(team.ToDraft(), facts));
 }
 
@@ -46,16 +50,18 @@ public interface ITeamFields
     IReadOnlyList<string> CharacterIds { get; }
     int? FlexStartIndex { get; }
     IReadOnlyList<string> MowIds { get; }
+    int? MowFlexStartIndex { get; }
     string? CampaignGroupId { get; }
     IReadOnlyList<string> IncursionMowIds { get; }
     string? Notes { get; }
+    TeamRarityCap? RarityCap { get; }
 }
 
 internal static class TeamFieldsExtensions
 {
     public static TeamDraft ToDraft(this ITeamFields fields) => new(
         fields.Name, fields.Modes, fields.CharacterIds, fields.FlexStartIndex, fields.MowIds, fields.CampaignGroupId,
-        fields.IncursionMowIds, fields.Notes);
+        fields.IncursionMowIds, fields.Notes, fields.MowFlexStartIndex, fields.RarityCap);
 }
 
 public sealed record CreateTeamRequest(
@@ -64,9 +70,11 @@ public sealed record CreateTeamRequest(
     IReadOnlyList<string> CharacterIds,
     int? FlexStartIndex,
     IReadOnlyList<string> MowIds,
+    int? MowFlexStartIndex,
     string? CampaignGroupId,
     IReadOnlyList<string> IncursionMowIds,
-    string? Notes
+    string? Notes,
+    TeamRarityCap? RarityCap
 ) : ITeamFields;
 
 /// <summary>Replaces every editable field when <see cref="Revision"/> matches the stored team.</summary>
@@ -76,9 +84,11 @@ public sealed record UpdateTeamRequest(
     IReadOnlyList<string> CharacterIds,
     int? FlexStartIndex,
     IReadOnlyList<string> MowIds,
+    int? MowFlexStartIndex,
     string? CampaignGroupId,
     IReadOnlyList<string> IncursionMowIds,
     string? Notes,
+    TeamRarityCap? RarityCap,
     long Revision
 ) : ITeamFields;
 
@@ -87,7 +97,8 @@ public sealed record UpdateTeamOrderRequest(IReadOnlyList<Guid> TeamIds);
 
 /// <summary>
 /// The shape checks every create and update passes before the team rules run: bounded lists, each unit at most once,
-/// and a flex section that leaves at least one core character and holds at least one flex character. Name length is
+/// a flex section that leaves at least one core character and holds at least one flex character, and a MoW flex
+/// section that holds at least one flex MoW (every MoW may be flex). Name length is
 /// a team rule (<c>nameLength</c>), so it is reported with the other rules, not here.
 /// </summary>
 internal static class TeamFieldsValidation
@@ -126,6 +137,10 @@ internal static class TeamFieldsValidation
         validator.RuleFor(request => request.FlexStartIndex)
             .Must((request, index) => index is null || (index >= 1 && index <= (request.CharacterIds?.Count ?? 0) - 1))
             .WithMessage("flexStartIndex must leave at least one core and one flex character.");
+        validator.RuleFor(request => request.MowFlexStartIndex)
+            .Must((request, index) => index is null || (index >= 0 && index <= (request.MowIds?.Count ?? 0) - 1))
+            .WithMessage("mowFlexStartIndex must hold at least one flex MoW.");
+        validator.RuleFor(request => request.RarityCap).IsInEnum().When(request => request.RarityCap is not null);
         validator.RuleFor(request => request.CampaignGroupId).MaximumLength(TeamValidation.MaxUnitIdLength);
         validator.RuleFor(request => request.Notes).MaximumLength(TeamValidation.MaxNotesLength);
     }

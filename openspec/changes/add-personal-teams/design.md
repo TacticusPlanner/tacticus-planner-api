@@ -27,7 +27,7 @@ Current state that shapes the approach:
 
 ### D1: One row per team, with its lineup in columns of that row
 
-A new public `teams` table holds `id`, `profile_id`, `revision`, `name`, `name_key`, `import_key`, `sort_order`, `modes`, `character_ids`, `flex_start_index`, `mow_ids`, `campaign_group_id`, `incursion_mow_ids`, `notes`, `created_at` and `updated_at`. The list columns are `text[]` primitive collections. The lineup is only ever read and written through its team, which matches ADR 0011 rule 1.
+A new public `teams` table holds `id`, `profile_id`, `revision`, `name`, `name_key`, `import_key`, `sort_order`, `modes`, `character_ids`, `flex_start_index`, `mow_ids`, `mow_flex_start_index`, `campaign_group_id`, `incursion_mow_ids`, `notes`, `rarity_cap`, `created_at` and `updated_at`. The list columns are `text[]` primitive collections. The lineup is only ever read and written through its team, which matches ADR 0011 rule 1.
 
 Alternative considered: one per-profile row with every team as JSONB, as Legendary Event plans do. Rejected because teams are edited one at a time, so a single revision would make two devices conflict over unrelated teams, and later War Defense references would need application-level integrity. Member tables were rejected by ADR 0011.
 
@@ -73,7 +73,15 @@ Alternative considered: re-run by name only (the earlier choice). Simpler, but i
 
 ### D11: Migration
 
-Migration `AddTeams` creates the table with a cascading foreign key to the profile, which also covers account purge. There is no backfill. Migrations apply on startup, and rollback is reverting the change, because no existing table changes.
+Migration `AddTeams` creates the table with a cascading foreign key to the profile, which also covers account purge. There is no backfill. The MoW flex index and the rarity cap were added after the migration was first generated; because it has never reached production, it is regenerated with them rather than followed by a second migration, and a local database that already applied it drops and recreates the `teams` table. Migrations apply on startup, and rollback is reverting the change, because no existing table changes.
+
+### D12: MoW roles mirror characters
+
+MoWs are split into core and flex the way characters are: `mow_ids` lists core MoWs first and `mow_flex_start_index` marks where flex begins. One shape for both keeps the record, the rules and the clients' lineup code alike, and a list of `{ id, role }` objects would let core and flex interleave for no benefit. Unlike characters, every MoW may be flex (index 0): a War team can plan "no MoW by default, bring one of these". `tooManyMows` becomes `tooManyCoreMows` (at most 1 core MoW in War and Tournament Arena); the rename is safe because the contract has not been released. V1 has no MoW roles, so its first MoW imports as core and the rest as flex, which keeps multi-MoW V1 teams valid instead of flagging them.
+
+### D13: The rarity cap is stored, not enforced
+
+`rarity_cap` is a nullable text column holding one of the six rarity names, validated on input. It records what the team is prepared for ("my Epic Guild War team") so clients can preview the lineup at that rarity. No rule reads it: the server does not know the player's roster, and a unit above the cap is simply played capped in the game.
 
 ## Risks / Trade-offs
 
