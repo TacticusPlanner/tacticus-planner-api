@@ -116,6 +116,8 @@ public sealed class TeamPostgresTests
         await using (var otherDb = database.CreateContext(other))
         {
             Assert.Empty(await otherDb.Teams.ToListAsync(ct));
+            otherDb.Teams.Add(Team.Create(other, Draft("Other's"), 1));
+            await otherDb.SaveChangesAsync(ct);
         }
 
         await using (var connection = new NpgsqlConnection(database.ConnectionString))
@@ -126,7 +128,9 @@ public sealed class TeamPostgresTests
             await delete.ExecuteNonQueryAsync(ct);
         }
 
+        // Only the deleted profile's teams go; the other profile keeps its own.
         await using var verify = database.CreateContext();
-        Assert.Empty(await verify.Teams.IgnoreQueryFilters().ToListAsync(ct));
+        var survivor = Assert.Single(await verify.Teams.IgnoreQueryFilters().ToListAsync(ct));
+        Assert.Equal((other, "Other's"), (survivor.ProfileId, survivor.Name));
     }
 }

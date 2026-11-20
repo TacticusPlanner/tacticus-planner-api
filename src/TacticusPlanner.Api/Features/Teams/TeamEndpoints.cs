@@ -169,61 +169,75 @@ public sealed class UpdateTeamEndpoint : Endpoint<UpdateTeamRequest, TeamRespons
             return;
         }
 
-        var db = Resolve<PlannerDbContext>();
         var service = Resolve<TeamsService>();
         var facts = service.Facts;
-        // Scoped to the caller's profile by PlannerDbContext's global query filter.
-        var team = await db.Teams.FirstOrDefaultAsync(entity => entity.Id == teamId, ct);
-        if (team is null)
-        {
-            await this.SendNotFoundProblemAsync(ct);
-            return;
-        }
-
-        if (team.Revision != req.Revision)
-        {
-            await SendStaleAsync(team, facts, ct);
-            return;
-        }
-
         var draft = req.ToDraft();
         var broken = TeamRules.Evaluate(draft, facts);
-        if (broken.Count > 0)
-        {
-            await TeamProblems.SendRulesBrokenAsync(this, broken, ct);
-            return;
-        }
 
-        if (await service.IsNameTakenAsync(draft.Name, teamId, ct))
+        var db = Resolve<PlannerDbContext>();
+        // Under the profile lock, like create, delete, reorder and the V1 import: a rename cannot take a name the
+        // import is about to insert, and no delete can move this team's position before the response reads it.
+        var (outcome, result) = await service.ExecuteLockedAsync<(UpdateOutcome, Team?)>(async transaction =>
         {
-            AddError(TeamProblems.NameTakenFailure());
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
+            // Scoped to the caller's profile by PlannerDbContext's global query filter.
+            var team = await db.Teams.FirstOrDefaultAsync(entity => entity.Id == teamId, ct);
+            if (team is null)
+                return (UpdateOutcome.NotFound, null);
+            if (team.Revision != req.Revision)
+                return (UpdateOutcome.Stale, team);
+            if (broken.Count > 0)
+                return (UpdateOutcome.RulesBroken, null);
+            if (await service.IsNameTakenAsync(draft.Name, teamId, ct))
+                return (UpdateOutcome.NameTaken, null);
 
-        team.Apply(draft);
-        try
+            team.Apply(draft);
+            try
+            {
+                await db.SaveChangesAsync(ct);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                db.ChangeTracker.Clear();
+                var current = await db.Teams.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == teamId, ct);
+                return current is null ? (UpdateOutcome.NotFound, null) : (UpdateOutcome.Stale, current);
+            }
+            catch (DbUpdateException exception) when (TeamsService.IsNameConflict(exception))
+            {
+                return (UpdateOutcome.NameTaken, null);
+            }
+
+            await transaction.CommitAsync(ct);
+            return (UpdateOutcome.Updated, team);
+        }, ct);
+
+        switch (outcome)
         {
-            await db.SaveChangesAsync(ct);
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            db.ChangeTracker.Clear();
-            var current = await db.Teams.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == teamId, ct);
-            if (current is null)
+            case UpdateOutcome.NotFound:
                 await this.SendNotFoundProblemAsync(ct);
-            else
-                await SendStaleAsync(current, facts, ct);
-            return;
+                return;
+            case UpdateOutcome.Stale:
+                await SendStaleAsync(result!, facts, ct);
+                return;
+            case UpdateOutcome.RulesBroken:
+                await TeamProblems.SendRulesBrokenAsync(this, broken, ct);
+                return;
+            case UpdateOutcome.NameTaken:
+                AddError(TeamProblems.NameTakenFailure());
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
+            default:
+                await Send.OkAsync(TeamResponse.From(result!, facts), ct);
+                return;
         }
-        catch (DbUpdateException exception) when (TeamsService.IsNameConflict(exception))
-        {
-            AddError(TeamProblems.NameTakenFailure());
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
+    }
 
-        await Send.OkAsync(TeamResponse.From(team, facts), ct);
+    private enum UpdateOutcome
+    {
+        Updated,
+        NotFound,
+        Stale,
+        RulesBroken,
+        NameTaken,
     }
 
     private Task SendStaleAsync(Team current, TeamRuleFacts facts, CancellationToken ct) =>

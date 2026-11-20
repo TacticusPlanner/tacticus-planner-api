@@ -34,7 +34,7 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     // Teams: the caller lookup, then (writes) the profile lock, one count or set read, and one write or list read.
     private const int ListTeams = 2;
     private const int CreateTeam = 5;
-    private const int UpdateTeam = 4;
+    private const int UpdateTeam = 5;
     private const int DeleteTeam = 5;
     private const int ReorderTeams = 5;
 

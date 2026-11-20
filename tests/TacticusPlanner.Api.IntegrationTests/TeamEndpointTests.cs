@@ -160,10 +160,39 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
         var (client, _) = await ClientAsync();
 
         var response = await client.PostAsync(Url, new StringContent(
-            """{"name":"Shiny","modes":["horde"],"characterIds":["ultraCalgar"],"mowIds":[],"incursionMowIds":[],"rarityCap":"Shiny"}""",
+            """{"name":"Shiny","modes":["horde"],"characterIds":["ultraCalgar","ultraTitus","ultraApothecary"],"mowIds":[],"incursionMowIds":[],"rarityCap":"Shiny"}""",
             System.Text.Encoding.UTF8, "application/json"), Ct);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problem = await response.ReadProblemAsync();
+        Assert.Equal("validation", problem["issueCode"]?.GetValue<string>());
+        Assert.Contains(problem["errors"]!.AsObject(), error => error.Key.EndsWith("rarityCap", StringComparison.OrdinalIgnoreCase));
+        Assert.Empty(await ListAsync(client));
+    }
+
+    [Theory]
+    [InlineData("modes")]
+    [InlineData("characterIds")]
+    [InlineData("mowIds")]
+    [InlineData("incursionMowIds")]
+    public async Task ANullLineupListIsAnInvalidShape(string field)
+    {
+        var (client, _) = await ClientAsync();
+        var body = new System.Text.Json.Nodes.JsonObject
+        {
+            ["name"] = "Nulls",
+            ["modes"] = new System.Text.Json.Nodes.JsonArray("horde"),
+            ["characterIds"] = new System.Text.Json.Nodes.JsonArray("ultraCalgar", "ultraTitus", "ultraApothecary"),
+            ["mowIds"] = new System.Text.Json.Nodes.JsonArray(),
+            ["incursionMowIds"] = new System.Text.Json.Nodes.JsonArray(),
+        };
+        body[field] = null;
+
+        var response = await client.PostAsync(Url, new StringContent(
+            body.ToJsonString(), System.Text.Encoding.UTF8, "application/json"), Ct);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("validation", await response.ReadIssueCodeAsync());
         Assert.Empty(await ListAsync(client));
     }
 
@@ -317,6 +346,25 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
         Assert.Equal([(first.Id, 1), (third.Id, 2)], teams.Select(team => (team.Id, team.Position)));
         Assert.Equal([1L, 1L], teams.Select(team => team.Revision));
         Assert.Equal(HttpStatusCode.NotFound, (await client.DeleteAsync($"{Url}/{second.Id}", Ct)).StatusCode);
+    }
+
+    [Fact]
+    public async Task AnUpdateAfterADeleteReturnsTheStoredPosition()
+    {
+        var (client, _) = await ClientAsync();
+        var first = await CreateAsync(client, Create("First"));
+        var second = await CreateAsync(client, Create("Second"));
+        var third = await CreateAsync(client, Create("Third"));
+
+        // A delete moves the later teams up without changing their revision, so an edit made before it still saves.
+        await client.DeleteAsync($"{Url}/{first.Id}", Ct);
+        await client.DeleteAsync($"{Url}/{second.Id}", Ct);
+        var response = await client.PutAsJsonAsync($"{Url}/{third.Id}", Update(third, "Renamed"), Ct);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var updated = (await response.Content.ReadFromJsonAsync<TeamResponse>(Ct))!;
+        Assert.Equal(("Renamed", 1), (updated.Name, updated.Position));
+        Assert.Equal(1, Assert.Single(await ListAsync(client)).Position);
     }
 
     [Fact]

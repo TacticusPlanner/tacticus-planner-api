@@ -111,23 +111,23 @@ internal static class TeamFieldsValidation
         where T : ITeamFields
     {
         validator.RuleFor(request => request.Name).NotNull().MaximumLength(200);
-        validator.RuleFor(request => request.Modes).NotNull()
+        validator.RuleFor(request => request.Modes).Cascade(CascadeMode.Stop).NotNull()
             .Must(modes => modes.Distinct().Count() == modes.Count).WithMessage("Each mode can be listed once.");
-        validator.RuleFor(request => request.CharacterIds).NotNull()
+        validator.RuleFor(request => request.CharacterIds).Cascade(CascadeMode.Stop).NotNull()
             .Must(ids => ids.Count <= TeamValidation.MaxCharacters)
             .WithMessage($"A team can have at most {TeamValidation.MaxCharacters} characters.")
             .Must(ids => ids.Distinct(StringComparer.Ordinal).Count() == ids.Count)
             .WithMessage("Each character can be in the lineup once.");
         validator.RuleFor(request => request.CharacterIds).Must(ValidIds).WithMessage($"Unit ids must be 1 to {TeamValidation.MaxUnitIdLength} characters.")
             .When(request => request.CharacterIds is not null);
-        validator.RuleFor(request => request.MowIds).NotNull()
+        validator.RuleFor(request => request.MowIds).Cascade(CascadeMode.Stop).NotNull()
             .Must(ids => ids.Count <= TeamValidation.MaxMows)
             .WithMessage($"A team can have at most {TeamValidation.MaxMows} MoWs.")
             .Must(ids => ids.Distinct(StringComparer.Ordinal).Count() == ids.Count)
             .WithMessage("Each MoW can be in the lineup once.");
         validator.RuleFor(request => request.MowIds).Must(ValidIds).WithMessage($"Unit ids must be 1 to {TeamValidation.MaxUnitIdLength} characters.")
             .When(request => request.MowIds is not null);
-        validator.RuleFor(request => request.IncursionMowIds).NotNull()
+        validator.RuleFor(request => request.IncursionMowIds).Cascade(CascadeMode.Stop).NotNull()
             .Must(ids => ids.Count <= TeamValidation.MaxIncursionMows)
             .WithMessage($"A team can be built for at most {TeamValidation.MaxIncursionMows} Incursions.")
             .Must(ids => ids.Distinct(StringComparer.Ordinal).Count() == ids.Count)

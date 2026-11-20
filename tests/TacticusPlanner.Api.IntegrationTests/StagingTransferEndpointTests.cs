@@ -58,6 +58,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         var targetClient = await GoalsTestHelpers.CreateProvisionedClientAsync(target, targetSubject);
         var staleGoalIds = await GoalsTestHelpers.SeedRankGoalsAsync(target, targetSubject, 2, GoalStatus.Completed);
         await SeedStaleEventShopPlansAsync(targetSubject);
+        var staleTeamIds = await SeedStaleTeamsAsync(targetSubject);
 
         var codeResponse = await sourceClient.PostAsync("/api/v1/account/staging-transfer-code", null, Ct);
         codeResponse.EnsureSuccessStatusCode();
@@ -130,6 +131,8 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             [("First team", 1, (string?)null), ("V1 team", 2, "gw ultras"), ("Third team", 3, null)],
             teams.Select(team => (team.Name, team.SortOrder, team.ImportKey)));
         Assert.DoesNotContain(teams, team => seeded.TeamIds.Contains(team.Id));
+        // The staging teams seeded before the import, one sharing a production team's name, are gone.
+        Assert.DoesNotContain(teams, team => staleTeamIds.Contains(team.Id));
         Assert.Equal(["ultraCalgar", "ultraTitus"], teams[0].CharacterIds);
         Assert.Equal((1, "prod notes"), (teams[0].FlexStartIndex, teams[0].Notes));
         Assert.Equal((1, TeamRarityCap.Legendary), (teams[0].MowFlexStartIndex, teams[0].RarityCap));
@@ -187,6 +190,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         var targetSubject = $"stg-{Guid.NewGuid()}";
         var targetClient = await GoalsTestHelpers.CreateProvisionedClientAsync(target, targetSubject);
         await SeedStaleEventShopPlansAsync(targetSubject);
+        await SeedStaleTeamsAsync(targetSubject);
 
         var codeResponse = await sourceClient.PostAsync("/api/v1/account/staging-transfer-code", null, Ct);
         var code = await codeResponse.Content.ReadFromJsonAsync<CreateStagingTransferCodeResponse>(Ct);
@@ -194,12 +198,14 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             "/api/v1/account/import-from-production", new ImportFromProductionRequest(code!.Code), Ct);
         importResponse.EnsureSuccessStatusCode();
         var counts = await importResponse.Content.ReadFromJsonAsync<ImportFromProductionResponse>(Ct);
-        Assert.Equal(0, counts!.EventShopPlans);
+        Assert.Equal((0, 0), (counts!.EventShopPlans, counts.Teams));
 
         using var scope = target.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
         var profile = await db.Profiles.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Subject == targetSubject, Ct);
         Assert.Empty(await db.EventShopPlans.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
+        Assert.Empty(await db.Teams.IgnoreQueryFilters().AsNoTracking()
             .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
     }
 
@@ -266,6 +272,22 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         }
 
         await db.SaveChangesAsync(Ct);
+    }
+
+    /// <summary>Staging teams the import must replace: one named like a production team, one only staging has.</summary>
+    private async Task<IReadOnlyList<TeamId>> SeedStaleTeamsAsync(string subject)
+    {
+        using var scope = target.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        var profileId = (await db.Profiles.IgnoreQueryFilters().FirstAsync(entity => entity.Subject == subject, Ct)).Id;
+        Team StaleTeam(string name, int position) => Team.Create(
+            profileId,
+            new TeamDraft(name, [TeamMode.Horde], ["ultraCalgar", "ultraTitus", "ultraApothecary"], null, [], null, [], null),
+            position);
+        var teams = new[] { StaleTeam("First team", 1), StaleTeam("Staging only", 2) };
+        db.Teams.AddRange(teams);
+        await db.SaveChangesAsync(Ct);
+        return [.. teams.Select(team => team.Id)];
     }
 
     private async Task<SeededSource> SeedSourceAsync(string subject)

@@ -1,4 +1,6 @@
+using System.Net;
 using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.V1Import;
 using TacticusPlanner.Domain.Teams;
 
@@ -157,5 +159,42 @@ public sealed class V1ImportParsingTests
         Assert.Equal(("No chars", null), (teams[1].Name, teams[1].Chars));
         Assert.Null(teams[2].Name);
         Assert.Equal((null, null), (teams[3].Name, teams[3].Chars));
+    }
+
+    [Fact]
+    public async Task TheRealClientReadsTeamsFromTheProfileResponse()
+    {
+        const string body = """
+            {
+              "tacticusApiKey": null,
+              "data": {
+                "teams2": [
+                  { "name": "GW ultras", "chars": ["ultraCalgar", "ultraTitus", "ultraApothecary"], "guildWar": true },
+                  { "name": "Horde", "chars": ["blackAbaddon", "blackPoxwalker", "blackHaarken"], "horde": true }
+                ]
+              }
+            }
+            """;
+        var services = new ServiceCollection().AddTacticusV1Client("https://v1.example.test", "functions-key");
+        services.AddHttpClient(TacticusV1Client.HttpClientName)
+            .ConfigurePrimaryHttpMessageHandler(() => new ProfileHandler(body));
+        using var provider = services.BuildServiceProvider();
+
+        var profile = await new TacticusV1Client(provider.GetRequiredService<IHttpClientFactory>())
+            .GetProfileAsync("token", TestContext.Current.CancellationToken);
+
+        Assert.NotNull(profile?.Teams);
+        Assert.True(profile.Teams.IsPresent);
+        Assert.Equal(["GW ultras", "Horde"], profile.Teams.Teams!.Select(team => team.Name));
+        Assert.Equal(["ultraCalgar", "ultraTitus", "ultraApothecary"], profile.Teams.Teams![0].Chars);
+    }
+
+    private sealed class ProfileHandler(string body) : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) =>
+            Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(body, System.Text.Encoding.UTF8, "application/json"),
+            });
     }
 }
