@@ -31,8 +31,9 @@ and .NET Aspire for local orchestration.
   `tacticus-planner-apps` React/Vite client. `orchestration/TacticusPlanner.ServiceDefaults`
   holds shared Aspire service defaults (telemetry, health checks).
 - `.agents/skills` (canonical) / `.claude/skills` (mirror): local agent skill
-  docs — `game-catalog-data` and `vulnerabilities-scan` (NuGet vulnerability
-  scan + fix process for this repo).
+  docs — `game-catalog-data`, `review-guidelines` (what a code review checks
+  here) and `vulnerabilities-scan` (NuGet vulnerability scan + fix process for
+  this repo).
 
 ## Build, Test, and Development Commands
 
@@ -109,6 +110,13 @@ Mark nothing under `Migrations/` by hand: it is generated code (see its
 `Update Database`/`Reset Database`/`Drop Database` commands (dashboard or
 `aspire resource api-migrations <command> --apphost ...`) instead of manual
 SQL against the local database.
+
+## Code Review
+
+When you review a diff or pull request in this repo, including with the
+built-in `/code-review` or `/simplify` or when triaging CodeRabbit findings,
+read the `review-guidelines` skill first and apply it on top of the general
+review. It lists what to flag here, at what severity, and what to skip.
 
 ## Commit & Pull Request Guidelines
 
