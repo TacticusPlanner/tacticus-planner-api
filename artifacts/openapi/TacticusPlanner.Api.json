@@ -185,7 +185,7 @@
           "Account"
         ],
         "summary": "Replaces this staging account's planner data with a copy from production.",
-        "description": "Staging only (404 elsewhere). Redeems a code from production's POST account/staging-transfer-code and, in one transaction, replaces goals, projects, Legendary Event plans and run records, event shop plans, personal roster snapshots, settings and progress overrides. The Tacticus API key, player data and guild are not copied. 400 when the code is invalid or expired; 502 when production cannot be reached.",
+        "description": "Staging only (404 elsewhere). Redeems a code from production's POST account/staging-transfer-code and, in one transaction, replaces goals, projects, Legendary Event plans and run records, event shop plans, personal roster snapshots, teams, settings and progress overrides. The Tacticus API key, player data and guild are not copied. 400 when the code is invalid or expired; 502 when production cannot be reached.",
         "operationId": "TacticusPlannerApiFeaturesStagingTransferImportFromProductionEndpoint",
         "requestBody": {
           "content": {
@@ -436,7 +436,7 @@
           "Account"
         ],
         "summary": "Selectively imports integration data, progress, and goals from V1.",
-        "description": "V1 credentials are used once and never persisted. After profile retrieval, each selected part is applied independently and reports Imported, Skipped, or Failed. Goals are created directly by this operation, in V1 priority order — the response carries one outcome per source V1 goal (created, skipped, or failed), one per linked unit when a pre-farm goal fans out, plus one per automatically added prerequisite. The goals part is refused (no goals created) when the account has no player data snapshot. The legendaryEventPlans part creates one Legendary Event plan per V1 event (never touching a plan that already has teams) and reports one outcome per V1 event in legendaryEventOutcomes. The rosterSnapshots part rebuilds V1 roster snapshots and stores the live ones as V1Import personal snapshots, newest first within the manual limit, skipping ones an earlier run imported; it reports one outcome per V1 snapshot in rosterSnapshotOutcomes.",
+        "description": "V1 credentials are used once and never persisted. After profile retrieval, each selected part is applied independently and reports Imported, Skipped, or Failed. Goals are created directly by this operation, in V1 priority order — the response carries one outcome per source V1 goal (created, skipped, or failed), one per linked unit when a pre-farm goal fans out, plus one per automatically added prerequisite. The goals part is refused (no goals created) when the account has no player data snapshot. The legendaryEventPlans part creates one Legendary Event plan per V1 event (never touching a plan that already has teams) and reports one outcome per V1 event in legendaryEventOutcomes. The rosterSnapshots part rebuilds V1 roster snapshots and stores the live ones as V1Import personal snapshots, newest first within the manual limit, skipping ones an earlier run imported; it reports one outcome per V1 snapshot in rosterSnapshotOutcomes. The teams part imports V1 teams2 as personal teams, after the existing ones and within the team limit, keeping each team as V1 had it even when it breaks a team rule; it skips teams an earlier run imported (even renamed ones) and names already taken, and reports one outcome per V1 team in teamOutcomes.",
         "operationId": "TacticusPlannerApiFeaturesV1ImportImportV1ProfileEndpoint",
         "requestBody": {
           "content": {
@@ -7853,6 +7853,378 @@
         ]
       }
     },
+    "/api/v1/teams": {
+      "get": {
+        "tags": [
+          "Teams"
+        ],
+        "summary": "Lists the caller's teams in their saved order.",
+        "description": "issues are the team rules each team breaks against the current catalog, derived on every read; a team with issues stays readable, reorderable and deletable.",
+        "operationId": "TacticusPlannerApiFeaturesTeamsListTeamsEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListTeamsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Teams"
+        ],
+        "summary": "Creates a team at the end of the order.",
+        "operationId": "TacticusPlannerApiFeaturesTeamsCreateTeamEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTeamRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The created team, as GET returns it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "teamRulesBroken (each broken rule under rules), teamNameTaken, teamLimitReached, or an invalid shape.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/teams/order": {
+      "put": {
+        "tags": [
+          "Teams"
+        ],
+        "summary": "Reorders the caller's teams as a whole list.",
+        "description": "teamIds must be exactly the profile's current teams, in their new order. A reorder changes no other field of any team, including its revision.",
+        "operationId": "TacticusPlannerApiFeaturesTeamsUpdateTeamOrderEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTeamOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The reordered teams.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListTeamsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "teamOrderStale: teamIds is not the profile's current set of teams; current is the current list.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/teams/{teamId}": {
+      "put": {
+        "tags": [
+          "Teams"
+        ],
+        "summary": "Replaces a team's fields when the revision matches.",
+        "description": "The updated team must satisfy every team rule, including a team that was imported with issues. The id, position and V1 import key never change.",
+        "operationId": "TacticusPlannerApiFeaturesTeamsUpdateTeamEndpoint",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTeamRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated team, as GET returns it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "teamRulesBroken (each broken rule under rules), teamNameTaken, or an invalid shape.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The team does not exist or belongs to another profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "teamRevisionStale; current is the team as it stands.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Teams"
+        ],
+        "summary": "Deletes a team and closes the gap in the remaining positions.",
+        "operationId": "TacticusPlannerApiFeaturesTeamsDeleteTeamEndpoint",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The team was deleted."
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The team does not exist or belongs to another profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/userjot-token": {
       "get": {
         "tags": [
@@ -8071,9 +8443,16 @@
           },
           "current": {
             "description": "The conflicting resource as its read endpoint serves it."
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TeamRuleCode"
+            },
+            "description": "On a 400 teamRulesBroken: every team rule the refused team breaks."
           }
         },
-        "description": "RFC 7807 problem details. issueCode names the failure; errors maps fields to messages on a validation failure; current carries the conflicting resource in its read shape on a 409."
+        "description": "RFC 7807 problem details. issueCode names the failure; errors maps fields to messages on a validation failure; current carries the conflicting resource in its read shape on a 409; rules names the broken team rules on a 400 teamRulesBroken."
       },
       "BattleMilestone": {
         "enum": [
@@ -8648,6 +9027,88 @@
           "expiresAt": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "CreateTeamRequest": {
+        "const": null,
+        "required": [
+          "name",
+          "modes",
+          "characterIds",
+          "flexStartIndex",
+          "mowIds",
+          "mowFlexStartIndex",
+          "campaignGroupId",
+          "incursionMowIds",
+          "notes",
+          "rarityCap"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "const": null,
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "modes": {
+            "$ref": "#/components/schemas/IReadOnlyListOfTeamMode"
+          },
+          "characterIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "flexStartIndex": {
+            "const": null,
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "mowIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "mowFlexStartIndex": {
+            "const": null,
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "campaignGroupId": {
+            "const": null,
+            "maxLength": 64,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "incursionMowIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "notes": {
+            "const": null,
+            "maxLength": 300,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "rarityCap": {
+            "const": null,
+            "oneOf": [
+              {
+                "const": null,
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TeamRarityCap"
+              }
+            ]
           }
         }
       },
@@ -15248,6 +15709,7 @@
           "legendaryEventRunRecords",
           "personalRosterSnapshots",
           "eventShopPlans",
+          "teams",
           "settings",
           "overrides"
         ],
@@ -15274,6 +15736,10 @@
             "format": "int32"
           },
           "eventShopPlans": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teams": {
             "type": "integer",
             "format": "int32"
           },
@@ -15364,6 +15830,8 @@
           "legendaryEventOutcomes",
           "rosterSnapshots",
           "rosterSnapshotOutcomes",
+          "teams",
+          "teamOutcomes",
           "importProjectId",
           "profileId",
           "playerName",
@@ -15406,6 +15874,12 @@
           },
           "rosterSnapshotOutcomes": {
             "$ref": "#/components/schemas/IReadOnlyListOfV1RosterSnapshotOutcome"
+          },
+          "teams": {
+            "$ref": "#/components/schemas/ImportPartResult"
+          },
+          "teamOutcomes": {
+            "$ref": "#/components/schemas/IReadOnlyListOfV1TeamOutcome"
           },
           "importProjectId": {
             "type": [
@@ -15486,6 +15960,10 @@
             "default": false
           },
           "rosterSnapshots": {
+            "type": "boolean",
+            "default": false
+          },
+          "teams": {
             "type": "boolean",
             "default": false
           }
@@ -16236,6 +16714,24 @@
           "type": "string"
         }
       },
+      "IReadOnlyListOfTeamMode": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TeamMode"
+        }
+      },
+      "IReadOnlyListOfTeamResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TeamResponse"
+        }
+      },
+      "IReadOnlyListOfTeamRuleCode": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TeamRuleCode"
+        }
+      },
       "IReadOnlyListOfV1GoalOutcome": {
         "type": "array",
         "items": {
@@ -16258,6 +16754,18 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/V1RosterSnapshotOutcome"
+        }
+      },
+      "IReadOnlyListOfV1TeamIssue": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/V1TeamIssue"
+        }
+      },
+      "IReadOnlyListOfV1TeamOutcome": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/V1TeamOutcome"
         }
       },
       "LegendaryEventAnnotationStatus": {
@@ -16765,6 +17273,17 @@
         "properties": {
           "projects": {
             "$ref": "#/components/schemas/ListOfProjectSummaryResponse"
+          }
+        }
+      },
+      "ListTeamsResponse": {
+        "required": [
+          "teams"
+        ],
+        "type": "object",
+        "properties": {
+          "teams": {
+            "$ref": "#/components/schemas/IReadOnlyListOfTeamResponse"
           }
         }
       },
@@ -17566,6 +18085,136 @@
         ],
         "type": "string"
       },
+      "TeamMode": {
+        "enum": [
+          "warOffense",
+          "warDefense",
+          "guildRaid",
+          "tournamentArena",
+          "horde",
+          "campaign",
+          "incursion"
+        ],
+        "type": "string"
+      },
+      "TeamRarityCap": {
+        "enum": [
+          "Common",
+          "Uncommon",
+          "Rare",
+          "Epic",
+          "Legendary",
+          "Mythic"
+        ],
+        "type": "string"
+      },
+      "TeamResponse": {
+        "required": [
+          "id",
+          "revision",
+          "name",
+          "position",
+          "modes",
+          "characterIds",
+          "flexStartIndex",
+          "mowIds",
+          "mowFlexStartIndex",
+          "campaignGroupId",
+          "incursionMowIds",
+          "notes",
+          "rarityCap",
+          "issues"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modes": {
+            "$ref": "#/components/schemas/IReadOnlyListOfTeamMode"
+          },
+          "characterIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "flexStartIndex": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "mowIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "mowFlexStartIndex": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "campaignGroupId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "incursionMowIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "notes": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "rarityCap": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TeamRarityCap"
+              }
+            ]
+          },
+          "issues": {
+            "$ref": "#/components/schemas/IReadOnlyListOfTeamRuleCode"
+          }
+        }
+      },
+      "TeamRuleCode": {
+        "enum": [
+          "nameLength",
+          "noMode",
+          "tooFewCharacters",
+          "unknownUnit",
+          "modeNotCombinable",
+          "tooManyCoreCharacters",
+          "tooManyCoreMows",
+          "mowsNotAllowed",
+          "campaignRequired",
+          "unknownCampaign",
+          "coreCharacterMissing",
+          "factionNotAllowed",
+          "incursionRequired",
+          "unknownIncursion",
+          "noSharedIncursionFaction"
+        ],
+        "type": "string"
+      },
       "UnitId": {
         "type": "string"
       },
@@ -18293,6 +18942,106 @@
           }
         }
       },
+      "UpdateTeamOrderRequest": {
+        "required": [
+          "teamIds"
+        ],
+        "type": "object",
+        "properties": {
+          "teamIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGuid"
+          }
+        }
+      },
+      "UpdateTeamRequest": {
+        "const": null,
+        "required": [
+          "name",
+          "modes",
+          "characterIds",
+          "flexStartIndex",
+          "mowIds",
+          "mowFlexStartIndex",
+          "campaignGroupId",
+          "incursionMowIds",
+          "notes",
+          "rarityCap",
+          "revision"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "const": null,
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "modes": {
+            "$ref": "#/components/schemas/IReadOnlyListOfTeamMode"
+          },
+          "characterIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "flexStartIndex": {
+            "const": null,
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "mowIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "mowFlexStartIndex": {
+            "const": null,
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "campaignGroupId": {
+            "const": null,
+            "maxLength": 64,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "incursionMowIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "notes": {
+            "const": null,
+            "maxLength": 300,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "rarityCap": {
+            "const": null,
+            "oneOf": [
+              {
+                "const": null,
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TeamRarityCap"
+              }
+            ]
+          },
+          "revision": {
+            "const": null,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "UpdateUserSettingsRequest": {
         "const": null,
         "required": [
@@ -18748,6 +19497,61 @@
           "failed"
         ],
         "type": "string"
+      },
+      "V1TeamIssue": {
+        "required": [
+          "code",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "V1TeamOutcome": {
+        "required": [
+          "name",
+          "status",
+          "code",
+          "teamId",
+          "issues"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "status": {
+            "$ref": "#/components/schemas/ImportPartStatus"
+          },
+          "code": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "teamId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "uuid"
+          },
+          "issues": {
+            "$ref": "#/components/schemas/IReadOnlyListOfV1TeamIssue"
+          }
+        }
       },
       "XpBookRarity": {
         "enum": [

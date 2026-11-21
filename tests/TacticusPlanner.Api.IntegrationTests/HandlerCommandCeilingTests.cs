@@ -2,7 +2,9 @@ using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.TacticusIntegration;
+using TacticusPlanner.Api.Features.Teams;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.Teams;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.TacticusApi.Models.Guild;
 using TacticusPlanner.TacticusApi.Models.GuildRaid;
@@ -29,6 +31,12 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     private const int RaidStatus = 7;
     // Plus the automatic roster snapshot check: its savepoint, the setting, the profile lock and one recency read.
     private const int PlayerSync = 10;
+    // Teams: the caller lookup, then (writes) the profile lock, one count or set read, and one write or list read.
+    private const int ListTeams = 2;
+    private const int CreateTeam = 5;
+    private const int UpdateTeam = 5;
+    private const int DeleteTeam = 5;
+    private const int ReorderTeams = 5;
 
     private static readonly CreateGoalRequest Rank = new(
         GoalEntityType.Character,
@@ -190,6 +198,35 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
         // The second sync is the steady-state path: the snapshot row already exists.
         (await client.PostAsync("/api/v1/player-data/sync", null, ct)).EnsureSuccessStatusCode();
         AssertWithin(PlayerSync, await client.PostAsync("/api/v1/player-data/sync", null, ct));
+    }
+
+    private static CreateTeamRequest Team(string name) =>
+        new(name, [TeamMode.Horde], ["ultraCalgar", "ultraTitus", "ultraApothecary"], null, [], null, null, [], null, null);
+
+    private static async Task<TeamResponse> CreateTeamAsync(HttpClient client, string name)
+    {
+        var response = await client.PostAsJsonAsync("/api/v1/teams", Team(name), TestContext.Current.CancellationToken);
+        response.EnsureSuccessStatusCode();
+        return (await response.Content.ReadFromJsonAsync<TeamResponse>(TestContext.Current.CancellationToken))!;
+    }
+
+    [Fact]
+    public async Task TeamEndpointsStayWithinCeilings()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var ct = TestContext.Current.CancellationToken;
+        var first = await CreateTeamAsync(client, "First team");
+
+        AssertWithin(CreateTeam, await client.PostAsJsonAsync("/api/v1/teams", Team("Second team"), ct));
+        AssertWithin(ListTeams, await client.GetAsync("/api/v1/teams", ct));
+        var second = (await client.GetFromJsonAsync<ListTeamsResponse>("/api/v1/teams", ct))!.Teams[1];
+        AssertWithin(UpdateTeam, await client.PutAsJsonAsync(
+            $"/api/v1/teams/{first.Id}",
+            new UpdateTeamRequest("Renamed team", first.Modes, first.CharacterIds, null, [], null, null, [], null, null, first.Revision),
+            ct));
+        AssertWithin(ReorderTeams, await client.PutAsJsonAsync(
+            "/api/v1/teams/order", new UpdateTeamOrderRequest([second.Id, first.Id]), ct));
+        AssertWithin(DeleteTeam, await client.DeleteAsync($"/api/v1/teams/{second.Id}", ct));
     }
 
     private static async Task<GoalDetailResponse> CreateAsync(HttpClient client)

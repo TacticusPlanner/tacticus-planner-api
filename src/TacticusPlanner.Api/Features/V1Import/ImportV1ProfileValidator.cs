@@ -30,7 +30,8 @@ public sealed class ImportV1ProfileValidator : Validator<ImportV1ProfileRequest>
                     || selection.OnslaughtProgress
                     || selection.CampaignEventProgress
                     || selection.LegendaryEventPlans
-                    || selection.RosterSnapshots))
+                    || selection.RosterSnapshots
+                    || selection.Teams))
             .WithMessage("Select at least one V1 profile part to import.");
     }
 }

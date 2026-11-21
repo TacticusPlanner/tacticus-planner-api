@@ -47,6 +47,10 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
             .Where(entity => entity.ProfileId == profileId)
             .OrderBy(entity => entity.EventId)
             .ToListAsync(ct);
+        var teams = await db.Teams.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profileId)
+            .OrderBy(entity => entity.SortOrder).ThenBy(entity => entity.Id)
+            .ToListAsync(ct);
         var rosterSnapshots = await db.PersonalRosterSnapshots.IgnoreQueryFilters().AsNoTracking()
             .Where(entity => entity.ProfileId == profileId)
             .OrderBy(entity => entity.TakenAt).ThenBy(entity => entity.Id)
@@ -132,6 +136,20 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
                 EventId = plan.EventId,
                 CatalogVersion = plan.CatalogVersion,
                 Entries = plan.Entries,
+            }).ToList(),
+            Teams = teams.Select(team => new StagingTransferTeam
+            {
+                Name = team.Name,
+                Modes = team.Modes,
+                CharacterIds = team.CharacterIds,
+                FlexStartIndex = team.FlexStartIndex,
+                MowIds = team.MowIds,
+                MowFlexStartIndex = team.MowFlexStartIndex,
+                CampaignGroupId = team.CampaignGroupId,
+                IncursionMowIds = team.IncursionMowIds,
+                Notes = team.Notes,
+                RarityCap = team.RarityCap,
+                ImportKey = team.ImportKey,
             }).ToList(),
         };
     }

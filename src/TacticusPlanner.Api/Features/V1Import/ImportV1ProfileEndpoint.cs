@@ -35,7 +35,10 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
                 + "(never touching a plan that already has teams) and reports one outcome per V1 event in "
                 + "legendaryEventOutcomes. The rosterSnapshots part rebuilds V1 roster snapshots and stores the live ones "
                 + "as V1Import personal snapshots, newest first within the manual limit, skipping ones an earlier run "
-                + "imported; it reports one outcome per V1 snapshot in rosterSnapshotOutcomes.";
+                + "imported; it reports one outcome per V1 snapshot in rosterSnapshotOutcomes. The teams part imports V1 "
+                + "teams2 as personal teams, after the existing ones and within the team limit, keeping each team as V1 "
+                + "had it even when it breaks a team rule; it skips teams an earlier run imported (even renamed ones) and "
+                + "names already taken, and reports one outcome per V1 team in teamOutcomes.";
             summary.Response(StatusCodes.Status429TooManyRequests, UpstreamRateLimit.ResponseDescription);
         });
     }
@@ -115,6 +118,10 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             ? await Resolve<V1RosterSnapshotImportService>().ImportAsync(profileId.Value, v1.RosterSnapshots, ct)
             : new V1RosterSnapshotImportResult(ImportPartResult.NotSelected(), []);
 
+        var teams = selection.Teams
+            ? await Resolve<V1TeamImportService>().ImportAsync(profileId.Value, v1.Teams, ct)
+            : new V1TeamImportResult(ImportPartResult.NotSelected(), []);
+
         await Send.OkAsync(new ImportV1ProfileResponse(
             userId,
             personalKey.Part,
@@ -129,6 +136,8 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             LegendaryEventOutcomes = legendaryEvents.Outcomes,
             RosterSnapshots = rosterSnapshots.Part,
             RosterSnapshotOutcomes = rosterSnapshots.Outcomes,
+            Teams = teams.Part,
+            TeamOutcomes = teams.Outcomes,
             ImportProjectId = goalResult.ProjectId,
             ProfileId = profileId.Value.Value,
             PlayerName = personalKey.PlayerName,
@@ -472,7 +481,9 @@ public sealed record ImportV1Selection(
     // V1 Legendary Event teams and notes (leTeams / leProgress). Off unless asked for.
     bool LegendaryEventPlans = false,
     // V1 roster snapshots (rosterSnapshots), stored as V1Import personal snapshots. Off unless asked for.
-    bool RosterSnapshots = false
+    bool RosterSnapshots = false,
+    // V1 teams (teams2), stored as personal teams. Off unless asked for.
+    bool Teams = false
 );
 
 public sealed record ImportV1ProfileRequest(string? Username, string? Password, ImportV1Selection? Import);
@@ -509,6 +520,13 @@ public sealed record ImportV1ProfileResponse(
     /// <summary>One outcome per V1 roster snapshot, newest first, when <c>rosterSnapshots</c> was selected.</summary>
     [JsonRequired]
     public IReadOnlyList<V1RosterSnapshotOutcome> RosterSnapshotOutcomes { get; init; } = [];
+
+    [JsonRequired]
+    public ImportPartResult Teams { get; init; } = ImportPartResult.NotSelected();
+
+    /// <summary>One outcome per processed V1 team, in V1 priority order, when <c>teams</c> was selected.</summary>
+    [JsonRequired]
+    public IReadOnlyList<V1TeamOutcome> TeamOutcomes { get; init; } = [];
 
     /// <summary>The project this run's imported goals went into; null when it created no goals.</summary>
     [JsonRequired]

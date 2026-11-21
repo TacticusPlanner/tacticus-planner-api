@@ -18,7 +18,7 @@ namespace TacticusPlanner.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.14")
+                .HasAnnotation("ProductVersion", "10.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -908,6 +908,108 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasDatabaseName("ix_personal_roster_snapshots_profile_id_taken_at_id");
 
                     b.ToTable("personal_roster_snapshots", (string)null);
+                });
+
+            modelBuilder.Entity("TacticusPlanner.Domain.Teams.Team", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("CampaignGroupId")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("campaign_group_id");
+
+                    b.PrimitiveCollection<List<string>>("CharacterIds")
+                        .IsRequired()
+                        .HasColumnType("text[]")
+                        .HasColumnName("character_ids");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int?>("FlexStartIndex")
+                        .HasColumnType("integer")
+                        .HasColumnName("flex_start_index");
+
+                    b.Property<string>("ImportKey")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("import_key");
+
+                    b.PrimitiveCollection<List<string>>("IncursionMowIds")
+                        .IsRequired()
+                        .HasColumnType("text[]")
+                        .HasColumnName("incursion_mow_ids");
+
+                    b.PrimitiveCollection<string[]>("Modes")
+                        .IsRequired()
+                        .HasColumnType("text[]")
+                        .HasColumnName("modes");
+
+                    b.Property<int?>("MowFlexStartIndex")
+                        .HasColumnType("integer")
+                        .HasColumnName("mow_flex_start_index");
+
+                    b.PrimitiveCollection<List<string>>("MowIds")
+                        .IsRequired()
+                        .HasColumnType("text[]")
+                        .HasColumnName("mow_ids");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("NameKey")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("name_key");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasColumnName("notes");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("RarityCap")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("rarity_cap");
+
+                    b.Property<long>("Revision")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("revision");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer")
+                        .HasColumnName("sort_order");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_teams");
+
+                    b.HasIndex("ProfileId", "ImportKey")
+                        .IsUnique()
+                        .HasDatabaseName("ux_teams_profile_id_import_key")
+                        .HasFilter("import_key IS NOT NULL");
+
+                    b.HasIndex("ProfileId", "NameKey")
+                        .IsUnique()
+                        .HasDatabaseName("ux_teams_profile_id_name_key");
+
+                    b.ToTable("teams", (string)null);
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.UserSettings.UserSettings", b =>
@@ -3411,6 +3513,18 @@ namespace TacticusPlanner.Persistence.Migrations
 
                     b.Navigation("Roster")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TacticusPlanner.Domain.Teams.Team", b =>
+                {
+                    b.HasOne("TacticusPlanner.Domain.Profiles.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_teams_profiles_profile_id");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.UserSettings.UserSettings", b =>
