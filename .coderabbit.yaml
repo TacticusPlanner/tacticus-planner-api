@@ -32,3 +32,4 @@ knowledge_base:
   code_guidelines:
     filePatterns:
       - "AGENTS.md"
+      - ".agents/skills/review-guidelines/SKILL.md"
