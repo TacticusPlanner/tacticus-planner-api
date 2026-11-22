@@ -9,6 +9,7 @@ using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Domain.RosterSnapshots;
+using TacticusPlanner.Domain.Teams;
 using TacticusPlanner.Domain.UserSettings;
 using TacticusPlanner.GameDomain;
 using TacticusPlanner.Persistence;
@@ -57,6 +58,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         var targetClient = await GoalsTestHelpers.CreateProvisionedClientAsync(target, targetSubject);
         var staleGoalIds = await GoalsTestHelpers.SeedRankGoalsAsync(target, targetSubject, 2, GoalStatus.Completed);
         await SeedStaleEventShopPlansAsync(targetSubject);
+        var staleTeamIds = await SeedStaleTeamsAsync(targetSubject);
 
         var codeResponse = await sourceClient.PostAsync("/api/v1/account/staging-transfer-code", null, Ct);
         codeResponse.EnsureSuccessStatusCode();
@@ -68,7 +70,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         importResponse.EnsureSuccessStatusCode();
         var counts = await importResponse.Content.ReadFromJsonAsync<ImportFromProductionResponse>(Ct);
         // Two projects: the seeded one and the Default project provisioned with the production account.
-        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, 1, 1, true, true), counts);
+        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, 1, 1, 3, true, true), counts);
 
         using var scope = target.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
@@ -123,6 +125,19 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         Assert.Equal("ultraCalgar", Assert.Single(snapshot.Roster.Characters).UnitId.Value);
         Assert.Equal(1, snapshot.CharacterCount);
 
+        var teams = await db.Teams.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profile.Id).OrderBy(entity => entity.SortOrder).ToListAsync(Ct);
+        Assert.Equal(
+            [("First team", 1, (string?)null), ("V1 team", 2, "gw ultras"), ("Third team", 3, null)],
+            teams.Select(team => (team.Name, team.SortOrder, team.ImportKey)));
+        Assert.DoesNotContain(teams, team => seeded.TeamIds.Contains(team.Id));
+        // The staging teams seeded before the import, one sharing a production team's name, are gone.
+        Assert.DoesNotContain(teams, team => staleTeamIds.Contains(team.Id));
+        Assert.Equal(["ultraCalgar", "ultraTitus"], teams[0].CharacterIds);
+        Assert.Equal((1, "prod notes"), (teams[0].FlexStartIndex, teams[0].Notes));
+        Assert.Equal((1, TeamRarityCap.Legendary), (teams[0].MowFlexStartIndex, teams[0].RarityCap));
+        Assert.Equal([TeamMode.WarDefense], teams[0].Modes);
+
         var settings = await db.UserSettings.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Id == profile.Id, Ct);
         Assert.Equal(538, settings.Settings.DailyEnergy);
 
@@ -175,6 +190,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         var targetSubject = $"stg-{Guid.NewGuid()}";
         var targetClient = await GoalsTestHelpers.CreateProvisionedClientAsync(target, targetSubject);
         await SeedStaleEventShopPlansAsync(targetSubject);
+        await SeedStaleTeamsAsync(targetSubject);
 
         var codeResponse = await sourceClient.PostAsync("/api/v1/account/staging-transfer-code", null, Ct);
         var code = await codeResponse.Content.ReadFromJsonAsync<CreateStagingTransferCodeResponse>(Ct);
@@ -182,12 +198,14 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             "/api/v1/account/import-from-production", new ImportFromProductionRequest(code!.Code), Ct);
         importResponse.EnsureSuccessStatusCode();
         var counts = await importResponse.Content.ReadFromJsonAsync<ImportFromProductionResponse>(Ct);
-        Assert.Equal(0, counts!.EventShopPlans);
+        Assert.Equal((0, 0), (counts!.EventShopPlans, counts.Teams));
 
         using var scope = target.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
         var profile = await db.Profiles.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Subject == targetSubject, Ct);
         Assert.Empty(await db.EventShopPlans.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
+        Assert.Empty(await db.Teams.IgnoreQueryFilters().AsNoTracking()
             .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
     }
 
@@ -232,7 +250,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         Assert.Equal(HttpStatusCode.NotFound, codeOnTarget.StatusCode);
     }
 
-    private sealed record SeededSource(GoalId ParentGoalId, GoalId ChildGoalId, DateTimeOffset SnapshotTakenAt);
+    private sealed record SeededSource(GoalId ParentGoalId, GoalId ChildGoalId, DateTimeOffset SnapshotTakenAt, IReadOnlyList<TeamId> TeamIds);
 
     /// <summary>Staging plans the import must replace: one for an event production has no plan for, one for the
     /// same event production has.</summary>
@@ -254,6 +272,22 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         }
 
         await db.SaveChangesAsync(Ct);
+    }
+
+    /// <summary>Staging teams the import must replace: one named like a production team, one only staging has.</summary>
+    private async Task<IReadOnlyList<TeamId>> SeedStaleTeamsAsync(string subject)
+    {
+        using var scope = target.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        var profileId = (await db.Profiles.IgnoreQueryFilters().FirstAsync(entity => entity.Subject == subject, Ct)).Id;
+        Team StaleTeam(string name, int position) => Team.Create(
+            profileId,
+            new TeamDraft(name, [TeamMode.Horde], ["ultraCalgar", "ultraTitus", "ultraApothecary"], null, [], null, [], null),
+            position);
+        var teams = new[] { StaleTeam("First team", 1), StaleTeam("Staging only", 2) };
+        db.Teams.AddRange(teams);
+        await db.SaveChangesAsync(Ct);
+        return [.. teams.Select(team => team.Id)];
     }
 
     private async Task<SeededSource> SeedSourceAsync(string subject)
@@ -344,7 +378,17 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             OnslaughtProgressOverrides = [new OnslaughtProgressOverrideRecord { Alliance = "Xenos", Sector = "Iron", Tier = 2 }],
         });
 
+        // Three ordered teams, stored out of insertion order; the second came from a V1 import.
+        Team SeedTeam(string name, int position, string? importKey = null) => Team.Create(
+            profileId,
+            new TeamDraft(name, [TeamMode.WarDefense], ["ultraCalgar", "ultraTitus"], 1, ["ultraDreadnought", "tauBroadside"], null, [],
+                "prod notes", MowFlexStartIndex: 1, RarityCap: TeamRarityCap.Legendary),
+            position,
+            importKey);
+        var teams = new[] { SeedTeam("Third team", 3), SeedTeam("First team", 1), SeedTeam("V1 team", 2, "gw ultras") };
+        db.Teams.AddRange(teams);
+
         await db.SaveChangesAsync(Ct);
-        return new SeededSource(parent.Id, child.Id, takenAt);
+        return new SeededSource(parent.Id, child.Id, takenAt, [.. teams.Select(team => team.Id)]);
     }
 }

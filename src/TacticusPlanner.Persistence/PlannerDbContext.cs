@@ -9,6 +9,7 @@ using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Domain.RosterSnapshots;
+using TacticusPlanner.Domain.Teams;
 using TacticusPlanner.Persistence.Encryption;
 using UserSettingsEntity = TacticusPlanner.Domain.UserSettings.UserSettings;
 
@@ -65,6 +66,8 @@ public sealed class PlannerDbContext(
     public DbSet<PersonalRosterSnapshot> PersonalRosterSnapshots => Set<PersonalRosterSnapshot>();
 
     public DbSet<EventShopPlan> EventShopPlans => Set<EventShopPlan>();
+
+    public DbSet<Team> Teams => Set<Team>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -135,6 +138,7 @@ public sealed class PlannerDbContext(
         modelBuilder.Entity<LegendaryEventRunRecord>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
         modelBuilder.Entity<PersonalRosterSnapshot>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
         modelBuilder.Entity<EventShopPlan>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
+        modelBuilder.Entity<Team>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
 
         // Join table with no ProfileId of its own: scoped through its parent Project.
         modelBuilder.Entity<ProjectGoal>().HasQueryFilter(entity => entity.Project!.ProfileId == CurrentProfileId);

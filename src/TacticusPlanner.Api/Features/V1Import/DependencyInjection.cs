@@ -7,6 +7,7 @@ public static class DependencyInjection
         services.AddScoped<V1GoalImportService>();
         services.AddScoped<V1LegendaryEventImportService>();
         services.AddScoped<V1RosterSnapshotImportService>();
+        services.AddScoped<V1TeamImportService>();
         services.AddTacticusV1Client(
             configuration["V1Api:BaseUrl"],
             configuration["V1Api:FunctionsKey"]

@@ -56,6 +56,11 @@ public sealed class PostgresTestDatabase : IAsyncDisposable
 
     public PlannerDbContext CreateContext() => CreateContext(ProfileId);
 
+    /// <summary>A context of the seeded profile with <paramref name="interceptors"/> added, for faults.</summary>
+    public PlannerDbContext CreateContext(params IInterceptor[] interceptors) =>
+        new(new DbContextOptionsBuilder<PlannerDbContext>(Options).AddInterceptors(interceptors).Options,
+            new PassthroughEncryption(), new StaticProfile(ProfileId));
+
     /// <summary>Adds a profile with <paramref name="projects"/> custom projects (their ids land in
     /// <see cref="ProjectIds"/> for the seeded profile).</summary>
     public async Task SeedProfileAsync(ProfileId profileId, int projects = 1)

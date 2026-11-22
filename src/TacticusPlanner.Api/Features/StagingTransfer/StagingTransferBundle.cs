@@ -4,6 +4,7 @@ using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Domain.RosterSnapshots;
+using TacticusPlanner.Domain.Teams;
 using TacticusPlanner.Domain.UserSettings;
 
 namespace TacticusPlanner.Api.Features.StagingTransfer;
@@ -43,6 +44,9 @@ public sealed record StagingTransferBundle
     public List<StagingTransferPersonalRosterSnapshot> PersonalRosterSnapshots { get; init; } = [];
 
     public List<StagingTransferEventShopPlan> EventShopPlans { get; init; } = [];
+
+    /// <summary>The profile's teams in their order; empty in bundles exported before teams existed.</summary>
+    public List<StagingTransferTeam> Teams { get; init; } = [];
 }
 
 public sealed record StagingTransferOverrides
@@ -166,4 +170,31 @@ public sealed record StagingTransferPersonalRosterSnapshot
     public string? ImportKey { get; init; }
 
     public RosterSnapshot Roster { get; init; } = new();
+}
+
+/// <summary>A personal team (<c>personal-teams</c>). Its position is its place in <see cref="StagingTransferBundle.Teams"/>.</summary>
+public sealed record StagingTransferTeam
+{
+    public string Name { get; init; } = string.Empty;
+
+    public List<TeamMode> Modes { get; init; } = [];
+
+    public List<string> CharacterIds { get; init; } = [];
+
+    public int? FlexStartIndex { get; init; }
+
+    public List<string> MowIds { get; init; } = [];
+
+    public int? MowFlexStartIndex { get; init; }
+
+    public string? CampaignGroupId { get; init; }
+
+    public List<string> IncursionMowIds { get; init; } = [];
+
+    public string? Notes { get; init; }
+
+    public TeamRarityCap? RarityCap { get; init; }
+
+    /// <summary>Set on a team imported from V1, so a V1 import re-run on staging still skips it.</summary>
+    public string? ImportKey { get; init; }
 }
