@@ -1,0 +1,22 @@
+name: PR Approval Review Relay
+
+# Only signals pr-approval-recheck.yml that the maintainer reviewed a PR. It
+# decides nothing: for a fork PR this file runs from the fork's merge commit
+# with a read-only token, so the approval check itself runs elsewhere.
+on:
+  pull_request_review:
+    types:
+      - submitted
+      - dismissed
+
+permissions: {}
+
+jobs:
+  relay:
+    # Other people's reviews cannot change the approval check.
+    if: github.event.review.user.login == 'svehera'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Signal the approval recheck
+        run: echo "Maintainer review received; the approval check re-runs next."
