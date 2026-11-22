@@ -12012,7 +12012,8 @@
         "required": [
           "name",
           "target",
-          "parameters"
+          "parameters",
+          "locaKey"
         ],
         "type": "object",
         "properties": {
@@ -12025,6 +12026,12 @@
           },
           "parameters": {
             "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndString"
+          },
+          "locaKey": {
+            "type": [
+              "null",
+              "string"
+            ]
           }
         }
       },

@@ -31,7 +31,7 @@ public sealed class HreDenormalizerTests
 
     private static DatamineHreSources Sources(
         DatamineHeroReleaseEvent? hre = null,
-        string quests = """{ "hre1": { "quests": [ { "name": "hre1_q1", "rewards": ["hreCurrency:100"], "successorQuests": ["hre1_bonus"], "tasks": [{ "name": "RaidBattles", "target": 5 }] }, { "name": "hre1_bonus", "rewards": ["summoningToken"], "tasks": [{ "name": "DealDamageWithHero", "target": 15000, "taskParameters": { "heroId": "orksWeirdboy" } }] } ] } }""",
+        string quests = """{ "hre1": { "quests": [ { "name": "hre1_q1", "rewards": ["hreCurrency:100"], "successorQuests": ["hre1_bonus"], "tasks": [{ "name": "RaidBattles", "target": 5, "locaKey": "RaidBattles_description" }] }, { "name": "hre1_bonus", "rewards": ["summoningToken"], "tasks": [{ "name": "DealDamageWithHero", "target": 15000, "taskParameters": { "heroId": "orksWeirdboy" } }] } ] } }""",
         string chests = """{ "hre_phase_chest_1_00": [{ "rewards": ["hreCurrency:550", "gold:7000-8000", "hreShards:33"] }], "hre_progress_chest_01": [{ "rewards": ["gold:500-550", "hreShards:10-11"] }] }""",
         string products = """{ "p1": { "chestId": "hre_progress_chest_01", "cost": { "type": "hreCurrency", "amount": 100 } }, "p2": { "chestId": "other" } }""") =>
         new(
@@ -81,6 +81,18 @@ public sealed class HreDenormalizerTests
     }
 
     [Fact]
+    public void TheShippedTasksCarryTheirHintKeys()
+    {
+        var tasks = Snapshot.HreViews.SelectMany(hre => hre.Missions).SelectMany(mission => mission.Tasks).ToArray();
+
+        Assert.All(tasks, task => Assert.False(string.IsNullOrEmpty(task.LocaKey)));
+        Assert.Equal("SlayEnemiesWithFactionTrait_description", Weirdboy.Missions[1].Tasks[1].LocaKey);
+        // The key tells variants of one task name apart; the name alone would pick the generic hint.
+        var psychic = Weirdboy.Missions[8].Tasks.Single(task => task.Name == "DealDamageOfProfileType");
+        Assert.Equal("DealDamageOfProfileType_Psychic_description", psychic.LocaKey);
+    }
+
+    [Fact]
     public void TheShippedLeaderboardMatchesTheWikiBrackets()
     {
         var leaderboard = Weirdboy.Leaderboard;
@@ -112,6 +124,7 @@ public sealed class HreDenormalizerTests
 
         Assert.Equal(["hre1_q1", "hre1_bonus"], hre.Missions.Select(mission => mission.Id));
         Assert.Equal((100, false), (hre.Missions[0].Currency, hre.Missions[0].Bonus));
+        Assert.Equal(["RaidBattles_description", null], hre.Missions.Select(mission => mission.Tasks[0].LocaKey));
         Assert.Equal(new GameCatalogHrePhaseChest(0, "hre_phase_chest_1_00", 550, 33), hre.Leaderboard.Phases[0].Tiers[0]);
         Assert.Equal([new GameCatalogHreChest("hre_progress_chest_01", 100, 10, 11)], hre.ChestShop);
     }
@@ -151,7 +164,7 @@ public sealed class HreDenormalizerTests
     [Fact]
     public void UnknownReferencesFailValidation()
     {
-        var task = new GameCatalogHreMissionTask("SlayEnemiesOfFaction", 1, new Dictionary<string, string> { ["factionId"] = "Squats" });
+        var task = new GameCatalogHreMissionTask("SlayEnemiesOfFaction", 1, new Dictionary<string, string> { ["factionId"] = "Squats" }, null);
         var hre = Weirdboy with
         {
             HeroId = "nobody",

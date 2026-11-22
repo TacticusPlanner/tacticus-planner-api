@@ -1,6 +1,6 @@
 ﻿{
   version: 1.44.88.3089+3e1589cba710,
-  schemaHash: f4346089a29accbd2844611263bbbf3e3a8ead594a8f0fbffcf54bc51f15f841,
+  schemaHash: 922528cc02cb85330710c3b16e1c50402c36ede37731aa85b14d43f1f3f91cc3,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},
   datasets: [
@@ -76,7 +76,7 @@
     },
     {
       key: hre,
-      hash: 58099c3a704dc090613a6a3ea90ddf121d444a050b10efc86e2cec0d710c9201,
+      hash: 6fd2d8915e22d3a143aca35ce4d37e1a97145a21a7eb71c97db772857acb1458,
       url: /api/v1/game-catalog/hre/{envelopeHash}
     },
     {
