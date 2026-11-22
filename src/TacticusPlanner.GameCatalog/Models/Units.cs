@@ -90,8 +90,55 @@ public sealed record GameCatalogCharacterView(
     IReadOnlyList<GameCatalogFarmLocation> ShardLocations,
     IReadOnlyList<GameCatalogEquipmentSlot> EligibleEquipment,
     // none, optional, conditional or forced: see GameCatalogUnitSummons.
-    string Summons
+    string Summons,
+    // The active then passive abilities with their curated roles and target: see GameCatalogUnitAbility.
+    IReadOnlyList<GameCatalogUnitAbility> Abilities
 );
+
+/// <summary>
+/// One ability of a character or MoW as curated in <c>unit-abilities</c>: what it does (<c>Roles</c>, one or more of
+/// <see cref="GameCatalogAbilityRoles"/>) and what it lands on (<c>Target</c>, one of <see cref="GameCatalogAbilityTargets"/>).
+/// <c>Kind</c> is <c>active</c> or <c>passive</c> for a character and <c>primary</c> or <c>secondary</c> for a MoW.
+/// <c>Attack</c> is <c>melee</c> or <c>ranged</c> when the datamine gives the ability that attack range, else null
+/// (no attack, or the unit's normal attack).
+/// </summary>
+public sealed record GameCatalogUnitAbility(
+    string Id,
+    string Kind,
+    IReadOnlyList<string> Roles,
+    string Target,
+    string? Attack
+);
+
+/// <summary>The roles an ability can have in <c>unit-abilities</c>.</summary>
+public static class GameCatalogAbilityRoles
+{
+    /// <summary>The ability itself deals damage (counts as ability damage).</summary>
+    public const string Damage = "damage";
+
+    /// <summary>Heals, repairs, shields, revives or buffs the unit or its allies.</summary>
+    public const string Support = "support";
+
+    /// <summary>Summons, moves, marks, debuffs, taunts or changes terrain.</summary>
+    public const string Utility = "utility";
+
+    public static readonly IReadOnlySet<string> All = new HashSet<string>([Damage, Support, Utility], StringComparer.Ordinal);
+}
+
+/// <summary>What an ability in <c>unit-abilities</c> lands on.</summary>
+public static class GameCatalogAbilityTargets
+{
+    /// <summary>No target to pick: the unit itself, or a trigger that hits nobody.</summary>
+    public const string None = "none";
+
+    /// <summary>One unit.</summary>
+    public const string OneUnit = "single";
+
+    /// <summary>An area or several units.</summary>
+    public const string Aoe = "aoe";
+
+    public static readonly IReadOnlySet<string> All = new HashSet<string>([None, OneUnit, Aoe], StringComparer.Ordinal);
+}
 
 /// <summary>
 /// The served <c>summons</c> of a character or MoW, curated in <c>unit-summons</c>: whether the unit can bring a

@@ -68,6 +68,11 @@ restrictions); these are silently ignored on deserialize.
   `Data/curated/unit-summons.json` (unlisted ⇒ `none`). The load fails when the curated units differ from the units
   with an ability that has a `summonHp…` variable, so a bump that adds a summoner needs its entry
   (`Denormalization/UnitSummonsDenormalizer.cs`).
+  Characters and MoWs also serve `abilities`: the active then passive ability (a MoW's primary then secondary), each
+  with `id`, `kind`, curated `roles` (`damage` / `support` / `utility`, one or more) and `target` (`none` / `single` /
+  `aoe`) from `Data/curated/unit-abilities.json`, and `attack` (`melee` / `ranged`, else null) from the ability's
+  `attackRangeType`. Every unit's every active and passive ability must be curated, so a bump that adds a unit or
+  changes its abilities fails until they are (`Denormalization/UnitAbilitiesDenormalizer.cs`).
 - **mows** is a plain array; the shared upgrade-cost ladder is its own dataset `mow-upgrade-costs`, keyed by the ability **level** it
   raises a MoW to (`level = rawIndex + 2`; level 1 is free).
 - **ascension-costs** is the shared `(rarity, stars)` orb/shard ladder — one shared progression, served as

@@ -9445,7 +9445,8 @@
           "rankUpUpgrades",
           "shardLocations",
           "eligibleEquipment",
-          "summons"
+          "summons",
+          "abilities"
         ],
         "type": "object",
         "properties": {
@@ -9536,6 +9537,9 @@
           },
           "summons": {
             "type": "string"
+          },
+          "abilities": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogUnitAbility"
           }
         }
       },
@@ -12897,7 +12901,8 @@
           "alliance",
           "primaryAbility",
           "secondaryAbility",
-          "summons"
+          "summons",
+          "abilities"
         ],
         "type": "object",
         "properties": {
@@ -12924,6 +12929,9 @@
           },
           "summons": {
             "type": "string"
+          },
+          "abilities": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogUnitAbility"
           },
           "mythicAbility": {
             "oneOf": [
@@ -14423,6 +14431,36 @@
           "modifier": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "GameCatalogUnitAbility": {
+        "required": [
+          "id",
+          "kind",
+          "roles",
+          "target",
+          "attack"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "roles": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "target": {
+            "type": "string"
+          },
+          "attack": {
+            "type": [
+              "null",
+              "string"
+            ]
           }
         }
       },
@@ -16078,6 +16116,12 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogTraitPowerModifier"
+        }
+      },
+      "IReadOnlyListOfGameCatalogUnitAbility": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogUnitAbility"
         }
       },
       "IReadOnlyListOfGameCatalogUnitPowerUnit": {

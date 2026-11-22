@@ -1,0 +1,1909 @@
+{
+  "adeptCanoness": {
+    "BrazierOfHolyFire": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "CondemnorStake": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "adeptCelestine": {
+    "SkyStrike": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "GeminaeSuperia": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "adeptExorcist": {
+    "ThriceBlessedConflagration": {
+      "roles": [
+        "damage",
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "DevastatingRefrain": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    }
+  },
+  "adeptHospitaller": {
+    "RitesOfRestoration": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "MedicusMinistorum": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "adeptMorvenn": {
+    "SanctorumMissile": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "RighteousRepugnance": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    }
+  },
+  "adeptRetributor": {
+    "ArmoriumCherub": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "FireOfAbsolution": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    }
+  },
+  "admecDestroyer": {
+    "SentinelDirectives": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "HeavyGravCannon": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "admecDominus": {
+    "RadBombardment": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    },
+    "MasterAnnihilator": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    }
+  },
+  "admecManipulus": {
+    "DefendTheDivineWork": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "GalvanicField": {
+      "roles": [
+        "support"
+      ],
+      "target": "single"
+    }
+  },
+  "admecMarshall": {
+    "DoctrinaImperatives": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "ControlEdict": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "admecRuststalker": {
+    "CordClaw": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "OptimizedGait": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "astarCyrus": {
+    "StrikeFromTheShadows": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "HaywireMine": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "astarEradicator": {
+    "TotalObliteration": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "CrucibleOfBattle": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "astarLysander": {
+    "TitanhammerSquad": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "IconOfObstinacy": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "astraBullgryn": {
+    "FragBomb": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "AvalancheOfMuscle": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "astraCreed": {
+    "SupremeCommander": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    },
+    "SwornProtector": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "astraDreir": {
+    "LeadingTheCharge": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "ToughToKill": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "astraOrdnance": {
+    "BasiliskBarrage": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "SpotterReworked": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "astraOrdnanceBattery": {
+    "MalleusRocketLauncher": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "ForwardSpotter": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    }
+  },
+  "astraPrimarisPsy": {
+    "PsychicMaelstrom": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "Nightshroud": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "astraYarrick": {
+    "SendInTheNextWave": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    },
+    "SummaryExecution": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "blackAbaddon": {
+    "Drachnyen": {
+      "roles": [
+        "damage",
+        "support"
+      ],
+      "target": "single"
+    },
+    "FirstAmongTraitors": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "blackForgefiend": {
+    "HadesAutocannons": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "DaemonicOrdnance": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    }
+  },
+  "blackHaarken": {
+    "HeraldOfTheApocalypse": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    },
+    "HeadClaimer": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "blackObliterator": {
+    "FrenziedFiring": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "FleshmetalGuns": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "blackPossession": {
+    "Incursion": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    },
+    "Possession": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "blackTerminator": {
+    "BringerOfDespair": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "HatefulAssault": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "bloodDante": {
+    "LightOfSanguinius": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "LordOfTheHost": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "bloodDeathCompany": {
+    "BlackRage": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    },
+    "VisionsOfHeresy": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "bloodIntercessor": {
+    "HammerOfWrath": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "AggressiveOnslaught": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "bloodMephiston": {
+    "TheQuickening": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    },
+    "FuryOfTheAncients": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    }
+  },
+  "bloodSanguinary": {
+    "BloodChalice": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "SanguinaryPriest": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "bloodTerminator": {
+    "SavageEchoes": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "RedRampage": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    }
+  },
+  "custoAtlacoya": {
+    "TalonsOfTheEmperor": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "DaughterOfTheAbyss": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "custoBladeChampion": {
+    "MartialInspiration": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "LegacyOfCombat": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "custoDreadnought": {
+    "WrathfulAdvance": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    },
+    "RelentlessPersecution": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "custoKyrus": {
+    "VigilanceEternal": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "UnwaveringSentinel": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "custoTrajann": {
+    "MomentShackle": {
+      "roles": [
+        "damage",
+        "support"
+      ],
+      "target": "none"
+    },
+    "LegendaryCommander": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "custoVexilusPraetor": {
+    "VexillaMagnifica": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    },
+    "StandVigil": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "darkaAsmodai": {
+    "ExemplarOfHate": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    },
+    "FearedInterrogator": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "darkaAzrael": {
+    "DarkTalonStrike": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "MasterfulTactician": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "darkaCompanion": {
+    "CalibaniteGreatsword": {
+      "roles": [
+        "damage",
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "EnmityForTheUnworthy": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "darkaHellblaster": {
+    "Supercharge": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "GrimRetribution": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "darkaSternguard": {
+    "SternguardFocus": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "SpecialIssueCombiMelta": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    }
+  },
+  "darkaStormSpeeder": {
+    "DeathOnTheWind": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "Hailstrike": {
+      "roles": [
+        "damage",
+        "support"
+      ],
+      "target": "single"
+    }
+  },
+  "darkaTerminator": {
+    "PlasmaCannon": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "Deathwing": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "deathBlightbringer": {
+    "Poxwalkers": {
+      "roles": [
+        "utility"
+      ],
+      "target": "aoe"
+    },
+    "CursedPlagueBell": {
+      "roles": [
+        "damage",
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "deathBlightlord": {
+    "FlailSwing": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "HazeOfCorruption": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "deathCrawler": {
+    "EntropyCannons": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "PlagueburstMortar": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    }
+  },
+  "deathPutrifier": {
+    "FoulInfusion": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "ExplosiveMaladies": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "deathRotbone": {
+    "RevitalizingMalignancy": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "TaintedNarthecium": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "deathTyphus": {
+    "PlagueWind": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "DestroyerHive": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "eldarAutarch": {
+    "Loki_SwoopingHawk": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "PathOfCommand": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "eldarFarseer": {
+    "Executioner": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "Doom": {
+      "roles": [
+        "support",
+        "utility"
+      ],
+      "target": "aoe"
+    }
+  },
+  "eldarJainZar": {
+    "SilentDeath": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "TerrorsLament": {
+      "roles": [
+        "utility"
+      ],
+      "target": "aoe"
+    }
+  },
+  "eldarLhykhis": {
+    "EmpyricAmbush": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "WhisperingWeb": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    }
+  },
+  "eldarMauganRa": {
+    "HarvesterOfSouls": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "InescapableAccuracy": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "eldarRanger": {
+    "FireAndReposition": {
+      "roles": [
+        "support",
+        "utility"
+      ],
+      "target": "none"
+    },
+    "WireweaveNet": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "emperExultant": {
+    "EuphoricStrikes": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "RefusalToBeOutdone": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "emperFlawlessBlade": {
+    "DaemonicPatrons": {
+      "roles": [
+        "support",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "EcstaticSlaughter": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "emperKakophonist": {
+    "DoomSiren": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "ObsessiveAnnunciation": {
+      "roles": [
+        "utility"
+      ],
+      "target": "aoe"
+    }
+  },
+  "emperLucius": {
+    "LashOfTorment": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "ArmourOfShriekingSouls": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    }
+  },
+  "emperNoiseMarine": {
+    "ExcruciatingFrequencies": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "TerrifyingCrescendo": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "genesBiophagus": {
+    "AberrantHypermorph": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    },
+    "TwistedScience": {
+      "roles": [
+        "support"
+      ],
+      "target": "single"
+    }
+  },
+  "genesKelermorph": {
+    "HeroicFusillade": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "HypersensoryAbilities": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "genesMagus": {
+    "MindControl": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    },
+    "SpiritualLeader": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "genesPatriarch": {
+    "MightFromBelow": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "CosmicHorror": {
+      "roles": [
+        "utility"
+      ],
+      "target": "aoe"
+    }
+  },
+  "genesPrimus": {
+    "CultDemagogue": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    },
+    "DecoysAndMisdirection": {
+      "roles": [
+        "damage"
+      ],
+      "target": "none"
+    }
+  },
+  "lostaBile": {
+    "PrimeTestSubject": {
+      "roles": [
+        "support"
+      ],
+      "target": "single"
+    },
+    "DiabolicRegeneration": {
+      "roles": [
+        "support"
+      ],
+      "target": "single"
+    }
+  },
+  "lostaFearmonger": {
+    "ProclivityForMurder": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    },
+    "TerrorchemPoison": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "necroChronomancer": {
+    "Chronometron": {
+      "roles": [
+        "utility"
+      ],
+      "target": "aoe"
+    },
+    "TimesplinterMantle": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "necroDestroyer": {
+    "MultiThreatEliminator": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "InescapableDeath": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "necroOverlord": {
+    "ResurrectionOrb": {
+      "roles": [
+        "support",
+        "utility"
+      ],
+      "target": "none"
+    },
+    "MyWillBeDoneOverlord": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "necroPlasmancer": {
+    "HarbingerOfDestruction": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "LivingLightning": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "necroReanimator": {
+    "ReanimationBeam": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "NanoscarabRepairProtocols": {
+      "roles": [
+        "support"
+      ],
+      "target": "single"
+    }
+  },
+  "necroSpyder": {
+    "ScarabHive": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    },
+    "FabricatorClawArray": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "necroWarden": {
+    "AdaptiveStrategy": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "RelentlessMarch": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "orksBigMek": {
+    "GrotTank": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    },
+    "KustomForceFieldReworked": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "orksKillaKan": {
+    "DakkaDakkaDakka": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "PowerTrip": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "orksNob": {
+    "UnstoppableMomentumReworked": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "SmashaEad": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "orksRukkatrukk": {
+    "SquigLaunchas": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "SquigMine": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    }
+  },
+  "orksRuntherd": {
+    "GetEmRuntz": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    },
+    "SquigHound": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    }
+  },
+  "orksWarboss": {
+    "Waaagh": {
+      "roles": [
+        "support",
+        "utility"
+      ],
+      "target": "none"
+    },
+    "LightImUp": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "orksWeirdboy": {
+    "PowerVomit": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "WaaaghEnergy": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "spaceBlackmane": {
+    "WarHowl": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "SagaOfTheWarriorBorn": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "spaceHound": {
+    "GrapnelLauncher": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "HuntersBeyondDeath": {
+      "roles": [
+        "utility"
+      ],
+      "target": "aoe"
+    }
+  },
+  "spaceRockfist": {
+    "Foehammer": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "AnvilShield": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "spaceStormcaller": {
+    "Stormcaller": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "LordOfTempests": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "spaceWolfPriest": {
+    "RitesOfMorkai": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "HealingBalms": {
+      "roles": [
+        "support"
+      ],
+      "target": "single"
+    }
+  },
+  "spaceWulfen": {
+    "GreatFrostAxe": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "SavageKiller": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "tauAunShi": {
+    "InspiredToGreatness": {
+      "roles": [
+        "support"
+      ],
+      "target": "single"
+    },
+    "SereneUnifier": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "tauBroadside": {
+    "HeavyRailRifle": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "TwinSmartMissileSystem": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    }
+  },
+  "tauCrisis": {
+    "EarlyWarningOverride": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    },
+    "CyclicIonBlaster": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "tauDarkstrider": {
+    "FightingRetreat": {
+      "roles": [
+        "utility"
+      ],
+      "target": "aoe"
+    },
+    "StructuralAnalyser": {
+      "roles": [
+        "support",
+        "utility"
+      ],
+      "target": "single"
+    }
+  },
+  "tauFarsight": {
+    "ExemplarOfTheMontka": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "WayOfTheShortBlade": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "tauMarksman": {
+    "SeekerMissileFrequencyLock": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "MV71SniperDroneSquad": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    }
+  },
+  "tauShadowsun": {
+    "ExemplarOfTheKauyon": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "DefenderOfTheGreaterGood": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "templAggressor": {
+    "FragstormGrenadeLauncher": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "Boltstorm": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    }
+  },
+  "templAncient": {
+    "UnbreakableDuty": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "AstartesBanner": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "templChampion": {
+    "HolyDuel": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "MartialSuperiority": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "templHelbrecht": {
+    "CrusadeOfWrath": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "DestroyTheWitch": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "templSwordBrother": {
+    "ThunderousAssault": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "ChampionOfTheFeast": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    }
+  },
+  "thousAhriman": {
+    "Doombolt": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "PsychicStalk": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "thousDaemonPrince": {
+    "AetherStride": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    },
+    "InfernalCannon": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    }
+  },
+  "thousInfernalMaster": {
+    "MasterOfTheTutelaries": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    },
+    "InfernalPacts": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "thousSekhetar": {
+    "HeavyWarpFlamer": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "PropheticSentinel": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "thousSorcerer": {
+    "AttemptedPossession": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    },
+    "ArcaneShield": {
+      "roles": [
+        "support"
+      ],
+      "target": "single"
+    }
+  },
+  "thousTerminator": {
+    "HellfyreMissileRack": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "TimeFlux": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "thousTzaangor": {
+    "SorcerousFacade": {
+      "roles": [
+        "support"
+      ],
+      "target": "single"
+    },
+    "RealityUnbound": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "tyranBiovore": {
+    "BioMinefield": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    },
+    "SporeMineLauncher": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "tyranDeathleaper": {
+    "FearOfTheUnseen": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    },
+    "FeederTendrils": {
+      "roles": [
+        "support",
+        "utility"
+      ],
+      "target": "single"
+    }
+  },
+  "tyranNeurothrope": {
+    "SpiritLeech": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "Neuroparasite": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    }
+  },
+  "tyranParasite": {
+    "ItItches": {
+      "roles": [
+        "utility"
+      ],
+      "target": "aoe"
+    },
+    "BarbedOvipositor": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "tyranTyrantGuard": {
+    "CrushingClaws": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    },
+    "GuardianOrganism": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "tyranWingedPrime": {
+    "AlphaWarrior": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    },
+    "SynapticLinchpin": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "ultraApothecary": {
+    "CombatRestoratives": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    },
+    "Narthecium": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "ultraCalgar": {
+    "GauntletsOfUltramar": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "RitesOfBattle": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "ultraDreadnought": {
+    "DutyEternal": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    },
+    "MacroPlasmaIncinerator": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    }
+  },
+  "ultraEliminatorSgt": {
+    "MortisRound": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "CamoCloak": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "ultraInceptorSgt": {
+    "DeathFromAbove": {
+      "roles": [
+        "utility"
+      ],
+      "target": "single"
+    },
+    "ShockAssault": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "ultraTigurius": {
+    "StormOfWrath": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "PsychicFortress": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "ultraTitus": {
+    "TacticalPrecision": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "FuelledByFury": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "votanBeserk": {
+    "AugmentedAssault": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "FuryFromTheDelve": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    }
+  },
+  "votanChampion": {
+    "MassDriverAccelerator": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "ModifiedExoarmour": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "votanIronmaster": {
+    "GravitonRifle": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "EcogSupport": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    }
+  },
+  "votanMemnyr": {
+    "IronkinSteeljack": {
+      "roles": [
+        "utility"
+      ],
+      "target": "none"
+    },
+    "PredictiveGuidance": {
+      "roles": [
+        "utility"
+      ],
+      "target": "aoe"
+    }
+  },
+  "votanUthar": {
+    "AncestralFortune": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "single"
+    },
+    "GrimEfficiency": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  },
+  "worldEightbound": {
+    "OverwhelmingWrath": {
+      "roles": [
+        "damage",
+        "utility"
+      ],
+      "target": "aoe"
+    },
+    "BeaconOfRage": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "worldExecutions": {
+    "MurderousSwing": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "TrophyTaker": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "worldJakhal": {
+    "JakhalStimms": {
+      "roles": [
+        "damage"
+      ],
+      "target": "aoe"
+    },
+    "Skullsmasher": {
+      "roles": [
+        "support"
+      ],
+      "target": "none"
+    }
+  },
+  "worldKharn": {
+    "KillMaimBurn": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "TheBetrayer": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    }
+  },
+  "worldTerminator": {
+    "BloodyFury": {
+      "roles": [
+        "damage"
+      ],
+      "target": "single"
+    },
+    "WrathfulDevotion": {
+      "roles": [
+        "support"
+      ],
+      "target": "aoe"
+    }
+  }
+}

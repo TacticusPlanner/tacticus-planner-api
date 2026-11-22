@@ -29,11 +29,13 @@ public sealed record DatamineWeapon(int Hits, string DamageProfile, int? Range);
 
 // One value of abilities.json, keyed by ability id (null for a few placeholder ids). `constants` holds the
 // `damageProfile`, `damageProfile_2`, ... strings; `upgrades` is a MoW ability's per-level recipe list;
-// `variables` holds the per-level value tables (only their names are read: `summonHp…` marks a summoning ability).
+// `variables` holds the per-level value tables (only their names are read: `summonHp…` marks a summoning ability);
+// `attackRangeType` is Melee or Ranged for an ability that attacks at that range (Normal: the unit's normal attack).
 public sealed record DatamineAbility(
     IReadOnlyDictionary<string, string>? Constants,
     IReadOnlyList<IReadOnlyList<string>>? Upgrades,
-    IReadOnlyDictionary<string, JsonElement>? Variables = null
+    IReadOnlyDictionary<string, JsonElement>? Variables = null,
+    string? AttackRangeType = null
 );
 
 // One value of npc.json, keyed by NPC id. Loot objects have no FactionId / GrandAllianceId.

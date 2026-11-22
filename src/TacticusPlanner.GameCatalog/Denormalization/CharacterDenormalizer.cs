@@ -9,7 +9,8 @@ internal static partial class GameCatalogDenormalizer
         IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>> equipmentByType,
         IReadOnlyDictionary<string, GameCatalogCampaignGroup> campaignGroups,
         IReadOnlyList<GameCatalogDropChance> dropChances,
-        IReadOnlyDictionary<string, string> summonsByUnit)
+        IReadOnlyDictionary<string, string> summonsByUnit,
+        IReadOnlyDictionary<string, IReadOnlyList<GameCatalogUnitAbility>> abilitiesByUnit)
     {
         var dropChanceById = BuildDropChanceIndex(dropChances);
         var (rewardLocations, expectedGoldByBattle) = BuildRewardLocations(campaignGroups);
@@ -47,7 +48,8 @@ internal static partial class GameCatalogDenormalizer
                     character.RankUpUpgrades,
                     BuildShardLocations(character.Id, rewardLocations, dropChanceById, expectedGoldByBattle),
                     BuildEligibleEquipment(character, faction.FactionId, equipmentByTypeName),
-                    summonsByUnit.GetValueOrDefault(character.Id, GameCatalogUnitSummons.None)));
+                    summonsByUnit.GetValueOrDefault(character.Id, GameCatalogUnitSummons.None),
+                    abilitiesByUnit.GetValueOrDefault(character.Id, [])));
             }
         }
 
