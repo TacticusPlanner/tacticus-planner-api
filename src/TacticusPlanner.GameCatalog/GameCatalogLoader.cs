@@ -29,8 +29,10 @@ public static class GameCatalogLoader
     {
         // ---- load raw source collections (by convention: key -> {key}.json) --------------------
         var abilities = LoadDatamine<Dictionary<string, DatamineAbility?>>(GameCatalogDenormalizer.DatamineAbilitiesPath);
-        var unitsByFaction = GameCatalogDenormalizer.ReadDatamineUnits(
-            LoadDatamine<Dictionary<string, DatamineLineupUnit>>(GameCatalogDenormalizer.DatamineLineupPath), abilities);
+        var lineup = LoadDatamine<Dictionary<string, DatamineLineupUnit>>(GameCatalogDenormalizer.DatamineLineupPath);
+        var unitsByFaction = GameCatalogDenormalizer.ReadDatamineUnits(lineup, abilities);
+        var summonsByUnit = GameCatalogDenormalizer.ReadUnitSummons(
+            LoadDataset<Dictionary<string, string>>(GameCatalogDatasets.UnitSummons), lineup, abilities);
 
         var mowUpgradeCosts = GameCatalogDenormalizer.ReadDatamineMowUpgradeCosts(
             LoadDatamine<List<Dictionary<string, int>>>(GameCatalogDenormalizer.DatamineAbilityUpgradeCostsMoWPath));
@@ -145,9 +147,9 @@ public static class GameCatalogLoader
         var guildRaidMetaRawData = LoadGuildRaidMetaRawData();
 
         // ---- build denormalized served datasets ------------------------------------------------
-        var characterViews = GameCatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances);
+        var characterViews = GameCatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances, summonsByUnit);
         var npcList = GameCatalogDenormalizer.BuildNpcs(npcsByFaction);
-        var mowList = GameCatalogDenormalizer.BuildMows(unitsByFaction);
+        var mowList = GameCatalogDenormalizer.BuildMows(unitsByFaction, summonsByUnit);
         var mowUpgradeCostViews = GameCatalogDenormalizer.BuildMowUpgradeCosts(mowUpgradeCosts);
         var characterAbilityCostViews = GameCatalogDenormalizer.BuildCharacterAbilityCosts(characterAbilityCosts);
         var ascensionCostViews = GameCatalogDenormalizer.BuildAscensionCosts(ascensionCosts);

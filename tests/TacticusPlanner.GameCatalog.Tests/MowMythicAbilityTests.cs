@@ -14,6 +14,7 @@ public sealed class MowMythicAbilityTests
         "Imperial",
         new GameCatalogMowAbility("DutyEternal", []),
         new GameCatalogMowAbility("MacroPlasmaIncinerator", []),
+        GameCatalogUnitSummons.Optional,
         mythicName is null ? null : new GameCatalogMowMythicAbility(mythicName));
 
     [Fact]

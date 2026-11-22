@@ -10,6 +10,9 @@ public sealed record GameCatalogMow(
     string Alliance,
     GameCatalogMowAbility PrimaryAbility,
     GameCatalogMowAbility SecondaryAbility,
+    // none, optional or forced (see GameCatalogUnitSummons); the reader serves none and BuildMows sets it from
+    // unit-summons.
+    string Summons,
     // The ability unlocked at Mythic rarity, the datamine lineup.json mythicAbilities[0]. It
     // levels with the MoW's blue stars, not upgrade materials, so it carries no recipes. Omitted (not null)
     // when unknown.
