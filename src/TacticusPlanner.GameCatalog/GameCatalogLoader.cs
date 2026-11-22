@@ -33,6 +33,10 @@ public static class GameCatalogLoader
         var unitsByFaction = GameCatalogDenormalizer.ReadDatamineUnits(lineup, abilities);
         var summonsByUnit = GameCatalogDenormalizer.ReadUnitSummons(
             LoadDataset<Dictionary<string, string>>(GameCatalogDatasets.UnitSummons), lineup, abilities);
+        var abilitiesByUnit = GameCatalogDenormalizer.ReadUnitAbilities(
+            LoadDataset<Dictionary<string, Dictionary<string, GameCatalogCuratedAbility>>>(GameCatalogDatasets.UnitAbilities),
+            lineup,
+            abilities);
 
         var mowUpgradeCosts = GameCatalogDenormalizer.ReadDatamineMowUpgradeCosts(
             LoadDatamine<List<Dictionary<string, int>>>(GameCatalogDenormalizer.DatamineAbilityUpgradeCostsMoWPath));
@@ -147,9 +151,9 @@ public static class GameCatalogLoader
         var guildRaidMetaRawData = LoadGuildRaidMetaRawData();
 
         // ---- build denormalized served datasets ------------------------------------------------
-        var characterViews = GameCatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances, summonsByUnit);
+        var characterViews = GameCatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances, summonsByUnit, abilitiesByUnit);
         var npcList = GameCatalogDenormalizer.BuildNpcs(npcsByFaction);
-        var mowList = GameCatalogDenormalizer.BuildMows(unitsByFaction, summonsByUnit);
+        var mowList = GameCatalogDenormalizer.BuildMows(unitsByFaction, summonsByUnit, abilitiesByUnit);
         var mowUpgradeCostViews = GameCatalogDenormalizer.BuildMowUpgradeCosts(mowUpgradeCosts);
         var characterAbilityCostViews = GameCatalogDenormalizer.BuildCharacterAbilityCosts(characterAbilityCosts);
         var ascensionCostViews = GameCatalogDenormalizer.BuildAscensionCosts(ascensionCosts);

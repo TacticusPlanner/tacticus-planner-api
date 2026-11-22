@@ -10,7 +10,8 @@ internal static partial class GameCatalogDenormalizer
 
     public static IReadOnlyList<GameCatalogMow> BuildMows(
         IReadOnlyDictionary<string, GameCatalogFactionUnits> unitsByFaction,
-        IReadOnlyDictionary<string, string> summonsByUnit) =>
+        IReadOnlyDictionary<string, string> summonsByUnit,
+        IReadOnlyDictionary<string, IReadOnlyList<GameCatalogUnitAbility>> abilitiesByUnit) =>
         unitsByFaction
             .OrderBy(pair => pair.Key, StringComparer.Ordinal)
             .SelectMany(pair => pair.Value.Mows.Select(mow => mow with
@@ -19,6 +20,7 @@ internal static partial class GameCatalogDenormalizer
                 Faction = pair.Value.FactionId,
                 Alliance = pair.Value.Alliance,
                 Summons = summonsByUnit.GetValueOrDefault(mow.Id, GameCatalogUnitSummons.None),
+                Abilities = abilitiesByUnit.GetValueOrDefault(mow.Id, []),
             }))
             .ToArray();
 

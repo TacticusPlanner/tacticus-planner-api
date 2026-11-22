@@ -133,6 +133,7 @@ internal static partial class GameCatalogDenormalizer
             new GameCatalogMowAbility(primary, MowRecipes(id, primary, abilities)),
             new GameCatalogMowAbility(secondary, MowRecipes(id, secondary, abilities)),
             GameCatalogUnitSummons.None,
+            [],
             unit.MythicAbilities is [var mythic, ..] ? new GameCatalogMowMythicAbility(mythic) : null);
     }
 

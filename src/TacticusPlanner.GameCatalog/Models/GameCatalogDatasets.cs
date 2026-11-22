@@ -145,6 +145,14 @@ public static class GameCatalogDatasets
     public const string UnitSummons = "unit-summons";
 
     /// <summary>
+    /// Curated roles (<c>damage</c>, <c>support</c>, <c>utility</c>) and target (<c>none</c>, <c>single</c>, <c>aoe</c>)
+    /// of every character's and MoW's abilities, keyed by unit then ability id. Merged into the served characters and
+    /// mows as <c>abilities</c> with the datamine attack range; never served on its own. See
+    /// Denormalization/UnitAbilitiesDenormalizer.cs.
+    /// </summary>
+    public const string UnitAbilities = "unit-abilities";
+
+    /// <summary>
     /// Source keys of the always-on daily shops, each read from its merchant in the datamine <c>merchants.json</c>.
     /// Consolidated into the single served <see cref="Shops"/> array (one record per shop, keyed by the id after
     /// the <c>shops-</c> prefix). Limited-time event shops are deliberately excluded.
@@ -199,6 +207,7 @@ public static class GameCatalogDatasets
         CampaignCuration,
         LreCuration,
         UnitSummons,
+        UnitAbilities,
         GuildRaidMetaComps,
         .. GuildRaidMetaBossGroups,
     ];
