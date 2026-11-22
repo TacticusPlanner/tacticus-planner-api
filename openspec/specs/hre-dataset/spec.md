@@ -22,12 +22,20 @@ its chests from `gameconfig/loot/chests.json` and its chest shop from `gameconfi
 
 Each record SHALL carry `milestones` (each `scorePoints` and the `currency` it pays) and `missions` in chain order from
 `questId` along `successorQuests`, each with `index` (from 1), `id`, `bonus` (true for the chain's last mission),
-`currency`, `rewards` and `tasks` (`name`, `target`, `parameters`).
+`currency`, `rewards` and `tasks` (`name`, `target`, `parameters`, `locaKey`). A task's `locaKey` SHALL be the
+game's, or null when the game ships none; the client reads the task's in-game hint at
+`MissionQuickLinks/TaskDetails_<locaKey>`, which tells variants of one task name apart.
 
 #### Scenario: The Weirdboy event
 
 - **WHEN** the dataset is served at datamine `v1.43.157.2989`
 - **THEN** its 36 milestones pay 6090 currency in total and its 21 missions pay 2000, the last being the bonus
+
+#### Scenario: A task's hint key
+
+- **WHEN** the dataset is served at datamine `v1.44.88.3089`
+- **THEN** every task of both events carries a `locaKey`, and the Weirdboy event's mission 9 Psychic damage task carries
+  `DealDamageOfProfileType_Psychic_description`
 
 ### Requirement: Each event carries its leaderboard and chest shop
 

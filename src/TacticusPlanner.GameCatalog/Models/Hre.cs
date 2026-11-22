@@ -45,11 +45,13 @@ public sealed record GameCatalogHreMission(
 );
 
 // One task of a mission: the game's task name, target and parameters (factionTrait, factionId, gameMode, heroId,
-// damageProfileType).
+// damageProfileType), and its locaKey (null when the game ships none): the client reads the task's in-game hint at
+// MissionQuickLinks/TaskDetails_<locaKey>, which tells variants of one task name apart (e.g. a Psychic damage type).
 public sealed record GameCatalogHreMissionTask(
     string Name,
     int Target,
-    IReadOnlyDictionary<string, string> Parameters
+    IReadOnlyDictionary<string, string> Parameters,
+    string? LocaKey
 );
 
 // The event leaderboard: the daily currency per position bracket and each phase's end-of-phase chest per bracket.
@@ -107,7 +109,12 @@ public sealed record DatamineHreQuest(
     IReadOnlyList<DatamineHreQuestTask>? Tasks
 );
 
-public sealed record DatamineHreQuestTask(string Name, int Target, IReadOnlyDictionary<string, string>? TaskParameters);
+public sealed record DatamineHreQuestTask(
+    string Name,
+    int Target,
+    IReadOnlyDictionary<string, string>? TaskParameters,
+    string? LocaKey
+);
 
 public sealed record DatamineHreQuestGroup(IReadOnlyList<DatamineHreQuest> Quests);
 

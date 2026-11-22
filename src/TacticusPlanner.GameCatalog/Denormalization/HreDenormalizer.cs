@@ -117,7 +117,8 @@ internal static partial class GameCatalogDenormalizer
                 (quest.Tasks ?? []).Select(task => new GameCatalogHreMissionTask(
                     task.Name,
                     task.Target,
-                    new SortedDictionary<string, string>(task.TaskParameters?.ToDictionary() ?? [], StringComparer.Ordinal))).ToArray()));
+                    new SortedDictionary<string, string>(task.TaskParameters?.ToDictionary() ?? [], StringComparer.Ordinal),
+                    string.IsNullOrEmpty(task.LocaKey) ? null : task.LocaKey)).ToArray()));
             name = next;
         }
 
