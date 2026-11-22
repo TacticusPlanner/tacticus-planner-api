@@ -131,8 +131,9 @@ internal static partial class GameCatalogDenormalizer
             ["hse_faction_boost_world_eaters"] = ("hse-faction-boost", "WorldEaters", "Personal"),
             ["faction_focus"] = ("hse-faction-focus", "default", "Personal"),
             ["hse_faction_focus_october_2026"] = ("hse-faction-focus", "october-2026", "Personal"),
-            ["defeat_waves"] = ("hse-defeat-waves", "default", "Personal"),
-            ["defeat_waves_2"] = ("hse-defeat-waves", "run-2", "Personal"),
+            // The game names its defeat_waves events "Against the Tide".
+            ["defeat_waves"] = ("hse-against-the-tide", "default", "Personal"),
+            ["defeat_waves_2"] = ("hse-against-the-tide", "run-2", "Personal"),
             ["hse_11th_edition_week1"] = ("hse-11th-edition-week-1", "default", "Personal"),
             ["global_hse_11th_edition_week1_blood_angels"] = ("hse-11th-edition-week-1", "global-blood-angels", "Global"),
             ["global_hse_11th_edition_week1_orks"] = ("hse-11th-edition-week-1", "global-orks", "Global"),

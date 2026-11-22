@@ -95,9 +95,9 @@ public sealed class EventDatamineReaderTests
     }
 
     [Fact]
-    public void ShippedHseScoringSkipsTheDefeatWavesLowTierTheGameNoLongerHas()
+    public void ShippedHseScoringSkipsTheAgainstTheTideLowTierTheGameNoLongerHas()
     {
-        var scoring = GameCatalogLoader.Load().HseScoring.Single(definition => definition.DefinitionId == "hse-defeat-waves");
+        var scoring = GameCatalogLoader.Load().HseScoring.Single(definition => definition.DefinitionId == "hse-against-the-tide");
 
         Assert.Equal(["High", "Mid"], scoring.Variants.Single(variant => variant.VariantKey == "default").Tiers.Select(tier => tier.Tier));
         Assert.Equal(["High", "Mid", "Low"], scoring.Variants.Single(variant => variant.VariantKey == "run-2").Tiers.Select(tier => tier.Tier));

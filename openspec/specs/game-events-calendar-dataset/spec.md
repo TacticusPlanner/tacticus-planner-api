@@ -57,7 +57,7 @@ When an `event-definitions` record declares required parameters, the catalog bui
 - **THEN** the catalog build does not fail validation and the occurrence is served with the parameter
 
 #### Scenario: Unknown HSE variant fails the build
-- **WHEN** an `hse-defeat-waves` occurrence carries `hseVariant` `run-3` and the definition has no such variant
+- **WHEN** an `hse-against-the-tide` occurrence carries `hseVariant` `run-3` and the definition has no such variant
 - **THEN** the catalog build fails validation
 
 #### Scenario: Shop event income passes validation
@@ -121,7 +121,7 @@ The served `events-calendar` dataset SHALL be indexed by calendar date. An occur
 - **THEN** there is no endpoint serving raw `event-occurrences` records directly
 
 ### Requirement: Every known Home Screen Event type has a definition
-`event-definitions` SHALL contain a `type: HomeScreenEvent` definition for every HSE type that exists in V1's event data or in the game, including Purge Order (`hse-purge-order`), Against the Tide (`hse-against-the-tide`), Warp Surge, Machine Hunt, Training Rush, Squig Smash, Arsenal of War, Global Conflict Operations, Faction Boost, Faction Focus, the Terminator, Rapid Assault, Flying and Psyker trait boosts, For the Dark Gods, For the Emperor, Defeat Waves, and the three 11th-edition weeks. Each SHALL use `recurrence.kind` `None`.
+`event-definitions` SHALL contain a `type: HomeScreenEvent` definition for every HSE type that exists in V1's event data or in the game, including Purge Order (`hse-purge-order`), Against the Tide (`hse-against-the-tide`, the game's `defeat_waves` events), Warp Surge, Machine Hunt, Training Rush, Squig Smash, Arsenal of War, Global Conflict Operations, Faction Boost, Faction Focus, the Terminator, Rapid Assault, Flying and Psyker trait boosts, For the Dark Gods, For the Emperor, and the three 11th-edition weeks. Each SHALL use `recurrence.kind` `None`.
 
 #### Scenario: Purge Order is defined
 - **WHEN** `event-definitions` is served

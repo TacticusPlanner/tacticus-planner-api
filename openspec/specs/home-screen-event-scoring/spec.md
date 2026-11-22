@@ -72,9 +72,9 @@ Game-mode ids SHALL be the catalog names `Arena`, `TournamentArena`, `Onslaught`
 - **GIVEN** the Machine Hunt datamine has two `killUnits` trackers and two `raidBattles` (campaign sweep) trackers, each sweep tracker's modes covered by a `killUnits` tracker with equal points
 - **THEN** only the two `KillUnits` trackers (3 and 5 points) are served
 
-#### Scenario: No scoring data
+#### Scenario: Against the Tide is scored from the game's defeat_waves events
 
-- **THEN** `hse-against-the-tide` has no `config.hse`
+- **THEN** `hse-against-the-tide` has `config.hse` read from the game's `defeat_waves` (`default`) and `defeat_waves_2` (`run-2`) events, each with one `DefeatWaves` tracker worth 1 point
 
 ### Requirement: An occurrence resolves to one variant
 
@@ -99,7 +99,7 @@ The scoring SHALL be read at load from the pinned datamine copies `gameconfig/li
 - **GIVEN** a tier whose milestones are 20, 40, 40
 - **THEN** catalog loading fails naming the definition, variant and tier
 
-#### Scenario: Defeat Waves serves the game's current ladders
+#### Scenario: Against the Tide serves the game's current ladders
 
 - **WHEN** `event-definitions` is served from datamine `v1.43.157.2989`
-- **THEN** `hse-defeat-waves`'s `default` variant has the game's current `High` and `Mid` ladders and no `Low` tier (the game has no `hse_defeat_waves_tier_low` ladder), and its `run-2` variant keeps `High`, `Mid` and `Low`
+- **THEN** `hse-against-the-tide`'s `default` variant has the game's current `High` and `Mid` ladders and no `Low` tier (the game has no `hse_defeat_waves_tier_low` ladder), and its `run-2` variant keeps `High`, `Mid` and `Low`
