@@ -12,20 +12,17 @@ name: PR Approval Gatekeeper
 # belong to the head commit, so the result recorded while the PR targets its
 # parent branch still counts when GitHub retargets it to main.
 #
-# Fork PRs: review events from a fork run with a read-only token and the
-# workflow file from the PR's merge commit. Reading reviews only needs read
-# access, so the check still reports. Because a fork can edit that file, keep
-# fork workflow runs behind maintainer approval in the repository settings.
+# Reviews: GitHub keeps one check run per triggering event, so a run started by
+# a review would sit next to this one instead of replacing it. A review instead
+# starts pr-approval-review-relay.yml, and pr-approval-recheck.yml re-runs this
+# workflow's latest run for the PR's head commit. That keeps a single
+# `check-approval` check, always evaluated by this file as it is on main.
 on:
   pull_request_target:
     types:
       - opened
       - reopened
       - synchronize
-  pull_request_review:
-    types:
-      - submitted
-      - dismissed
 
 permissions:
   pull-requests: read
