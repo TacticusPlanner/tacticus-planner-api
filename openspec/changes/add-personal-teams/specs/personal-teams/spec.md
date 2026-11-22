@@ -75,7 +75,7 @@ The server SHALL send ids and codes only, never display names or icons. The rule
 
 ### Requirement: Names, notes and team count are limited
 
-A team name SHALL be trimmed and SHALL be 3 to 40 characters. It SHALL be unique within the profile, ignoring case, and a duplicate SHALL be refused with `400` and code `teamNameTaken`. Notes SHALL be at most 300 characters, and blank notes SHALL be stored as null. A profile SHALL have at most 20 teams, and creating a 21st SHALL be refused with `400` and code `teamLimitReached`. The limit SHALL be a single configured value, 20 by default, read by creates and the import alike. The limit SHALL hold under concurrent creates and imports.
+A team name SHALL be trimmed and SHALL be 3 to 40 characters. It SHALL be unique within the profile, ignoring case, and a duplicate SHALL be refused with `400` and code `teamNameTaken`. Notes SHALL be at most 300 characters, and blank notes SHALL be stored as null. A profile SHALL have at most 50 teams, and creating a 51st SHALL be refused with `400` and code `teamLimitReached`. The limit SHALL be a single configured value, 50 by default, read by creates and the import alike. The limit SHALL hold under concurrent creates and imports.
 
 #### Scenario: Same name in another case
 
@@ -83,9 +83,9 @@ A team name SHALL be trimmed and SHALL be 3 to 40 characters. It SHALL be unique
 - **WHEN** another team is saved as "mortarion CORE"
 - **THEN** the save is refused with `teamNameTaken`
 
-#### Scenario: Twenty-first team
+#### Scenario: Fifty-first team
 
-- **GIVEN** a profile with 20 teams
+- **GIVEN** a profile with 50 teams
 - **WHEN** a client creates a team
 - **THEN** the API responds `400` with code `teamLimitReached`
 

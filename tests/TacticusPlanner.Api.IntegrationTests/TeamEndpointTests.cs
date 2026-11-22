@@ -232,16 +232,16 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
     }
 
     [Fact]
-    public async Task TheTwentyFirstTeamIsRefused()
+    public async Task TheFiftyFirstTeamIsRefused()
     {
         var (client, subject) = await ClientAsync();
-        await SeedAsync(subject, [.. Enumerable.Range(1, 20).Select(i => Seeded($"Seeded {i}"))]);
+        await SeedAsync(subject, [.. Enumerable.Range(1, TeamValidation.DefaultLimit).Select(i => Seeded($"Seeded {i}"))]);
 
         var response = await client.PostAsJsonAsync(Url, Create("One too many"), Ct);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Equal(TeamsService.LimitReached, await response.ReadIssueCodeAsync());
-        Assert.Equal(20, (await ListAsync(client)).Count);
+        Assert.Equal(TeamValidation.DefaultLimit, (await ListAsync(client)).Count);
     }
 
     [Fact]

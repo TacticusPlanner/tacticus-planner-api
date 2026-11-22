@@ -12,7 +12,7 @@ public static class TeamValidation
     public const int MaxNotesLength = 300;
 
     /// <summary>The default per-profile team limit; the API reads the configured value (<c>TeamOptions.Limit</c>).</summary>
-    public const int DefaultLimit = 20;
+    public const int DefaultLimit = 50;
 
     /// <summary>Fewest characters a team has, in every mode; MoWs do not count.</summary>
     public const int MinCharacters = 3;

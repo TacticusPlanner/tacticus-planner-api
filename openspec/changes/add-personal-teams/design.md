@@ -33,7 +33,7 @@ Alternative considered: one per-profile row with every team as JSONB, as Legenda
 
 ### D2: Uniqueness and limits
 
-`name_key` is the trimmed name lowercased with the invariant culture, with a unique index on `(profile_id, name_key)` as the backstop and a pre-check that returns `teamNameTaken`. The 20-team limit is one options value (`TeamOptions.Limit`), as `PersonalLimit` is for roster snapshots, so raising it later is configuration, not a code change. Creates, deletes, reorders and the import run under `LockCurrentProfileAsync`, which keeps the limit and positions correct under concurrency. `sort_order` is stored 1-based and contiguous, is not unique in the database, and is served as `position`.
+`name_key` is the trimmed name lowercased with the invariant culture, with a unique index on `(profile_id, name_key)` as the backstop and a pre-check that returns `teamNameTaken`. The team limit (50) is one options value (`TeamOptions.Limit`), as `PersonalLimit` is for roster snapshots, so raising it later is configuration, not a code change. Creates, deletes, reorders and the import run under `LockCurrentProfileAsync`, which keeps the limit and positions correct under concurrency. `sort_order` is stored 1-based and contiguous, is not unique in the database, and is served as `position`.
 
 ### D3: One rule evaluator
 
@@ -41,7 +41,7 @@ Alternative considered: one per-profile row with every team as JSONB, as Legenda
 
 ### D4: Issues are derived, never stored
 
-`issues` are computed on read. A catalog update can therefore raise or clear them with no data migration, and no stored flag can drift. Reading 20 teams is an in-memory check against a snapshot that is already loaded.
+`issues` are computed on read. A catalog update can therefore raise or clear them with no data migration, and no stored flag can drift. Reading 50 teams is an in-memory check against a snapshot that is already loaded.
 
 ### D5: Campaign uses the base group id
 

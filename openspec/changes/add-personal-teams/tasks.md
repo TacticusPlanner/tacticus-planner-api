@@ -4,7 +4,7 @@
 - [x] 1.2 Add `TeamRules.Evaluate` returning the rule codes from the `personal-teams` spec, and verify unit tests cover every code plus each spec scenario, including the Rukkatrukk, two-Incursion and core-character-as-flex cases.
 - [x] 1.3 Add `TeamConfiguration`, the `Teams` `DbSet`, the profile `HasQueryFilter`, the unique `(profile_id, name_key)` index, the partial unique `(profile_id, import_key)` index and the cascading profile foreign key.
 - [x] 1.4 Run `dotnet ef migrations add AddTeams`, and verify a persistence integration test covers both unique indexes and that purging a profile removes its teams.
-- [x] 1.5 Add `TeamOptions.Limit` (default 20) bound from configuration, and verify creates and the import both read it.
+- [x] 1.5 Add `TeamOptions.Limit` (default 50, raised from 20) bound from configuration, and verify creates and the import both read it.
 
 ## 2. Teams endpoints
 
