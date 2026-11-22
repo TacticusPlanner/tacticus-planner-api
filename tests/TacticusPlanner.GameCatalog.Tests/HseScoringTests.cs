@@ -102,7 +102,7 @@ public sealed class HseScoringTests
     }
 
     [Fact]
-    public void DropsCampaignSweepTrackersAndLeavesUnscoredDefinitionsAlone()
+    public void DropsCampaignSweepTrackers()
     {
         // V1's Machine Hunt also has two raidBattles (campaign sweep) trackers; serving them would double-count.
         var machineHunt = ServedVariant("hse-machine-hunt", "default");
@@ -110,9 +110,18 @@ public sealed class HseScoringTests
             .Select(tracker => (Kind: tracker.GetProperty("kind").GetString(), Points: tracker.GetProperty("points").GetInt32()))
             .ToArray();
         Assert.Equal([("KillUnits", 3), ("KillUnits", 5)], trackers);
+    }
 
-        var againstTheTide = GameCatalogLoader.Load().EventDefinitionViews.Single(definition => definition.Id == "hse-against-the-tide");
-        Assert.False(againstTheTide.Config is { ValueKind: JsonValueKind.Object } config && config.TryGetProperty("hse", out _));
+    [Fact]
+    public void AgainstTheTideIsScoredFromTheGamesDefeatWavesEvents()
+    {
+        // The calendar's "Against the Tide" runs are the game's defeat_waves events: one point per wave
+        // defeated in Salvage Run, Onslaught and Survival.
+        var againstTheTide = ServedVariant("hse-against-the-tide", "default");
+        var tracker = Assert.Single(againstTheTide.GetProperty("trackers").EnumerateArray());
+        Assert.Equal("DefeatWaves", tracker.GetProperty("kind").GetString());
+        Assert.Equal(1, tracker.GetProperty("points").GetInt32());
+        Assert.DoesNotContain(GameCatalogLoader.Load().EventDefinitions, definition => definition.Id == "hse-defeat-waves");
     }
 
     [Fact]

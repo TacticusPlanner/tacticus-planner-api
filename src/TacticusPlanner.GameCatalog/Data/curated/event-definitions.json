@@ -195,12 +195,6 @@
     "requiredParameters": []
   },
   {
-    "id": "hse-defeat-waves",
-    "type": "HomeScreenEvent",
-    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
-    "requiredParameters": []
-  },
-  {
     "id": "hse-11th-edition-week-1",
     "type": "HomeScreenEvent",
     "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },

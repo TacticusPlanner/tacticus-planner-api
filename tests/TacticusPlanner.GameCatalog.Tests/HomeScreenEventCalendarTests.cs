@@ -8,7 +8,7 @@ public sealed class HomeScreenEventCalendarTests
     private static readonly string[] Added =
     [
         "purge-order", "squig-smash", "against-the-tide", "trait-boost-rapid-assault", "trait-boost-flying",
-        "trait-boost-psyker", "for-the-dark-gods", "for-the-emperor", "defeat-waves",
+        "trait-boost-psyker", "for-the-dark-gods", "for-the-emperor",
         "11th-edition-week-1", "11th-edition-week-2", "11th-edition-week-3", "global-operation-imperator",
         "global-blood-tithe",
     ];
@@ -37,7 +37,7 @@ public sealed class HomeScreenEventCalendarTests
     {
         var snapshot = GameCatalogLoader.Load();
         var ids = snapshot.EventDefinitions.Where(d => d.Type == "HomeScreenEvent").Select(d => d.Id).ToHashSet();
-        Assert.Equal(22, ids.Count(id => id.StartsWith("hse-", StringComparison.Ordinal)));
+        Assert.Equal(21, ids.Count(id => id.StartsWith("hse-", StringComparison.Ordinal)));
         foreach (var id in Added)
             Assert.Contains($"hse-{id}", ids);
 
