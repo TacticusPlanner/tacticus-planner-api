@@ -226,6 +226,24 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
+    public async Task ShorteningNeverSplitsAnEmoji()
+    {
+        var client = await ClientAsync();
+        // 39 ASCII characters then an emoji (two UTF-16 code units), so a 40-unit cut lands inside the pair.
+        var name = new string('n', 39) + "\U0001F600 tail";
+        var notes = new string('x', 299) + "\U0001F600 tail";
+
+        var body = await ImportAsync(client, Configure(Teams(Team(
+            name, extra: $$""", "horde": true, "notes": {{JsonSerializer.Serialize(notes)}}"""))));
+
+        var outcome = Assert.Single(body.TeamOutcomes);
+        Assert.Equal(ImportPartStatus.Imported, outcome.Status);
+        Assert.Equal([("name_shortened", (string?)null), ("notes_shortened", null)], Issues(outcome));
+        var team = Assert.Single(await ListAsync(client));
+        Assert.Equal((new string('n', 39), new string('x', 299)), (team.Name, team.Notes));
+    }
+
+    [Fact]
     public async Task ATeamThatBreaksARuleIsImportedAsV1HadIt()
     {
         var client = await ClientAsync();

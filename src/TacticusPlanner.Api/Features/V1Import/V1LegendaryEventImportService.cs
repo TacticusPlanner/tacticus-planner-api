@@ -192,18 +192,8 @@ public sealed partial class V1LegendaryEventImportService(
         if (v1Notes.Length <= LegendaryEventValidation.MaxNotesLength)
             return v1Notes;
 
-        var cut = 0;
-        var elements = StringInfo.GetTextElementEnumerator(v1Notes);
-        while (elements.MoveNext())
-        {
-            var end = elements.ElementIndex + elements.GetTextElement().Length;
-            if (end > LegendaryEventValidation.MaxNotesLength)
-                break;
-            cut = end;
-        }
-
         issues.Add(new("notes_truncated", null, v1Notes.Length.ToString(CultureInfo.InvariantCulture)));
-        return v1Notes[..cut];
+        return V1ImportText.CutToLength(v1Notes, LegendaryEventValidation.MaxNotesLength);
     }
 
     /// <summary>V1 teams in order: <c>teams</c> when non-empty, otherwise synthesised from the legacy lane maps the

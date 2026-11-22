@@ -40,11 +40,8 @@ public sealed class TeamsService(PlannerDbContext db, IGameCatalogProvider catal
     public TeamRuleFacts Facts => TeamCatalogFacts.For(catalog.Current);
 
     /// <summary>The profile's teams in order; scoped by the query filter.</summary>
-    public Task<List<Team>> ListAsync(CancellationToken ct, bool tracked = false)
-    {
-        var query = tracked ? db.Teams : db.Teams.AsNoTracking();
-        return query.OrderBy(team => team.SortOrder).ThenBy(team => team.Id).ToListAsync(ct);
-    }
+    public Task<List<Team>> ListAsync(CancellationToken ct) =>
+        db.Teams.AsNoTracking().OrderBy(team => team.SortOrder).ThenBy(team => team.Id).ToListAsync(ct);
 
     public async Task<ListTeamsResponse> ListResponseAsync(CancellationToken ct)
     {
@@ -91,11 +88,9 @@ public sealed class TeamsService(PlannerDbContext db, IGameCatalogProvider catal
 
     private async Task ResetAfterFailedAttemptAsync(HashSet<object> callerTracked, CancellationToken ct)
     {
-        foreach (var entry in db.ChangeTracker.Entries().ToList())
-        {
-            if (!callerTracked.Contains(entry.Entity))
-                entry.State = EntityState.Detached;
-        }
+        var startedByAttempt = db.ChangeTracker.Entries().Where(entry => !callerTracked.Contains(entry.Entity)).ToList();
+        foreach (var entry in startedByAttempt)
+            entry.State = EntityState.Detached;
 
         // A saved but rolled-back change leaves an entity Unchanged with values that were never committed, so every
         // entity the caller tracked is reloaded (which also tracks it again if the failure detached it).

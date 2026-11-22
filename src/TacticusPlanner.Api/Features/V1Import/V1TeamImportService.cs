@@ -159,6 +159,9 @@ public sealed class V1TeamImportService(PlannerDbContext db, IGameCatalogProvide
             .Select(entry => Map(entry.Team, units, facts))
             .ToList();
 
+        // Earlier V1 import parts save but leave their entities tracked (the roster snapshots with their JSON-owned
+        // units). Nothing here needs them, and a retried locked attempt would otherwise reload each one.
+        db.ChangeTracker.Clear();
         var outcomes = await teams.ExecuteLockedAsync(async transaction =>
         {
             var existing = await db.Teams.AsNoTracking()
@@ -283,20 +286,19 @@ public sealed class V1TeamImportService(PlannerDbContext db, IGameCatalogProvide
         var name = trimmed;
         if (name.Length > TeamValidation.MaxNameLength)
         {
-            name = name[..TeamValidation.MaxNameLength].TrimEnd();
+            name = V1ImportText.CutToLength(name, TeamValidation.MaxNameLength).TrimEnd();
             issues.Add(new("name_shortened", null));
         }
 
         var notes = TeamValidation.NormalizeNotes(source.Notes);
         if (notes is { Length: > TeamValidation.MaxNotesLength })
         {
-            notes = notes[..TeamValidation.MaxNotesLength];
+            notes = V1ImportText.CutToLength(notes, TeamValidation.MaxNotesLength);
             issues.Add(new("notes_shortened", null));
         }
 
-        var importKey = trimmed.ToLower(CultureInfo.InvariantCulture);
-        if (importKey.Length > TeamValidation.MaxImportKeyLength)
-            importKey = importKey[..TeamValidation.MaxImportKeyLength];
+        var importKey = V1ImportText.CutToLength(
+            trimmed.ToLower(CultureInfo.InvariantCulture), TeamValidation.MaxImportKeyLength);
 
         // V1 has no MoW roles: the first MoW is core and any later ones flex (design D12), so a V1 war team with
         // several MoWs imports valid instead of flagged. V1 has no rarity cap.

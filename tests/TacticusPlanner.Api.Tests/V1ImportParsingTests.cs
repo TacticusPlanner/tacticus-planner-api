@@ -10,6 +10,20 @@ public sealed class V1ImportParsingTests
 {
     private static readonly JsonSerializerOptions WebJsonOptions = new(JsonSerializerDefaults.Web);
 
+    [Theory]
+    [InlineData("abc", 5, "abc")]
+    [InlineData("abcdef", 3, "abc")]
+    [InlineData("ab\U0001F600", 3, "ab")] // the cut falls inside the emoji's surrogate pair
+    [InlineData("ab\U0001F600", 4, "ab\U0001F600")]
+    [InlineData("abe\u0301", 3, "ab")] // e + combining acute is one text element
+    public void ImportedTextIsCutOnATextElementBoundary(string value, int maxLength, string expected)
+    {
+        var cut = V1ImportText.CutToLength(value, maxLength);
+
+        Assert.Equal(expected, cut);
+        Assert.False(cut.Length > 0 && char.IsHighSurrogate(cut[^1]));
+    }
+
     [Fact]
     public void ParsesCurrentV1OnslaughtPreferencesShapeAndNormalizesSectorNames()
     {

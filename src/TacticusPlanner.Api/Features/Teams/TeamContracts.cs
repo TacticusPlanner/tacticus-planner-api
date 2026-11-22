@@ -163,5 +163,5 @@ public sealed class UpdateTeamValidator : Validator<UpdateTeamRequest>
 public sealed class UpdateTeamOrderValidator : Validator<UpdateTeamOrderRequest>
 {
     public UpdateTeamOrderValidator() =>
-        RuleFor(request => request.TeamIds).NotNull().Must(ids => ids.Count <= 1000);
+        RuleFor(request => request.TeamIds).Cascade(CascadeMode.Stop).NotNull().Must(ids => ids.Count <= 1000);
 }

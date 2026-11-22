@@ -414,6 +414,21 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
         Assert.Equal(TeamsService.OrderStale, await response.ReadIssueCodeAsync());
     }
 
+    [Theory]
+    [InlineData("{}")]
+    [InlineData("""{"teamIds":null}""")]
+    public async Task AReorderWithoutTeamIdsIsAnInvalidShape(string json)
+    {
+        var (client, _) = await ClientAsync();
+        await CreateAsync(client, Create("Team A"));
+
+        using var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        var response = await client.PutAsync($"{Url}/order", content, Ct);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("validation", await response.ReadIssueCodeAsync());
+    }
+
     [Fact]
     public async Task TeamsAreDeletedWithTheProfile()
     {
