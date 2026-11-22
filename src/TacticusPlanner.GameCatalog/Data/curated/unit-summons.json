@@ -1,6 +1,6 @@
 {
   "adeptCelestine": "forced",
-  "admecMarshall": "optional",
+  "admecMarshall": "conditional",
   "astraCreed": "forced",
   "astraDreir": "optional",
   "astraOrdnanceBattery": "optional",
@@ -29,6 +29,6 @@
   "tyranWingedPrime": "forced",
   "ultraDreadnought": "optional",
   "ultraInceptorSgt": "optional",
-  "votanIronmaster": "forced",
+  "votanIronmaster": "conditional",
   "votanMemnyr": "optional"
 }

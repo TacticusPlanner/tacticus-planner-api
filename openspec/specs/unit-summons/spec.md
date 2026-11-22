@@ -10,10 +10,10 @@ onto the battlefield and whether the player can keep it from doing so. Clients u
 
 ### Requirement: Every character and MoW serves its summon type
 
-Each served `characters` and `mows` record SHALL carry `summons`: `none` (no ability summons), `optional` (the
-player decides whether it summons: an active ability left unused, or a passive the player can switch off) or
-`forced` (a passive ability summons on its own, so the player cannot prevent it). A unit with both kinds SHALL be
-`forced`.
+Each served `characters` and `mows` record SHALL carry `summons`: `none` (no ability summons), `optional` (only an
+active ability summons, so the player decides whether it summons), `conditional` (a passive ability summons, but only
+while the player keeps up a condition they can avoid, such as an active switched on or a repair) or `forced` (a
+passive ability summons on its own, so the player cannot prevent it). A unit with a forced summon SHALL be `forced`.
 
 #### Scenario: A forced summoner
 
@@ -23,8 +23,13 @@ player decides whether it summons: an active ability left unused, or a passive t
 #### Scenario: An optional summoner
 
 - **WHEN** the `characters` dataset is served
-- **THEN** `necroSpyder` (Aleph-Null, whose Scarab Hive is an active ability) and `admecMarshall` (Tan Gi'da, whose
-  passive summons only while his active is switched on) have `summons: "optional"`
+- **THEN** `necroSpyder` (Aleph-Null, whose Scarab Hive is an active ability) has `summons: "optional"`
+
+#### Scenario: A conditional summoner
+
+- **WHEN** the `characters` dataset is served
+- **THEN** `admecMarshall` (Tan Gi'da, whose passive summons only while his active is switched on) and
+  `votanIronmaster` (Vynn, whose passive summons only when he repairs) have `summons: "conditional"`
 
 #### Scenario: A MoW
 
@@ -33,8 +38,8 @@ player decides whether it summons: an active ability left unused, or a passive t
 
 ### Requirement: The summon type is curated
 
-The type SHALL come from `Data/curated/unit-summons.json`, an object from unit id to `optional` or `forced`. An
-unlisted unit SHALL be served `none`.
+The type SHALL come from `Data/curated/unit-summons.json`, an object from unit id to `optional`, `conditional` or
+`forced`. An unlisted unit SHALL be served `none`.
 
 #### Scenario: An unlisted unit
 
@@ -45,7 +50,7 @@ unlisted unit SHALL be served `none`.
 ### Requirement: The curation agrees with the datamine
 
 Loading SHALL fail, naming `unit-summons` and the unit, when a curated id is not a `lineup.json` unit, a curated type
-is not `optional` or `forced`, a unit has an ability whose `gameconfig/units/abilities.json` entry has a
+is not `optional`, `conditional` or `forced`, a unit has an ability whose `gameconfig/units/abilities.json` entry has a
 `summonHp…` variable (the summon's stat table) but no curated type, or a curated unit has no such ability. A datamine
 bump that adds a summoner therefore fails until its type is curated.
 
@@ -58,4 +63,5 @@ bump that adds a summoner therefore fails until its type is curated.
 #### Scenario: The shipped curation
 
 - **WHEN** the catalog loads at datamine `v1.44.88.3089`
-- **THEN** 10 characters are `forced`, 16 characters and 6 MoWs are `optional`, and every other unit is `none`
+- **THEN** 9 characters are `forced`, 2 characters are `conditional`, 15 characters and 6 MoWs are `optional`, and every
+  other unit is `none`

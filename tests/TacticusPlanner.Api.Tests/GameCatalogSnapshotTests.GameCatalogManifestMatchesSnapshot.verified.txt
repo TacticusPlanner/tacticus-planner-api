@@ -1,5 +1,5 @@
 ﻿{
-  version: 1.44.88.3089+b7a21cd14b95,
+  version: 1.44.88.3089+adcb9927dcd9,
   schemaHash: 82e342c2a6c0deddc2a4c1c21f172e271085e73c6d34a836041c32af3049bb71,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},
@@ -26,7 +26,7 @@
     },
     {
       key: characters,
-      hash: c165826f4b1401f58982161a6e4a9f0295841f355c4a5242cf577f37bfda17d1,
+      hash: ed4c1da459bb8649f6ef4989f4b434a072843e1b85490e90ee7dcfeaeaec4e2d,
       url: /api/v1/game-catalog/characters/{envelopeHash}
     },
     {

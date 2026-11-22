@@ -9,11 +9,11 @@ internal static partial class GameCatalogDenormalizer
     private const string SummonHealthVariablePrefix = "summonHp";
 
     /// <summary>
-    /// Reads the curated <c>unit-summons</c> file (unit id to <c>optional</c> or <c>forced</c>) into the summon type
+    /// Reads the curated <c>unit-summons</c> file (unit id to <c>optional</c>, <c>conditional</c> or <c>forced</c>) into the summon type
     /// of every lineup unit: listed units keep their curated type, every other unit is <c>none</c>.
     /// </summary>
     /// <exception cref="InvalidOperationException">
-    /// A curated id is not a character or MoW, a type is not <c>optional</c> or <c>forced</c>, or the curated units
+    /// A curated id is not a character or MoW, a type is not <c>optional</c>, <c>conditional</c> or <c>forced</c>, or the curated units
     /// differ from the lineup units with an ability that has summon stats (a <c>summonHp…</c> variable), so a
     /// datamine bump with a new summoner fails until its type is curated.
     /// </exception>
@@ -30,9 +30,11 @@ internal static partial class GameCatalogDenormalizer
                 errors.Add($"'{unitId}' is not a character or MoW");
             }
 
-            if (summons is not (GameCatalogUnitSummons.Optional or GameCatalogUnitSummons.Forced))
+            if (summons is not (GameCatalogUnitSummons.Optional or GameCatalogUnitSummons.Conditional or GameCatalogUnitSummons.Forced))
             {
-                errors.Add($"'{unitId}' has summons '{summons}' (expected '{GameCatalogUnitSummons.Optional}' or '{GameCatalogUnitSummons.Forced}')");
+                errors.Add(
+                    $"'{unitId}' has summons '{summons}' (expected '{GameCatalogUnitSummons.Optional}', " +
+                    $"'{GameCatalogUnitSummons.Conditional}' or '{GameCatalogUnitSummons.Forced}')");
             }
         }
 

@@ -89,7 +89,7 @@ public sealed record GameCatalogCharacterView(
     IReadOnlyList<GameCatalogCharacterRankUp> RankUpUpgrades,
     IReadOnlyList<GameCatalogFarmLocation> ShardLocations,
     IReadOnlyList<GameCatalogEquipmentSlot> EligibleEquipment,
-    // none, optional or forced: see GameCatalogUnitSummons.
+    // none, optional, conditional or forced: see GameCatalogUnitSummons.
     string Summons
 );
 
@@ -103,10 +103,16 @@ public static class GameCatalogUnitSummons
     public const string None = "none";
 
     /// <summary>
-    /// The player decides whether it summons: an active ability left unused, or a passive the player can switch off
-    /// (Tan Gi'da's needs his active on). An LRE "No Summons" battle allows it.
+    /// Only an active ability summons, so the player decides whether it summons. An LRE "No Summons" battle allows it.
     /// </summary>
     public const string Optional = "optional";
+
+    /// <summary>
+    /// A passive ability summons, but only while the player keeps a condition up that they can avoid (Tan Gi'da's
+    /// needs his active switched on, Vynn's needs him to repair). An LRE "No Summons" battle allows it, though it is
+    /// easy to summon by accident.
+    /// </summary>
+    public const string Conditional = "conditional";
 
     /// <summary>A passive ability summons on its own (on a kill, when attacked…), so the player cannot prevent it.</summary>
     public const string Forced = "forced";

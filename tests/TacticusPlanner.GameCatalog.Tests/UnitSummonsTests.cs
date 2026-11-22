@@ -25,6 +25,7 @@ public sealed class UnitSummonsTests
     {
         ["optionalSummoner"] = Unit(["Summon"], ["Strike"]),
         ["forcedSummoner"] = Unit(["Strike"], ["SecondSummon"]),
+        ["conditionalSummoner"] = Unit(["Strike"], ["Summon"]),
         ["plain"] = Unit(["Strike", "Placeholder"]),
     };
 
@@ -32,12 +33,23 @@ public sealed class UnitSummonsTests
     public void ListedUnitsKeepTheirTypeAndEveryOtherUnitHasNone()
     {
         var summons = GameCatalogDenormalizer.ReadUnitSummons(
-            new Dictionary<string, string> { ["optionalSummoner"] = "optional", ["forcedSummoner"] = "forced" },
+            new Dictionary<string, string>
+            {
+                ["optionalSummoner"] = "optional",
+                ["conditionalSummoner"] = "conditional",
+                ["forcedSummoner"] = "forced",
+            },
             Lineup,
             Abilities);
 
         Assert.Equal(
-            new Dictionary<string, string> { ["optionalSummoner"] = "optional", ["forcedSummoner"] = "forced", ["plain"] = "none" },
+            new Dictionary<string, string>
+            {
+                ["optionalSummoner"] = "optional",
+                ["conditionalSummoner"] = "conditional",
+                ["forcedSummoner"] = "forced",
+                ["plain"] = "none",
+            },
             summons);
     }
 
@@ -48,7 +60,13 @@ public sealed class UnitSummonsTests
     [InlineData("optionalSummoner", "sometimes", "'optionalSummoner' has summons 'sometimes'")]
     public void ACurationThatDisagreesWithTheDatamineFailsTheLoad(string unitId, string type, string message)
     {
-        var curated = new Dictionary<string, string> { ["optionalSummoner"] = "optional", ["forcedSummoner"] = "forced", [unitId] = type };
+        var curated = new Dictionary<string, string>
+        {
+            ["optionalSummoner"] = "optional",
+            ["conditionalSummoner"] = "conditional",
+            ["forcedSummoner"] = "forced",
+            [unitId] = type,
+        };
         if (unitId == "forcedSummoner")
         {
             curated.Remove("optionalSummoner");
@@ -67,11 +85,13 @@ public sealed class UnitSummonsTests
         var characters = catalog.CharacterViews.ToDictionary(character => character.Id, character => character.Summons, StringComparer.Ordinal);
         var mows = catalog.MowList.ToDictionary(mow => mow.Id, mow => mow.Summons, StringComparer.Ordinal);
 
-        Assert.Equal(("forced", "optional", "optional", "none"),
-            (characters["blackPossession"], characters["necroSpyder"], characters["admecMarshall"], characters["ultraCalgar"]));
+        Assert.Equal(("forced", "optional", "conditional", "conditional", "none"),
+            (characters["blackPossession"], characters["necroSpyder"], characters["admecMarshall"], characters["votanIronmaster"],
+                characters["ultraCalgar"]));
         Assert.Equal(("optional", "none"), (mows["tyranBiovore"], mows["blackForgefiend"]));
-        Assert.Equal(10, characters.Values.Count(summons => summons == "forced"));
-        Assert.Equal(16, characters.Values.Count(summons => summons == "optional"));
+        Assert.Equal(9, characters.Values.Count(summons => summons == "forced"));
+        Assert.Equal(15, characters.Values.Count(summons => summons == "optional"));
+        Assert.Equal(2, characters.Values.Count(summons => summons == "conditional"));
         Assert.Equal(6, mows.Values.Count(summons => summons == "optional"));
         Assert.DoesNotContain("forced", mows.Values);
     }
