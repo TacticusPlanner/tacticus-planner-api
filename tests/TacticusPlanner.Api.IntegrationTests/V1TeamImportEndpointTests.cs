@@ -406,7 +406,7 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
         {
             var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
             var profileId = (await db.Profiles.IgnoreQueryFilters().FirstAsync(entity => entity.Subject == subject, Ct)).Id;
-            db.Teams.AddRange(Enumerable.Range(1, 18).Select(i => Domain.Teams.Team.Create(
+            db.Teams.AddRange(Enumerable.Range(1, TeamValidation.DefaultLimit - 2).Select(i => Domain.Teams.Team.Create(
                 profileId, new TeamDraft($"Seeded {i}", [TeamMode.Horde], ["ultraCalgar"], null, [], null, [], null), i)));
             await db.SaveChangesAsync(Ct);
         }
@@ -421,7 +421,7 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
             [("Import one", ImportPartStatus.Imported, null), ("Import two", ImportPartStatus.Imported, null),
              ("Import three", ImportPartStatus.Skipped, "team_limit_reached"), ("Import four", ImportPartStatus.Skipped, "team_limit_reached")],
             body.TeamOutcomes.Select(outcome => (outcome.Name, outcome.Status, outcome.Code)));
-        Assert.Equal(20, (await ListAsync(client)).Count);
+        Assert.Equal(TeamValidation.DefaultLimit, (await ListAsync(client)).Count);
     }
 
     [Fact]
