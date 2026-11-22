@@ -248,15 +248,15 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
     public async Task ConcurrentCreatesCannotPassTheLimit()
     {
         var (client, subject) = await ClientAsync();
-        await SeedAsync(subject, [.. Enumerable.Range(1, 18).Select(i => Seeded($"Seeded {i}"))]);
+        await SeedAsync(subject, [.. Enumerable.Range(1, TeamValidation.DefaultLimit - 2).Select(i => Seeded($"Seeded {i}"))]);
 
         var responses = await Task.WhenAll(Enumerable.Range(1, 6)
             .Select(i => client.PostAsJsonAsync(Url, Create($"Racer {i}"), Ct)));
 
         Assert.Equal(2, responses.Count(response => response.StatusCode == HttpStatusCode.OK));
         var teams = await ListAsync(client);
-        Assert.Equal(20, teams.Count);
-        Assert.Equal(Enumerable.Range(1, 20), teams.Select(team => team.Position));
+        Assert.Equal(TeamValidation.DefaultLimit, teams.Count);
+        Assert.Equal(Enumerable.Range(1, TeamValidation.DefaultLimit), teams.Select(team => team.Position));
     }
 
     [Fact]
