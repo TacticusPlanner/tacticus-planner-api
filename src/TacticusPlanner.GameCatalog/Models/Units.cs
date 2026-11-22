@@ -89,22 +89,25 @@ public sealed record GameCatalogCharacterView(
     IReadOnlyList<GameCatalogCharacterRankUp> RankUpUpgrades,
     IReadOnlyList<GameCatalogFarmLocation> ShardLocations,
     IReadOnlyList<GameCatalogEquipmentSlot> EligibleEquipment,
-    // none, active or passive: see GameCatalogUnitSummons.
+    // none, optional or forced: see GameCatalogUnitSummons.
     string Summons
 );
 
 /// <summary>
 /// The served <c>summons</c> of a character or MoW, curated in <c>unit-summons</c>: whether the unit can bring a
-/// summon onto the battlefield, and whether the player controls it.
+/// summon onto the battlefield, and whether the player can keep it from doing so.
 /// </summary>
 public static class GameCatalogUnitSummons
 {
     /// <summary>No ability summons.</summary>
     public const string None = "none";
 
-    /// <summary>Only an active ability summons, so the player can leave it unused (an LRE "No Summons" battle allows it).</summary>
-    public const string Active = "active";
+    /// <summary>
+    /// The player decides whether it summons: an active ability left unused, or a passive the player can switch off
+    /// (Tan Gi'da's needs his active on). An LRE "No Summons" battle allows it.
+    /// </summary>
+    public const string Optional = "optional";
 
-    /// <summary>A passive ability can summon on its own (on a kill, when attacked…), so the player cannot prevent it.</summary>
-    public const string Passive = "passive";
+    /// <summary>A passive ability summons on its own (on a kill, when attacked…), so the player cannot prevent it.</summary>
+    public const string Forced = "forced";
 }

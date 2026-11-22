@@ -10,7 +10,7 @@ public sealed record GameCatalogMow(
     string Alliance,
     GameCatalogMowAbility PrimaryAbility,
     GameCatalogMowAbility SecondaryAbility,
-    // none, active or passive (see GameCatalogUnitSummons); the reader serves none and BuildMows sets it from
+    // none, optional or forced (see GameCatalogUnitSummons); the reader serves none and BuildMows sets it from
     // unit-summons.
     string Summons,
     // The ability unlocked at Mythic rarity, the datamine lineup.json mythicAbilities[0]. It

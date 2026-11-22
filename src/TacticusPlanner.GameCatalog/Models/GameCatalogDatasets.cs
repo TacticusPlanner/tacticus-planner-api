@@ -137,8 +137,8 @@ public static class GameCatalogDatasets
     public const string LreCuration = "lre-curation";
 
     /// <summary>
-    /// Curated summon type of every character and MoW that can summon (<c>active</c>: only through an active
-    /// ability, which the player can leave unused; <c>passive</c>: a passive ability can summon on its own). An
+    /// Curated summon type of every character and MoW that can summon (<c>optional</c>: the player decides whether
+    /// it summons; <c>forced</c>: a passive ability summons on its own). An
     /// unlisted unit has no summons. Merged into the served characters and mows as <c>summons</c>; never served on
     /// its own. See Denormalization/UnitSummonsDenormalizer.cs.
     /// </summary>
