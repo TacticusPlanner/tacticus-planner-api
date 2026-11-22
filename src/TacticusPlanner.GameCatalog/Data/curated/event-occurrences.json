@@ -394,8 +394,8 @@
   {
     "id": "occ-2026-12-03-hse-against-the-tide",
     "definitionId": "hse-against-the-tide",
-    "startUtc": "2026-12-03T00:00:00Z",
-    "endUtc": "2026-12-10T00:00:00Z",
+    "startUtc": "2026-12-03T08:00:00Z",
+    "endUtc": "2026-12-10T08:00:00Z",
     "parameters": null
   },
   {
@@ -408,8 +408,8 @@
   {
     "id": "occ-2026-12-12-hse-training-rush",
     "definitionId": "hse-training-rush",
-    "startUtc": "2026-12-12T00:00:00Z",
-    "endUtc": "2026-12-16T00:00:00Z",
+    "startUtc": "2026-12-12T08:00:00Z",
+    "endUtc": "2026-12-16T08:00:00Z",
     "parameters": null
   },
   {
@@ -429,8 +429,8 @@
   {
     "id": "occ-2026-12-19-hse-against-the-tide",
     "definitionId": "hse-against-the-tide",
-    "startUtc": "2026-12-19T00:00:00Z",
-    "endUtc": "2026-12-20T00:00:00Z",
+    "startUtc": "2026-12-19T08:00:00Z",
+    "endUtc": "2026-12-20T08:00:00Z",
     "parameters": null
   }
 ]
