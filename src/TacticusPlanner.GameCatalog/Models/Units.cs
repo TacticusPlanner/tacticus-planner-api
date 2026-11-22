@@ -88,5 +88,23 @@ public sealed record GameCatalogCharacterView(
     IReadOnlyList<string> EquipmentSlots,
     IReadOnlyList<GameCatalogCharacterRankUp> RankUpUpgrades,
     IReadOnlyList<GameCatalogFarmLocation> ShardLocations,
-    IReadOnlyList<GameCatalogEquipmentSlot> EligibleEquipment
+    IReadOnlyList<GameCatalogEquipmentSlot> EligibleEquipment,
+    // none, active or passive: see GameCatalogUnitSummons.
+    string Summons
 );
+
+/// <summary>
+/// The served <c>summons</c> of a character or MoW, curated in <c>unit-summons</c>: whether the unit can bring a
+/// summon onto the battlefield, and whether the player controls it.
+/// </summary>
+public static class GameCatalogUnitSummons
+{
+    /// <summary>No ability summons.</summary>
+    public const string None = "none";
+
+    /// <summary>Only an active ability summons, so the player can leave it unused (an LRE "No Summons" battle allows it).</summary>
+    public const string Active = "active";
+
+    /// <summary>A passive ability can summon on its own (on a kill, when attacked…), so the player cannot prevent it.</summary>
+    public const string Passive = "passive";
+}

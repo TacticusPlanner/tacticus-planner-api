@@ -64,6 +64,10 @@ restrictions); these are silently ignored on deserialize.
   `rankUpUpgrades` = `upgrades` rows ranked Stone1…; MoW primary/secondary = its two actives with the
   abilities' `upgrades` recipes, `mythicAbility` = `mythicAbilities[0]`. NPC stats map `FixedArmor`→`armour`,
   `StarLevel`→`stars` (absent ⇒ 0). No faction display names (the record's `Name` holds the faction id).
+  Characters and MoWs also serve `summons` (`none` / `active` / `passive`), curated in
+  `Data/curated/unit-summons.json` (unlisted ⇒ `none`). The load fails when the curated units differ from the units
+  with an ability that has a `summonHp…` variable, so a bump that adds a summoner needs its entry
+  (`Denormalization/UnitSummonsDenormalizer.cs`).
 - **mows** is a plain array; the shared upgrade-cost ladder is its own dataset `mow-upgrade-costs`, keyed by the ability **level** it
   raises a MoW to (`level = rawIndex + 2`; level 1 is free).
 - **ascension-costs** is the shared `(rarity, stars)` orb/shard ladder — one shared progression, served as

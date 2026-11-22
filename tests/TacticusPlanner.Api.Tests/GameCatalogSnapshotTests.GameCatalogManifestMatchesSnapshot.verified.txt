@@ -1,6 +1,6 @@
 ﻿{
-  version: 1.44.88.3089+3e1589cba710,
-  schemaHash: 922528cc02cb85330710c3b16e1c50402c36ede37731aa85b14d43f1f3f91cc3,
+  version: 1.44.88.3089+9dee9a3fe2be,
+  schemaHash: 82e342c2a6c0deddc2a4c1c21f172e271085e73c6d34a836041c32af3049bb71,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},
   datasets: [
@@ -26,7 +26,7 @@
     },
     {
       key: characters,
-      hash: 0e57b1c4176447f8351fb6432624c234e88ac957f891127e69e7d1660dedb68c,
+      hash: e138f255d6a0305d3ad1a2517ea27107310b445bc525fe5352712f17ea403bf6,
       url: /api/v1/game-catalog/characters/{envelopeHash}
     },
     {
@@ -101,7 +101,7 @@
     },
     {
       key: mows,
-      hash: 6ca02af56ed2052294bfa18c8886aa0d8f4fcc61c223a96d76a1ac5442f503f0,
+      hash: 3ee903e85f77e687104c5589c8ec4a1d83d5486cd19370424b8accfbe1c78552,
       url: /api/v1/game-catalog/mows/{envelopeHash}
     },
     {

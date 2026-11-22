@@ -9444,7 +9444,8 @@
           "equipmentSlots",
           "rankUpUpgrades",
           "shardLocations",
-          "eligibleEquipment"
+          "eligibleEquipment",
+          "summons"
         ],
         "type": "object",
         "properties": {
@@ -9532,6 +9533,9 @@
           },
           "eligibleEquipment": {
             "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEquipmentSlot"
+          },
+          "summons": {
+            "type": "string"
           }
         }
       },
@@ -12892,7 +12896,8 @@
           "faction",
           "alliance",
           "primaryAbility",
-          "secondaryAbility"
+          "secondaryAbility",
+          "summons"
         ],
         "type": "object",
         "properties": {
@@ -12916,6 +12921,9 @@
           },
           "secondaryAbility": {
             "$ref": "#/components/schemas/GameCatalogMowAbility"
+          },
+          "summons": {
+            "type": "string"
           },
           "mythicAbility": {
             "oneOf": [
