@@ -132,7 +132,7 @@ The served `events-calendar` dataset SHALL be indexed by calendar date. An occur
 - **THEN** the definition is added in the same change that authors its first occurrence
 
 ### Requirement: Currently announced Home Screen Event runs are authored
-`event-occurrences` SHALL contain an occurrence, with explicit UTC start and end instants, for every HSE run that is live or announced with a known end at the time the catalog is released. Instants follow the documented convention (start 08:00 UTC on the first day shown in game, end exclusive at 08:00 UTC on the day after the last day shown) and SHALL NOT be rounded to midnight unless the game is verified to switch at midnight. A run whose end is not yet known SHALL NOT be authored with an invented end.
+`event-occurrences` SHALL contain an occurrence, with explicit UTC start and end instants, for every HSE run that is live or announced with a known end at the time the catalog is released. Instants follow the documented convention (start 00:00 UTC on the first day shown in game, end exclusive at 00:00 UTC on the day after the last day shown), which the game was verified to use (a start on 2026-11-23 and ends on 2026-11-01 and 2026-11-16 all switched at midnight UTC); an in-game timer overrides the calendar day. Runs authored before that check keep their 08:00 UTC instants. A run whose end is not yet known SHALL NOT be authored with an invented end.
 
 #### Scenario: Upcoming run is in the calendar
 - **GIVEN** a Machine Hunt announced to start on 2026-10-02
