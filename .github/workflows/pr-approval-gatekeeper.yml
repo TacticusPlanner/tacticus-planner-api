@@ -1,0 +1,86 @@
+name: PR Approval Gatekeeper
+
+# Passes straight away for the maintainer's own PRs. Any other PR passes only
+# once the maintainer's latest review approves its current head commit.
+#
+# Security: this workflow never checks out or runs PR code. pull_request_target
+# runs with the base repository's token, so checking out a fork's code here
+# would hand that token to untrusted code.
+#
+# Stacked PRs: there is no branch filter. A PR stacked on another PR targets
+# that PR's branch, not main, and `branches: [main]` would skip it. Check runs
+# belong to the head commit, so the result recorded while the PR targets its
+# parent branch still counts when GitHub retargets it to main.
+#
+# Fork PRs: review events from a fork run with a read-only token and the
+# workflow file from the PR's merge commit. Reading reviews only needs read
+# access, so the check still reports. Because a fork can edit that file, keep
+# fork workflow runs behind maintainer approval in the repository settings.
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  pull_request_review:
+    types:
+      - submitted
+      - dismissed
+
+permissions:
+  pull-requests: read
+
+jobs:
+  check-approval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check PR Author or Maintainer Approval
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        with:
+          script: |
+            const pr = context.payload.pull_request
+            // The repository belongs to an organization, so context.repo.owner
+            // is the org, not a person.
+            const maintainer = "svehera"
+
+            if (pr.user.login === maintainer) {
+              core.info("Maintainer PR. Passing check.")
+              return
+            }
+
+            const reviews = await github.paginate(github.rest.pulls.listReviews, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              per_page: 100,
+            })
+
+            // A plain comment review does not change the approval state, the
+            // same as on GitHub's own review summary.
+            const decisiveStates = ["APPROVED", "CHANGES_REQUESTED", "DISMISSED"]
+            const latestReview = reviews
+              .filter(
+                (r) =>
+                  r.user?.login === maintainer &&
+                  decisiveStates.includes(r.state)
+              )
+              .at(-1)
+
+            if (latestReview?.state !== "APPROVED") {
+              core.setFailed(`Waiting for approval from @${maintainer}.`)
+              return
+            }
+
+            // An approval covers the commit it was given on. A push after it
+            // needs a fresh approval.
+            if (latestReview.commit_id !== pr.head.sha) {
+              core.setFailed(
+                `@${maintainer} approved ${latestReview.commit_id.slice(0, 7)}, ` +
+                  `but the PR head is now ${pr.head.sha.slice(0, 7)}. ` +
+                  "Waiting for a fresh approval."
+              )
+              return
+            }
+
+            core.info("Approved by maintainer. Passing check.")
