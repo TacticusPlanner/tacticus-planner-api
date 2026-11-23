@@ -50,13 +50,19 @@ The server SHALL send ids and codes only, never display names or icons. The rule
 
 ### Requirement: Teams are created, updated and deleted through the teams endpoints
 
-`POST /api/v1/teams` SHALL create a team at the end of the order. `PUT /api/v1/teams/{teamId}` SHALL replace a team's fields when the request's `revision` matches, and otherwise SHALL respond `409` with code `teamRevisionStale` and the current team. `DELETE /api/v1/teams/{teamId}` SHALL delete the team and close the gap in the remaining positions. A created or updated team SHALL be returned as `GET` returns it.
+`POST /api/v1/teams` SHALL create a team at the end of the order. `PUT /api/v1/teams/{teamId}` SHALL replace a team's fields when the request's `revision` matches, and otherwise SHALL respond `409` with code `teamRevisionStale` and the current team. Every successful update SHALL advance the team's revision by one, so a second update based on the same revision is refused as stale. `DELETE /api/v1/teams/{teamId}` SHALL delete the team and close the gap in the remaining positions. A created or updated team SHALL be returned as `GET` returns it.
 
 #### Scenario: Stale update
 
 - **GIVEN** a team at revision 3
 - **WHEN** a client updates it with revision 2
 - **THEN** the API responds `409` with code `teamRevisionStale` and the team at revision 3, and nothing changes
+
+#### Scenario: Two clients edit the same revision
+
+- **GIVEN** two clients that both read a team at revision 1
+- **WHEN** the first updates it with revision 1, and then the second updates it with revision 1
+- **THEN** the first update succeeds and the team is at revision 2, and the second is refused with `teamRevisionStale` and the team at revision 2
 
 #### Scenario: Delete closes the gap
 
@@ -76,7 +82,7 @@ The server SHALL send ids and codes only, never display names or icons. The rule
 
 ### Requirement: Names, notes and team count are limited
 
-A team name SHALL be trimmed and SHALL be 3 to 40 characters. It SHALL be unique within the profile, ignoring case, and a duplicate SHALL be refused with `400` and code `teamNameTaken`. Notes SHALL be at most 300 characters, and blank notes SHALL be stored as null. A profile SHALL have at most 50 teams, and creating a 51st SHALL be refused with `400` and code `teamLimitReached`. The limit SHALL be a single configured value, 50 by default, read by creates and the import alike. The limit SHALL hold under concurrent creates and imports.
+A team name SHALL be trimmed and SHALL be 3 to 40 characters. It SHALL be unique within the profile, ignoring case, and a duplicate SHALL be refused with `400` and code `teamNameTaken`. Notes SHALL be at most 300 characters, and blank notes SHALL be stored as null. A profile SHALL have at most the configured team limit (`Teams:Limit`, 50 by default), and a create past it SHALL be refused with `400` and code `teamLimitReached`. The limit SHALL be that single configured value, read by creates and the import alike. The limit SHALL hold under concurrent creates and imports.
 
 #### Scenario: Same name in another case
 
@@ -86,7 +92,7 @@ A team name SHALL be trimmed and SHALL be 3 to 40 characters. It SHALL be unique
 
 #### Scenario: Fifty-first team
 
-- **GIVEN** a profile with 50 teams
+- **GIVEN** the default limit of 50 and a profile with 50 teams
 - **WHEN** a client creates a team
 - **THEN** the API responds `400` with code `teamLimitReached`
 

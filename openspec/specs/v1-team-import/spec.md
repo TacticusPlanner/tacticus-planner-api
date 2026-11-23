@@ -140,7 +140,7 @@ Rationale: V1 has no team ids, and V1 War Defense refers to teams by name. A lat
 
 #### Scenario: Partial room
 
-- **GIVEN** a profile with 18 teams and 4 importable V1 teams with new names
+- **GIVEN** the default limit of 50, a profile with 48 teams and 4 importable V1 teams with new names
 - **WHEN** the import runs
 - **THEN** the first 2 are imported, in V1 priority order, and the other 2 are `Skipped` with code `team_limit_reached`
 
