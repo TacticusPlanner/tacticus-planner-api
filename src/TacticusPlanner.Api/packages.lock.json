@@ -114,19 +114,19 @@
       },
       "PostHog.AspNetCore": {
         "type": "Direct",
-        "requested": "[2.9.12, )",
-        "resolved": "2.9.12",
-        "contentHash": "DEdzAJZN6tC+Gnq2A5bZzYcjXiQ/urFcD4FwYGqT6khKeLDp7H4vxeU00sV6HASaxCEAM4IiOrx21eU10tnJtw==",
+        "requested": "[2.10.0, )",
+        "resolved": "2.10.0",
+        "contentHash": "tWIPob30vGiaSfjm+P6LCbOL8cZ9j5OfKojG61Y5AM6iaRPtUslz30bkvfZ4FAkrnYSMUqvbvPc++6OMIWPpGw==",
         "dependencies": {
           "Microsoft.FeatureManagement": "4.8.0",
-          "PostHog": "2.21.1"
+          "PostHog": "2.23.0"
         }
       },
       "Scalar.AspNetCore": {
         "type": "Direct",
-        "requested": "[2.19.0, )",
-        "resolved": "2.19.0",
-        "contentHash": "nTXL9wsg6UhQ27KPUhuMr3/BE02H3zjuii2I5x7vbx7myPHkJzvzGDj7hfd1lKZBmJgUcKI+W7wcIzDdV/N/Dg=="
+        "requested": "[2.21.0, )",
+        "resolved": "2.21.0",
+        "contentHash": "pDaxW7B1HqQIU5T64Jn1Txn2JKyVqoOvskCAqTb/lffZyUS8hBxhxmOkJum4wbzFmhc2LsKULVQ/4GDHLb7yjQ=="
       },
       "Vogen": {
         "type": "Direct",
@@ -578,8 +578,8 @@
       },
       "PostHog": {
         "type": "Transitive",
-        "resolved": "2.21.1",
-        "contentHash": "SagGskudys4bYc91YQE+7RKtf5Ji+6M6glNBHBRW3QoZDTU9mrapQHK8NoLn/6XPzErp3sHmKrq3iX2k3EE/tQ=="
+        "resolved": "2.23.0",
+        "contentHash": "Y7VB1L84l8cJL0FN4RATELKhnBYl12TUUidZrl/Yr3+/xd87/jIpyvTVi3JCfivx5jAet019p5bjGTSxjvQftA=="
       },
       "ReactiveUI.Disposables": {
         "type": "Transitive",
