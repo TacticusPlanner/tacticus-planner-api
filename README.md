@@ -50,9 +50,12 @@ dotnet build -c Release --no-restore
 ```
 
 Package versions are managed in `Directory.Packages.props`. Lock files are
-committed for the API and ServiceDefaults projects. AppHost is intentionally
+committed for the `src/` projects and ServiceDefaults. AppHost is intentionally
 unlocked because Aspire injects platform-specific dashboard and orchestration
-packages for Windows, Linux, or macOS during restore.
+packages for Windows, Linux, or macOS during restore. The `tests/` projects are
+unlocked too: they get most packages transitively through the `src/` projects,
+and Dependabot only refreshes the lock file of the project that references a
+package directly, so locked test projects failed every such bump.
 
 ## Run the local full stack with Aspire
 

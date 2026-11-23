@@ -46,8 +46,11 @@ dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore
 ```
 
 - Package versions are centrally managed in `Directory.Packages.props`. Lock
-  files are committed for every project except the AppHost, which is
-  intentionally unlocked (Aspire injects platform-specific packages).
+  files are committed for the `src/` projects and ServiceDefaults. The AppHost
+  is intentionally unlocked (Aspire injects platform-specific packages), and so
+  are the `tests/` projects (they get most packages transitively, and
+  Dependabot only refreshes the lock file of the project that references a
+  package directly).
 - Run the local full stack with **Aspire, not `dotnet run`**:
   `aspire run --project orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj`.
   Use `aspire stop`/`aspire ps`/`aspire describe` to manage it — see
