@@ -8,8 +8,8 @@ public sealed class RankTargetKeyTests
     private const int Silver3 = (int)UnitRank.Silver3;
 
     [Theory]
-    [InlineData(false, 3, true, 0)] // three applied slots == point-five below Diamond3
-    [InlineData(false, 7, false, 3)] // applied slots cap at the 3-slot row below Diamond3
+    [InlineData(false, 3, true, 0)] // three applied slots == point-five below Adamantine1
+    [InlineData(true, 4, false, 4)] // point-five is only a floor of 3
     public void EquivalentEndStatesShareOneKey(bool pointFiveA, int appliedA, bool pointFiveB, int appliedB) =>
         Assert.Equal(
             RankTargetKey.From(Silver3, pointFiveA, appliedA),
@@ -18,6 +18,8 @@ public sealed class RankTargetKeyTests
     [Theory]
     [InlineData(false, 0, false, 2)] // clean vs partially applied
     [InlineData(false, 2, true, 0)] // partial vs full row
+    [InlineData(false, 4, false, 3)] // a bottom-row slot below Diamond3 is its own stopping point
+    [InlineData(false, 5, false, 4)]
     public void DistinctEndStatesHaveDistinctKeys(bool pointFiveA, int appliedA, bool pointFiveB, int appliedB) =>
         Assert.NotEqual(
             RankTargetKey.From(Silver3, pointFiveA, appliedA),
@@ -28,6 +30,10 @@ public sealed class RankTargetKeyTests
         Assert.NotEqual(
             RankTargetKey.From(Silver3, false, 0),
             RankTargetKey.From((int)UnitRank.Gold1, false, 0));
+
+    [Fact]
+    public void Diamond2NumbersEachSlot() =>
+        Assert.Equal($"{(int)UnitRank.Diamond2}:4", RankTargetKey.From((int)UnitRank.Diamond2, false, 4));
 
     [Fact]
     public void Diamond3NumbersEachSlot() =>
