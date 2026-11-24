@@ -52,7 +52,8 @@ public sealed record GameCatalogRawEventShopWeek(
 /// from <see cref="DefinitionId"/> (or, while it is null, from <see cref="EventKey"/>) and derives dates, the current
 /// day and every label. <see cref="StartUtc"/> and <see cref="DefinitionId"/> are null for an event the datamine ships
 /// but the calendar does not date yet (start date to be announced); its <see cref="DayCount"/> is then 7 per known
-/// week. See specs/game-event-shops-dataset.
+/// week. A dated event's <see cref="DayCount"/> is its weeks' total days (the last week may be shorter than 7). See
+/// specs/game-event-shops-dataset.
 /// </summary>
 public sealed record GameCatalogEventShopView(
     string Id,

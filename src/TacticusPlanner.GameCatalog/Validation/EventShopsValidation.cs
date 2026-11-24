@@ -5,13 +5,15 @@ namespace TacticusPlanner.GameCatalog.Validation;
 public static partial class GameCatalogValidator
 {
     private static readonly TimeSpan EventShopWeekLength = TimeSpan.FromDays(7);
+    private static readonly TimeSpan EventShopDayLength = TimeSpan.FromDays(1);
 
     private static void ValidateEventShops(
         GameCatalogSnapshot snapshot, HashSet<string> unitOrMowIds, List<GameCatalogValidationError> errors) =>
         ValidateEventShops(snapshot.RawEventShops, snapshot.EventShopViews, unitOrMowIds, errors);
 
     /// <summary>
-    /// Every served event shop must have weeks numbered 1..W that (when dated) are contiguous 7-day windows starting at 00:00 UTC, variants that meet every daily-shop rule, and a single cost
+    /// Every served event shop must have weeks numbered 1..W that (when dated) are contiguous windows starting at 00:00 UTC,
+    /// each exactly 7 days except the last, which lasts 1 to 7 whole days, variants that meet every daily-shop rule, and a single cost
     /// currency <c>seasonalEventCurrency&lt;EventKey&gt;</c>. Every error names the event key. See
     /// specs/game-event-shops-dataset.
     /// </summary>
@@ -41,12 +43,11 @@ public static partial class GameCatalogValidator
                 var occurrence = week.Occurrence;
 
                 // An undated event (start date to be announced) has no calendar weeks to check.
-                if (occurrence is not null && (occurrence.EndUtc - occurrence.StartUtc != EventShopWeekLength
-                    || occurrence.StartUtc.UtcDateTime.TimeOfDay != TimeSpan.Zero))
+                if (occurrence is not null && !IsValidEventShopWeekWindow(occurrence, isLastWeek: index == eventShop.Weeks.Count - 1))
                 {
                     errors.Add(new GameCatalogValidationError(
                         dataset, "InvalidEventShopWeek",
-                        $"Event '{eventKey}' week {week.Week} ('{occurrence.Id}') must start at 00:00 UTC and last exactly 7 days."));
+                        $"Event '{eventKey}' week {week.Week} ('{occurrence.Id}') must start at 00:00 UTC and last exactly 7 days (the last week 1 to 7 whole days)."));
                 }
 
                 if (index > 0 && occurrence is not null
@@ -89,5 +90,22 @@ public static partial class GameCatalogValidator
                 ValidateShopSlotViews(dataset, $"{eventShop.EventKey} week {week.Week}", week.Slots, unitOrMowIds, errors);
             }
         }
+    }
+
+    /// <summary>
+    /// A dated event shop week starts at 00:00 UTC and lasts 7 days; the event's last week may end early, after 1 to 7
+    /// whole days (Skull Harvest runs 6 days).
+    /// </summary>
+    private static bool IsValidEventShopWeekWindow(GameCatalogEventOccurrence occurrence, bool isLastWeek)
+    {
+        var length = occurrence.EndUtc - occurrence.StartUtc;
+        if (occurrence.StartUtc.UtcDateTime.TimeOfDay != TimeSpan.Zero)
+        {
+            return false;
+        }
+
+        return isLastWeek
+            ? length >= EventShopDayLength && length <= EventShopWeekLength && length.Ticks % EventShopDayLength.Ticks == 0
+            : length == EventShopWeekLength;
     }
 }
