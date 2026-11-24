@@ -6173,6 +6173,96 @@
         ]
       }
     },
+    "/api/v1/legendary-event-run-records": {
+      "get": {
+        "tags": [
+          "Legendary-Event-Run-Records"
+        ],
+        "summary": "Reads a page of the caller's run records across every Legendary Event, newest first.",
+        "description": "Lists every record of the caller's profile, whether or not a plan exists for its event, ordered by startedAt then id, both descending. Each item is a summary (no lanes, teams or roster): read the roster from /legendary-event-plans/{eventId}/run-records/{recordId}/roster. limit is 1–100 (default 20); after is the opaque nextAfter of the previous page, null on the last one. A profile with no records reads as an empty page.",
+        "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansListLegendaryEventRunRecordsEndpoint",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "integer"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegendaryEventRunRecordSummariesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "limit is out of range or after is not a valid cursor.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/me/roster-snapshots": {
       "post": {
         "tags": [
@@ -16713,6 +16803,12 @@
           "$ref": "#/components/schemas/LegendaryEventRunRecordResponse"
         }
       },
+      "IReadOnlyListOfLegendaryEventRunRecordSummaryResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/LegendaryEventRunRecordSummaryResponse"
+        }
+      },
       "IReadOnlyListOfLegendaryEventRunRecordTeamResponse": {
         "type": "array",
         "items": {
@@ -17096,6 +17192,64 @@
               "null",
               "string"
             ]
+          }
+        }
+      },
+      "LegendaryEventRunRecordSummariesResponse": {
+        "required": [
+          "records",
+          "nextAfter"
+        ],
+        "type": "object",
+        "properties": {
+          "records": {
+            "$ref": "#/components/schemas/IReadOnlyListOfLegendaryEventRunRecordSummaryResponse"
+          },
+          "nextAfter": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "LegendaryEventRunRecordSummaryResponse": {
+        "required": [
+          "id",
+          "eventId",
+          "run",
+          "startedAt",
+          "progressAt",
+          "catalogVersion",
+          "points"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": "string"
+          },
+          "run": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "progressAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "catalogVersion": {
+            "type": "string"
+          },
+          "points": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
