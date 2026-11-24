@@ -39,10 +39,11 @@ public sealed class EventShopsDenormalizerTests
         Assert.Equal("anniversary-event", august.DefinitionId);
         Assert.Equal("seasonalEventCurrencyOctober2026", october.Currency);
 
-        // Skull Harvest: the game's event text says it begins Monday 23 November and is week-long.
+        // Skull Harvest: begins Monday 23 November and ends with the Blood Tithe HSE on 29 November 00:00 UTC
+        // (the datamine's november_2026 profile theme window).
         var november = Event("november-2026");
         Assert.Equal(new DateTimeOffset(2026, 11, 23, 0, 0, 0, TimeSpan.Zero), november.StartUtc);
-        Assert.Equal(7, november.DayCount);
+        Assert.Equal(6, november.DayCount);
         Assert.Equal("skull-harvest-shop", november.DefinitionId);
     }
 

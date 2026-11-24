@@ -62,8 +62,21 @@ public sealed class EventShopsValidationTests
     }
 
     [Fact]
-    public void WeekThatIsNotSevenDaysFails() =>
-        AssertSingleError(Validate(Week(1, Start, length: TimeSpan.FromDays(6))), "InvalidEventShopWeek");
+    public void WeekBeforeTheLastThatIsNotSevenDaysFails() =>
+        AssertSingleError(
+            Validate(Week(1, Start, length: TimeSpan.FromDays(6)), Week(2, Start.AddDays(6))), "InvalidEventShopWeek");
+
+    [Fact]
+    public void LastWeekOfFewerWholeDaysPasses() =>
+        Assert.Empty(Validate(Week(1, Start), Week(2, Start.AddDays(7), length: TimeSpan.FromDays(6))));
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(36)]
+    [InlineData(156)]
+    [InlineData(192)]
+    public void LastWeekThatIsNotOneToSevenWholeDaysFails(int hours) =>
+        AssertSingleError(Validate(Week(1, Start, length: TimeSpan.FromHours(hours))), "InvalidEventShopWeek");
 
     [Fact]
     public void WeekNotStartingAtMidnightFails() =>
