@@ -435,3 +435,15 @@ public sealed class GetGameCatalogGuildRaidMetaEndpoint(IGameCatalogProvider cat
             "Curated exact Guild Raid Boss teams, Comp guidance, and source/update ids — no display names, icons, or source URLs.");
     }
 }
+
+public sealed class GetGameCatalogGuildWarEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogGuildWarSeason>>(catalog, GameCatalogDatasets.GuildWar)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/guild-war", "game-catalog/guild-war/{envelopeHash}");
+        ConfigureServed(
+            "Gets the Guild War config per season.",
+            "One record per live Guild War season, ordered by id: zones in layout order with their buff and score, zone tiers with the rarity cap of each of their five slots, battlefield levels with each zone's tier and the per-attempt debuff, buffs with their ability variables, the map pool, scoring and the per-rarity power caps. The game does not say which season is live.");
+    }
+}

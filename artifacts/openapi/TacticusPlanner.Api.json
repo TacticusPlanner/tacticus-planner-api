@@ -2121,6 +2121,104 @@
         }
       }
     },
+    "/api/v1/game-catalog/guild-war": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Guild War config per season.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogGuildWarEndpoint1",
+        "responses": {
+          "200": {
+            "description": "One record per live Guild War season, ordered by id: zones in layout order with their buff and score, zone tiers with the rarity cap of each of their five slots, battlefield levels with each zone's tier and the per-attempt debuff, buffs with their ability variables, the map pool, scoring and the per-rarity power caps. The game does not say which season is live.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogGuildWarSeason"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/guild-war/{envelopeHash}": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Guild War config per season.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogGuildWarEndpoint2",
+        "parameters": [
+          {
+            "name": "envelopeHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One record per live Guild War season, ordered by id: zones in layout order with their buff and score, zone tiers with the rarity cap of each of their five slots, battlefield levels with each zone's tier and the per-attempt debuff, buffs with their ability variables, the map pool, scoring and the per-rarity power caps. The game does not say which season is live.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogGuildWarSeason"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/horde-mode-tiers": {
       "get": {
         "tags": [
@@ -10718,6 +10816,48 @@
           }
         }
       },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogGuildWarSeason": {
+        "required": [
+          "version",
+          "schemaHash",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaHash": {
+            "type": "string"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "const": null,
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/GameCatalogGuildWarSeason"
+            }
+          }
+        }
+      },
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogHordeModeTiers": {
         "required": [
           "version",
@@ -12229,6 +12369,265 @@
           },
           "primes": {
             "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildRaidMetaPrimeView"
+          }
+        }
+      },
+      "GameCatalogGuildWarBuff": {
+        "required": [
+          "id",
+          "scope",
+          "abilities"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "abilities": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarBuffAbility"
+          }
+        }
+      },
+      "GameCatalogGuildWarBuffAbility": {
+        "required": [
+          "abilityId",
+          "rarity",
+          "variables"
+        ],
+        "type": "object",
+        "properties": {
+          "abilityId": {
+            "type": "string"
+          },
+          "rarity": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "variables": {
+            "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndIReadOnlyListOfInt32"
+          }
+        }
+      },
+      "GameCatalogGuildWarLevel": {
+        "required": [
+          "battlefieldLevel",
+          "attemptDebuffPercent",
+          "scoreFactorPercent",
+          "zones"
+        ],
+        "type": "object",
+        "properties": {
+          "battlefieldLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "attemptDebuffPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "scoreFactorPercent": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "zones": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarLevelZone"
+          }
+        }
+      },
+      "GameCatalogGuildWarLevelZone": {
+        "required": [
+          "zoneId",
+          "tierId"
+        ],
+        "type": "object",
+        "properties": {
+          "zoneId": {
+            "type": "string"
+          },
+          "tierId": {
+            "type": "string"
+          }
+        }
+      },
+      "GameCatalogGuildWarLineupScore": {
+        "required": [
+          "maxAttempts",
+          "maxUnitsLost",
+          "score"
+        ],
+        "type": "object",
+        "properties": {
+          "maxAttempts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxUnitsLost": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogGuildWarMap": {
+        "required": [
+          "boardId",
+          "spawnPointsSet"
+        ],
+        "type": "object",
+        "properties": {
+          "boardId": {
+            "type": "string"
+          },
+          "spawnPointsSet": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogGuildWarPowerCap": {
+        "required": [
+          "rarity",
+          "maxPower"
+        ],
+        "type": "object",
+        "properties": {
+          "rarity": {
+            "type": "string"
+          },
+          "maxPower": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogGuildWarScoring": {
+        "required": [
+          "unitKilled",
+          "lineupEliminated"
+        ],
+        "type": "object",
+        "properties": {
+          "unitKilled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lineupEliminated": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarLineupScore"
+          }
+        }
+      },
+      "GameCatalogGuildWarSeason": {
+        "required": [
+          "id",
+          "nextSeasonId",
+          "maxAttempts",
+          "zones",
+          "tiers",
+          "levels",
+          "buffs",
+          "maps",
+          "scoring",
+          "powerCaps"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "nextSeasonId": {
+            "type": "string"
+          },
+          "maxAttempts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "zones": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarZone"
+          },
+          "tiers": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarTier"
+          },
+          "levels": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarLevel"
+          },
+          "buffs": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarBuff"
+          },
+          "maps": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarMap"
+          },
+          "scoring": {
+            "$ref": "#/components/schemas/GameCatalogGuildWarScoring"
+          },
+          "powerCaps": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarPowerCap"
+          }
+        }
+      },
+      "GameCatalogGuildWarTier": {
+        "required": [
+          "id",
+          "rarityCaps"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "rarityCaps": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          }
+        }
+      },
+      "GameCatalogGuildWarZone": {
+        "required": [
+          "id",
+          "visualId",
+          "buffId",
+          "canBeMoved",
+          "score",
+          "row",
+          "column"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "visualId": {
+            "type": "string"
+          },
+          "buffId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "canBeMoved": {
+            "type": "boolean"
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "row": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "column": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -16397,6 +16796,60 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogGuildRaidMetaRecommendationView"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarBuff": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarBuff"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarBuffAbility": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarBuffAbility"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarLevel": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarLevel"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarLevelZone": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarLevelZone"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarLineupScore": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarLineupScore"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarMap": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarMap"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarPowerCap": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarPowerCap"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarTier": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarTier"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarZone": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarZone"
         }
       },
       "IReadOnlyListOfGameCatalogHeroPowerStep": {

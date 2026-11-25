@@ -1,8 +1,8 @@
 ## 1. Guild War dataset
 
-- [ ] 1.1 Add `globalconfig/guildWar.json` to `Data/datamine/files.txt` and copy it with `pull-datamine.cs --source`, and verify `DatamineSourceTests` passes.
-- [ ] 1.2 Add the `GuildWar` served models, `GuildWarDenormalizer` and `GuildWarValidation` per the `guild-war-dataset` spec, register `guild-war` in `GameCatalogDatasets.Served`, and verify denormalizer tests for the four seasons, Season D's zones, the Armoury level-5 caps, the rarity-keyed buffs and level 0.
-- [ ] 1.3 Add the `guild-war` catalog endpoint, and verify an endpoint test and the promoted manifest snapshot (one new dataset, `schemaHash` moved).
+- [x] 1.1 Add `globalconfig/guildWar.json` to `Data/datamine/files.txt` and copy it with `pull-datamine.cs --source`, and verify `DatamineSourceTests` passes.
+- [x] 1.2 Add the `GuildWar` served models, `GuildWarDenormalizer` and `GuildWarValidation` per the `guild-war-dataset` spec, register `guild-war` in `GameCatalogDatasets.Served`, and verify denormalizer tests for the four seasons, Season D's zones, the Armoury level-5 caps, the rarity-keyed buffs and level 0.
+- [x] 1.3 Add the `guild-war` catalog endpoint, and verify an endpoint test and the promoted manifest snapshot (one new dataset, `schemaHash` moved).
 
 ## 2. Wars and attacks
 

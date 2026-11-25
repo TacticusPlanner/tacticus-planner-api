@@ -57,6 +57,10 @@ public static class GameCatalogDatasets
     // from the campaign, LRE, quest, incursion and raid-boss views plus the raw Survival and Onslaught waves. See
     // Denormalization/NpcEncounterDenormalizer.cs.
     public const string NpcEncounters = "npc-encounters";
+    // guild-war: one record per live Guild War season (zones and layout, tiers and slot rarity caps, battlefield levels,
+    // buffs, map pool, scoring, power caps) from the datamine globalconfig/guildWar.json. See
+    // Denormalization/GuildWarDenormalizer.cs.
+    public const string GuildWar = "guild-war";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -313,5 +317,6 @@ public static class GameCatalogDatasets
         Hre,
         Incursions,
         NpcEncounters,
+        GuildWar,
     ];
 }
