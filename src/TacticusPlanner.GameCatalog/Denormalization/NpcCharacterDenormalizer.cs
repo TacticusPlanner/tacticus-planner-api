@@ -29,17 +29,10 @@ internal static partial class GameCatalogDenormalizer
             .GroupBy(entry => (entry.FactionId, entry.character.Name))
             .ToDictionary(group => group.Key, group => group.First().character.Id);
 
-        var nameMatches = new Dictionary<string, string>(StringComparer.Ordinal);
-        foreach (var faction in npcsByFaction.Values)
-        {
-            foreach (var npc in faction.Npcs)
-            {
-                if (characterByFactionAndName.TryGetValue((faction.FactionId, npc.Name), out var characterId))
-                {
-                    nameMatches[npc.Id] = characterId;
-                }
-            }
-        }
+        var nameMatches = npcsByFaction.Values
+            .SelectMany(faction => faction.Npcs.Select(npc => (npc.Id, Key: (faction.FactionId, npc.Name))))
+            .Where(entry => characterByFactionAndName.ContainsKey(entry.Key))
+            .ToDictionary(entry => entry.Id, entry => characterByFactionAndName[entry.Key], StringComparer.Ordinal);
 
         var npcIds = npcsByFaction.Values
             .SelectMany(faction => faction.Npcs)
