@@ -175,7 +175,8 @@ do not commit secrets.
 | `V1Api__BaseUrl` | Base URL of the legacy V1 planner backend used by V1 profile import |
 | `V1Api__FunctionsKey` | Azure Functions `x-functions-key` for the V1 backend's `LoginUser`/`GetUserData` HTTP triggers (`AuthorizationLevel.Function`); sent as a header on every V1 request when set |
 | `RateLimiting__UpstreamFastPerMinute` | Optional, default `10`. Per-profile, per-endpoint requests/minute for `POST tacticus-api-key/validate` and `PUT me/tacticus-integration`; excess requests get `429` with `Retry-After` |
-| `RateLimiting__UpstreamSlowPerHour` | Optional, default `10`. Per-profile, per-endpoint requests/hour for `POST tacticus-integration/player-sync`, `POST guilds/register`, `POST guilds/me/sync`, `POST me/v1-import` and `POST me/roster-snapshots` (not with `fromLastSync=true`) |
+| `RateLimiting__UpstreamSlowPerHour` | Optional, default `10`. Per-profile, per-endpoint requests/hour for `POST guilds/register`, `POST guilds/me/sync`, `POST me/v1-import` and `POST me/roster-snapshots` (not with `fromLastSync=true`) |
+| `RateLimiting__PlayerDataSyncPerHour` | Optional, default `30`. Per-profile requests/hour for `POST player-data/sync` (auto-sync runs hourly; this bounds manual syncs) |
 | `RosterSnapshots__PersonalLimit` | Optional, default `20`. How many manual and V1-imported roster snapshots a profile may hold; automatic snapshots do not count |
 | `RosterSnapshots__AutoLimit` | Optional, default `12`. How many automatic roster snapshots a profile keeps; the oldest is replaced at the limit |
 | `RosterSnapshots__AutoWindowDays` | Optional, default `30`. A sync takes an automatic roster snapshot only when no roster snapshot of any kind was taken within this many days |

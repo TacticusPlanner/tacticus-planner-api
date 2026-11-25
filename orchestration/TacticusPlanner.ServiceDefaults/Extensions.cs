@@ -44,7 +44,6 @@ public static class Extensions
         builder.Services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
         builder.Services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
 
-        builder.Services.AddServiceDiscovery();
         builder.Services.AddHealthChecks()
             .AddCheck("self", () => HealthCheckResult.Healthy(), [LivenessTag]);
         builder.Services.AddOutputCache();
@@ -54,7 +53,9 @@ public static class Extensions
             // Retrying a POST/PUT/PATCH/DELETE after a timeout or 5xx can apply it upstream twice; only safe
             // methods (GET, HEAD, OPTIONS, TRACE) are retried.
             http.AddStandardResilienceHandler(options => options.Retry.DisableForUnsafeHttpMethods());
-            http.AddServiceDiscovery();
+            // No AddServiceDiscovery(): every base URL is absolute, and its handler leaks a resolver (and that
+            // resolver's 10 s cleanup timer) each time IHttpClientFactory rotates a handler, so timers, CPU and
+            // memory grew with uptime in prod (Microsoft.Extensions.ServiceDiscovery 10.11.1).
         });
 
         return builder;
@@ -101,8 +102,18 @@ public static class Extensions
             ValueTask.CompletedTask;
     }
 
+    /// <summary>Metric streams dropped before export (see <see cref="ConfigureOpenTelemetry"/>).</summary>
+    public static readonly IReadOnlyList<string> UnusedMetrics =
+    [
+        "http.client.open_connections",
+        "http.client.active_requests",
+        "aspnetcore.routing.match_attempts",
+    ];
+
     private static void ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
     {
+        builder.Services.AddHttpContextAccessor();
+
         var useOtlpExporter = !string.IsNullOrWhiteSpace(
             builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]
         );
@@ -127,6 +138,13 @@ public static class Extensions
                     .AddHttpClientInstrumentation()
                     .AddRuntimeInstrumentation();
 
+                // The largest metric streams in prod Log Analytics, and nothing reads them: request
+                // telemetry already carries outgoing call counts and routing outcomes.
+                foreach (var unused in UnusedMetrics)
+                {
+                    metrics.AddView(unused, MetricStreamConfiguration.Drop);
+                }
+
                 if (useOtlpExporter)
                 {
                     metrics.AddOtlpExporter();
@@ -143,7 +161,9 @@ public static class Extensions
                             !context.Request.Path.StartsWithSegments("/health")
                             && !HttpMethods.IsOptions(context.Request.Method);
                     })
-                    .AddHttpClientInstrumentation();
+                    .AddHttpClientInstrumentation()
+                    // Registered before UseAzureMonitor below, so it runs before that exporter's processor.
+                    .AddProcessor(services => new TelemetryNoiseProcessor(services.GetService<IHttpContextAccessor>()));
 
                 if (useOtlpExporter)
                 {

@@ -433,4 +433,40 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         var memberEntry = body.Members.Single(member => member.Role == DomainGuildRole.Member);
         Assert.True(memberEntry.IsLinked);
     }
+
+    [Fact]
+    public async Task MemberWhoMovedGuildsIsRelinkedToTheNewGuildOnRegistration()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var (oldLeaderClient, oldLeaderId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var (newLeaderClient, newLeaderId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var (_, movedMemberId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+
+        var oldToken = $"guild-token-{Guid.NewGuid()}";
+        factory.TacticusApi.ConfigureGuildResponse(
+            oldToken,
+            FakeTacticusApi.BuildGuildResponse(
+                Guid.NewGuid(), "OLD", "Old Guild", 1,
+                (oldLeaderId, GuildRole.LEADER, 10, null),
+                (movedMemberId, GuildRole.MEMBER, 5, null)));
+        (await oldLeaderClient.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(oldToken), ct))
+            .EnsureSuccessStatusCode();
+
+        // The member has since joined another guild; the old guild has not synced, so its roster still links them.
+        var newToken = $"guild-token-{Guid.NewGuid()}";
+        factory.TacticusApi.ConfigureGuildResponse(
+            newToken,
+            FakeTacticusApi.BuildGuildResponse(
+                Guid.NewGuid(), "NEW", "New Guild", 1,
+                (newLeaderId, GuildRole.LEADER, 10, null),
+                (movedMemberId, GuildRole.MEMBER, 5, null)));
+        var response = await newLeaderClient.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(newToken), ct);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var newGuild = await response.Content.ReadFromJsonAsync<RegisteredGuildResponse>(ct);
+        Assert.True(newGuild!.Members.Single(member => member.Role == DomainGuildRole.Member).IsLinked);
+
+        var oldGuild = await (await oldLeaderClient.GetAsync("/api/v1/guild", ct)).Content.ReadFromJsonAsync<MyGuildResponse>(ct);
+        Assert.False(oldGuild!.Guild!.Members.Single(member => member.Role == DomainGuildRole.Member).IsLinked);
+    }
 }
