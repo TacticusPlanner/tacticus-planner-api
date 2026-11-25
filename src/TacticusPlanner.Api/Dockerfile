@@ -25,8 +25,18 @@ RUN dotnet publish src/TacticusPlanner.Api/TacticusPlanner.Api.csproj \
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0.15-noble-chiseled@sha256:7c625e44e5d588b4d7b2a913e94ca4bd5098ce47442da404829e4c7936a764e1 AS runtime
 WORKDIR /app
+# Runtime sized for the 0.5 vCPU / 1 GiB Container App (containerCpu / containerMemory in tacticus-planner-infra):
+# - DOTNET_PROCESSOR_COUNT=1: the runtime otherwise sees the node's 4 CPUs and sizes the GC and thread pool for them.
+# - DOTNET_GCHeapHardLimit=0x28000000 (640 MiB): an explicit managed-heap ceiling, so the GC compacts and trims well
+#   before the container limit instead of the replica hanging. Revisit it if containerMemory changes.
+# - DOTNET_GCConserveMemory=5: compact gen2 when it is fragmented instead of growing the heap.
+# - MALLOC_ARENA_MAX=2: cap glibc malloc arenas, which otherwise fragment native memory across threads.
 ENV ASPNETCORE_HTTP_PORTS=8080 \
-    DOTNET_EnableDiagnostics=0
+    DOTNET_EnableDiagnostics=0 \
+    DOTNET_PROCESSOR_COUNT=1 \
+    DOTNET_GCHeapHardLimit=0x28000000 \
+    DOTNET_GCConserveMemory=5 \
+    MALLOC_ARENA_MAX=2
 EXPOSE 8080
 COPY --from=build --chown=$APP_UID:$APP_UID /app .
 USER $APP_UID
