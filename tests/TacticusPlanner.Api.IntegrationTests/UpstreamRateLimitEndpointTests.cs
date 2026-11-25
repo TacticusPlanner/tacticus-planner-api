@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.TacticusIntegration;
+using TacticusPlanner.Api.Features.UpstreamRateLimiting;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.IntegrationTests;
@@ -81,7 +82,7 @@ public sealed class UpstreamRateLimitEndpointTests(PlannerApiFactory factory) : 
         (await client.PutAsJsonAsync(
             "/api/v1/account/tacticus-integration", new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, null), ct))
             .EnsureSuccessStatusCode();
-        for (var index = 0; index < 10; index++)
+        for (var index = 0; index < new UpstreamRateLimitOptions().PlayerDataSyncPerHour; index++)
         {
             (await PostAsync(client, PlayerSync)).EnsureSuccessStatusCode();
         }
@@ -104,6 +105,23 @@ public sealed class UpstreamRateLimitEndpointTests(PlannerApiFactory factory) : 
 
         Assert.Equal(HttpStatusCode.NotFound, (await PostAsync(client, Sync)).StatusCode);
         Assert.Equal(HttpStatusCode.TooManyRequests, (await PostAsync(client, Sync)).StatusCode);
+    }
+
+    [Fact]
+    public async Task PlayerSyncHasItsOwnLimitAboveTheSlowOne()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        using var limited = factory.WithWebHostBuilder(builder => builder
+            .UseSetting("RateLimiting:UpstreamSlowPerHour", "1")
+            .UseSetting("RateLimiting:PlayerDataSyncPerHour", "3"));
+        var client = limited.CreateClient();
+        client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, $"player-sync-{Guid.NewGuid()}");
+        await client.GetAsync("/api/v1/account", ct);
+        (await client.PutAsJsonAsync(Integration, new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, null), ct))
+            .EnsureSuccessStatusCode();
+
+        Assert.All(await RepeatAsync(client, PlayerSync, 3), status => Assert.Equal(HttpStatusCode.OK, status));
+        Assert.Equal(HttpStatusCode.TooManyRequests, (await PostAsync(client, PlayerSync)).StatusCode);
     }
 
     private async Task<DateTimeOffset?> LastAttemptedAtAsync(string subject)
