@@ -294,4 +294,28 @@ public sealed class EventsValidationTests
 
         Assert.DoesNotContain(errors, error => error.Code == "InvalidTimeWindow");
     }
+
+    [Fact]
+    public void AGuildWarSeasonMustNameAServedSeasonConfig()
+    {
+        var definition = new GameCatalogEventDefinition(
+            "guild-war-season", "GuildWarSeason", new GameCatalogEventRecurrence("None", null, null, null), [], null);
+        var known = Occurrence("occ-known", "guild-war-season", new Dictionary<string, JsonElement>
+        {
+            ["seasonConfigId"] = Json("guildWarSeasonC"),
+        });
+        var unknown = Occurrence("occ-unknown", "guild-war-season", new Dictionary<string, JsonElement>
+        {
+            ["seasonConfigId"] = Json("guildWarSeasonZ"),
+        });
+        var unnamed = Occurrence("occ-unnamed", "guild-war-season");
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateGuildWarSeasonConfigs(
+            [definition], [known, unknown, unnamed], ["guildWarSeasonA", "guildWarSeasonC"], errors);
+
+        var error = Assert.Single(errors);
+        Assert.Equal("UnknownGuildWarSeasonConfig", error.Code);
+        Assert.Contains("occ-unknown", error.Message);
+    }
 }

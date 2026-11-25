@@ -94,6 +94,8 @@ public static class GameCatalogLoader
                 chests,
                 shopProducts),
             JsonOptions);
+        var guildWarViews = GameCatalogDenormalizer.ReadDatamineGuildWar(
+            LoadDatamine<DatamineGuildWar>(GameCatalogDenormalizer.DatamineGuildWarPath));
         var incursionViews = GameCatalogDenormalizer.ReadDatamineIncursions(
             LoadDatamine<List<DatamineMowEvent>>(GameCatalogDenormalizer.DatamineMowEventPath),
             chests);
@@ -241,6 +243,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Hre] = HashServed(GameCatalogDatasets.Hre, hreViews),
             [GameCatalogDatasets.Incursions] = HashServed(GameCatalogDatasets.Incursions, incursionViews),
             [GameCatalogDatasets.NpcEncounters] = HashServed(GameCatalogDatasets.NpcEncounters, npcEncounterViews),
+            [GameCatalogDatasets.GuildWar] = HashServed(GameCatalogDatasets.GuildWar, guildWarViews),
         };
 
         var schemaHash = GameCatalogContractHashing.ComputeContractHash(payloadTypes, JsonOptions);
@@ -306,7 +309,8 @@ public static class GameCatalogLoader
             progressionRulesViews,
             hreViews,
             incursionViews,
-            npcEncounterViews);
+            npcEncounterViews,
+            guildWarViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

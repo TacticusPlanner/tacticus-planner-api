@@ -277,6 +277,16 @@ restrictions); these are silently ignored on deserialize.
   being served (stored plans stay readable); `ShopEventCalendarTests` fails only for a week that has not ended yet
   whose `eventKey` has no merchant (a typo, or a calendar entry ahead of the datamine).
 
+- **guild-war** is one record per live Guild War season of the datamine `globalconfig/guildWar.json` (keys
+  `guildWarSeason[A-Z]`; `_staging`/`_fast`/`_ci2` test configs are dropped), ordered by id
+  (`Denormalization/GuildWarDenormalizer.cs`). Seasons differ (Season D swaps the Landing Pads for `ComsStation` and
+  `AntiAirBattery1/2`), so nothing is shared across records except `powerCaps` (`guildWarConfig.maxHeroPowerCap`,
+  repeated). `zones` follow `defaultZoneTypeLayout` row by row with `zoneTypeConfigs` and `scorePerZoneType`; `tiers`
+  are ordered by their first slot cap (Trooper..Hero); `levels` list each zone's tier; a buff's `abilities` are the
+  `abilities` entry keyed by its `abilityId` (rarity null) or `{abilityId}_{Rarity}`, variables served uninterpreted.
+  The game names no live season: wars store the one the player picks. A zone, tier, buff or level that doesn't hold
+  together fails the load.
+
 ## Horde-mode tiers
 
 `Data/curated/horde-mode-tiers.json` is a single hand-curated tier list (a one-element array) of how well a

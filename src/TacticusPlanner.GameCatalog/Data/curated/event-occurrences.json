@@ -291,7 +291,7 @@
     "definitionId": "guild-war-season",
     "startUtc": "2026-10-23T09:00:00Z",
     "endUtc": "2026-11-07T09:00:00Z",
-    "parameters": { "season": 28 }
+    "parameters": { "season": 28, "seasonConfigId": "guildWarSeasonC" }
   },
   {
     "id": "occ-2026-10-27-ta-power-ups-legendary-mow",
@@ -382,7 +382,7 @@
     "definitionId": "guild-war-season",
     "startUtc": "2026-11-27T09:00:00Z",
     "endUtc": "2026-12-12T09:00:00Z",
-    "parameters": { "season": 29 }
+    "parameters": { "season": 29, "seasonConfigId": "guildWarSeasonC" }
   },
   {
     "id": "occ-2026-12-01-ta-power-ups-legendary-mow",

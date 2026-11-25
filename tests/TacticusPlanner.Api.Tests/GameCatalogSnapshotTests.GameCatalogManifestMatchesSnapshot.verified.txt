@@ -1,6 +1,6 @@
 ﻿{
-  version: 1.44.88.3089+787f7576d1b6,
-  schemaHash: 4c8905d8fe8a471705ce1a64dca808c7bf6fa8d45c6994c5877edbfcfda6dd88,
+  version: 1.44.88.3089+a180f928aa00,
+  schemaHash: 5975ffaefaa56ab36e00e0099275c4971e8edfa9e3503ed5ba5a2c00b680bd57,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},
   datasets: [
@@ -68,6 +68,11 @@
       key: guild-raid-meta,
       hash: 624de84a3265d6c701eba416483749cfb34f49a04e6381f00ca4ed71991ec80e,
       url: /api/v1/game-catalog/guild-raid-meta/{envelopeHash}
+    },
+    {
+      key: guild-war,
+      hash: 4db1bf46c21ab69730a6a6cceb28e76cf3ef4ef88274f7e701d75044197a5766,
+      url: /api/v1/game-catalog/guild-war/{envelopeHash}
     },
     {
       key: horde-mode-tiers,
