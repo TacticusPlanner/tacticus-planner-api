@@ -260,7 +260,9 @@ restrictions); these are silently ignored on deserialize.
   parameter is the event key, ordered by `weekNumber`; the optional `incomeFree` / `incomeBonusShipment` parameters
   become that week's `estimatedWeeklyIncome`. Slots reuse the `shops` variant projection. **Adding a new event** in a
   datamine bump: list the new `*EventShop` merchants, then author one `ShopEvent` occurrence per week in
-  `event-occurrences.json` (7 days from 00:00 UTC, contiguous, `weekNumber` 1..W, `eventKey`, optional income); a new
+  `event-occurrences.json` (7 days from 00:00 UTC, contiguous, `weekNumber` 1..W, `eventKey`, optional income; a shop
+  week always runs the full 7 days even when the event's HSEs, theme window or quests end earlier, because its last
+  day is for spending the remaining currency, so never end it with them); a new
   event name gets its own `ShopEvent` definition (and the apps an `events` locale name). A merchant with no calendar
   week is not served; a dated event whose week merchant, mission prefix or currency doesn't match fails the load
   (`Validation/EventShopsValidation.cs`). **When a datamine drops an old event's merchants**, the event simply stops
