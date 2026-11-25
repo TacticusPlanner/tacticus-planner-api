@@ -31,7 +31,8 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
 
     private static UpdateTeamRequest Update(TeamResponse team, string? name = null, string[]? characters = null) =>
         new(name ?? team.Name, team.Modes, characters ?? team.CharacterIds, team.FlexStartIndex, team.MowIds,
-            team.MowFlexStartIndex, team.CampaignGroupId, team.IncursionMowIds, team.Notes, team.RarityCap, team.Revision);
+            team.MowFlexStartIndex, team.CampaignGroupId, team.IncursionMowIds, team.Notes, team.RarityCap, team.Revision,
+            team.SurvivalEventKey);
 
     private async Task<(HttpClient Client, string Subject)> ClientAsync()
     {
@@ -446,5 +447,22 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
         using var verify = factory.Services.CreateScope();
         var verifyDb = verify.ServiceProvider.GetRequiredService<PlannerDbContext>();
         Assert.False(await verifyDb.Teams.IgnoreQueryFilters().AnyAsync(team => team.ProfileId == profileId, Ct));
+    }
+
+    [Fact]
+    public async Task ASurvivalTeamKeepsItsEventAndFollowsItsRules()
+    {
+        var (client, _) = await ClientAsync();
+
+        var created = await CreateAsync(client, Create("Survival Dec") with { SurvivalEventKey = "december-2026" });
+        var renamed = await client.PutAsJsonAsync($"{Url}/{created.Id}", Update(created, name: "Survival December"), Ct);
+        var broken = Create("Survival bad", characters: ["ultraCalgar", "ultraTitus", "admecManipulus", "necroSpyder"]);
+        var rules = await RulesAsync(await client.PostAsJsonAsync(Url, broken with { SurvivalEventKey = "december-2026" }, Ct));
+
+        Assert.Equal("december-2026", created.SurvivalEventKey);
+        Assert.Empty(created.Issues);
+        Assert.Equal(HttpStatusCode.OK, renamed.StatusCode);
+        Assert.Equal("december-2026", (await renamed.Content.ReadFromJsonAsync<TeamResponse>(Ct))!.SurvivalEventKey);
+        Assert.Equal(["factionNotAllowed", "survivalFeaturedCharacter"], rules.Select(rule => rule!.GetValue<string>()));
     }
 }

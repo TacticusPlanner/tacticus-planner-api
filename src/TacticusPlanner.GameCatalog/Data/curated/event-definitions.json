@@ -270,5 +270,11 @@
     "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
     "requiredParameters": [],
     "config": { "ruleset": "InfestedPowerUps" }
+  },
+  {
+    "id": "survival",
+    "type": "Survival",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": ["survivalEventId"]
   }
 ]

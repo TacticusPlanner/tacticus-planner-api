@@ -25,4 +25,9 @@ public enum TeamRuleCode
     [JsonStringEnumMemberName("incursionRequired")] IncursionRequired,
     [JsonStringEnumMemberName("unknownIncursion")] UnknownIncursion,
     [JsonStringEnumMemberName("noSharedIncursionFaction")] NoSharedIncursionFaction,
+    [JsonStringEnumMemberName("survivalModeRequired")] SurvivalModeRequired,
+    [JsonStringEnumMemberName("unknownSurvivalEvent")] UnknownSurvivalEvent,
+    [JsonStringEnumMemberName("survivalFeaturedCharacter")] SurvivalFeaturedCharacter,
+    [JsonStringEnumMemberName("survivalTooManyCharacters")] SurvivalTooManyCharacters,
+    [JsonStringEnumMemberName("survivalTooManyMows")] SurvivalTooManyMows,
 }

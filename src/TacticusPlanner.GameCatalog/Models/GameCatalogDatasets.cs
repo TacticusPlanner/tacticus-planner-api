@@ -61,6 +61,10 @@ public static class GameCatalogDatasets
     // buffs, map pool, scoring, power caps) from the datamine globalconfig/guildWar.json. See
     // Denormalization/GuildWarDenormalizer.cs.
     public const string GuildWar = "guild-war";
+    // survival-events: one record per seasonal event with Survival (rules, waves, scoring, milestones, chests, missions,
+    // offers) from the datamine liveEvents/seasonalEvent.json and its battle set, ladders, chest products, quest groups
+    // and offers, dated by the calendar's Survival occurrences. See Denormalization/SurvivalEventsDenormalizer.cs.
+    public const string SurvivalEvents = "survival-events";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -318,5 +322,6 @@ public static class GameCatalogDatasets
         Incursions,
         NpcEncounters,
         GuildWar,
+        SurvivalEvents,
     ];
 }

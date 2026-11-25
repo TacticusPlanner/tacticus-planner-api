@@ -20,6 +20,7 @@ public sealed record TeamResponse(
     IReadOnlyList<string> IncursionMowIds,
     string? Notes,
     TeamRarityCap? RarityCap,
+    string? SurvivalEventKey,
     IReadOnlyList<TeamRuleCode> Issues
 )
 {
@@ -37,6 +38,7 @@ public sealed record TeamResponse(
         team.IncursionMowIds,
         team.Notes,
         team.RarityCap,
+        team.SurvivalEventKey,
         TeamRules.Evaluate(team.ToDraft(), facts));
 }
 
@@ -55,13 +57,15 @@ public interface ITeamFields
     IReadOnlyList<string> IncursionMowIds { get; }
     string? Notes { get; }
     TeamRarityCap? RarityCap { get; }
+    string? SurvivalEventKey { get; }
 }
 
 internal static class TeamFieldsExtensions
 {
     public static TeamDraft ToDraft(this ITeamFields fields) => new(
         fields.Name, fields.Modes, fields.CharacterIds, fields.FlexStartIndex, fields.MowIds, fields.CampaignGroupId,
-        fields.IncursionMowIds, fields.Notes, fields.MowFlexStartIndex, fields.RarityCap);
+        fields.IncursionMowIds, fields.Notes, fields.MowFlexStartIndex, fields.RarityCap,
+        fields.SurvivalEventKey);
 }
 
 public sealed record CreateTeamRequest(
@@ -74,7 +78,8 @@ public sealed record CreateTeamRequest(
     string? CampaignGroupId,
     IReadOnlyList<string> IncursionMowIds,
     string? Notes,
-    TeamRarityCap? RarityCap
+    TeamRarityCap? RarityCap,
+    string? SurvivalEventKey = null
 ) : ITeamFields;
 
 /// <summary>Replaces every editable field when <see cref="Revision"/> matches the stored team.</summary>
@@ -89,7 +94,8 @@ public sealed record UpdateTeamRequest(
     IReadOnlyList<string> IncursionMowIds,
     string? Notes,
     TeamRarityCap? RarityCap,
-    long Revision
+    long Revision,
+    string? SurvivalEventKey = null
 ) : ITeamFields;
 
 /// <summary>The profile's complete team list in its new order.</summary>
@@ -142,6 +148,7 @@ internal static class TeamFieldsValidation
             .WithMessage("mowFlexStartIndex must hold at least one flex MoW.");
         validator.RuleFor(request => request.RarityCap).IsInEnum().When(request => request.RarityCap is not null);
         validator.RuleFor(request => request.CampaignGroupId).MaximumLength(TeamValidation.MaxUnitIdLength);
+        validator.RuleFor(request => request.SurvivalEventKey).MaximumLength(TeamValidation.MaxUnitIdLength);
         validator.RuleFor(request => request.Notes).MaximumLength(TeamValidation.MaxNotesLength);
     }
 }

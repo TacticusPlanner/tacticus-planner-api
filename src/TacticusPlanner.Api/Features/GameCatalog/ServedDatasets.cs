@@ -42,6 +42,7 @@ public static class ServedDatasets
             [GameCatalogDatasets.DamageTypes] = snapshot => snapshot.DamageTypeViews,
             [GameCatalogDatasets.GlobalValues] = snapshot => snapshot.GlobalValuesViews,
             [GameCatalogDatasets.GuildWar] = snapshot => snapshot.GuildWarViews,
+            [GameCatalogDatasets.SurvivalEvents] = snapshot => snapshot.SurvivalEventViews,
             [GameCatalogDatasets.ProgressionRules] = snapshot => snapshot.ProgressionRulesViews,
             [GameCatalogDatasets.Hre] = snapshot => snapshot.HreViews,
             [GameCatalogDatasets.Incursions] = snapshot => snapshot.IncursionViews,

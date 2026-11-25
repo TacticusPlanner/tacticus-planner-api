@@ -200,6 +200,8 @@ public sealed record StagingTransferTeam
 
     public TeamRarityCap? RarityCap { get; init; }
 
+    public string? SurvivalEventKey { get; init; }
+
     /// <summary>Set on a team imported from V1, so a V1 import re-run on staging still skips it.</summary>
     public string? ImportKey { get; init; }
 }

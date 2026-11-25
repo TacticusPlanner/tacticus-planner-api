@@ -240,16 +240,20 @@ internal static partial class GameCatalogDenormalizer
         IReadOnlyDictionary<string, JsonElement> questGroups,
         JsonSerializerOptions options)
     {
-        var seasonalQuests = new[] { SeasonalDailyQuestGroup, SeasonalFreeQuestGroup, SeasonalPremiumQuestGroup }
+        var seasonalQuests = ReadSeasonalQuests(questGroups, options);
+        return rawEventShops.Select(raw => BuildEventShop(raw, tieredProgressRewards, chests, seasonalQuests)).ToArray();
+    }
+
+    /// <summary>The daily, free and premium seasonal quest groups of <c>groups.json</c>, by group name.</summary>
+    private static Dictionary<string, IReadOnlyList<DatamineSeasonalQuest>> ReadSeasonalQuests(
+        IReadOnlyDictionary<string, JsonElement> questGroups, JsonSerializerOptions options) =>
+        new[] { SeasonalDailyQuestGroup, SeasonalFreeQuestGroup, SeasonalPremiumQuestGroup }
             .ToDictionary(
                 group => group,
                 group => questGroups.TryGetValue(group, out var element)
                     ? element.Deserialize<DatamineSeasonalQuestGroup>(options)?.Quests ?? []
                     : (IReadOnlyList<DatamineSeasonalQuest>)[],
                 StringComparer.Ordinal);
-
-        return rawEventShops.Select(raw => BuildEventShop(raw, tieredProgressRewards, chests, seasonalQuests)).ToArray();
-    }
 
     /// <summary>The served event id for a datamine event key: <c>October2026</c> → <c>october-2026</c>.</summary>
     public static string EventShopId(string eventKey) => DatamineEventKeyPrefix(eventKey, "-");
@@ -284,13 +288,13 @@ internal static partial class GameCatalogDenormalizer
                 week.Week,
                 week.Occurrence is null ? null : ReadIncome(week.Occurrence),
                 week.Merchant is null ? [] : BuildShopSlots(week.Merchant),
-                progressChestsKey is null ? [] : BuildRewardTiers(raw.EventKey, progressChestsKey, tieredProgressRewards, chests),
-                BuildMissions(raw.EventKey, missionPrefix, seasonalQuests));
+                progressChestsKey is null ? [] : BuildRewardTiers(GameCatalogDatasets.EventShops, raw.EventKey, progressChestsKey, tieredProgressRewards, chests),
+                BuildMissions(GameCatalogDatasets.EventShops, raw.EventKey, missionPrefix, seasonalQuests));
         }).ToArray();
 
         var milestonesKey = $"se_milestones_{datamineKey}";
         var milestones = tieredProgressRewards.ContainsKey(milestonesKey)
-            ? BuildRewardTiers(raw.EventKey, milestonesKey, tieredProgressRewards, chests)
+            ? BuildRewardTiers(GameCatalogDatasets.EventShops, raw.EventKey, milestonesKey, tieredProgressRewards, chests)
             : [];
 
         return new GameCatalogEventShopView(
@@ -338,6 +342,7 @@ internal static partial class GameCatalogDenormalizer
     }
 
     private static GameCatalogRewardTierView[] BuildRewardTiers(
+        string dataset,
         string eventKey,
         string ladderKey,
         IReadOnlyDictionary<string, List<DatamineTieredProgressReward>> tieredProgressRewards,
@@ -347,8 +352,8 @@ internal static partial class GameCatalogDenormalizer
             .Select(tier => new GameCatalogRewardTierView(
                 tier.RequiredProgress,
                 chests.TryGetValue(tier.ChestRewardId, out var chest)
-                    ? ChestRewardStrings(chest).Select(reward => ParseRewardRange(eventKey, ladderKey, reward)).ToArray()
-                    : [ParseRewardRange(eventKey, ladderKey, tier.ChestRewardId)]))
+                    ? ChestRewardStrings(chest).Select(reward => ParseRewardRange(dataset, eventKey, ladderKey, reward)).ToArray()
+                    : [ParseRewardRange(dataset, eventKey, ladderKey, tier.ChestRewardId)]))
             .ToArray();
 
     /// <summary>Every reward string of every chest under one <c>chests.json</c> key, in source order.</summary>
@@ -362,12 +367,13 @@ internal static partial class GameCatalogDenormalizer
                 .SelectMany(chest => chest.GetProperty("rewards").EnumerateArray())
                 .Select(reward => reward.GetString() ?? string.Empty);
 
-    private static GameCatalogRewardRangeView ParseRewardRange(string eventKey, string where, string raw) =>
+    private static GameCatalogRewardRangeView ParseRewardRange(string dataset, string eventKey, string where, string raw) =>
         ShopNormalization.TryParseRewardRange(raw, out var type, out var min, out var max)
             ? new GameCatalogRewardRangeView(type, min, max)
-            : throw EventShopError(eventKey, $"'{where}' has an unparseable reward '{raw}'.");
+            : throw EventDatasetError(dataset, eventKey, $"'{where}' has an unparseable reward '{raw}'.");
 
     private static GameCatalogEventShopMissionsView BuildMissions(
+        string dataset,
         string eventKey,
         string prefix,
         IReadOnlyDictionary<string, IReadOnlyList<DatamineSeasonalQuest>> seasonalQuests)
@@ -375,7 +381,7 @@ internal static partial class GameCatalogDenormalizer
         var daily = seasonalQuests[SeasonalDailyQuestGroup]
             .Where(quest => quest.Name.StartsWith($"{prefix}_daily_", StringComparison.Ordinal))
             .OrderBy(quest => quest.Name, StringComparer.Ordinal)
-            .Select(quest => BuildMission(eventKey, quest))
+            .Select(quest => BuildMission(dataset, eventKey, quest))
             .ToArray();
 
         var freePrefix = $"{prefix}_free_";
@@ -385,7 +391,7 @@ internal static partial class GameCatalogDenormalizer
             .Where(entry => entry.Match.Success)
             .GroupBy(entry => int.Parse(entry.Match.Groups["chain"].Value, CultureInfo.InvariantCulture))
             .OrderBy(group => group.Key)
-            .Select(group => BuildChain(eventKey, $"{prefix}_free_{group.Key}", group.Select(entry => entry.Quest).ToArray()))
+            .Select(group => BuildChain(dataset, eventKey, $"{prefix}_free_{group.Key}", group.Select(entry => entry.Quest).ToArray()))
             .ToArray();
 
         var premiumPrefix = $"{prefix}_premium_";
@@ -395,7 +401,7 @@ internal static partial class GameCatalogDenormalizer
             .ToArray();
         GameCatalogEventShopMissionChainView[] premium = premiumQuests.Length == 0
             ? []
-            : [BuildChain(eventKey, $"{prefix}_premium", premiumQuests)];
+            : [BuildChain(dataset, eventKey, $"{prefix}_premium", premiumQuests)];
 
         // A prefix that matches no quest (a datamine that pruned an old event's quests) serves no missions, like a
         // missing ladder serves no tiers, so one event's quests can't fail the whole catalog load.
@@ -404,6 +410,7 @@ internal static partial class GameCatalogDenormalizer
 
     /// <summary>Orders a chain's quests by following <c>successorQuests</c> from the one no other quest succeeds.</summary>
     private static GameCatalogEventShopMissionChainView BuildChain(
+        string dataset,
         string eventKey, string chainId, DatamineSeasonalQuest[] quests)
     {
         var byName = quests.ToDictionary(quest => quest.Name, StringComparer.Ordinal);
@@ -413,7 +420,7 @@ internal static partial class GameCatalogDenormalizer
         var heads = quests.Where(quest => !successors.Contains(quest.Name)).ToArray();
         if (heads.Length != 1)
         {
-            throw EventShopError(eventKey, $"mission chain '{chainId}' has {heads.Length} starting quests; expected 1.");
+            throw EventDatasetError(dataset, eventKey, $"mission chain '{chainId}' has {heads.Length} starting quests; expected 1.");
         }
 
         var ordered = new List<DatamineSeasonalQuest>();
@@ -428,16 +435,16 @@ internal static partial class GameCatalogDenormalizer
 
         if (ordered.Count != quests.Length)
         {
-            throw EventShopError(eventKey, $"mission chain '{chainId}' links {ordered.Count} of its {quests.Length} quests.");
+            throw EventDatasetError(dataset, eventKey, $"mission chain '{chainId}' links {ordered.Count} of its {quests.Length} quests.");
         }
 
-        return new GameCatalogEventShopMissionChainView(chainId, ordered.Select(quest => BuildMission(eventKey, quest)).ToArray());
+        return new GameCatalogEventShopMissionChainView(chainId, ordered.Select(quest => BuildMission(dataset, eventKey, quest)).ToArray());
     }
 
-    private static GameCatalogEventShopMissionView BuildMission(string eventKey, DatamineSeasonalQuest quest) =>
+    private static GameCatalogEventShopMissionView BuildMission(string dataset, string eventKey, DatamineSeasonalQuest quest) =>
         new(
             quest.Name,
-            (quest.Rewards ?? []).Select(reward => ParseRewardRange(eventKey, quest.Name, reward)).ToArray(),
+            (quest.Rewards ?? []).Select(reward => ParseRewardRange(dataset, eventKey, quest.Name, reward)).ToArray(),
             (quest.Tasks ?? [])
                 .Select(task => new GameCatalogEventShopTaskView(
                     task.Name,
@@ -445,6 +452,6 @@ internal static partial class GameCatalogDenormalizer
                     task.TaskParameters is { Count: > 0 } parameters ? parameters : null))
                 .ToArray());
 
-    private static InvalidOperationException EventShopError(string eventKey, string message) =>
-        new($"GameCatalog dataset '{GameCatalogDatasets.EventShops}' event '{eventKey}': {message}");
+    private static InvalidOperationException EventDatasetError(string dataset, string eventKey, string message) =>
+        new($"GameCatalog dataset '{dataset}' event '{eventKey}': {message}");
 }

@@ -285,7 +285,7 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
         {
             LegendaryEvents = ReadLegendaryEvents(payload.Data),
             RosterSnapshots = ReadRosterSnapshots(payload.Data?.RosterSnapshots),
-            Teams = ReadTeams(payload.Data?.Teams2),
+            Teams = ReadTeams(payload.Data?.Teams2, payload.Data?.SurvivalTeams),
         };
     }
 
@@ -329,18 +329,20 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
     /// Reads V1 <c>teams2</c> (V1 <c>ITeam2[]</c>). The blob stays a raw <see cref="JsonElement"/> on
     /// <see cref="V1UserData"/> so a malformed one fails only this part (<c>v1-team-import</c>). No key or an empty
     /// array is missing; anything but an array is invalid. Each entry is read leniently, so an entry that cannot be
-    /// read is reported on its own outcome and the rest still import.
+    /// read is reported on its own outcome and the rest still import. V1 <c>survivalTeams</c> (event name to unit ids)
+    /// follow as one Survival team per event; a malformed one is left out without failing the part.
     /// </summary>
-    internal static V1TeamImportData ReadTeams(JsonElement? element)
+    internal static V1TeamImportData ReadTeams(JsonElement? element, JsonElement? survivalTeams = null)
     {
+        var survival = V1TeamSource.ReadSurvivalTeams(Present(survivalTeams));
         if (Present(element) is not { } present)
-            return V1TeamImportData.Missing();
+            return survival.Count == 0 ? V1TeamImportData.Missing() : V1TeamImportData.Valid(survival);
         if (present.ValueKind != JsonValueKind.Array)
             return V1TeamImportData.Invalid();
-        if (present.GetArrayLength() == 0)
+        if (present.GetArrayLength() == 0 && survival.Count == 0)
             return V1TeamImportData.Missing();
 
-        return V1TeamImportData.Valid([.. present.EnumerateArray().Select(V1TeamSource.Read)]);
+        return V1TeamImportData.Valid([.. present.EnumerateArray().Select(V1TeamSource.Read), .. survival]);
     }
 
     private static bool IsWellFormed(V1RosterSnapshotsState state)
@@ -595,7 +597,8 @@ internal sealed record V1UserData(
     JsonElement? LegendaryEventsProgress = null,
     JsonElement? LeSettings = null,
     JsonElement? RosterSnapshots = null,
-    JsonElement? Teams2 = null
+    JsonElement? Teams2 = null,
+    JsonElement? SurvivalTeams = null
 );
 
 internal sealed record V1OnslaughtPreferencesData(

@@ -80,7 +80,8 @@ public sealed class OpenApiDocumentTests(GameCatalogApiFactory factory) : IClass
         [
             "nameLength", "noMode", "tooFewCharacters", "unknownUnit", "modeNotCombinable", "tooManyCoreCharacters", "tooManyCoreMows",
             "mowsNotAllowed", "campaignRequired", "unknownCampaign", "coreCharacterMissing", "factionNotAllowed",
-            "incursionRequired", "unknownIncursion", "noSharedIncursionFaction",
+            "incursionRequired", "unknownIncursion", "noSharedIncursionFaction", "survivalModeRequired", "unknownSurvivalEvent",
+            "survivalFeaturedCharacter", "survivalTooManyCharacters", "survivalTooManyMows",
         ];
         var schemas = await SchemasAsync();
 

@@ -8,7 +8,8 @@ namespace TacticusPlanner.Api.Features.Teams;
 /// Builds the plain <see cref="TeamRuleFacts"/> the team rules read from a catalog snapshot (design D3), once per
 /// snapshot. A campaign is a non-Elite campaign group: Elite and Elite Mirror are difficulties of the same storyline,
 /// so their groups are not campaigns a team can name (D5). An Incursion's allowed factions are the
-/// <c>allowedFactions</c> of its served <c>incursions</c> record (D6).
+/// <c>allowedFactions</c> of its served <c>incursions</c> record (D6). A Survival event's facts are its served
+/// <c>survival-events</c> rules.
 /// </summary>
 public static class TeamCatalogFacts
 {
@@ -35,7 +36,16 @@ public static class TeamCatalogFacts
             IReadOnlySet<string> (incursion) => incursion.AllowedFactions.ToHashSet(StringComparer.Ordinal),
             StringComparer.Ordinal);
 
-        return new TeamRuleFacts(characterFactions, mowIds, campaigns, incursions);
+        var survivalEvents = catalog.SurvivalEventViews.ToDictionary(
+            survivalEvent => survivalEvent.Id,
+            survivalEvent => new TeamSurvivalFacts(
+                survivalEvent.FeaturedCharacterId,
+                survivalEvent.Rules.AllowedFactionIds.ToHashSet(StringComparer.Ordinal),
+                survivalEvent.Rules.MaxCharacters,
+                survivalEvent.Rules.MaxMows),
+            StringComparer.Ordinal);
+
+        return new TeamRuleFacts(characterFactions, mowIds, campaigns, incursions, survivalEvents);
     }
 
     /// <summary>A group is Elite when any of its campaign types is Elite or EliteMirror.</summary>

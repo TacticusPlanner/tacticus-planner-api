@@ -432,5 +432,26 @@
     "startUtc": "2026-12-19T08:00:00Z",
     "endUtc": "2026-12-20T08:00:00Z",
     "parameters": null
+  },
+  {
+    "id": "occ-2026-05-24-survival-may-2026",
+    "definitionId": "survival",
+    "startUtc": "2026-05-24T00:00:00Z",
+    "endUtc": "2026-05-31T00:00:00Z",
+    "parameters": { "survivalEventId": "may-2026" }
+  },
+  {
+    "id": "occ-2026-09-12-survival-september-2026",
+    "definitionId": "survival",
+    "startUtc": "2026-09-12T00:00:00Z",
+    "endUtc": "2026-09-19T00:00:00Z",
+    "parameters": { "survivalEventId": "september-2026" }
+  },
+  {
+    "id": "occ-2026-12-03-survival-december-2026",
+    "definitionId": "survival",
+    "startUtc": "2026-12-03T00:00:00Z",
+    "endUtc": "2026-12-10T00:00:00Z",
+    "parameters": { "survivalEventId": "december-2026" }
   }
 ]

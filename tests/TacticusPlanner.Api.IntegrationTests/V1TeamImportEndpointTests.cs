@@ -28,7 +28,7 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
         var data = JsonSerializer.Deserialize<V1UserData>(dataJson, TacticusV1Client.WebJsonOptions);
         return factory.V1Client.ConfigureProfile(new TacticusV1Profile(null, null)
         {
-            Teams = TacticusV1Client.ReadTeams(data?.Teams2),
+            Teams = TacticusV1Client.ReadTeams(data?.Teams2, data?.SurvivalTeams),
         });
     }
 
@@ -437,5 +437,30 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(
             [(ImportPartStatus.Imported, null), (ImportPartStatus.Skipped, "team_limit_reached")],
             body.TeamOutcomes.Select(outcome => (outcome.Status, outcome.Code)));
+    }
+
+    [Fact]
+    public async Task V1SurvivalTeamsBecomeTeamsTiedToTheirEvent()
+    {
+        var client = await ClientAsync();
+        var username = Configure("""
+            {"survivalTeams": {
+                "season_december_2026_event": ["admecManipulus", "ultraCalgar", "ultraTitus", "ultraApothecary"],
+                "season_crescendo_01_event": ["ultraCalgar"],
+                "season_may_2026_event": []
+            }}
+            """);
+
+        var body = await ImportAsync(client, username);
+
+        Assert.Equal(
+            [(ImportPartStatus.Imported, (string?)null), (ImportPartStatus.Skipped, "survival_event_not_recognised")],
+            body.TeamOutcomes.Select(outcome => (outcome.Status, outcome.Code)));
+        var team = Assert.Single(await ListAsync(client));
+        Assert.Equal("Survival · December 2026", team.Name);
+        Assert.Equal("december-2026", team.SurvivalEventKey);
+        Assert.Equal([TeamMode.Horde], team.Modes);
+        Assert.Equal(["ultraCalgar", "ultraTitus", "ultraApothecary"], team.CharacterIds);
+        Assert.Empty(team.Issues);
     }
 }

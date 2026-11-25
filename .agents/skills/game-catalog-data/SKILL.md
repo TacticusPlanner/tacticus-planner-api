@@ -278,6 +278,15 @@ restrictions); these are silently ignored on deserialize.
   `abilities` entry keyed by its `abilityId` (rarity null) or `{abilityId}_{Rarity}`, variables served uninterpreted.
   The game names no live season: wars store the one the player picks. A zone, tier, buff or level that doesn't hold
   together fails the load.
+- **survival-events** is one record per `liveEvents/seasonalEvent.json` entry with `includesSurvival`, id from the
+  event name (`season_december_2026_event` → `december-2026`), ordered by id
+  (`Denormalization/SurvivalEventsDenormalizer.cs`). Waves come from the `survival.battleSetId` battle set (one battle),
+  enemies grouped by `npcId:N`; a summon power-up's `:N` is the summon NPC's stats row, not a count. Medals are read by
+  name (`<medal>MedalWave`/`<medal>MedalReward`). Milestones and missions reuse the event shop readers (missions by the
+  id's prefix, `crescendo_b_*`); chests are the `product_<prefix>_progress_chest_NN` products costing the event
+  currency whose prefix contains every part of the id (`crescendo_event_a`). Offers are `initialOfferIds` through
+  `shop/offers.json` and `shop/realMoneyProducts.json` (US price in cents). Dates come from calendar `survival`
+  occurrences (`survivalEventId`); undated events serve nulls.
 
 ## Horde-mode tiers
 
