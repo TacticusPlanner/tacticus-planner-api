@@ -18,12 +18,16 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>
     /// Flattens the per-faction raw files into the served <c>npcs</c> list, ordered by source key (ordinal)
     /// then source order, stamping each record with its owning file's faction/alliance and its
-    /// <see cref="ClassifyNpc"/> kind. Stat ladders pass through untouched.
+    /// <see cref="ClassifyNpc"/> kind and its playable character from <paramref name="characterByNpc"/> (see
+    /// <see cref="ReadNpcCharacters"/>; an NPC it does not list has none). Stat ladders pass through untouched.
     /// </summary>
-    public static IReadOnlyList<GameCatalogNpc> BuildNpcs(IReadOnlyDictionary<string, GameCatalogFactionNpcs> npcsByFaction) =>
+    public static IReadOnlyList<GameCatalogNpc> BuildNpcs(
+        IReadOnlyDictionary<string, GameCatalogFactionNpcs> npcsByFaction,
+        IReadOnlyDictionary<string, string> characterByNpc) =>
         npcsByFaction
             .OrderBy(pair => pair.Key, StringComparer.Ordinal)
-            .SelectMany(pair => pair.Value.Npcs.Select(npc => ToServedNpc(pair.Key, pair.Value, npc)))
+            .SelectMany(pair => pair.Value.Npcs.Select(npc =>
+                ToServedNpc(pair.Key, pair.Value, npc, characterByNpc.GetValueOrDefault(npc.Id))))
             .ToArray();
 
     /// <summary>
@@ -35,13 +39,15 @@ internal static partial class GameCatalogDenormalizer
         : traits.Contains(MachineOfWarTraitId, StringComparer.Ordinal) ? NpcKindMachineOfWar
         : NpcKindUnit;
 
-    private static GameCatalogNpc ToServedNpc(string sourceKey, GameCatalogFactionNpcs faction, GameCatalogRawNpc npc) =>
+    private static GameCatalogNpc ToServedNpc(
+        string sourceKey, GameCatalogFactionNpcs faction, GameCatalogRawNpc npc, string? characterId) =>
         new(
             npc.Id,
             npc.Name,
             faction.FactionId,
             faction.Alliance,
             ClassifyNpc(sourceKey, npc.Traits),
+            characterId,
             npc.MeleeDamage,
             npc.MeleeHits,
             npc.RangedDamage,

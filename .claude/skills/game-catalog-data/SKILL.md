@@ -64,6 +64,10 @@ restrictions); these are silently ignored on deserialize.
   `rankUpUpgrades` = `upgrades` rows ranked Stone1…; MoW primary/secondary = its two actives with the
   abilities' `upgrades` recipes, `mythicAbility` = `mythicAbilities[0]`. NPC stats map `FixedArmor`→`armour`,
   `StarLevel`→`stars` (absent ⇒ 0). No faction display names (the record's `Name` holds the faction id).
+  An NPC serves `characterId`: the character with its game name in its faction (MoWs are not characters), with
+  the exceptions curated in `Data/curated/npc-characters.json` by NPC id (a character id for a name that differs,
+  `null` to unlink a false match). An entry that repeats the name match fails the load, so the list stays short
+  (`Denormalization/NpcCharacterDenormalizer.cs`).
   Characters and MoWs also serve `summons` (`none` / `optional` / `conditional` / `forced`), curated in
   `Data/curated/unit-summons.json` (unlisted ⇒ `none`). The load fails when the curated units differ from the units
   with an ability that has a `summonHp…` variable, so a bump that adds a summoner needs its entry
