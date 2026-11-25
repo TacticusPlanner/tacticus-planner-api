@@ -21,7 +21,7 @@ public sealed class PlayerSyncEndpoint : EndpointWithoutRequest<PlayerDataManife
     public override void Configure()
     {
         Post("player-data/sync");
-        Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
+        Options(builder => builder.WithMetadata(UpstreamRateLimit.PlayerSync));
         Summary(summary =>
         {
             summary.Summary = "Syncs the authenticated user's player data from the Tacticus API.";

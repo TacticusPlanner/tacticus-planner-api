@@ -166,10 +166,14 @@ public sealed class GuildSyncService(
         }
         catch (DbUpdateConcurrencyException)
         {
+            // Callers such as the V1 import keep saving through this context: drop the rejected changes so a
+            // later SaveChanges does not replay them and fail the whole request.
+            db.ChangeTracker.Clear();
             return new GuildSyncResult.Conflict("The guild changed while this update was being applied. Please retry.");
         }
         catch (DbUpdateException)
         {
+            db.ChangeTracker.Clear();
             return new GuildSyncResult.Conflict(
                 "This guild or one of its members conflicts with an existing registration."
             );
@@ -239,6 +243,23 @@ public sealed class GuildSyncService(
                 .Select(snapshot => new { snapshot.Id, snapshot.PlayerDetails.Name })
                 .Where(snapshot => snapshot.Name != string.Empty)
                 .ToDictionaryAsync(snapshot => snapshot.Id, snapshot => snapshot.Name, ct);
+
+        // A Tacticus user is in one guild at a time, and this fresh roster proves where they are now. A link left
+        // on another guild's roster (they moved, and that guild has not synced since) would break the
+        // one-guild-per-profile index, so it is severed here; that guild's next sync drops the member row.
+        if (linkedProfileIds.Count > 0)
+        {
+            var linkedIds = linkedProfileIds.Select(id => (ProfileId?)id).ToList();
+            var staleLinks = await db.GuildMembers
+                .Where(member => member.GuildId != guild.Id && linkedIds.Contains(member.ProfileId))
+                .ToListAsync(ct);
+            foreach (var staleLink in staleLinks)
+            {
+                staleLink.ProfileId = null;
+                staleLink.LinkedPlayerName = null;
+                staleLink.LastActiveInPlannerOn = null;
+            }
+        }
 
         var existingByUserId = guild.Members.ToDictionary(member => member.TacticusUserId);
         var upstreamUserIds = new HashSet<TacticusUserId>(
