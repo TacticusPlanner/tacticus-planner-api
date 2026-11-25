@@ -51,6 +51,12 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
             .Where(entity => entity.ProfileId == profileId)
             .OrderBy(entity => entity.SortOrder).ThenBy(entity => entity.Id)
             .ToListAsync(ct);
+        var guildWars = await db.GuildWars.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profileId)
+            .Include(entity => entity.Attacks)
+            .OrderBy(entity => entity.StartedAt).ThenBy(entity => entity.Id)
+            .AsSplitQuery()
+            .ToListAsync(ct);
         var rosterSnapshots = await db.PersonalRosterSnapshots.IgnoreQueryFilters().AsNoTracking()
             .Where(entity => entity.ProfileId == profileId)
             .OrderBy(entity => entity.TakenAt).ThenBy(entity => entity.Id)
@@ -150,6 +156,24 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
                 Notes = team.Notes,
                 RarityCap = team.RarityCap,
                 ImportKey = team.ImportKey,
+            }).ToList(),
+            GuildWars = guildWars.Select(war => new StagingTransferGuildWar
+            {
+                SeasonId = war.SeasonId,
+                BattlefieldLevel = war.BattlefieldLevel,
+                StartedAt = war.StartedAt,
+                EndedAt = war.EndedAt,
+                Attacks = war.OrderedAttacks().Select(attack => new StagingTransferGuildWarAttack
+                {
+                    AttackedAt = attack.AttackedAt,
+                    ZoneId = attack.ZoneId,
+                    Slot = attack.Slot,
+                    RarityCap = attack.RarityCap,
+                    Lineup = attack.Lineup,
+                    Result = attack.Result,
+                    UnitsLost = attack.UnitsLost,
+                    Enemy = attack.Enemy,
+                }).ToList(),
             }).ToList(),
         };
     }

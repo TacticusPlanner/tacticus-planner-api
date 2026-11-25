@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Domain.EventShops;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.GuildWars;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
@@ -20,12 +21,13 @@ public sealed record StagingTransferImportCounts(
     int PersonalRosterSnapshots,
     int EventShopPlans,
     int Teams,
+    int GuildWars,
     bool Settings,
     bool Overrides);
 
 /// <summary>
 /// Staging side: replaces the caller's planner data with a production bundle, in one transaction. Goals,
-/// projects, Legendary Event plans and run records, event shop plans, personal roster snapshots, teams, user settings and player-data overrides are deleted and
+/// projects, Legendary Event plans and run records, event shop plans, personal roster snapshots, teams, Guild Wars, user settings and player-data overrides are deleted and
 /// recreated with fresh ids (so two staging accounts can import the same production profile). The display
 /// name is copied only when the staging account has not confirmed one. The Tacticus integration, player-data
 /// snapshot and guild membership are left as they are.
@@ -58,6 +60,8 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
             await db.PersonalRosterSnapshots.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
             await db.EventShopPlans.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
             await db.Teams.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
+            // Attacks cascade with their war.
+            await db.GuildWars.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
             await db.UserSettings.Where(entity => entity.Id == profileId).ExecuteDeleteAsync(ct);
             await db.PlayerDataOverrides.Where(entity => entity.Id == profileId).ExecuteDeleteAsync(ct);
 
@@ -215,6 +219,8 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
                     importKey));
             }
 
+            AddGuildWars(profileId, bundle.GuildWars);
+
             await db.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
         });
@@ -227,8 +233,43 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
             bundle.PersonalRosterSnapshots.Count,
             bundle.EventShopPlans.DistinctBy(plan => plan.EventId).Count(),
             bundle.Teams.Count,
+            bundle.GuildWars.Count,
             bundle.Settings is not null,
             bundle.Overrides is not null);
+    }
+
+    /// <summary>
+    /// Recreates the bundle's wars and attacks with new ids, keeping every field. Production holds at most one current
+    /// war; should a malformed bundle hold more, only the last started stays current and the others end when it
+    /// started, so the one-current-war index cannot fail the whole import.
+    /// </summary>
+    private void AddGuildWars(ProfileId profileId, IReadOnlyList<StagingTransferGuildWar> wars)
+    {
+        var ordered = wars.OrderBy(war => war.StartedAt).ToList();
+        var current = ordered.LastOrDefault(war => war.EndedAt is null);
+        foreach (var source in ordered)
+        {
+            var war = GuildWar.Start(profileId, source.SeasonId, source.BattlefieldLevel, source.StartedAt);
+            war.EndedAt = source.EndedAt ?? (ReferenceEquals(source, current) ? null : current!.StartedAt);
+            db.GuildWars.Add(war);
+            foreach (var attack in source.Attacks)
+            {
+                db.GuildWarAttacks.Add(new GuildWarAttack
+                {
+                    Id = GuildWarAttackId.From(Guid.CreateVersion7()),
+                    WarId = war.Id,
+                    ProfileId = profileId,
+                    AttackedAt = attack.AttackedAt,
+                    ZoneId = attack.ZoneId,
+                    Slot = attack.Slot,
+                    RarityCap = attack.RarityCap,
+                    Lineup = attack.Lineup,
+                    Result = attack.Result,
+                    UnitsLost = attack.UnitsLost,
+                    Enemy = attack.Enemy,
+                });
+            }
+        }
     }
 
     /// <summary>

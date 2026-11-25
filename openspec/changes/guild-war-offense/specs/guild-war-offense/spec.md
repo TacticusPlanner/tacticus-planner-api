@@ -60,13 +60,13 @@ Ids and codes only: the server SHALL NOT send display names or icons. Attacks of
 
 ### Requirement: Past wars are listed newest first
 
-`GET /api/v1/guild-wars` SHALL return `{ items, next }`: the profile's ended wars, newest `startedAt` first with the id as the tiebreak, each with its attacks, at most `limit` (1 to 50, default 20) per page. `next` SHALL be an opaque cursor for the following page, or null on the last page; passing it as `after` SHALL continue the list. The current war SHALL NOT be listed.
+`GET /api/v1/guild-wars` SHALL return `{ items, nextAfter }`: the profile's ended wars, newest `startedAt` first with the id as the tiebreak, each with its attacks, at most `limit` (1 to 50, default 20) per page. `nextAfter` SHALL be an opaque cursor for the following page, or null on the last page; passing it as `after` SHALL continue the list. The current war SHALL NOT be listed.
 
 #### Scenario: Paging
 
 - **GIVEN** 3 ended wars
-- **WHEN** the caller lists with `limit` 2, then with `after` set to the returned `next`
-- **THEN** the first page holds the two newest wars, the second the oldest, and its `next` is null
+- **WHEN** the caller lists with `limit` 2, then with `after` set to the returned `nextAfter`
+- **THEN** the first page holds the two newest wars, the second the oldest, and its `nextAfter` is null
 
 ### Requirement: Attacks are logged, edited and undone
 

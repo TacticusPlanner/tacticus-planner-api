@@ -1,5 +1,6 @@
 using TacticusPlanner.Domain.EventShops;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.GuildWars;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Projects;
@@ -47,6 +48,10 @@ public sealed record StagingTransferBundle
 
     /// <summary>The profile's teams in their order; empty in bundles exported before teams existed.</summary>
     public List<StagingTransferTeam> Teams { get; init; } = [];
+
+    /// <summary>The profile's Guild Wars, oldest first; at most one has no <c>endedAt</c>. Empty in bundles exported
+    /// before wars existed.</summary>
+    public List<StagingTransferGuildWar> GuildWars { get; init; } = [];
 }
 
 public sealed record StagingTransferOverrides
@@ -197,4 +202,37 @@ public sealed record StagingTransferTeam
 
     /// <summary>Set on a team imported from V1, so a V1 import re-run on staging still skips it.</summary>
     public string? ImportKey { get; init; }
+}
+
+/// <summary>A Guild War (<c>guild-war-offense</c>) with its attacks, oldest first.</summary>
+public sealed record StagingTransferGuildWar
+{
+    public string SeasonId { get; init; } = string.Empty;
+
+    public int BattlefieldLevel { get; init; }
+
+    public DateTimeOffset StartedAt { get; init; }
+
+    public DateTimeOffset? EndedAt { get; init; }
+
+    public List<StagingTransferGuildWarAttack> Attacks { get; init; } = [];
+}
+
+public sealed record StagingTransferGuildWarAttack
+{
+    public DateTimeOffset AttackedAt { get; init; }
+
+    public string ZoneId { get; init; } = string.Empty;
+
+    public int Slot { get; init; }
+
+    public GuildWarRarity RarityCap { get; init; }
+
+    public GuildWarLineup Lineup { get; init; } = new();
+
+    public GuildWarAttackResult? Result { get; init; }
+
+    public int? UnitsLost { get; init; }
+
+    public GuildWarEnemy? Enemy { get; init; }
 }

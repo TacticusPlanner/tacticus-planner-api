@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.StagingTransfer;
 using TacticusPlanner.Domain.EventShops;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.GuildWars;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
@@ -70,7 +71,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         importResponse.EnsureSuccessStatusCode();
         var counts = await importResponse.Content.ReadFromJsonAsync<ImportFromProductionResponse>(Ct);
         // Two projects: the seeded one and the Default project provisioned with the production account.
-        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, 1, 1, 3, true, true), counts);
+        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, 1, 1, 3, 2, true, true), counts);
 
         using var scope = target.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
@@ -137,6 +138,22 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         Assert.Equal((1, "prod notes"), (teams[0].FlexStartIndex, teams[0].Notes));
         Assert.Equal((1, TeamRarityCap.Legendary), (teams[0].MowFlexStartIndex, teams[0].RarityCap));
         Assert.Equal([TeamMode.WarDefense], teams[0].Modes);
+
+        var wars = await db.GuildWars.IgnoreQueryFilters().AsNoTracking().Include(entity => entity.Attacks)
+            .Where(entity => entity.ProfileId == profile.Id).OrderBy(entity => entity.StartedAt).ToListAsync(Ct);
+        Assert.Equal(
+            [("guildWarSeasonA", 4, seeded.WarStartedAt, (DateTimeOffset?)seeded.WarStartedAt.AddDays(7), 2),
+                ("guildWarSeasonB", 5, seeded.WarStartedAt.AddDays(7), null, 1)],
+            wars.Select(war => (war.SeasonId, war.BattlefieldLevel, war.StartedAt, war.EndedAt, war.Attacks.Count)));
+        Assert.DoesNotContain(wars, war => seeded.WarIds.Contains(war.Id));
+        Assert.All(wars.SelectMany(war => war.Attacks), attack => Assert.Equal(profile.Id, attack.ProfileId));
+        Assert.Equal(["Armoury", "Bastion"], wars[0].OrderedAttacks().Select(attack => attack.ZoneId));
+        var attack = Assert.Single(wars[1].Attacks);
+        Assert.Equal((2, GuildWarRarity.Epic, GuildWarAttackResult.Won, (int?)1), (attack.Slot, attack.RarityCap, attack.Result, attack.UnitsLost));
+        Assert.Equal(["ultraCalgar", "ultraDreadnought"], attack.Lineup.UnitIds());
+        Assert.Equal((UnitRank.Diamond3, 50), (attack.Lineup.Characters[0].Rank, attack.Lineup.Characters[0].XpLevel));
+        Assert.Equal("tauAunShi", Assert.Single(attack.Enemy!.Characters).UnitId);
+        Assert.Equal(GuildWarEnemyUnitState.Killed, attack.Enemy.Characters[0].State);
 
         var settings = await db.UserSettings.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Id == profile.Id, Ct);
         Assert.Equal(538, settings.Settings.DailyEnergy);
@@ -250,7 +267,13 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         Assert.Equal(HttpStatusCode.NotFound, codeOnTarget.StatusCode);
     }
 
-    private sealed record SeededSource(GoalId ParentGoalId, GoalId ChildGoalId, DateTimeOffset SnapshotTakenAt, IReadOnlyList<TeamId> TeamIds);
+    private sealed record SeededSource(
+        GoalId ParentGoalId,
+        GoalId ChildGoalId,
+        DateTimeOffset SnapshotTakenAt,
+        IReadOnlyList<TeamId> TeamIds,
+        DateTimeOffset WarStartedAt,
+        IReadOnlyList<GuildWarId> WarIds);
 
     /// <summary>Staging plans the import must replace: one for an event production has no plan for, one for the
     /// same event production has.</summary>
@@ -388,7 +411,50 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         var teams = new[] { SeedTeam("Third team", 3), SeedTeam("First team", 1), SeedTeam("V1 team", 2, "gw ultras") };
         db.Teams.AddRange(teams);
 
+        // An ended war with two attacks and the current war with one, enemy details included.
+        var warStartedAt = new DateTimeOffset(2026, 10, 1, 9, 0, 0, TimeSpan.Zero);
+        var ended = GuildWar.Start(profileId, "guildWarSeasonA", 4, warStartedAt);
+        ended.EndedAt = warStartedAt.AddDays(7);
+        var current = GuildWar.Start(profileId, "guildWarSeasonB", 5, warStartedAt.AddDays(7));
+        db.GuildWars.AddRange(ended, current);
+        GuildWarAttack SeedAttack(GuildWar war, string zoneId, int minutes, string characterId) => new()
+        {
+            Id = GuildWarAttackId.From(Guid.CreateVersion7()),
+            WarId = war.Id,
+            ProfileId = profileId,
+            AttackedAt = war.StartedAt.AddMinutes(minutes),
+            ZoneId = zoneId,
+            Slot = 2,
+            RarityCap = GuildWarRarity.Epic,
+            Lineup = new GuildWarLineup
+            {
+                Characters = [new GuildWarLineupUnit
+                {
+                    UnitId = characterId, Progression = UnitProgression.LegendaryRedThreeStars, Rank = UnitRank.Diamond3, XpLevel = 50,
+                    AbilityLevels = [50, 48],
+                }],
+            },
+        };
+        // Stored newest first, so the export has to order them.
+        db.GuildWarAttacks.AddRange(SeedAttack(ended, "Bastion", 20, "ultraTitus"), SeedAttack(ended, "Armoury", 10, "ultraCalgar"));
+        var withEnemy = SeedAttack(current, "Armoury", 5, "ultraCalgar");
+        withEnemy.Lineup.Mow = new GuildWarLineupUnit
+        {
+            UnitId = "ultraDreadnought",
+            Progression = UnitProgression.EpicRedOneStar,
+            XpLevel = 40,
+            AbilityLevels = [40, 40],
+        };
+        withEnemy.Result = GuildWarAttackResult.Won;
+        withEnemy.UnitsLost = 1;
+        withEnemy.Enemy = new GuildWarEnemy
+        {
+            Characters = [new GuildWarEnemyUnit { UnitId = "tauAunShi", Rarity = GuildWarRarity.Epic, State = GuildWarEnemyUnitState.Killed }],
+        };
+        db.GuildWarAttacks.Add(withEnemy);
+
         await db.SaveChangesAsync(Ct);
-        return new SeededSource(parent.Id, child.Id, takenAt, [.. teams.Select(team => team.Id)]);
+        return new SeededSource(
+            parent.Id, child.Id, takenAt, [.. teams.Select(team => team.Id)], warStartedAt, [ended.Id, current.Id]);
     }
 }
