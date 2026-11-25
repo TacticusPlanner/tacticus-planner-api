@@ -29,6 +29,12 @@ public class GuildRaidAttack
     public required TacticusUserIdHash TacticusUserIdHash { get; set; }
 
     /// <summary>
+    /// Last four characters of the attacking player's Tacticus user ID, as guildmates already see it masked.
+    /// <see langword="null"/> on hits stored before it was kept.
+    /// </summary>
+    public string? TacticusUserIdSuffix { get; set; }
+
+    /// <summary>
     /// Upstream raid tier coordinate used to match the catalog position; typically zero-based.
     /// </summary>
     public int Tier { get; set; }
@@ -67,8 +73,9 @@ public class GuildRaidAttack
     /// <summary>
     /// One-based catalog progression for the exact season tier, set, and encounter. An explicit upstream
     /// suffix is validated against this value; when the source omits its suffix, the catalog supplies it.
+    /// A hit first stored by past-season capture keeps only its own suffix, or <see langword="null"/> without one.
     /// </summary>
-    public int ProgressionIndex { get; set; }
+    public int? ProgressionIndex { get; set; }
 
     /// <summary>
     /// Rarity-based difficulty reported by the upstream attack, such as <see cref="GuildRaidDifficulty.Legendary"/>.

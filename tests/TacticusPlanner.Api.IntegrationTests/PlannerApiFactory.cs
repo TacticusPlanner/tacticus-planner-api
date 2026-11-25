@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using TacticusPlanner.Api.Features.AccountManagement;
 using TacticusPlanner.Api.Features.Analytics;
+using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.V1Import;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.TacticusApi;
@@ -29,6 +30,10 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
 
     /// <summary>Extra service registrations, applied last. Set before the host first starts.</summary>
     internal Action<IServiceCollection>? ExtraServices { get; set; }
+
+    /// <summary>Runs the Guild Raid season capture worker, off by default so a refresh in an unrelated test starts no
+    /// background work that races its assertions. Set before the host first starts.</summary>
+    internal bool RunSeasonCaptureWorker { get; set; }
 
     internal Func<PlannerDbContext, bool>? FailAfterSave { get; set; }
     internal bool FailureInjected { get; set; }
@@ -125,6 +130,12 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
 
             services.RemoveAll<IExternalIdentityDeleter>();
             services.AddSingleton<IExternalIdentityDeleter>(ExternalIdentityDeleter);
+
+            if (!RunSeasonCaptureWorker)
+            {
+                services.Remove(services.Single(
+                    service => service.ImplementationType == typeof(GuildRaidSeasonCaptureWorker)));
+            }
 
             ExtraServices?.Invoke(services);
         });

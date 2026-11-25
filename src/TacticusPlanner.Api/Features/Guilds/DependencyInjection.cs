@@ -7,6 +7,9 @@ public static class DependencyInjection
         services.AddScoped<GuildSyncService>();
         services.AddScoped<GuildRaidStatusService>();
         services.AddSingleton<GuildRaidRefreshCoordinator>();
+        services.AddScoped<GuildRaidSeasonCaptureService>();
+        services.AddSingleton<GuildRaidSeasonCaptureRequests>();
+        services.AddHostedService<GuildRaidSeasonCaptureWorker>();
 
         return services;
     }

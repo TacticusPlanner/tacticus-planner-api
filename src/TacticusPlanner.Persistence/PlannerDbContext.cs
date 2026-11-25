@@ -53,6 +53,8 @@ public sealed class PlannerDbContext(
 
     public DbSet<GuildRaidAttack> GuildRaidAttacks => Set<GuildRaidAttack>();
 
+    public DbSet<GuildRaidSeasonCapture> GuildRaidSeasonCaptures => Set<GuildRaidSeasonCapture>();
+
     public DbSet<Goal> Goals => Set<Goal>();
 
     public DbSet<Project> Projects => Set<Project>();

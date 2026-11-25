@@ -36,6 +36,18 @@ public class GuildRaidSyncState : BaseEntity
     public GuildRaidSeasonId? ActiveSeasonId { get; set; }
 
     /// <summary>
+    /// The active season number for which upstream's list of past seasons was last applied; <see langword="null"/>
+    /// before the first list.
+    /// </summary>
+    public int? SeasonsListedFor { get; set; }
+
+    /// <summary>
+    /// No season capture run may start for this guild before this instant. While a run works it is that run's lease,
+    /// so it is written only by conditional updates and never through a tracked entity.
+    /// </summary>
+    public DateTimeOffset? CaptureNotBefore { get; set; }
+
+    /// <summary>
     /// Registered guild navigation for <see cref="GuildId"/>.
     /// </summary>
     public virtual Guild? Guild { get; set; }
