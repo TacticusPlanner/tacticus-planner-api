@@ -25,15 +25,6 @@
           "Microsoft.Extensions.Resilience": "10.11.1"
         }
       },
-      "Microsoft.Extensions.ServiceDiscovery": {
-        "type": "Direct",
-        "requested": "[10.11.1, )",
-        "resolved": "10.11.1",
-        "contentHash": "N+1ANg9xXsX973s37sjsH94SZwq58J1SvtoVxw1wDbdn1Z1F2AfNPmwyJa1DidjhoYtP4LolNg0usVN4UPmkMA==",
-        "dependencies": {
-          "Microsoft.Extensions.ServiceDiscovery.Abstractions": "10.11.1"
-        }
-      },
       "OpenTelemetry.Exporter.OpenTelemetryProtocol": {
         "type": "Direct",
         "requested": "[1.21.0, )",
@@ -144,11 +135,6 @@
           "Polly.Extensions": "8.4.2",
           "Polly.RateLimiting": "8.4.2"
         }
-      },
-      "Microsoft.Extensions.ServiceDiscovery.Abstractions": {
-        "type": "Transitive",
-        "resolved": "10.11.1",
-        "contentHash": "BYo9+FAaQmKMGY3GSugoOtQM0m2oGl0IECdXfp4stSA9vRb3pjtVrTi7I4PkBEj6Xsr6ecPbYzcsbrLYzXj/pQ=="
       },
       "Microsoft.Extensions.Telemetry": {
         "type": "Transitive",

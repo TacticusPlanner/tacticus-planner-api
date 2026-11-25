@@ -44,7 +44,6 @@ public static class Extensions
         builder.Services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
         builder.Services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
 
-        builder.Services.AddServiceDiscovery();
         builder.Services.AddHealthChecks()
             .AddCheck("self", () => HealthCheckResult.Healthy(), [LivenessTag]);
         builder.Services.AddOutputCache();
@@ -54,7 +53,9 @@ public static class Extensions
             // Retrying a POST/PUT/PATCH/DELETE after a timeout or 5xx can apply it upstream twice; only safe
             // methods (GET, HEAD, OPTIONS, TRACE) are retried.
             http.AddStandardResilienceHandler(options => options.Retry.DisableForUnsafeHttpMethods());
-            http.AddServiceDiscovery();
+            // No AddServiceDiscovery(): every base URL is absolute, and its handler leaks a resolver (and that
+            // resolver's 10 s cleanup timer) each time IHttpClientFactory rotates a handler, so timers, CPU and
+            // memory grew with uptime in prod (Microsoft.Extensions.ServiceDiscovery 10.11.1).
         });
 
         return builder;
