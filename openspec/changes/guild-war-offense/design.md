@@ -47,7 +47,9 @@ A partial unique index on `(profile_id)` where `ended_at IS NULL` keeps at most 
 
 ### D5: The war stores its season and battlefield level
 
-`season_id` and `battlefield_level` are stored on the war and set by the player (PUT current, or when starting a war). The server checks the season is served and the level is one of the season's levels when they are written. A later catalog that drops the season does not touch stored wars.
+`season_id` and `battlefield_level` are stored on the war and set by the player (PUT current, or when starting a war). The server checks the season is served and the level is one of the season's levels when they are written. A later catalog that drops the season does not touch stored wars. Once a war has attacks its season is locked (`409` `guildWarHasAttacks`): the attacks' caps and zones belong to that season, so a different one means a new war. The level stays editable, since stored caps do not move. Starting a war sends the id of the war the client saw as current, so a retried start answers `409` with the war it already created rather than ending it.
+
+The game names no current season config, so the calendar does: each `guild-war-season` occurrence MAY carry `seasonConfigId` (validated against the served seasons), and clients default a new war to the config of the current or latest season. The datamine chain (A→B→C, C→C) means every season after the first two runs C, unless the game resets it.
 
 ### D6: The server derives the rarity cap
 
@@ -55,7 +57,7 @@ An attack sends `zoneId` and `slot` (0 to 4). The server reads the war's season 
 
 ### D7: Tokens and deployed units are derived
 
-A war serves `tokensUsed` (its attack count) and `deployedUnitIds` (every unit of every attack's lineup, characters then MoWs, in attack order). Nothing stores them, so an Undo can never leave a unit deployed. Creating or editing an attack is refused with `guildWarUnitDeployed` when one of its units is in another attack of the same war, and creating one is refused with `guildWarTokensSpent` when the war already holds the season's `maxAttempts` attacks (10 when the season is no longer served).
+A war serves `tokensUsed` (its attack count) and `deployedUnitIds` (every unit of every attack's lineup, characters then MoWs, in attack order). Nothing stores them, so an Undo can never leave a unit deployed. Creating or editing an attack is refused with `guildWarUnitDeployed` when one of its units is in another attack of the same war, and creating one is refused with `guildWarTokensSpent` when the war already holds the season's `maxAttempts` attacks. A create needs the season served (it is checked first, by the zone), so there is no fallback cap. An update that keeps its zone and slot skips the zone check, so an attack stays editable after its season leaves the catalog; its enemy buffs and board are then checked against what it already stored.
 
 ### D8: The lineup is what the client sends
 
@@ -75,7 +77,7 @@ Create, update and delete of an attack return the war as `GET` returns it, so a 
 
 ### D12: Migration
 
-Migration `AddGuildWars` creates both tables with cascading foreign keys (war to profile, attack to war and profile), which also covers account purge. There is no backfill. No existing table changes, so rollback is reverting the change.
+Migration `AddGuildWars` creates both tables (an attack's `lost_unit_ids` is a text array and `notes` a varchar(200)) with cascading foreign keys (war to profile, attack to war and profile), which also covers account purge. There is no backfill. No existing table changes, so rollback is reverting the change.
 
 ## Risks / Trade-offs
 

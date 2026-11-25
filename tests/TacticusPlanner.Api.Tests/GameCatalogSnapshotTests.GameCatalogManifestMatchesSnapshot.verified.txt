@@ -1,5 +1,5 @@
 ﻿{
-  version: 1.44.88.3089+1464632d4cf3,
+  version: 1.44.88.3089+a180f928aa00,
   schemaHash: 5975ffaefaa56ab36e00e0099275c4971e8edfa9e3503ed5ba5a2c00b680bd57,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},

@@ -265,8 +265,9 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
                     RarityCap = attack.RarityCap,
                     Lineup = attack.Lineup,
                     Result = attack.Result,
-                    UnitsLost = attack.UnitsLost,
+                    LostUnitIds = attack.LostUnitIds,
                     Enemy = attack.Enemy,
+                    Notes = attack.Notes,
                 });
             }
         }

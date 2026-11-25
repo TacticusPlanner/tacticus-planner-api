@@ -13,7 +13,7 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Persistence.Migrations
 {
     [DbContext(typeof(PlannerDbContext))]
-    [Migration("20261125163843_AddGuildWars")]
+    [Migration("20261125181003_AddGuildWars")]
     partial class AddGuildWars
     {
         /// <inheritdoc />
@@ -394,6 +394,15 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
+                    b.PrimitiveCollection<List<string>>("LostUnitIds")
+                        .HasColumnType("text[]")
+                        .HasColumnName("lost_unit_ids");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("notes");
+
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("uuid")
                         .HasColumnName("profile_id");
@@ -417,10 +426,6 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Property<int>("Slot")
                         .HasColumnType("integer")
                         .HasColumnName("slot");
-
-                    b.Property<int?>("UnitsLost")
-                        .HasColumnType("integer")
-                        .HasColumnName("units_lost");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")

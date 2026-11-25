@@ -65,3 +65,12 @@ The load SHALL fail when a layout zone has no `zoneTypeConfigs` or `scorePerZone
 
 - **WHEN** level 0 of any season is read
 - **THEN** `scoreFactorPercent` is null and `attemptDebuffPercent` is 0
+
+### Requirement: The calendar names each season's config
+
+A `guild-war-season` occurrence in the events calendar MAY carry the parameter `seasonConfigId`, the id of the `guild-war` season that Guild War season runs. When present it SHALL name a served season, else the catalog load SHALL fail with `UnknownGuildWarSeasonConfig`. Clients SHALL default a new war to the config of the current, or else the latest started, season that names one, and to the first served season when none does.
+
+#### Scenario: Season 29 runs C
+
+- **WHEN** the calendar occurrence for season 29 is read
+- **THEN** its `seasonConfigId` is `guildWarSeasonC`

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
@@ -34,15 +35,16 @@ public sealed class GuildWarEndpointTests(PlannerApiFactory factory) : IClassFix
         string zoneId = "Armoury",
         int slot = 2,
         GuildWarAttackResult? result = null,
-        int? unitsLost = null,
-        GuildWarEnemyDto? enemy = null) =>
+        string[]? lostUnitIds = null,
+        GuildWarEnemyDto? enemy = null,
+        string? notes = null) =>
         new(zoneId, slot, [.. characters.Select(id => Unit(id))], mow is null ? null : Unit(mow, rank: null), result,
-            unitsLost, enemy, null);
+            lostUnitIds, enemy, notes, null);
 
     private static UpdateGuildWarAttackRequest Update(
         GuildWarAttackResponse attack, string[]? characters = null, string? zoneId = null, int? slot = null) =>
         new(zoneId ?? attack.ZoneId, slot ?? attack.Slot, characters is null ? attack.Characters : [.. characters.Select(id => Unit(id))],
-            attack.Mow, attack.Result, attack.UnitsLost, attack.Enemy, attack.Revision);
+            attack.Mow, attack.Result, attack.LostUnitIds, attack.Enemy, attack.Notes, attack.Revision);
 
     private static async Task<GuildWarResponse> OkWarAsync(HttpResponseMessage response)
     {
@@ -54,8 +56,10 @@ public sealed class GuildWarEndpointTests(PlannerApiFactory factory) : IClassFix
         HttpClient client, string seasonId = "guildWarSeasonA", int level = 5, long revision = 0) =>
         await OkWarAsync(await client.PutAsJsonAsync(CurrentUrl, new SetCurrentGuildWarRequest(seasonId, level, revision), Ct));
 
+    /// <summary>Starts a war, ending the current one as the client sees it.</summary>
     private static async Task<GuildWarResponse> StartAsync(HttpClient client, string seasonId = "guildWarSeasonA", int level = 5) =>
-        await OkWarAsync(await client.PostAsJsonAsync(Url, new StartGuildWarRequest(seasonId, level), Ct));
+        await OkWarAsync(await client.PostAsJsonAsync(
+            Url, new StartGuildWarRequest(seasonId, level, (await CurrentAsync(client))?.Id), Ct));
 
     private static async Task<GuildWarResponse> LogAsync(HttpClient client, CreateGuildWarAttackRequest request) =>
         await OkWarAsync(await client.PostAsJsonAsync(AttacksUrl, request, Ct));
@@ -101,7 +105,8 @@ public sealed class GuildWarEndpointTests(PlannerApiFactory factory) : IClassFix
 
     [Theory]
     [InlineData("guildWarSeasonGone", 1, "guildWarUnknownSeason")]
-    [InlineData("guildWarSeasonA", 6, "validation")]
+    [InlineData("guildWarSeasonA", 6, "guildWarUnknownLevel")]
+    [InlineData("guildWarSeasonA", -1, "validation")]
     public async Task SettingsMustNameAServedSeasonAndLevel(string seasonId, int level, string issueCode)
     {
         var (client, _) = await ClientAsync();
@@ -110,7 +115,7 @@ public sealed class GuildWarEndpointTests(PlannerApiFactory factory) : IClassFix
             await client.PutAsJsonAsync(CurrentUrl, new SetCurrentGuildWarRequest(seasonId, level, 0), Ct),
             HttpStatusCode.BadRequest, issueCode);
         await AssertProblemAsync(
-            await client.PostAsJsonAsync(Url, new StartGuildWarRequest(seasonId, level), Ct),
+            await client.PostAsJsonAsync(Url, new StartGuildWarRequest(seasonId, level, null), Ct),
             HttpStatusCode.BadRequest, issueCode);
         Assert.Null(await CurrentAsync(client));
     }
@@ -134,6 +139,40 @@ public sealed class GuildWarEndpointTests(PlannerApiFactory factory) : IClassFix
         Assert.Equal((old.Id, 3), (ended.Id, ended.Attacks.Count));
         Assert.NotNull(ended.EndedAt);
         Assert.Null(past.NextAfter);
+    }
+
+    [Fact]
+    public async Task ARetriedStartDoesNotEndTheWarItStarted()
+    {
+        var (client, _) = await ClientAsync();
+        var old = await SetCurrentAsync(client);
+        var request = new StartGuildWarRequest("guildWarSeasonA", 5, old.Id);
+        var started = await OkWarAsync(await client.PostAsJsonAsync(Url, request, Ct));
+
+        // The same request again (its response was lost) finds another war current and changes nothing.
+        var retried = await client.PostAsJsonAsync(Url, request, Ct);
+        await AssertProblemAsync(retried, HttpStatusCode.Conflict, GuildWarsService.RevisionStale);
+        AssertSame(started, await CurrentAsync(client));
+        Assert.Single((await client.GetFromJsonAsync<PastGuildWarsResponse>(Url, Ct))!.Items);
+        // A client that sees no war does not end one either.
+        await AssertProblemAsync(
+            await client.PostAsJsonAsync(Url, new StartGuildWarRequest("guildWarSeasonA", 5, null), Ct),
+            HttpStatusCode.Conflict, GuildWarsService.RevisionStale);
+    }
+
+    [Fact]
+    public async Task TheSeasonIsKeptOnceAttacksAreLogged()
+    {
+        var (client, _) = await ClientAsync();
+        await SetCurrentAsync(client, "guildWarSeasonA", 5);
+        var war = await LogAsync(client, Attack(["ultraCalgar"]));
+
+        await AssertProblemAsync(
+            await client.PutAsJsonAsync(CurrentUrl, new SetCurrentGuildWarRequest("guildWarSeasonD", 5, war.Revision), Ct),
+            HttpStatusCode.Conflict, GuildWarsService.HasAttacks);
+        Assert.Equal("guildWarSeasonA", (await CurrentAsync(client))!.SeasonId);
+        // The level may still change.
+        Assert.Equal(3, (await SetCurrentAsync(client, "guildWarSeasonA", 3, war.Revision)).BattlefieldLevel);
     }
 
     [Fact]
@@ -186,14 +225,16 @@ public sealed class GuildWarEndpointTests(PlannerApiFactory factory) : IClassFix
         var enemy = new GuildWarEnemyDto(
             [new GuildWarEnemyUnitDto("tauAunShi", GuildWarRarity.Epic, UnitRank.Gold2, GuildWarEnemyUnitState.Killed)],
             null, ["EnvArmourSupplies_Regional"], null);
-        await LogAsync(client, Attack(["ultraCalgar", "ultraTitus"], "ultraDreadnought", result: GuildWarAttackResult.Won, unitsLost: 1, enemy: enemy));
+        await LogAsync(client, Attack(["ultraCalgar", "ultraTitus"], "ultraDreadnought", result: GuildWarAttackResult.Won, lostUnitIds: ["ultraTitus"], enemy: enemy, notes: "  Focus the Broadside.  "));
         var war = await LogAsync(client, Attack(["bloodDante", "bloodMephiston", "ultraApothecary"], zoneId: "Armoury", slot: 0));
 
         Assert.Equal(2, war.TokensUsed);
         Assert.Equal(["ultraCalgar", "ultraTitus", "ultraDreadnought", "bloodDante", "bloodMephiston", "ultraApothecary"], war.DeployedUnitIds);
         Assert.Equal([GuildWarRarity.Epic, GuildWarRarity.Legendary], war.Attacks.Select(attack => attack.RarityCap));
         var logged = war.Attacks[0];
-        Assert.Equal((GuildWarAttackResult.Won, (int?)1), (logged.Result, logged.UnitsLost));
+        Assert.Equal(GuildWarAttackResult.Won, logged.Result);
+        Assert.Equal(["ultraTitus"], logged.LostUnitIds);
+        Assert.Equal("Focus the Broadside.", logged.Notes);
         AssertSame(enemy, logged.Enemy);
         Assert.Null(logged.Mow!.Rank);
         AssertSame(war, await CurrentAsync(client));
@@ -245,18 +286,48 @@ public sealed class GuildWarEndpointTests(PlannerApiFactory factory) : IClassFix
     }
 
     [Theory]
-    [InlineData(0, null, null)]
-    [InlineData(1, null, 2)]
-    [InlineData(1, GuildWarAttackResult.Lost, 7)]
-    [InlineData(6, null, null)]
-    public async Task AnInvalidShapeIsAValidationError(int characters, GuildWarAttackResult? result, int? unitsLost)
+    [InlineData(0, null, null, 0)]
+    [InlineData(1, null, "ultraCalgar", 0)]
+    [InlineData(1, GuildWarAttackResult.Lost, "ultraTitus", 0)]
+    [InlineData(2, GuildWarAttackResult.Lost, "ultraCalgar,ultraCalgar", 0)]
+    [InlineData(1, null, null, 201)]
+    [InlineData(6, null, null, 0)]
+    public async Task AnInvalidShapeIsAValidationError(int characters, GuildWarAttackResult? result, string? lost, int notesLength)
     {
         var (client, _) = await ClientAsync();
         await SetCurrentAsync(client);
         string[] ids = ["ultraCalgar", "ultraTitus", "ultraApothecary", "ultraTigurius", "ultraEliminatorSgt", "ultraInceptorSgt"];
+        var request = Attack(ids[..characters], result: result, lostUnitIds: lost?.Split(','), notes: new string('n', notesLength));
 
         await AssertProblemAsync(
-            await client.PostAsJsonAsync(AttacksUrl, Attack(ids[..characters], result: result, unitsLost: unitsLost), Ct),
+            await client.PostAsJsonAsync(AttacksUrl, request, Ct), HttpStatusCode.BadRequest, "validation");
+    }
+
+    [Fact]
+    public async Task ACharacterNeedsARankAndAMowHasNone()
+    {
+        var (client, _) = await ClientAsync();
+        await SetCurrentAsync(client);
+
+        await AssertProblemAsync(
+            await client.PostAsJsonAsync(AttacksUrl, Attack(["ultraCalgar"]) with { Characters = [Unit("ultraCalgar", rank: null)] }, Ct),
+            HttpStatusCode.BadRequest, "validation");
+        await AssertProblemAsync(
+            await client.PostAsJsonAsync(AttacksUrl, Attack(["ultraCalgar"]) with { Mow = Unit("ultraDreadnought") }, Ct),
+            HttpStatusCode.BadRequest, "validation");
+    }
+
+    [Theory]
+    [InlineData("0001-01-01T00:00:00Z")]
+    [InlineData("2999-01-01T00:00:00Z")]
+    public async Task AnAttackTimeOutOfRangeIsRefused(string attackedAt)
+    {
+        var (client, _) = await ClientAsync();
+        await SetCurrentAsync(client);
+
+        await AssertProblemAsync(
+            await client.PostAsJsonAsync(
+                AttacksUrl, Attack(["ultraCalgar"]) with { AttackedAt = DateTimeOffset.Parse(attackedAt, CultureInfo.InvariantCulture) }, Ct),
             HttpStatusCode.BadRequest, "validation");
     }
 

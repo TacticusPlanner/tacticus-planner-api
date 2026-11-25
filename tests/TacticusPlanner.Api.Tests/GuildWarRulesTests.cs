@@ -132,7 +132,7 @@ public sealed class GuildWarRulesTests
         for (var index = 1; index < Facts.Seasons["guildWarSeasonA"].MaxAttempts; index++)
             war.Attacks.Add(Logged(war, Draft([])));
 
-        Assert.Null(GuildWarRules.Evaluate(Draft(["ultraCalgar", "ultraTitus"]), war, attack.Id, Facts));
+        Assert.Null(GuildWarRules.Evaluate(Draft(["ultraCalgar", "ultraTitus"]), war, attack, Facts));
     }
 
     [Fact]
@@ -144,7 +144,7 @@ public sealed class GuildWarRulesTests
             war.Attacks.Add(Logged(war, Draft([])));
 
         Assert.Equal(GuildWarAttackRuleCode.TokensSpent, GuildWarRules.Evaluate(Draft(["ultraCalgar"]), war, null, Facts));
-        Assert.Null(GuildWarRules.Evaluate(Draft(["ultraCalgar"]), war, war.Attacks[0].Id, Facts));
+        Assert.Null(GuildWarRules.Evaluate(Draft(["ultraCalgar"]), war, war.Attacks[0], Facts));
     }
 
     [Fact]
@@ -163,8 +163,43 @@ public sealed class GuildWarRulesTests
     }
 
     [Fact]
-    public void AWarWhoseSeasonLeftTheCatalogHasTenTokens() =>
-        Assert.Equal(GuildWarValidation.FallbackMaxAttempts, GuildWarRules.MaxAttempts(Facts, War("guildWarSeasonGone")));
+    public void AnAttackKeepsItsTargetAfterItsSeasonLeavesTheCatalog()
+    {
+        // The attack was logged while season A was served; the war's season is then no longer served.
+        var war = War();
+        var enemy = new GuildWarEnemy { BuffIds = ["EnvArmourSupplies_Regional"] };
+        var attack = Logged(war, Draft(["ultraCalgar"], enemy: enemy));
+        attack.Enemy = enemy;
+        war.Attacks.Add(attack);
+        war.SeasonId = "guildWarSeasonGone";
+
+        // A result-only edit, and one that keeps the stored buffs, pass; the target and new buffs cannot be checked.
+        Assert.Null(GuildWarRules.Evaluate(Draft(["ultraCalgar", "ultraTitus"], enemy: enemy), war, attack, Facts));
+        Assert.Equal(
+            GuildWarAttackRuleCode.UnknownZone,
+            GuildWarRules.Evaluate(Draft(["ultraCalgar"], slot: 3), war, attack, Facts));
+        Assert.Equal(
+            GuildWarAttackRuleCode.UnknownUnit,
+            GuildWarRules.Evaluate(
+                Draft(["ultraCalgar"], enemy: new GuildWarEnemy { BuffIds = ["EnvMedicaeSupplies_Regional"] }),
+                war, attack, Facts));
+        Assert.Equal(
+            GuildWarAttackRuleCode.UnknownUnit,
+            GuildWarRules.Evaluate(Draft(["ultraCalgar"], enemy: new GuildWarEnemy { BoardId = "anyBoard" }), war, attack, Facts));
+    }
+
+    [Fact]
+    public void AnUpdateKeepingItsTargetSkipsTheZoneCheck()
+    {
+        // A zone the war's season no longer has (a catalog bump moved it) still takes edits that keep it.
+        var war = War();
+        var attack = Logged(war, Draft(["ultraCalgar"]));
+        attack.ZoneId = "RemovedZone";
+        war.Attacks.Add(attack);
+
+        Assert.Null(GuildWarRules.Evaluate(Draft(["ultraTitus"], zoneId: "RemovedZone"), war, attack, Facts));
+        Assert.Null(GuildWarRules.Evaluate(Draft(["ultraTitus"], zoneId: "Armoury", slot: 0), war, attack, Facts));
+    }
 
     [Theory]
     [InlineData("guildWarSeasonA", 0, null)]

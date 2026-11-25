@@ -83,8 +83,13 @@ public class GuildWarAttack : BaseEntity<GuildWarAttackId>, IRevisionedEntity
 
     public GuildWarAttackResult? Result { get; set; }
 
-    /// <summary>Units the player lost, 0 to 6; only with a result.</summary>
-    public int? UnitsLost { get; set; }
+    /// <summary>The lineup units the player lost, each a lineup unit once; null when not recorded, and only with a
+    /// result.</summary>
+    public List<string>? LostUnitIds { get; set; }
+
+    /// <summary>The player's short note on the attack, at most <see cref="GuildWarValidation.MaxNotesLength"/>
+    /// characters; null when none.</summary>
+    public string? Notes { get; set; }
 
     public GuildWarEnemy? Enemy { get; set; }
 

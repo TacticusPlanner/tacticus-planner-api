@@ -90,7 +90,7 @@ internal static partial class GameCatalogDenormalizer
             var resolved = new List<GameCatalogGuildWarBuffAbility>();
             if (abilities.TryGetValue(abilityId, out var plain))
             {
-                resolved.Add(ReadGuildWarBuffAbility(abilityId, null, plain));
+                resolved.Add(ReadGuildWarBuffAbility(abilityId, null, plain, invalid));
             }
 
             foreach (var rarity in GuildWarRarities)
@@ -98,7 +98,7 @@ internal static partial class GameCatalogDenormalizer
                 var key = $"{abilityId}_{rarity}";
                 if (abilities.TryGetValue(key, out var byRarity))
                 {
-                    resolved.Add(ReadGuildWarBuffAbility(key, rarity, byRarity));
+                    resolved.Add(ReadGuildWarBuffAbility(key, rarity, byRarity, invalid));
                 }
             }
 
@@ -115,12 +115,15 @@ internal static partial class GameCatalogDenormalizer
     }
 
     private static GameCatalogGuildWarBuffAbility ReadGuildWarBuffAbility(
-        string abilityId, string? rarity, DatamineGuildWarAbility ability) =>
+        string abilityId, string? rarity, DatamineGuildWarAbility ability, Func<string, InvalidOperationException> invalid) =>
         new(
             abilityId,
             rarity,
             new SortedDictionary<string, IReadOnlyList<int>>(
-                (ability.Variables ?? []).ToDictionary(pair => pair.Key, IReadOnlyList<int> (pair) => pair.Value.ToArray()),
+                (ability.Variables ?? []).ToDictionary(
+                    pair => pair.Key,
+                    IReadOnlyList<int> (pair) => pair.Value?.ToArray()
+                        ?? throw invalid($"ability '{abilityId}' variable '{pair.Key}' is null.")),
                 StringComparer.Ordinal));
 
     private static GameCatalogGuildWarZone[] ReadGuildWarZones(

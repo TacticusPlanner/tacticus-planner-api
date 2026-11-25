@@ -13,3 +13,9 @@
 - [x] 2.5 Add attack create, update and delete, and verify integration tests for the derived tokens and deployed units, Undo, stale edit, unit deployed, tokens spent, `guildWarNotStarted` and another profile's war.
 - [x] 2.6 Carry wars and attacks in the staging transfer, and verify a round trip keeps the current war, the order and every field with new ids; verify purge removes them.
 - [x] 2.7 Verify the regenerated `artifacts/openapi` lists the endpoints and names each `issueCode` in their responses, and hand the contract to the `guild-war-offense` apps change.
+
+## 3. Review follow-ups
+
+- [x] 3.1 Let an update that keeps its zone and slot skip the zone check, drop the fallback token cap, lock a war's season once it has attacks (`guildWarHasAttacks`), make a war start idempotent with `currentWarId`, bound `attackedAt`, require a rank for characters only, and report a null buff variable as a load failure; verify unit and integration tests for each.
+- [x] 3.2 Replace `unitsLost` with `lostUnitIds` (lineup units, only with a result) and add `notes` (200 characters), regenerate `AddGuildWars`, and carry both in the staging transfer.
+- [x] 3.3 Add `seasonConfigId` to the `guild-war-season` calendar occurrences (season 28 and 29 run `guildWarSeasonC`), validate it against the served seasons, and verify a validation test.

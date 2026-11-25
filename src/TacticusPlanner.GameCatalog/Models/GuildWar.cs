@@ -107,7 +107,7 @@ public sealed record DatamineGuildWarZoneType(string? VisualId, bool? CanBeMoved
 
 public sealed record DatamineGuildWarMap(string? BoardId, int? SpawnPointsSet);
 
-public sealed record DatamineGuildWarAbility(Dictionary<string, List<int>>? Variables);
+public sealed record DatamineGuildWarAbility(Dictionary<string, List<int>?>? Variables);
 
 public sealed record DatamineGuildWarLevel(
     int? BattlefieldLevel,

@@ -149,7 +149,8 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         Assert.All(wars.SelectMany(war => war.Attacks), attack => Assert.Equal(profile.Id, attack.ProfileId));
         Assert.Equal(["Armoury", "Bastion"], wars[0].OrderedAttacks().Select(attack => attack.ZoneId));
         var attack = Assert.Single(wars[1].Attacks);
-        Assert.Equal((2, GuildWarRarity.Epic, GuildWarAttackResult.Won, (int?)1), (attack.Slot, attack.RarityCap, attack.Result, attack.UnitsLost));
+        Assert.Equal((2, GuildWarRarity.Epic, GuildWarAttackResult.Won, "Slow start."), (attack.Slot, attack.RarityCap, attack.Result, attack.Notes));
+        Assert.Equal(["ultraDreadnought"], attack.LostUnitIds);
         Assert.Equal(["ultraCalgar", "ultraDreadnought"], attack.Lineup.UnitIds());
         Assert.Equal((UnitRank.Diamond3, 50), (attack.Lineup.Characters[0].Rank, attack.Lineup.Characters[0].XpLevel));
         Assert.Equal("tauAunShi", Assert.Single(attack.Enemy!.Characters).UnitId);
@@ -446,7 +447,8 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             AbilityLevels = [40, 40],
         };
         withEnemy.Result = GuildWarAttackResult.Won;
-        withEnemy.UnitsLost = 1;
+        withEnemy.LostUnitIds = ["ultraDreadnought"];
+        withEnemy.Notes = "Slow start.";
         withEnemy.Enemy = new GuildWarEnemy
         {
             Characters = [new GuildWarEnemyUnit { UnitId = "tauAunShi", Rarity = GuildWarRarity.Epic, State = GuildWarEnemyUnitState.Killed }],

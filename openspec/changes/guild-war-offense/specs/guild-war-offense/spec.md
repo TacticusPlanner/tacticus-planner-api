@@ -11,7 +11,7 @@ A war SHALL belong to exactly one profile and SHALL be readable and writable onl
 - `id` (string): a stable UUID
 - `revision` (integer)
 - `seasonId` (string): a `guild-war` season id
-- `battlefieldLevel` (integer, 0 to 5)
+- `battlefieldLevel` (integer): one of the season's battlefield levels
 - `startedAt` (date-time)
 - `endedAt` (date-time or null): null for the current war
 - `tokensUsed` (integer): the number of attacks
@@ -24,8 +24,10 @@ An attack SHALL be returned as:
 - `attackedAt` (date-time): when it was logged
 - `zoneId` (string), `slot` (integer, 0 to 4)
 - `rarityCap` (string): the rarity cap of that zone and slot when it was logged
-- `characters` (array of 1 to 5 lineup units) and `mow` (lineup unit or null): each `{ unitId (string), progression (string), rank (string or null), xpLevel (integer), abilityLevels (integer array of 0 to 2) }`; `rank` is null for a MoW
-- `result` (`won`, `lost` or null) and `unitsLost` (integer 0 to 6, or null): null when not recorded
+- `characters` (array of 1 to 5 lineup units) and `mow` (lineup unit or null): each `{ unitId (string), progression (string), rank (string or null), xpLevel (integer), abilityLevels (integer array of 0 to 2) }`; `rank` is required for a character and null for a MoW
+- `result` (`won`, `lost` or null): null when not recorded
+- `lostUnitIds` (string array or null): the lineup units that died, recorded only with a result
+- `notes` (string or null): at most 200 characters, null when blank
 - `enemy` (object or null): `{ characters (array of 0 to 5 enemy units), mow (enemy unit or null), buffIds (string array), boardId (string or null) }`, each enemy unit `{ unitId (string), rarity (string or null), rank (string or null), state (`killed`, `damaged` or null) }`
 
 Ids and codes only: the server SHALL NOT send display names or icons. Attacks of one profile SHALL NOT be readable by another, and SHALL NOT be pooled or shared.
@@ -44,13 +46,25 @@ Ids and codes only: the server SHALL NOT send display names or icons. Attacks of
 
 ### Requirement: The current war is read, set and replaced through the war endpoints
 
-`GET /api/v1/guild-wars/current` SHALL return `{ war }`, with `war` null when the profile has no current war. `PUT /api/v1/guild-wars/current` with `{ seasonId, battlefieldLevel, revision }` SHALL create the current war when there is none (`revision` ignored, `startedAt` now) and otherwise SHALL update its season and battlefield level when `revision` matches, else respond `409` `guildWarRevisionStale` with the current war. `POST /api/v1/guild-wars` with `{ seasonId, battlefieldLevel }` SHALL end the current war (`endedAt` now), keeping it and its attacks, and create a new current war with no attacks. Each SHALL return the war as `GET` returns it. A `seasonId` that is not a served season, or a level that is not one of its levels, SHALL be refused with `400` `guildWarUnknownSeason` or `guildWarUnknownLevel`. Changing the battlefield level SHALL NOT change the `rarityCap` of attacks already logged.
+`GET /api/v1/guild-wars/current` SHALL return `{ war }`, with `war` null when the profile has no current war. `PUT /api/v1/guild-wars/current` with `{ seasonId, battlefieldLevel, revision }` SHALL create the current war when there is none (`revision` ignored, `startedAt` now) and otherwise SHALL update its season and battlefield level when `revision` matches, else respond `409` `guildWarRevisionStale` with the current war. Once the current war has attacks, a `PUT` that changes `seasonId` SHALL be refused with `409` `guildWarHasAttacks`; changing only the battlefield level stays allowed. `POST /api/v1/guild-wars` with `{ seasonId, battlefieldLevel, currentWarId }` SHALL end the current war (`endedAt` now), keeping it and its attacks, and create a new current war with no attacks. `currentWarId` names the war the client saw as current (null when it saw none); when the profile's current war is a different one (for example a retried start that already succeeded) the server SHALL respond `409` `guildWarRevisionStale` with the current war and end nothing. Each SHALL return the war as `GET` returns it. A `seasonId` that is not a served season, or a level that is not one of its levels, SHALL be refused with `400` `guildWarUnknownSeason` or `guildWarUnknownLevel`. Changing the battlefield level SHALL NOT change the `rarityCap` of attacks already logged.
 
 #### Scenario: No war yet
 
 - **GIVEN** a profile that never started a war
 - **WHEN** it reads the current war
 - **THEN** the API responds `200` with `war` null
+
+#### Scenario: The season is kept once attacks are logged
+
+- **GIVEN** a current war in `guildWarSeasonA` with one attack
+- **WHEN** the caller sets the season to `guildWarSeasonB`
+- **THEN** the API responds `409` `guildWarHasAttacks`, and the war is unchanged
+
+#### Scenario: A retried start ends nothing
+
+- **GIVEN** a start that ended war `w1` and created `w2`, whose response was lost
+- **WHEN** the client retries with `currentWarId` `w1`
+- **THEN** the API responds `409` `guildWarRevisionStale` with `w2`, and `w2` stays current
 
 #### Scenario: Starting a new war keeps the old one
 
@@ -70,7 +84,7 @@ Ids and codes only: the server SHALL NOT send display names or icons. Attacks of
 
 ### Requirement: Attacks are logged, edited and undone
 
-`POST /api/v1/guild-wars/current/attacks` SHALL add an attack to the current war, or respond `409` `guildWarNotStarted` when there is none. `PUT /api/v1/guild-wars/{warId}/attacks/{attackId}` SHALL replace an attack's fields when `revision` matches, else respond `409` `guildWarAttackRevisionStale` with the current war. `DELETE /api/v1/guild-wars/{warId}/attacks/{attackId}` SHALL remove the attack (Undo). An attack of an ended war MAY be edited or deleted. Each SHALL return the attack's war as `GET` returns it. Create and update SHALL send `zoneId`, `slot`, `characters`, `mow`, `result`, `unitsLost` and `enemy`; create MAY send `attackedAt` (default now), and update keeps it.
+`POST /api/v1/guild-wars/current/attacks` SHALL add an attack to the current war, or respond `409` `guildWarNotStarted` when there is none. `PUT /api/v1/guild-wars/{warId}/attacks/{attackId}` SHALL replace an attack's fields when `revision` matches, else respond `409` `guildWarAttackRevisionStale` with the current war. `DELETE /api/v1/guild-wars/{warId}/attacks/{attackId}` SHALL remove the attack (Undo). An attack of an ended war MAY be edited or deleted. Each SHALL return the attack's war as `GET` returns it. Create and update SHALL send `zoneId`, `slot`, `characters`, `mow`, `result`, `lostUnitIds`, `notes` and `enemy`; create MAY send `attackedAt` (default now; refused before 2020-01-01 or more than 5 minutes ahead of the server clock), and update keeps it.
 
 #### Scenario: Undo frees the units
 
@@ -90,12 +104,12 @@ The server SHALL check every created or updated attack and SHALL refuse it with 
 
 | Code | When |
 | --- | --- |
-| `guildWarUnknownZone` | `zoneId` is not a zone of the war's season, or `slot` is outside 0 to 4 |
-| `guildWarUnknownUnit` | a lineup or enemy `characters` id is not a catalog character, a `mow` id is not a catalog MoW, a unit is listed twice in the lineup or twice in the enemy lineup, or an enemy `buffIds` entry or `boardId` is not one of the season's buffs or maps |
+| `guildWarUnknownZone` | `zoneId` is not a zone of the war's season, or `slot` is outside 0 to 4; an update that keeps the attack's zone and slot skips this check |
+| `guildWarUnknownUnit` | a lineup or enemy `characters` id is not a catalog character, a `mow` id is not a catalog MoW, a unit is listed twice in the lineup or twice in the enemy lineup, or an enemy `buffIds` entry or `boardId` is not one of the season's buffs or maps (or, once the season is no longer served, not one the attack already stored) |
 | `guildWarUnitDeployed` | a lineup unit is in another attack of the same war |
-| `guildWarTokensSpent` | (create only) the war already has the season's `maxAttempts` attacks, or 10 when the season is no longer served |
+| `guildWarTokensSpent` | (create only) the war already has the season's `maxAttempts` attacks |
 
-On create and on an update that changes the zone or slot, the server SHALL store as `rarityCap` the `rarityCaps[slot]` of the zone's tier at the war's battlefield level; an update that keeps them SHALL keep the stored cap. Shape limits (1 to 5 characters, values in range, `unitsLost` only with a result) SHALL be validation errors. The server SHALL NOT compare a lineup unit's progression with the synced roster.
+On create and on an update that changes the zone or slot, the server SHALL store as `rarityCap` the `rarityCaps[slot]` of the zone's tier at the war's battlefield level; an update that keeps them SHALL keep the stored cap. Shape limits (1 to 5 characters, values in range, `lostUnitIds` distinct lineup units and only with a result, `notes` at most 200 characters) SHALL be validation errors. An attack whose season later leaves the catalog SHALL stay editable as long as its zone and slot are kept. The server SHALL NOT compare a lineup unit's progression with the synced roster.
 
 #### Scenario: The cap comes from the zone and slot
 

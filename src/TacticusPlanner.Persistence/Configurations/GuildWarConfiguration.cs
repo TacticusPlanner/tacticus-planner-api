@@ -68,7 +68,8 @@ public sealed class GuildWarAttackConfiguration : IEntityTypeConfiguration<Guild
         // Stored by name ("Epic"), like a team's rarity cap, so the columns read without the enums.
         builder.Property(entity => entity.RarityCap).HasConversion<string>().HasMaxLength(16).IsRequired();
         builder.Property(entity => entity.Result).HasConversion<string>().HasMaxLength(16);
-        builder.Property(entity => entity.UnitsLost);
+        builder.Property(entity => entity.LostUnitIds);
+        builder.Property(entity => entity.Notes).HasMaxLength(GuildWarValidation.MaxNotesLength);
         builder.Property(entity => entity.CreatedAt).IsRequired();
         builder.Property(entity => entity.UpdatedAt).IsRequired();
 

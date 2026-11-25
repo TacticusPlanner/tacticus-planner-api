@@ -16,6 +16,7 @@ public sealed class GuildWarsService(PlannerDbContext db, IGameCatalogProvider c
     public const string RevisionStale = "guildWarRevisionStale";
     public const string AttackRevisionStale = "guildWarAttackRevisionStale";
     public const string NotStarted = "guildWarNotStarted";
+    public const string HasAttacks = "guildWarHasAttacks";
 
     public GuildWarRuleFacts Facts => GuildWarCatalogFacts.For(catalog.Current);
 

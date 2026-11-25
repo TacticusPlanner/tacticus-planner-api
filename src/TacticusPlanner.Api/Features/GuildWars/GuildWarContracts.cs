@@ -38,8 +38,9 @@ public sealed record GuildWarAttackResponse(
     IReadOnlyList<GuildWarLineupUnitDto> Characters,
     GuildWarLineupUnitDto? Mow,
     GuildWarAttackResult? Result,
-    int? UnitsLost,
-    GuildWarEnemyDto? Enemy
+    IReadOnlyList<string>? LostUnitIds,
+    GuildWarEnemyDto? Enemy,
+    string? Notes
 )
 {
     public static GuildWarAttackResponse From(GuildWarAttack attack) => new(
@@ -52,8 +53,9 @@ public sealed record GuildWarAttackResponse(
         [.. attack.Lineup.Characters.Select(GuildWarLineupUnitDto.From)],
         attack.Lineup.Mow is { } mow ? GuildWarLineupUnitDto.From(mow) : null,
         attack.Result,
-        attack.UnitsLost,
-        attack.Enemy is { } enemy ? GuildWarEnemyDto.From(enemy) : null);
+        attack.LostUnitIds,
+        attack.Enemy is { } enemy ? GuildWarEnemyDto.From(enemy) : null,
+        attack.Notes);
 }
 
 /// <summary>A lineup unit as the player had it; <c>rank</c> is null for a MoW.</summary>
@@ -123,8 +125,9 @@ public sealed record PastGuildWarsResponse(IReadOnlyList<GuildWarResponse> Items
 /// <c>revision</c> is ignored).</summary>
 public sealed record SetCurrentGuildWarRequest(string SeasonId, int BattlefieldLevel, long Revision);
 
-/// <summary>Ends the current war (kept as history) and starts a new one.</summary>
-public sealed record StartGuildWarRequest(string SeasonId, int BattlefieldLevel);
+/// <summary>Ends the current war (kept as history) and starts a new one. <c>currentWarId</c> is the war the caller
+/// means to end, or null when it sees none, so a retried request does not end the war the first one started.</summary>
+public sealed record StartGuildWarRequest(string SeasonId, int BattlefieldLevel, Guid? CurrentWarId);
 
 public sealed class ListGuildWarsRequest
 {
@@ -145,8 +148,9 @@ public interface IGuildWarAttackFields
     IReadOnlyList<GuildWarLineupUnitDto> Characters { get; }
     GuildWarLineupUnitDto? Mow { get; }
     GuildWarAttackResult? Result { get; }
-    int? UnitsLost { get; }
+    IReadOnlyList<string>? LostUnitIds { get; }
     GuildWarEnemyDto? Enemy { get; }
+    string? Notes { get; }
 }
 
 internal static class GuildWarAttackFieldsExtensions
@@ -168,8 +172,9 @@ public sealed record CreateGuildWarAttackRequest(
     IReadOnlyList<GuildWarLineupUnitDto> Characters,
     GuildWarLineupUnitDto? Mow,
     GuildWarAttackResult? Result,
-    int? UnitsLost,
+    IReadOnlyList<string>? LostUnitIds,
     GuildWarEnemyDto? Enemy,
+    string? Notes,
     DateTimeOffset? AttackedAt
 ) : IGuildWarAttackFields;
 
@@ -180,8 +185,9 @@ public sealed record UpdateGuildWarAttackRequest(
     IReadOnlyList<GuildWarLineupUnitDto> Characters,
     GuildWarLineupUnitDto? Mow,
     GuildWarAttackResult? Result,
-    int? UnitsLost,
+    IReadOnlyList<string>? LostUnitIds,
     GuildWarEnemyDto? Enemy,
+    string? Notes,
     long Revision
 ) : IGuildWarAttackFields;
 
@@ -192,7 +198,8 @@ internal static class GuildWarFieldsValidation
     {
         validator.RuleFor(request => seasonId(request)).NotEmpty().MaximumLength(GuildWarValidation.MaxIdLength)
             .OverridePropertyName("seasonId");
-        validator.RuleFor(request => level(request)).InclusiveBetween(0, GuildWarValidation.MaxBattlefieldLevel)
+        // The upper bound is the season's own levels (guildWarUnknownLevel), so a new level needs no code change.
+        validator.RuleFor(request => level(request)).GreaterThanOrEqualTo(0)
             .OverridePropertyName("battlefieldLevel");
     }
 
@@ -204,17 +211,27 @@ internal static class GuildWarFieldsValidation
         validator.RuleFor(request => request.Characters).Cascade(CascadeMode.Stop).NotNull()
             .Must(units => units.Count is >= 1 and <= GuildWarValidation.MaxLineupCharacters)
             .WithMessage($"An attack has 1 to {GuildWarValidation.MaxLineupCharacters} characters.")
-            .Must(units => units.All(ValidLineupUnit))
-            .WithMessage("Each lineup unit needs an id, a known progression and rank, an XP level and at most two ability levels in range.");
-        validator.RuleFor(request => request.Mow).Must(mow => mow is null || ValidLineupUnit(mow))
-            .WithMessage("The lineup MoW needs an id, a known progression, an XP level and at most two ability levels in range.");
+            .Must(units => units.All(unit => ValidLineupUnit(unit) && unit.Rank is { } rank && Enum.IsDefined(rank)))
+            .WithMessage("Each lineup character needs an id, a known progression and rank, an XP level and at most two ability levels in range.");
+        validator.RuleFor(request => request.Mow).Must(mow => mow is null || (ValidLineupUnit(mow) && mow.Rank is null))
+            .WithMessage("The lineup MoW needs an id, a known progression, no rank, an XP level and at most two ability levels in range.");
         validator.RuleFor(request => request.Result).IsInEnum().When(request => request.Result is not null);
-        validator.RuleFor(request => request.UnitsLost)
-            .Must((request, lost) => lost is null || (request.Result is not null && lost is >= 0 and <= GuildWarValidation.MaxUnitsLost))
-            .WithMessage($"unitsLost is 0 to {GuildWarValidation.MaxUnitsLost} and only sent with a result.");
+        validator.RuleFor(request => request.LostUnitIds)
+            .Must((request, lost) => lost is null || (request.Result is not null && LostUnitsInLineup(request, lost)))
+            .WithMessage("lostUnitIds lists lineup units, each once, and is only sent with a result.");
+        validator.RuleFor(request => request.Notes).MaximumLength(GuildWarValidation.MaxNotesLength);
         validator.RuleFor(request => request.Enemy).Must(ValidEnemy!)
             .WithMessage($"Enemy details hold at most {GuildWarValidation.MaxEnemyCharacters} characters, one MoW and {GuildWarValidation.MaxBuffIds} buffs, with valid ids and values.")
             .When(request => request.Enemy is not null);
+    }
+
+    private static bool LostUnitsInLineup(IGuildWarAttackFields fields, IReadOnlyList<string> lost)
+    {
+        if (fields.Characters is null)
+            return false;
+        var lineup = fields.Characters.Select(unit => unit?.UnitId).Append(fields.Mow?.UnitId).ToHashSet(StringComparer.Ordinal);
+        return lost.All(id => id is not null && lineup.Contains(id))
+            && lost.Distinct(StringComparer.Ordinal).Count() == lost.Count;
     }
 
     private static bool ValidId(string? id) => !string.IsNullOrEmpty(id) && id.Length <= GuildWarValidation.MaxIdLength;
@@ -223,7 +240,6 @@ internal static class GuildWarFieldsValidation
         unit is not null
         && ValidId(unit.UnitId)
         && Enum.IsDefined(unit.Progression)
-        && (unit.Rank is null || Enum.IsDefined(unit.Rank.Value))
         && unit.XpLevel is >= 0 and <= GuildWarValidation.MaxXpLevel
         && unit.AbilityLevels is not null
         && unit.AbilityLevels.Count <= GuildWarValidation.MaxAbilityLevels
@@ -264,7 +280,15 @@ public sealed class StartGuildWarValidator : Validator<StartGuildWarRequest>
 
 public sealed class CreateGuildWarAttackValidator : Validator<CreateGuildWarAttackRequest>
 {
-    public CreateGuildWarAttackValidator() => GuildWarFieldsValidation.ApplyAttack(this);
+    public CreateGuildWarAttackValidator()
+    {
+        GuildWarFieldsValidation.ApplyAttack(this);
+        RuleFor(request => request.AttackedAt)
+            .Must(attackedAt => attackedAt is null
+                || (attackedAt >= GuildWarValidation.MinAttackedAt
+                    && attackedAt <= Resolve<TimeProvider>().GetUtcNow() + GuildWarValidation.MaxAttackedAtSkew))
+            .WithMessage("attackedAt is from 2020 on and not in the future.");
+    }
 }
 
 public sealed class UpdateGuildWarAttackValidator : Validator<UpdateGuildWarAttackRequest>

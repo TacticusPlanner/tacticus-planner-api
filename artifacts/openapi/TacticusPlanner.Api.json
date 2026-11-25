@@ -4911,6 +4911,7 @@
           "Guild-Wars"
         ],
         "summary": "Ends the current war, keeping it and its attacks, and starts a new one.",
+        "description": "currentWarId is the war the caller means to end, or null when it sees none. When another war is current (a retried request already started one), nothing changes.",
         "operationId": "TacticusPlannerApiFeaturesGuildWarsStartGuildWarEndpoint",
         "requestBody": {
           "content": {
@@ -4965,6 +4966,16 @@
           },
           "404": {
             "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "guildWarRevisionStale: currentWarId is not the current war; current is the war as it stands.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -5130,7 +5141,7 @@
           "Guild-Wars"
         ],
         "summary": "Sets the current war's season and battlefield level, creating the war when there is none.",
-        "description": "revision is ignored when the war is created. Changing the level keeps the rarityCap of attacks already logged.",
+        "description": "revision is ignored when the war is created. Changing the level keeps the rarityCap of attacks already logged. The season can change only while the war has no attacks, since logged attacks name the season's zones, buffs and maps.",
         "operationId": "TacticusPlannerApiFeaturesGuildWarsSetCurrentGuildWarEndpoint",
         "requestBody": {
           "content": {
@@ -5194,7 +5205,7 @@
             }
           },
           "409": {
-            "description": "guildWarRevisionStale; current is the war as it stands.",
+            "description": "guildWarRevisionStale, or guildWarHasAttacks for a season change once attacks are logged; current is the war as it stands.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9652,8 +9663,9 @@
           "characters",
           "mow",
           "result",
-          "unitsLost",
+          "lostUnitIds",
           "enemy",
+          "notes",
           "attackedAt"
         ],
         "type": "object",
@@ -9698,13 +9710,16 @@
               }
             ]
           },
-          "unitsLost": {
+          "lostUnitIds": {
             "const": null,
             "type": [
               "null",
-              "integer"
+              "array"
             ],
-            "format": "int32"
+            "items": {
+              "const": null,
+              "type": "string"
+            }
           },
           "enemy": {
             "const": null,
@@ -9716,6 +9731,15 @@
               {
                 "$ref": "#/components/schemas/GuildWarEnemyDto"
               }
+            ]
+          },
+          "notes": {
+            "const": null,
+            "maxLength": 200,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
             ]
           },
           "attackedAt": {
@@ -16918,8 +16942,9 @@
           "characters",
           "mow",
           "result",
-          "unitsLost",
-          "enemy"
+          "lostUnitIds",
+          "enemy",
+          "notes"
         ],
         "type": "object",
         "properties": {
@@ -16968,12 +16993,16 @@
               }
             ]
           },
-          "unitsLost": {
+          "lostUnitIds": {
+            "const": null,
             "type": [
               "null",
-              "integer"
+              "array"
             ],
-            "format": "int32"
+            "items": {
+              "const": null,
+              "type": "string"
+            }
           },
           "enemy": {
             "oneOf": [
@@ -16983,6 +17012,12 @@
               {
                 "$ref": "#/components/schemas/GuildWarEnemyDto"
               }
+            ]
+          },
+          "notes": {
+            "type": [
+              "null",
+              "string"
             ]
           }
         }
@@ -19775,7 +19810,8 @@
       "StartGuildWarRequest": {
         "required": [
           "seasonId",
-          "battlefieldLevel"
+          "battlefieldLevel",
+          "currentWarId"
         ],
         "type": "object",
         "properties": {
@@ -19785,6 +19821,13 @@
           "battlefieldLevel": {
             "type": "integer",
             "format": "int32"
+          },
+          "currentWarId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "uuid"
           }
         }
       },
@@ -20171,8 +20214,9 @@
           "characters",
           "mow",
           "result",
-          "unitsLost",
+          "lostUnitIds",
           "enemy",
+          "notes",
           "revision"
         ],
         "type": "object",
@@ -20217,13 +20261,16 @@
               }
             ]
           },
-          "unitsLost": {
+          "lostUnitIds": {
             "const": null,
             "type": [
               "null",
-              "integer"
+              "array"
             ],
-            "format": "int32"
+            "items": {
+              "const": null,
+              "type": "string"
+            }
           },
           "enemy": {
             "const": null,
@@ -20235,6 +20282,15 @@
               {
                 "$ref": "#/components/schemas/GuildWarEnemyDto"
               }
+            ]
+          },
+          "notes": {
+            "const": null,
+            "maxLength": 200,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
             ]
           },
           "revision": {

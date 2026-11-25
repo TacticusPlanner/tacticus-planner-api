@@ -232,7 +232,9 @@ public sealed record StagingTransferGuildWarAttack
 
     public GuildWarAttackResult? Result { get; init; }
 
-    public int? UnitsLost { get; init; }
+    public List<string>? LostUnitIds { get; init; }
 
     public GuildWarEnemy? Enemy { get; init; }
+
+    public string? Notes { get; init; }
 }

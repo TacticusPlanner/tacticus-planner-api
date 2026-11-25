@@ -54,6 +54,9 @@ internal static class GuildWarProblems
             });
     }
 
+    /// <summary>The note as stored: trimmed, null when blank.</summary>
+    public static string? NormalizedNotes(string? notes) => string.IsNullOrWhiteSpace(notes) ? null : notes.Trim();
+
     public static Task SendNotStartedAsync(IEndpoint endpoint, CancellationToken ct) =>
         endpoint.SendConflictAsync(
             GuildWarsService.NotStarted, "There is no current war. Start one first.", new CurrentGuildWarResponse(null), ct);
@@ -96,13 +99,16 @@ public sealed class SetCurrentGuildWarEndpoint : Endpoint<SetCurrentGuildWarRequ
         {
             summary.Summary = "Sets the current war's season and battlefield level, creating the war when there is none.";
             summary.Description = "revision is ignored when the war is created. Changing the level keeps the rarityCap "
-                + "of attacks already logged.";
+                + "of attacks already logged. The season can change only while the war has no attacks, since logged "
+                + "attacks name the season's zones, buffs and maps.";
             summary.Response<GuildWarResponse>(StatusCodes.Status200OK, "The current war, as GET returns it.");
             summary.Response(StatusCodes.Status400BadRequest,
                 "guildWarUnknownSeason, guildWarUnknownLevel, or an invalid shape.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "The caller has no profile.");
-            summary.Response(StatusCodes.Status409Conflict, "guildWarRevisionStale; current is the war as it stands.");
+            summary.Response(StatusCodes.Status409Conflict,
+                "guildWarRevisionStale, or guildWarHasAttacks for a season change once attacks are logged; current is "
+                + "the war as it stands.");
         });
     }
 
@@ -123,7 +129,7 @@ public sealed class SetCurrentGuildWarEndpoint : Endpoint<SetCurrentGuildWarRequ
 
         var db = Resolve<PlannerDbContext>();
         var now = GuildWarsService.Stored(Resolve<TimeProvider>().GetUtcNow());
-        var (stale, war) = await service.ExecuteLockedAsync(async transaction =>
+        var (conflict, war) = await service.ExecuteLockedAsync<(string?, GuildWar)>(async transaction =>
         {
             var current = await service.CurrentAsync(tracking: true, ct);
             if (current is null)
@@ -133,7 +139,11 @@ public sealed class SetCurrentGuildWarEndpoint : Endpoint<SetCurrentGuildWarRequ
             }
             else if (current.Revision != req.Revision)
             {
-                return (true, current);
+                return (GuildWarsService.RevisionStale, current);
+            }
+            else if (current.SeasonId != req.SeasonId && current.Attacks.Count > 0)
+            {
+                return (GuildWarsService.HasAttacks, current);
             }
             else
             {
@@ -143,14 +153,15 @@ public sealed class SetCurrentGuildWarEndpoint : Endpoint<SetCurrentGuildWarRequ
 
             await db.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
-            return (false, current);
+            return (null, current);
         }, ct);
 
-        if (stale)
+        if (conflict is not null)
         {
-            await this.SendConflictAsync(
-                GuildWarsService.RevisionStale, "The war changed on another device. Refresh and try again.",
-                GuildWarResponse.From(war), ct);
+            var message = conflict == GuildWarsService.HasAttacks
+                ? "The war has attacks, so its season cannot change. Start a new war instead."
+                : "The war changed on another device. Refresh and try again.";
+            await this.SendConflictAsync(conflict, message, GuildWarResponse.From(war), ct);
             return;
         }
 
@@ -166,11 +177,15 @@ public sealed class StartGuildWarEndpoint : Endpoint<StartGuildWarRequest, Guild
         Summary(summary =>
         {
             summary.Summary = "Ends the current war, keeping it and its attacks, and starts a new one.";
+            summary.Description = "currentWarId is the war the caller means to end, or null when it sees none. When "
+                + "another war is current (a retried request already started one), nothing changes.";
             summary.Response<GuildWarResponse>(StatusCodes.Status200OK, "The new current war, with no attacks.");
             summary.Response(StatusCodes.Status400BadRequest,
                 "guildWarUnknownSeason, guildWarUnknownLevel, or an invalid shape.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "The caller has no profile.");
+            summary.Response(StatusCodes.Status409Conflict,
+                "guildWarRevisionStale: currentWarId is not the current war; current is the war as it stands.");
         });
     }
 
@@ -191,11 +206,13 @@ public sealed class StartGuildWarEndpoint : Endpoint<StartGuildWarRequest, Guild
 
         var db = Resolve<PlannerDbContext>();
         var now = GuildWarsService.Stored(Resolve<TimeProvider>().GetUtcNow());
-        var war = await service.ExecuteLockedAsync(async transaction =>
+        var (stale, war) = await service.ExecuteLockedAsync(async transaction =>
         {
             // Two saves: the ended war leaves the one-current-war index before the new one enters it.
             if (await service.CurrentAsync(tracking: true, ct) is { } ended)
             {
+                if (ended.Id.Value != req.CurrentWarId)
+                    return (true, ended);
                 ended.EndedAt = now;
                 await db.SaveChangesAsync(ct);
             }
@@ -204,8 +221,16 @@ public sealed class StartGuildWarEndpoint : Endpoint<StartGuildWarRequest, Guild
             db.GuildWars.Add(started);
             await db.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
-            return started;
+            return (false, started);
         }, ct);
+
+        if (stale)
+        {
+            await this.SendConflictAsync(
+                GuildWarsService.RevisionStale, "Another war is current now. Refresh and try again.",
+                GuildWarResponse.From(war), ct);
+            return;
+        }
 
         await Send.OkAsync(GuildWarResponse.From(war), ct);
     }
@@ -330,7 +355,8 @@ public sealed class CreateGuildWarAttackEndpoint : Endpoint<CreateGuildWarAttack
                 RarityCap = GuildWarRules.RarityCap(facts, current, draft.ZoneId, draft.Slot)!.Value,
                 Lineup = draft.Lineup,
                 Result = req.Result,
-                UnitsLost = req.UnitsLost,
+                LostUnitIds = req.LostUnitIds?.ToList(),
+                Notes = GuildWarProblems.NormalizedNotes(req.Notes),
                 Enemy = draft.Enemy,
             });
             await db.SaveChangesAsync(ct);
@@ -398,7 +424,7 @@ public sealed class UpdateGuildWarAttackEndpoint : Endpoint<UpdateGuildWarAttack
                     return (UpdateOutcome.NotFound, null, null);
                 if (attack.Revision != req.Revision)
                     return (UpdateOutcome.Stale, current, null);
-                if (GuildWarRules.Evaluate(draft, current, attackId, facts) is { } code)
+                if (GuildWarRules.Evaluate(draft, current, attack, facts) is { } code)
                     return (UpdateOutcome.RulesBroken, current, code);
 
                 if (attack.ZoneId != draft.ZoneId || attack.Slot != draft.Slot)
@@ -407,7 +433,8 @@ public sealed class UpdateGuildWarAttackEndpoint : Endpoint<UpdateGuildWarAttack
                 attack.Slot = draft.Slot;
                 attack.Lineup = draft.Lineup;
                 attack.Result = req.Result;
-                attack.UnitsLost = req.UnitsLost;
+                attack.LostUnitIds = req.LostUnitIds?.ToList();
+                attack.Notes = GuildWarProblems.NormalizedNotes(req.Notes);
                 attack.Enemy = draft.Enemy;
                 await db.SaveChangesAsync(ct);
                 await transaction.CommitAsync(ct);

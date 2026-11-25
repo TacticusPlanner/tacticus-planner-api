@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -49,7 +50,8 @@ namespace TacticusPlanner.Persistence.Migrations
                     slot = table.Column<int>(type: "integer", nullable: false),
                     rarity_cap = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
                     result = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: true),
-                    units_lost = table.Column<int>(type: "integer", nullable: true),
+                    lost_unit_ids = table.Column<List<string>>(type: "text[]", nullable: true),
+                    notes = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     enemy = table.Column<string>(type: "jsonb", nullable: true),

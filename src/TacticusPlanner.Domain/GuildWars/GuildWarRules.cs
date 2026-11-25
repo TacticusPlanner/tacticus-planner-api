@@ -13,9 +13,7 @@ public static class GuildWarValidation
 
     public const int MaxBuffIds = 30;
 
-    public const int MaxUnitsLost = 6;
-
-    public const int MaxBattlefieldLevel = 5;
+    public const int MaxNotesLength = 200;
 
     public const int MaxXpLevel = 100;
 
@@ -23,8 +21,11 @@ public static class GuildWarValidation
 
     public const int MaxAbilityLevels = 2;
 
-    /// <summary>Attacks per war when the war's season is no longer served (design D7).</summary>
-    public const int FallbackMaxAttempts = 10;
+    /// <summary>How far past now a sent <c>attackedAt</c> may be, for clock skew between devices.</summary>
+    public static readonly TimeSpan MaxAttackedAtSkew = TimeSpan.FromMinutes(5);
+
+    /// <summary>The earliest <c>attackedAt</c> accepted: before the game had Guild Wars.</summary>
+    public static readonly DateTimeOffset MinAttackedAt = new(2020, 1, 1, 0, 0, 0, TimeSpan.Zero);
 }
 
 /// <summary>A season's facts the rules read: its zones and their tier per battlefield level, its tiers' slot caps, buffs
@@ -82,37 +83,48 @@ public static class GuildWarRules
     /// The first rule <paramref name="draft"/> breaks in <paramref name="war"/>, or null. <paramref name="replacing"/>
     /// is the attack being updated (its own units and token do not count against it), null on create.
     /// </summary>
+    /// <remarks>
+    /// An update that keeps the zone and slot keeps the stored cap, so it skips the zone check: an attack stays
+    /// editable after its war's season leaves the catalog (design D5). In such a season the enemy buffs and board can
+    /// only keep the stored ones, since there is nothing to check new ones against. A create needs the cap, so a war
+    /// whose season is not served takes no new attacks (<c>guildWarUnknownZone</c>).
+    /// </remarks>
     public static GuildWarAttackRuleCode? Evaluate(
-        GuildWarAttackDraft draft, GuildWar war, GuildWarAttackId? replacing, GuildWarRuleFacts facts)
+        GuildWarAttackDraft draft, GuildWar war, GuildWarAttack? replacing, GuildWarRuleFacts facts)
     {
-        facts.Seasons.TryGetValue(war.SeasonId, out var season);
-        if (RarityCap(facts, war, draft.ZoneId, draft.Slot) is null)
+        var season = facts.Seasons.GetValueOrDefault(war.SeasonId);
+        var keepsTarget = replacing is not null && replacing.ZoneId == draft.ZoneId && replacing.Slot == draft.Slot;
+        if (!keepsTarget && RarityCap(facts, war, draft.ZoneId, draft.Slot) is null)
             return GuildWarAttackRuleCode.UnknownZone;
-        if (!UnitsKnown(draft, facts, season!))
+        if (!UnitsKnown(draft, facts, season, replacing?.Enemy))
             return GuildWarAttackRuleCode.UnknownUnit;
 
-        var others = war.Attacks.Where(attack => replacing is null || attack.Id != replacing.Value).ToList();
+        var others = war.Attacks.Where(attack => replacing is null || attack.Id != replacing.Id).ToList();
         var deployed = others.SelectMany(attack => attack.Lineup.UnitIds()).ToHashSet(StringComparer.Ordinal);
         if (draft.Lineup.UnitIds().Any(deployed.Contains))
             return GuildWarAttackRuleCode.UnitDeployed;
-        if (replacing is null && others.Count >= MaxAttempts(facts, war))
+        // A create passed the zone check, so its season is served.
+        if (replacing is null && others.Count >= season!.MaxAttempts)
             return GuildWarAttackRuleCode.TokensSpent;
         return null;
     }
 
-    public static int MaxAttempts(GuildWarRuleFacts facts, GuildWar war) =>
-        facts.Seasons.TryGetValue(war.SeasonId, out var season) ? season.MaxAttempts : GuildWarValidation.FallbackMaxAttempts;
-
-    private static bool UnitsKnown(GuildWarAttackDraft draft, GuildWarRuleFacts facts, GuildWarSeasonFacts season)
+    private static bool UnitsKnown(
+        GuildWarAttackDraft draft, GuildWarRuleFacts facts, GuildWarSeasonFacts? season, GuildWarEnemy? stored)
     {
         if (!LineupKnown(draft.Lineup.Characters.Select(unit => unit.UnitId), draft.Lineup.Mow?.UnitId, facts))
             return false;
         if (draft.Enemy is not { } enemy)
             return true;
+        Func<string, bool> buffKnown = season is not null
+            ? season.BuffIds.Contains
+            : id => stored?.BuffIds.Contains(id, StringComparer.Ordinal) == true;
+        var boardKnown = enemy.BoardId is null
+            || (season is not null ? season.BoardIds.Contains(enemy.BoardId) : enemy.BoardId == stored?.BoardId);
         return LineupKnown(enemy.Characters.Select(unit => unit.UnitId), enemy.Mow?.UnitId, facts)
-            && enemy.BuffIds.All(season.BuffIds.Contains)
+            && enemy.BuffIds.All(buffKnown)
             && enemy.BuffIds.Distinct(StringComparer.Ordinal).Count() == enemy.BuffIds.Count
-            && (enemy.BoardId is null || season.BoardIds.Contains(enemy.BoardId));
+            && boardKnown;
     }
 
     private static bool LineupKnown(IEnumerable<string> characterIds, string? mowId, GuildWarRuleFacts facts)
