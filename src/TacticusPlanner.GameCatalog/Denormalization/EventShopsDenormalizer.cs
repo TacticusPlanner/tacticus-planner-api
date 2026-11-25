@@ -299,7 +299,7 @@ internal static partial class GameCatalogDenormalizer
             raw.DefinitionId,
             EventShopCurrency(raw.EventKey),
             raw.Weeks[0].Occurrence?.StartUtc,
-            raw.Weeks.Sum(week => week.Occurrence is null ? 7 : (int)(week.Occurrence.EndUtc - week.Occurrence.StartUtc).TotalDays),
+            7 * raw.Weeks.Count,
             milestones,
             weeks);
     }
