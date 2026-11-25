@@ -30,6 +30,9 @@ public sealed partial class GuildRaidSeasonCaptureService(
 
     private const int MaxNotFoundAttempts = 3;
 
+    /// <summary>The oldest season the Tacticus API has hits of; older ones answer with no entries.</summary>
+    internal int FirstSeason { get; set; } = 70;
+
     /// <summary>Pause before each season request.</summary>
     internal TimeSpan RequestPause { get; set; } = TimeSpan.FromSeconds(1);
 
@@ -72,12 +75,12 @@ public sealed partial class GuildRaidSeasonCaptureService(
             .Where(entity => entity.GuildId == guildId)
             .Select(entity => new
             {
-                entity.SeasonsListedFor,
+                entity.SeasonsPlannedFor,
                 Active = entity.ActiveSeason == null ? (int?)null : entity.ActiveSeason.SeasonNumber,
             })
             .SingleOrDefaultAsync(ct);
         return state?.Active is { } active
-            && (state.SeasonsListedFor != active || await PendingBelow(guildId, active).AnyAsync(ct));
+            && (state.SeasonsPlannedFor != active || await PendingBelow(guildId, active).AnyAsync(ct));
     }
 
     private IQueryable<GuildRaidSeasonCapture> PendingBelow(GuildId guildId, int activeSeason) =>
@@ -113,7 +116,7 @@ public sealed partial class GuildRaidSeasonCaptureService(
     /// <returns>Whether nothing is left to capture.</returns>
     private async Task<bool> CaptureAsync(Run run, CancellationToken ct)
     {
-        // Raid responses don't name their guild, so the key is checked on every run, not only for the season list.
+        // Raid responses don't name their guild, so the key is checked on every run, not only when seasons are planned.
         var upstream = (await tacticusApi.GetGuildAsync(run.Token, ct))?.Guild;
         if (upstream is null
             || TacticusGuildIdHash.FromNullable(hashService.ComputeHash(upstream.GuildId.ToString())) is not { } hash
@@ -127,7 +130,7 @@ public sealed partial class GuildRaidSeasonCaptureService(
             .Where(entity => entity.GuildId == run.GuildId)
             .Select(entity => new
             {
-                entity.SeasonsListedFor,
+                entity.SeasonsPlannedFor,
                 Active = entity.ActiveSeason == null ? (int?)null : entity.ActiveSeason.SeasonNumber,
             })
             .SingleAsync(ct);
@@ -136,14 +139,9 @@ public sealed partial class GuildRaidSeasonCaptureService(
             return true;
         }
 
-        if (state.SeasonsListedFor != active)
+        if (state.SeasonsPlannedFor != active)
         {
-            if (upstream.GuildRaidSeasons is not { Count: > 0 } listed)
-            {
-                throw new InvalidOperationException("The Tacticus API listed no Guild Raid seasons.");
-            }
-
-            await ApplySeasonListAsync(run.GuildId, active, listed, ct);
+            await PlanSeasonsAsync(run.GuildId, active, ct);
         }
 
         var pending = await PendingBelow(run.GuildId, active)
@@ -165,45 +163,35 @@ public sealed partial class GuildRaidSeasonCaptureService(
         return complete;
     }
 
-    private Task ApplySeasonListAsync(GuildId guildId, int active, List<int> listed, CancellationToken ct) =>
+    /// <summary>
+    /// Every season from the first one on, not the list in the guild response: that names only the latest seasons,
+    /// while far older ones are still served.
+    /// </summary>
+    private Task PlanSeasonsAsync(GuildId guildId, int active, CancellationToken ct) =>
         InTransactionAsync(async () =>
         {
-            var captures = await db.GuildRaidSeasonCaptures
+            var known = await db.GuildRaidSeasonCaptures
                 .Where(capture => capture.GuildId == guildId && capture.SeasonNumber < active)
-                .ToDictionaryAsync(capture => capture.SeasonNumber, ct);
-            var stored = await db.GuildRaidSeasons.AsNoTracking()
+                .Select(capture => capture.SeasonNumber)
+                .ToListAsync(ct);
+            var stored = await db.GuildRaidSeasons
                 .Where(season => season.GuildId == guildId && season.SeasonNumber < active)
                 .Select(season => season.SeasonNumber)
                 .ToListAsync(ct);
-            var past = listed.Where(season => season > 0 && season < active).ToHashSet();
-
-            foreach (var season in past.Union(stored).Where(season => !captures.ContainsKey(season)))
+            foreach (var season in Enumerable.Range(FirstSeason, Math.Max(0, active - FirstSeason)).Union(stored).Except(known))
             {
                 db.GuildRaidSeasonCaptures.Add(new GuildRaidSeasonCapture
                 {
                     GuildId = guildId,
                     SeasonNumber = season,
-                    Status = past.Contains(season)
-                        ? GuildRaidSeasonCaptureStatus.Pending
-                        : GuildRaidSeasonCaptureStatus.Unavailable,
+                    Status = GuildRaidSeasonCaptureStatus.Pending,
                 });
-            }
-
-            foreach (var capture in captures.Values)
-            {
-                capture.Status = (capture.Status, past.Contains(capture.SeasonNumber)) switch
-                {
-                    (GuildRaidSeasonCaptureStatus.Pending, false) => GuildRaidSeasonCaptureStatus.Unavailable,
-                    (GuildRaidSeasonCaptureStatus.Unavailable, true) when capture.NotFoundAttempts < MaxNotFoundAttempts =>
-                        GuildRaidSeasonCaptureStatus.Pending,
-                    var (status, _) => status,
-                };
             }
 
             await db.SaveChangesAsync(ct);
             await db.GuildRaidSyncStates
                 .Where(state => state.GuildId == guildId)
-                .ExecuteUpdateAsync(setters => setters.SetProperty(state => state.SeasonsListedFor, active), ct);
+                .ExecuteUpdateAsync(setters => setters.SetProperty(state => state.SeasonsPlannedFor, active), ct);
         }, ct);
 
     /// <returns>Whether the season needs no further attempt.</returns>

@@ -1,10 +1,10 @@
 ## Why
 
-Tacticus lists only a limited window of past Guild Raid seasons (V1 uses 11), and V2 keeps only the hits seen while someone refreshed the live season. Every two weeks another season is lost. Guild raid performance needs that history, so capture ships first, ahead of any page or access rule that shows it.
+V2 keeps only the Guild Raid hits seen while someone refreshed the live season. Tacticus lists only the latest seasons, but a probe with a real guild key found it still serving every season since 70 (March 2025), with no promise to keep them. Guild raid performance needs that history, so capture ships first, ahead of any page or access rule that shows it.
 
 ## What Changes
 
-- After a successful raid refresh, the API captures ended seasons in the background: one request per season, resumable, never delaying the refresh.
+- After a successful raid refresh, the API captures ended seasons, back to season 70, in the background: one request per season, resumable, never delaying the refresh.
 - Past hits are stored from their own data. A hit that does not match today's season config no longer blocks its season, because the game edits the five season configs in place.
 - A season becomes final only when fetched after a newer season started.
 - Each stored hit also keeps the last four characters of the player's Tacticus id. The full id stays unstored.

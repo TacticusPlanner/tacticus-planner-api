@@ -12,7 +12,7 @@
 ## 3. Capture
 
 - [x] 3.1 Implement the due check, lease claim, renewal and release; verify Postgres tests with two concurrent claims, an expired lease, a taken-over lease, the one-hour gap, and a live refresh saving during a lease
-- [x] 3.2 Implement the guild check and season list; verify tests for a different guild, a season leaving the list, a season listed again, unchanged members and roles, and no `/guild` call when nothing is due
+- [x] 3.2 Implement the guild check and season planning; verify tests for a different guild, seasons Tacticus does not list, a stored older season, a new active season, unchanged members and roles, and no `/guild` call when nothing is due
 - [x] 3.3 Implement per-season storing; verify tests for an unknown config, a changed position, a partly live season, a differing config hash, kept missing hits, an empty response with and without stored hits, and the wrong season number
 - [x] 3.4 Implement failure handling; verify tests for 400, 401, 403, 404 three times, timeout, 5xx, and an unreadable season that newer ones are captured past, each asserting statuses and the number of upstream calls
 - [x] 3.5 Add the queue and background worker and enqueue after a persisted active season; verify tests that refresh does not wait, a capture exception leaves refresh at 200 and the worker running, and cooldown, failed, no-active and `GET` paths enqueue nothing
@@ -26,6 +26,6 @@
 
 ## 5. Real data and gates
 
-- [ ] 5.1 With the user's agreement and a real guild key, run a local backfill and record in the PR, without ids or names: seasons captured, skipped entries, seasons off today's config, whether hits stored live match their past-season copies, and database size. Compare tokens, bombs, total damage and loop token counts of one season with V1, and note whether upstream `tier` identifies loops
+- [ ] 5.1 With the user's agreement and a real guild key, run a local backfill and record in the PR, without ids or names: seasons captured, skipped entries, seasons off today's config, whether hits stored live match their past-season copies, and database size. Compare tokens, bombs, total damage and loop token counts of one season with V1, and note whether upstream `tier` identifies loops. If the key owner is an Officer, use a local, uncommitted build that also accepts Officer in `GuildSyncService`, and say so in the PR; the branch keeps Leader/Co-Leader
 - [x] 5.2 Run `dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore`, `dotnet build TacticusPlanner.slnx -c Release --no-restore` and `dotnet test TacticusPlanner.slnx -c Release --no-build`; verify all pass
 - [ ] 5.3 Run `docker build -f src/TacticusPlanner.Api/Dockerfile -t tacticus-planner-api:local .` and `coderabbit review --agent --base main`; verify the build passes and valid findings are fixed

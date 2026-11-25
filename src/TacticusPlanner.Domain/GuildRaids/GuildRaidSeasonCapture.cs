@@ -17,7 +17,7 @@ public class GuildRaidSeasonCapture : BaseEntity
 
     public GuildRaidSeasonCaptureStatus Status { get; set; }
 
-    /// <summary>How often upstream answered 404 for this season although it listed it.</summary>
+    /// <summary>How often upstream answered 404 for this season.</summary>
     public int NotFoundAttempts { get; set; }
 
     /// <summary>Malformed entries left out of the last response.</summary>

@@ -18,7 +18,7 @@ namespace TacticusPlanner.Persistence.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
-                name: "seasons_listed_for",
+                name: "seasons_planned_for",
                 table: "guild_raid_sync_states",
                 type: "integer",
                 nullable: true);
@@ -75,7 +75,7 @@ namespace TacticusPlanner.Persistence.Migrations
                 table: "guild_raid_sync_states");
 
             migrationBuilder.DropColumn(
-                name: "seasons_listed_for",
+                name: "seasons_planned_for",
                 table: "guild_raid_sync_states");
 
             migrationBuilder.DropColumn(

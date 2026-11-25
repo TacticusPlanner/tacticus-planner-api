@@ -20,13 +20,13 @@ public sealed class GuildRaidSeasonCaptureWorkerTests
         await using var factory = new PlannerApiFactory { RunSeasonCaptureWorker = true };
         var gate = new TaskCompletionSource<GuildRaidResponse>(TaskCreationOptions.RunContinuationsAsynchronously);
         var (client, token, tag) = await RegisterAsync(factory);
-        factory.TacticusApi.ConfigureGuildRaidSeason(token, 113, () => gate.Task);
+        factory.TacticusApi.ConfigureGuildRaidSeason(token, 70, () => gate.Task);
 
         (await client.PostAsync("/api/v1/guild/raid-status/refresh", null, Ct)).EnsureSuccessStatusCode();
         await WaitAsync(() => Task.FromResult(factory.TacticusApi.GuildRaidSeasonCalls(token).Count == 1));
         Assert.False(await IsFinalAsync(factory, tag));
 
-        gate.SetResult(new GuildRaidResponse { Season = 113, SeasonConfigId = "guild_boss_season_config_1" });
+        gate.SetResult(new GuildRaidResponse { Season = 70, SeasonConfigId = "guild_boss_season_config_1" });
         await WaitAsync(() => IsFinalAsync(factory, tag));
     }
 
@@ -36,7 +36,7 @@ public sealed class GuildRaidSeasonCaptureWorkerTests
         await using var factory = new PlannerApiFactory { RunSeasonCaptureWorker = true };
         var (client, token, tag) = await RegisterAsync(factory);
         factory.TacticusApi.ConfigureGuildRaidSeason(
-            token, new GuildRaidResponse { Season = 113, SeasonConfigId = "guild_boss_season_config_1" });
+            token, new GuildRaidResponse { Season = 70, SeasonConfigId = "guild_boss_season_config_1" });
 
         const string refreshPath = "/api/v1/guild/raid-status/refresh";
         (await client.PostAsync(refreshPath, null, Ct)).EnsureSuccessStatusCode();
@@ -68,12 +68,11 @@ public sealed class GuildRaidSeasonCaptureWorkerTests
         var tag = $"W{Guid.NewGuid():N}"[..10];
         var upstream = FakeTacticusApi.BuildGuildResponse(
             Guid.NewGuid(), tag, "Worker Guild", 10, (tacticusUserId, UpstreamGuildRole.LEADER, 50, null));
-        upstream.Guild.GuildRaidSeasons = [113, 114];
         factory.TacticusApi.ConfigureGuildResponse(token, upstream);
         (await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), Ct)).EnsureSuccessStatusCode();
         factory.TacticusApi.ConfigureGuildRaidResponse(token, new GuildRaidResponse
         {
-            Season = 114,
+            Season = 71,
             SeasonConfigId = factory.Services.GetRequiredService<IGameCatalogProvider>().Current.RaidBossesView.Seasons.Keys.Min()!,
         });
         return (client, token, tag);

@@ -6,21 +6,27 @@ Keeps a guild's ended Guild Raid seasons before Tacticus stops serving them, and
 
 ### Requirement: A successful raid refresh starts capture of ended seasons
 
-After `POST /api/v1/guild/raid-status/refresh` persists an active season, the system SHALL capture in the background every season that Tacticus listed for the guild, is lower than the active season number, and is neither `final` nor `unavailable`. The refresh response SHALL NOT wait for capture or change because of its outcome. No capture SHALL start when the observation has no active season. A refresh served from the cooldown, a failed refresh, and `GET` requests SHALL NOT start capture.
+After `POST /api/v1/guild/raid-status/refresh` persists an active season, the system SHALL capture in the background every season from 70 up to the one before the active season, and every older season with stored hits, that is neither `final` nor `unavailable`. The season list in the guild response SHALL NOT decide what is captured, because Tacticus serves far more seasons than it lists. The refresh response SHALL NOT wait for capture or change because of its outcome. No capture SHALL start when the observation has no active season. A refresh served from the cooldown, a failed refresh, and `GET` requests SHALL NOT start capture.
 
-A new season list SHALL be applied once per active season number. Capture SHALL make no upstream request when the list was applied for the active season and no season is pending.
+Seasons SHALL be planned once per active season number. Capture SHALL make no upstream request when they were planned for the active season and no season is pending.
 
-#### Scenario: First refresh backfills the listed seasons
+#### Scenario: First refresh backfills every season
 
-- **GIVEN** active season 114 and a Tacticus list of 104 to 114, with none captured
+- **GIVEN** active season 114, a Tacticus list of 113 and 114, and none captured
 - **WHEN** a refresh succeeds
-- **THEN** the refresh responds without waiting, and seasons 104 to 113 are requested one at a time in ascending order
+- **THEN** the refresh responds without waiting, and seasons 70 to 113 are requested one at a time in ascending order
 
 #### Scenario: Nothing is due
 
-- **GIVEN** every listed past season is final and the list was applied for the active season
+- **GIVEN** every past season is final and seasons were planned for the active season
 - **WHEN** another refresh succeeds
 - **THEN** capture makes no upstream request
+
+#### Scenario: A new season starts
+
+- **GIVEN** seasons 70 to 113 are final
+- **WHEN** a refresh first observes active season 115
+- **THEN** only season 114 is requested
 
 #### Scenario: Gap between seasons
 
@@ -111,9 +117,9 @@ Capture SHALL NOT change the guild's live observation, its active season, or its
 
 ### Requirement: Capture failures are retried and lost seasons are reported
 
-A rejected key (400, 401 or 403), a timeout, a server error, or an unreadable or empty season list SHALL end the run and leave its seasons pending. A season whose successful response cannot be read SHALL store nothing and stay pending while the run continues with the next. A 404 for a listed season SHALL leave that season pending and continue with the next; its third 404 SHALL make it `unavailable` permanently.
+A rejected key (400, 401 or 403), a timeout or a server error SHALL end the run and leave its seasons pending. A season whose successful response cannot be read SHALL store nothing and stay pending while the run continues with the next. A 404 SHALL leave its season pending and continue with the next; its third 404 SHALL make it `unavailable` permanently.
 
-A pending season that a newly applied list does not contain SHALL become `unavailable`, and SHALL return to pending if a later list contains it. Stored hits SHALL be kept in every case. Credentials and full Tacticus user ids SHALL NOT be logged.
+A season missing from the Tacticus list SHALL NOT become `unavailable` for that reason. Stored hits SHALL be kept in every case. Credentials and full Tacticus user ids SHALL NOT be logged.
 
 #### Scenario: Rejected key during backfill
 
@@ -126,10 +132,10 @@ A pending season that a newly applied list does not contain SHALL become `unavai
 - **WHEN** the response for 112 holds an unknown rarity
 - **THEN** 112 stays pending without hits from it, and 113 is captured in the same run
 
-#### Scenario: Season leaves the window
+#### Scenario: Season is gone
 
 - **GIVEN** season 103 is pending with 400 hits seen live
-- **WHEN** a newly applied season list does not contain 103
+- **WHEN** Tacticus answers 404 for it a third time
 - **THEN** season 103 becomes unavailable and keeps its 400 hits
 
 ### Requirement: Stored hits keep a partial player id
@@ -164,7 +170,7 @@ Captured hits SHALL be kept until the guild's registration is deleted, which SHA
   - `observedAt`: UTC timestamp of the last stored response, or null;
   - `finalizedAt`: UTC timestamp, or null unless final.
 
-The persisted active season SHALL be `live`. Every other season known from an applied list or stored data SHALL appear with its capture status, and as `pending` when none is recorded. The response SHALL contain no hit, player id, name or credential. Season labels are derived by the client.
+The persisted active season SHALL be `live`. Every other season with a capture record or stored data SHALL appear with its capture status, and as `pending` when none is recorded. The response SHALL contain no hit, player id, name or credential. Season labels are derived by the client.
 
 An unprovisioned profile SHALL receive 404. A caller without a linked registered guild SHALL receive 409 with `issueCode` `guildRaidNotReady`. A linked guild with no seasons SHALL receive 200 with an empty array.
 

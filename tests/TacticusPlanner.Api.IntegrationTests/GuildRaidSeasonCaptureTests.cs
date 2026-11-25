@@ -27,9 +27,9 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
     [Fact]
-    public async Task BackfillCapturesEveryListedPastSeasonInOrderAndLeavesLiveStatusAlone()
+    public async Task BackfillCapturesEveryPastSeasonInOrderAndLeavesLiveStatusAlone()
     {
-        var guild = await ActiveGuildAsync([.. Enumerable.Range(104, 11)]);
+        var guild = await ActiveGuildAsync(104);
         foreach (var season in Enumerable.Range(104, 10))
         {
             factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(season, Entry(), Entry()));
@@ -46,8 +46,12 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
         Assert.Equal(20, await db.GuildRaidAttacks.CountAsync(
             attack => attack.Season!.GuildId == guild.Id && attack.Season.SeasonNumber < Active, Ct));
         var state = await StateAsync(db, guild);
-        Assert.Equal(Active, state.SeasonsListedFor);
+        Assert.Equal(Active, state.SeasonsPlannedFor);
         Assert.Null(state.CaptureNotBefore);
+
+        // The production default, which the runs of this class narrow.
+        await using var scope = factory.Services.CreateAsyncScope();
+        Assert.Equal(70, scope.ServiceProvider.GetRequiredService<GuildRaidSeasonCaptureService>().FirstSeason);
 
         // Nothing is due any more, so neither the guild nor a season is asked for again.
         var guildCalls = factory.TacticusApi.GuildCallCount(guild.Token);
@@ -59,7 +63,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task InterruptedBackfillResumesWithTheRemainingSeasonsOnceItsLeaseExpires()
     {
-        var guild = await ActiveGuildAsync([.. Enumerable.Range(104, 11)]);
+        var guild = await ActiveGuildAsync(104);
         using var host = new CancellationTokenSource();
         foreach (var season in Enumerable.Range(104, 10))
         {
@@ -86,7 +90,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task ConcurrentRunsClaimTheGuildOnce()
     {
-        var guild = await ActiveGuildAsync([113, Active]);
+        var guild = await ActiveGuildAsync(113);
         var gate = new TaskCompletionSource<GuildRaidResponse>(TaskCreationOptions.RunContinuationsAsynchronously);
         factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, 113, () => gate.Task);
         var guildCalls = factory.TacticusApi.GuildCallCount(guild.Token);
@@ -103,7 +107,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task RunThatLostItsLeaseStopsAndKeepsTheNewOne()
     {
-        var guild = await ActiveGuildAsync([112, 113, Active]);
+        var guild = await ActiveGuildAsync(112);
         var other = new DateTimeOffset(2099, 1, 1, 0, 0, 0, TimeSpan.Zero);
         factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, 112, async () =>
         {
@@ -121,7 +125,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task LiveRefreshDuringARunKeepsItsLease()
     {
-        var guild = await ActiveGuildAsync([112, 113, Active]);
+        var guild = await ActiveGuildAsync(112);
         factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, 112, async () =>
         {
             await ExpireRefreshCooldownAsync(guild);
@@ -138,24 +142,24 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task KeyOfAnotherGuildStoresNothing()
     {
-        var guild = await ActiveGuildAsync([113, Active]);
-        factory.TacticusApi.ConfigureGuildResponse(guild.Token, Upstream(Guid.NewGuid(), guild, [113, Active]));
+        var guild = await ActiveGuildAsync(113);
+        factory.TacticusApi.ConfigureGuildResponse(guild.Token, Upstream(Guid.NewGuid(), guild));
 
         await RunAsync(guild);
 
         Assert.Empty(factory.TacticusApi.GuildRaidSeasonCalls(guild.Token));
         await using var db = Db();
         Assert.Empty(await CapturesAsync(db, guild));
-        Assert.Null((await StateAsync(db, guild)).SeasonsListedFor);
+        Assert.Null((await StateAsync(db, guild)).SeasonsPlannedFor);
     }
 
     [Fact]
     public async Task KeyIsCheckedAgainWhenOnlyPendingSeasonsAreLeft()
     {
-        var guild = await ActiveGuildAsync([113, Active]);
+        var guild = await ActiveGuildAsync(113);
         factory.TacticusApi.ConfigureGuildRaidSeasonRejection(guild.Token, 113, HttpStatusCode.InternalServerError);
         await RunAsync(guild);
-        factory.TacticusApi.ConfigureGuildResponse(guild.Token, Upstream(Guid.NewGuid(), guild, [113, Active]));
+        factory.TacticusApi.ConfigureGuildResponse(guild.Token, Upstream(Guid.NewGuid(), guild));
         factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(113, Entry()));
 
         await RunAgainAsync(guild);
@@ -165,50 +169,46 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     }
 
     [Fact]
-    public async Task SeasonListMovesSeasonsInAndOutWithoutTouchingMembers()
+    public async Task SeasonsTacticusDoesNotListAreCapturedWithoutTouchingMembers()
     {
-        var guild = await ActiveGuildAsync([112, 113, Active]);
+        var guild = await ActiveGuildAsync(112);
         await StoreSeasonAsync(guild, 103, Entry());
-        await StoreSeasonAsync(guild, 112, Entry());
-        factory.TacticusApi.ConfigureGuildRaidSeasonRejection(guild.Token, 112, HttpStatusCode.NotFound);
-        factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(113, Entry()));
-        await RunAsync(guild);
-
-        // Stored but not listed; listed but not found; captured.
-        Assert.Equal(GuildRaidSeasonCaptureStatus.Unavailable, await StatusOfAsync(guild, 103));
-        Assert.Equal(GuildRaidSeasonCaptureStatus.Pending, await StatusOfAsync(guild, 112));
-        Assert.Equal(GuildRaidSeasonCaptureStatus.Final, await StatusOfAsync(guild, 113));
-
-        await RelistAsync(guild, [113, Active], upstreamRole: UpstreamGuildRole.MEMBER);
-        Assert.Equal(GuildRaidSeasonCaptureStatus.Unavailable, await StatusOfAsync(guild, 112));
-        await using (var db = Db())
+        factory.TacticusApi.ConfigureGuildResponse(
+            guild.Token, Upstream(guild.TacticusGuildId, guild, UpstreamGuildRole.MEMBER, listed: [Active]));
+        foreach (var season in new[] { 103, 112, 113 })
         {
-            Assert.Equal(GuildRole.Leader, (await db.GuildMembers.SingleAsync(member => member.GuildId == guild.Id, Ct)).Role);
-            Assert.Equal(1, await HitsAsync(db, guild, 103));
-            Assert.Equal(1, await HitsAsync(db, guild, 112));
+            factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(season, Entry()));
         }
 
-        factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(112, Entry()));
-        await RelistAsync(guild, [112, 113, Active]);
-        Assert.Equal(GuildRaidSeasonCaptureStatus.Final, await StatusOfAsync(guild, 112));
+        await RunAsync(guild);
+
+        Assert.Equal([103, 112, 113], factory.TacticusApi.GuildRaidSeasonCalls(guild.Token));
+        await using var db = Db();
+        Assert.All(await CapturesAsync(db, guild), capture => Assert.Equal(GuildRaidSeasonCaptureStatus.Final, capture.Status));
+        Assert.Equal(2, await HitsAsync(db, guild, 103));
+        Assert.Equal(GuildRole.Leader, (await db.GuildMembers.SingleAsync(member => member.GuildId == guild.Id, Ct)).Role);
     }
 
     [Fact]
-    public async Task EmptySeasonListFailsTheRunInsteadOfGivingUpOnSeasons()
+    public async Task NewActiveSeasonRequestsOnlyTheSeasonThatEnded()
     {
-        var guild = await ActiveGuildAsync([]);
+        var guild = await ActiveGuildAsync(112);
+        foreach (var season in new[] { 112, 113, Active })
+        {
+            factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(season, Entry()));
+        }
+
+        await RunAsync(guild);
+        await ActivateAsync(guild, Active + 1);
         await RunAsync(guild);
 
-        await using var db = Db();
-        var state = await StateAsync(db, guild);
-        Assert.Null(state.SeasonsListedFor);
-        AssertRetryInAnHour(state);
+        Assert.Equal([112, 113, Active], factory.TacticusApi.GuildRaidSeasonCalls(guild.Token));
     }
 
     [Fact]
     public async Task PastHitsAreStoredFromTheirOwnDataWhateverTodaysCatalogSays()
     {
-        var guild = await ActiveGuildAsync([113, Active]);
+        var guild = await ActiveGuildAsync(113);
         var suffixed = Entry();
         suffixed.UnitId = "guildBossRetired:3";
         suffixed.Tier = 7;
@@ -235,7 +235,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task MalformedEntriesAreSkippedAndCounted()
     {
-        var guild = await ActiveGuildAsync([113, Active]);
+        var guild = await ActiveGuildAsync(113);
         var unfinished = Entry();
         unfinished.CompletedOn = null;
         factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(113, Entry(), unfinished, Entry()));
@@ -251,7 +251,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task CaptureAddsToLiveHitsWithoutDuplicatingOrDeletingAnyAndFillsTheirSuffix()
     {
-        var guild = await ActiveGuildAsync([113, Active]);
+        var guild = await ActiveGuildAsync(113);
         var same = Entry();
         var rehashed = Entry();
         var onlyStored = Entry();
@@ -281,7 +281,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task EmptySeasonIsFinalOnlyWhenNothingWasSeenOfIt()
     {
-        var guild = await ActiveGuildAsync([111, 112, 113, Active]);
+        var guild = await ActiveGuildAsync(111);
         await StoreSeasonAsync(guild, 111, Entry());
         var malformed = Entry();
         malformed.UserId = Guid.Empty;
@@ -302,7 +302,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task WrongSeasonNumberStoresNothingAndTheRunContinues()
     {
-        var guild = await ActiveGuildAsync([112, 113, Active]);
+        var guild = await ActiveGuildAsync(112);
         factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, 112, () => Task.FromResult(Season(111, Entry())));
         factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(113, Entry()));
 
@@ -322,7 +322,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [InlineData("timeout")]
     public async Task FailureEndsTheRunKeepsWhatWasCapturedAndRetriesAfterAnHour(string failure)
     {
-        var guild = await ActiveGuildAsync([111, 112, 113, Active]);
+        var guild = await ActiveGuildAsync(111);
         factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(111, Entry()));
         if (int.TryParse(failure, out var code))
         {
@@ -353,7 +353,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [InlineData("units")]
     public async Task UnreadableSeasonStaysPendingWithoutHoldingUpNewerOnes(string defect)
     {
-        var guild = await ActiveGuildAsync([112, 113, Active]);
+        var guild = await ActiveGuildAsync(112);
         var bad = Entry();
         switch (defect)
         {
@@ -406,9 +406,9 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     }
 
     [Fact]
-    public async Task ThirdNotFoundMakesAListedSeasonUnavailableForGood()
+    public async Task ThirdNotFoundMakesASeasonUnavailableForGood()
     {
-        var guild = await ActiveGuildAsync([112, 113, Active]);
+        var guild = await ActiveGuildAsync(112);
         factory.TacticusApi.ConfigureGuildRaidSeasonRejection(guild.Token, 112, HttpStatusCode.NotFound);
         factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(113, Entry()));
 
@@ -420,7 +420,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
         await RunAgainAsync(guild);
         Assert.Equal(GuildRaidSeasonCaptureStatus.Unavailable, await StatusOfAsync(guild, 112));
 
-        await RelistAsync(guild, [112, 113, Active]);
+        await ReplanAsync(guild);
         Assert.Equal(GuildRaidSeasonCaptureStatus.Unavailable, await StatusOfAsync(guild, 112));
         Assert.Equal([112, 113, 112, 112], factory.TacticusApi.GuildRaidSeasonCalls(guild.Token));
     }
@@ -428,7 +428,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task NoActiveSeasonCapturesNothing()
     {
-        var guild = await ActiveGuildAsync([113, Active]);
+        var guild = await ActiveGuildAsync(113);
         factory.TacticusApi.ConfigureGuildRaidResponse(guild.Token, new GuildRaidResponse());
         await ExpireRefreshCooldownAsync(guild);
         (await guild.Client.PostAsync(RefreshPath, null, Ct)).EnsureSuccessStatusCode();
@@ -443,7 +443,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task FullTacticusUserIdIsInNoRaidColumn()
     {
-        var guild = await ActiveGuildAsync([113, Active]);
+        var guild = await ActiveGuildAsync(113);
         var entry = Entry();
         factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(113, entry));
         await RunAsync(guild);
@@ -472,7 +472,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task RefreshFillsTheSuffixOfAHitStoredWithoutIt()
     {
-        var guild = await ActiveGuildAsync([Active]);
+        var guild = await ActiveGuildAsync(Active);
         await using (var db = Db())
         {
             await db.GuildRaidAttacks.Where(attack => attack.Season!.GuildId == guild.Id)
@@ -493,7 +493,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     public async Task OnlyAFreshlyPersistedActiveSeasonIsQueued()
     {
         var queue = factory.Services.GetRequiredService<GuildRaidSeasonCaptureRequests>();
-        var guild = await ActiveGuildAsync([Active]);
+        var guild = await ActiveGuildAsync(Active);
         List<GuildId> Drain()
         {
             var queued = new List<GuildId>();
@@ -526,16 +526,20 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
     [Fact]
     public async Task SeasonsListsEveryStatusNewestFirstWithoutUpstreamCallsOrPlayerData()
     {
-        var guild = await ActiveGuildAsync([111, 112, 113, Active]);
+        var guild = await ActiveGuildAsync(111);
         await StoreSeasonAsync(guild, 103, Entry());
         var skipped = Entry();
         skipped.CompletedOn = null;
         factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(111));
         factory.TacticusApi.ConfigureGuildRaidSeasonRejection(guild.Token, 112, HttpStatusCode.NotFound);
         factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, Season(113, Entry(), skipped));
+        factory.TacticusApi.ConfigureGuildRaidSeasonRejection(guild.Token, 103, HttpStatusCode.NotFound);
         await RunAsync(guild);
         await using (var db = Db())
         {
+            await db.GuildRaidSeasonCaptures.Where(capture => capture.GuildId == guild.Id && capture.SeasonNumber == 103)
+                .ExecuteUpdateAsync(set => set.SetProperty(capture => capture.Status, GuildRaidSeasonCaptureStatus.Unavailable), Ct);
+
             // A plain member of a guild whose key was removed still reads the statuses.
             await db.GuildMembers.Where(member => member.GuildId == guild.Id)
                 .ExecuteUpdateAsync(set => set.SetProperty(member => member.Role, GuildRole.Member), Ct);
@@ -580,7 +584,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
         Assert.Equal("guildRaidNotReady",
             (await conflict.Content.ReadFromJsonAsync<JsonElement>(Ct)).GetProperty("issueCode").GetString());
 
-        var guild = await RegisterAsync([]);
+        var guild = await RegisterAsync();
         var empty = await guild.Client.GetFromJsonAsync<GuildRaidSeasonsResponse>(SeasonsPath, Ct);
         Assert.Null(empty!.CurrentSeasonNumber);
         Assert.Empty(empty.Seasons);
@@ -590,22 +594,32 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
         HttpClient Client, string Token, string Tag, GuildId Id, Guid TacticusGuildId, Guid TacticusUserId)
     {
         public GuildRaidEntry LiveEntry { get; set; } = null!;
+
+        /// <summary>The oldest season its runs ask for.</summary>
+        public int FirstSeason { get; set; } = Active;
     }
 
-    private async Task<TestGuild> RegisterAsync(int[] listed)
+    private async Task<TestGuild> RegisterAsync()
     {
         var (client, tacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
         var token = $"capture-token-{Guid.NewGuid()}";
         var guild = new TestGuild(client, token, $"S{Guid.NewGuid():N}"[..10], GuildId.From(Guid.NewGuid()), Guid.NewGuid(), tacticusUserId);
-        factory.TacticusApi.ConfigureGuildResponse(token, Upstream(guild.TacticusGuildId, guild, listed));
+        factory.TacticusApi.ConfigureGuildResponse(token, Upstream(guild.TacticusGuildId, guild));
         (await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), Ct)).EnsureSuccessStatusCode();
         await using var db = Db();
         return guild with { Id = await db.Guilds.Where(entity => entity.Tag == guild.Tag).Select(entity => entity.Id).SingleAsync(Ct) };
     }
 
-    private async Task<TestGuild> ActiveGuildAsync(int[] listed)
+    private async Task<TestGuild> ActiveGuildAsync(int firstSeason)
     {
-        var guild = await RegisterAsync(listed);
+        var guild = await RegisterAsync();
+        guild.FirstSeason = firstSeason;
+        await ActivateAsync(guild, Active);
+        return guild;
+    }
+
+    private async Task ActivateAsync(TestGuild guild, int number)
+    {
         var config = factory.Services.GetRequiredService<IGameCatalogProvider>().Current.RaidBossesView.Seasons
             .OrderBy(pair => pair.Key, StringComparer.Ordinal).First();
         var tier = config.Value.Tiers[0];
@@ -619,20 +633,24 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
         guild.LiveEntry = entry;
         factory.TacticusApi.ConfigureGuildRaidResponse(guild.Token, new GuildRaidResponse
         {
-            Season = Active,
+            Season = number,
             SeasonConfigId = config.Key,
             Entries = [entry],
         });
+        if (number != Active)
+        {
+            await ExpireRefreshCooldownAsync(guild);
+        }
+
         (await guild.Client.PostAsync(RefreshPath, null, Ct)).EnsureSuccessStatusCode();
-        return guild;
     }
 
     private static TacticusApi.Models.Guild.GuildResponse Upstream(
-        Guid guildId, TestGuild guild, int[] listed, UpstreamGuildRole role = UpstreamGuildRole.LEADER)
+        Guid guildId, TestGuild guild, UpstreamGuildRole role = UpstreamGuildRole.LEADER, List<int>? listed = null)
     {
         var response = FakeTacticusApi.BuildGuildResponse(
             guildId, guild.Tag, "Capture Guild", 10, (guild.TacticusUserId, role, 50, null));
-        response.Guild.GuildRaidSeasons = [.. listed];
+        response.Guild.GuildRaidSeasons = listed ?? [];
         return response;
     }
 
@@ -692,6 +710,7 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
         await using var scope = factory.Services.CreateAsyncScope();
         var service = scope.ServiceProvider.GetRequiredService<GuildRaidSeasonCaptureService>();
         service.RequestPause = TimeSpan.Zero;
+        service.FirstSeason = guild.FirstSeason;
         await service.RunAsync(guild.Id, ct ?? Ct);
     }
 
@@ -701,14 +720,13 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
         await RunAsync(guild);
     }
 
-    /// <summary>Runs as if another season list were due, as when a new season starts.</summary>
-    private async Task RelistAsync(TestGuild guild, int[] listed, UpstreamGuildRole upstreamRole = UpstreamGuildRole.LEADER)
+    /// <summary>Runs as if seasons had to be planned again, as when a new season starts.</summary>
+    private async Task ReplanAsync(TestGuild guild)
     {
-        factory.TacticusApi.ConfigureGuildResponse(guild.Token, Upstream(guild.TacticusGuildId, guild, listed, upstreamRole));
         await using (var db = Db())
         {
             await db.GuildRaidSyncStates.Where(state => state.GuildId == guild.Id)
-                .ExecuteUpdateAsync(set => set.SetProperty(state => state.SeasonsListedFor, (int?)null), Ct);
+                .ExecuteUpdateAsync(set => set.SetProperty(state => state.SeasonsPlannedFor, (int?)null), Ct);
         }
 
         await RunAgainAsync(guild);

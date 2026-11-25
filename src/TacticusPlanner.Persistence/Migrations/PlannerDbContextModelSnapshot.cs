@@ -357,9 +357,9 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("observed_at");
 
-                    b.Property<int?>("SeasonsListedFor")
+                    b.Property<int?>("SeasonsPlannedFor")
                         .HasColumnType("integer")
-                        .HasColumnName("seasons_listed_for");
+                        .HasColumnName("seasons_planned_for");
 
                     b.Property<string>("State")
                         .IsRequired()
