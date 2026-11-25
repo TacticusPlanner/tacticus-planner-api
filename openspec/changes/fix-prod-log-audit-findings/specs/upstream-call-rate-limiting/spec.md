@@ -2,11 +2,11 @@
 
 ### Requirement: Upstream-calling endpoints are limited per profile
 
-The system SHALL limit `POST tacticus-api-key/validate` and `PUT account/tacticus-integration` to 10 requests/minute by default (`upstream-fast`). `POST guild/register`, `POST guild/sync`, `DELETE guild`, `POST account/v1-import` and `POST me/roster-snapshots` without `fromLastSync=true` SHALL default to 10 requests/hour (`upstream-slow`). `POST tacticus-integration/player-sync` SHALL default to 30 requests/hour under its own configurable limit (`player-sync`). Limits SHALL be configurable and per profile. Other endpoints, including `POST me/roster-snapshots` with `fromLastSync=true`, SHALL NOT be limited.
+The system SHALL limit `POST tacticus-api-key/validate` and `PUT account/tacticus-integration` to 10 requests/minute by default (`upstream-fast`). `POST guild/register`, `POST guild/sync`, `DELETE guild`, `POST account/v1-import` and `POST me/roster-snapshots` without `fromLastSync=true` SHALL default to 10 requests/hour (`upstream-slow`). `POST player-data/sync` SHALL default to 30 requests/hour under its own configurable limit (`player-sync`). Limits SHALL be configurable and per profile. Other endpoints, including `POST me/roster-snapshots` with `fromLastSync=true`, SHALL NOT be limited.
 
 #### Scenario: Within the limit
 
-- **WHEN** a profile issues its first `POST tacticus-integration/player-sync` in an hour
+- **WHEN** a profile issues its first `POST player-data/sync` in an hour
 - **THEN** the request is processed normally
 
 #### Scenario: Limit exceeded
@@ -18,7 +18,7 @@ The system SHALL limit `POST tacticus-api-key/validate` and `PUT account/tacticu
 #### Scenario: Limits are per profile
 
 - **GIVEN** profile A has exhausted its `player-sync` limit
-- **WHEN** profile B issues `POST tacticus-integration/player-sync`
+- **WHEN** profile B issues `POST player-data/sync`
 - **THEN** profile B's request is processed normally
 
 #### Scenario: Unlimited endpoint
@@ -40,6 +40,6 @@ The system SHALL limit `POST tacticus-api-key/validate` and `PUT account/tacticu
 
 #### Scenario: Player sync has its own limit
 
-- **GIVEN** a profile has issued 29 `POST tacticus-integration/player-sync` requests within the current hour window
+- **GIVEN** a profile has issued 29 `POST player-data/sync` requests within the current hour window
 - **WHEN** it issues a thirtieth
 - **THEN** the request is processed normally, and a thirty-first within the window is rejected with 429

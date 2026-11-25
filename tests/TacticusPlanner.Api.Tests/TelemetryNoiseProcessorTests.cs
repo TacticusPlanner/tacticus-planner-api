@@ -49,7 +49,10 @@ public sealed class TelemetryNoiseProcessorTests
     private static void Emit(ActivitySource source, ActivityKind kind, TimeSpan duration, Action<Activity>? configure = null)
     {
         using var activity = source.StartActivity("span", kind)!;
-        activity.SetStartTime(DateTime.UtcNow - duration);
+        // Both ends are set so the duration is exactly what was asked for, however long the thread is paused.
+        var start = DateTime.UtcNow - duration;
+        activity.SetStartTime(start);
+        activity.SetEndTime(start + duration);
         configure?.Invoke(activity);
     }
 
@@ -136,16 +139,18 @@ public sealed class TelemetryNoiseProcessorTests
         {
             Emit(Database, ActivityKind.Client, TimeSpan.FromMilliseconds(5), activity =>
             {
+                activity.DisplayName = "failed";
                 activity.AddException(new InvalidOperationException("23505"));
                 activity.SetStatus(ActivityStatusCode.Error);
             });
             Emit(Database, ActivityKind.Client, TimeSpan.FromMilliseconds(5), activity =>
             {
+                activity.DisplayName = "cancelled";
                 activity.AddException(new OperationCanceledException());
                 activity.SetStatus(ActivityStatusCode.Error);
             });
         }, accessor);
 
-        Assert.Single(exported);
+        Assert.Equal("failed", Assert.Single(exported).DisplayName);
     }
 }
