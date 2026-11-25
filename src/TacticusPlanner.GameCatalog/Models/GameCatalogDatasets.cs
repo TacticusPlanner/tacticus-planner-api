@@ -145,6 +145,14 @@ public static class GameCatalogDatasets
     public const string UnitSummons = "unit-summons";
 
     /// <summary>
+    /// Curated NPC-to-character links the name match misses or gets wrong, keyed by NPC id: a character id links an
+    /// NPC whose name differs from the character's (a boss titled after the hero), <c>null</c> unlinks a same-named
+    /// NPC that is not the character. Merged into the served npcs as <c>characterId</c>; never served on its own. See
+    /// Denormalization/NpcCharacterDenormalizer.cs.
+    /// </summary>
+    public const string NpcCharacters = "npc-characters";
+
+    /// <summary>
     /// Curated roles (<c>damage</c>, <c>support</c>, <c>utility</c>) and target (<c>none</c>, <c>single</c>, <c>aoe</c>)
     /// of every character's and MoW's abilities, keyed by unit then ability id. Merged into the served characters and
     /// mows as <c>abilities</c> with the datamine attack range; never served on its own. See
@@ -207,6 +215,7 @@ public static class GameCatalogDatasets
         CampaignCuration,
         LreCuration,
         UnitSummons,
+        NpcCharacters,
         UnitAbilities,
         GuildRaidMetaComps,
         .. GuildRaidMetaBossGroups,

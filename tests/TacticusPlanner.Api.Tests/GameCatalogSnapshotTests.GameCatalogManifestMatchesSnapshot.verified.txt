@@ -1,6 +1,6 @@
 ﻿{
-  version: 1.44.88.3089+420051bf20ef,
-  schemaHash: 09974640d910b900f7d20f2649776b5b9d7dda08a00a856a1bea74ff2aa7354f,
+  version: 1.44.88.3089+134503d4634a,
+  schemaHash: 4c8905d8fe8a471705ce1a64dca808c7bf6fa8d45c6994c5877edbfcfda6dd88,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},
   datasets: [
@@ -121,7 +121,7 @@
     },
     {
       key: npcs,
-      hash: b19cb417dd7705dec82c1a40c5e99d241c357b34bd56e3f133fc338140a9cd03,
+      hash: 5f3c92041cb63f690009b0a2993a11fee1959feadd3d0214fdd42f203ed0e4e0,
       url: /api/v1/game-catalog/npcs/{envelopeHash}
     },
     {
