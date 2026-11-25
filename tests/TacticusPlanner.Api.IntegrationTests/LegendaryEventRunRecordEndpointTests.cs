@@ -323,8 +323,8 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
     {
         var (client, profileId) = await CreateProfileAsync();
         var start = new DateTimeOffset(2026, 10, 1, 0, 0, 0, TimeSpan.Zero);
-        var seeded = (await SeedRecordsAsync(profileId, Uthar, Enumerable.Range(0, 3).Select(day => start.AddDays(day * 2))))
-            .Concat(await SeedRecordsAsync(profileId, Lysander, Enumerable.Range(0, 3).Select(day => start.AddDays(day * 2 + 1))))
+        var seeded = (await SeedRecordsAsync(profileId, Uthar, Enumerable.Range(0, 3).Select(day => start.AddDays(day * 2.0))))
+            .Concat(await SeedRecordsAsync(profileId, Lysander, Enumerable.Range(0, 3).Select(day => start.AddDays((day * 2.0) + 1))))
             .ToList();
 
         var first = await ReadAllRecordsAsync(client, "?limit=4");
