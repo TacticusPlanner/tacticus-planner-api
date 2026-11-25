@@ -3,6 +3,10 @@
     <RootNamespace>TacticusPlanner.Api</RootNamespace>
     <UserSecretsId>tacticus-planner-api-local</UserSecretsId>
     <ContainerDefaultOS>Linux</ContainerDefaultOS>
+    <!-- Workstation GC: the API runs in a 0.5 vCPU / 1 GiB container, where Server GC (the Web SDK default) ran
+         4 heaps and never compacted gen2, so fragmentation and committed memory grew with uptime. The heap limit
+         and compaction settings are in the Dockerfile. -->
+    <ServerGarbageCollector>false</ServerGarbageCollector>
     <OpenApiDocumentsDirectory>$(MSBuildProjectDirectory)\..\..\artifacts\openapi</OpenApiDocumentsDirectory>
   </PropertyGroup>
   <ItemGroup>

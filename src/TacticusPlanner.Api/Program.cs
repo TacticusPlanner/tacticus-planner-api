@@ -150,6 +150,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+RuntimeInfoLog.Write(app.Logger);
 
 app.UseResponseCompression();
 app.UseExceptionHandler();
