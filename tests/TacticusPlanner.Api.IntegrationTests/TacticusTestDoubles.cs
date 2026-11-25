@@ -103,7 +103,7 @@ internal sealed class FakeTacticusApi : ITacticusApi
     public int GuildRaidCallCount(string guildApiToken) =>
         GuildRaidCallsByToken.GetValueOrDefault(guildApiToken);
 
-    private static async Task<ApiException> CreateGuildApiExceptionAsync(HttpStatusCode statusCode)
+    internal static async Task<ApiException> CreateGuildApiExceptionAsync(HttpStatusCode statusCode)
     {
         using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.tacticusgame.com/guild");
         using var response = new HttpResponseMessage(statusCode) { RequestMessage = request };
@@ -357,7 +357,7 @@ internal sealed class FakeTacticusApi : ITacticusApi
     {
         GuildRaidSeasonCallsByToken.GetOrAdd(guildApiToken, _ => new()).Enqueue(season);
         return GuildRaidSeasonsByToken.TryGetValue((guildApiToken, season), out var answer)
-            ? answer()
+            ? answer().WaitAsync(cancellationToken)
             : throw new InvalidOperationException($"No Guild Raid season {season} configured for '{guildApiToken}'.");
     }
 }

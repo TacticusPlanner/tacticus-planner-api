@@ -56,6 +56,11 @@ internal static class GuildRaidEntryNormalizer
             return false;
         }
 
+        if (string.IsNullOrWhiteSpace(value[..separator]))
+        {
+            return false;
+        }
+
         unitSetId = value[..separator];
         progressionIndex = parsed;
         return true;

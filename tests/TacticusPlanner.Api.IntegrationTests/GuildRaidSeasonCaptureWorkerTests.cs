@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Domain.GuildRaids.Enums;
 using TacticusPlanner.GameCatalog;
@@ -22,11 +23,17 @@ public sealed class GuildRaidSeasonCaptureWorkerTests
         var (client, token, tag) = await RegisterAsync(factory);
         factory.TacticusApi.ConfigureGuildRaidSeason(token, 70, () => gate.Task);
 
-        (await client.PostAsync("/api/v1/guild/raid-status/refresh", null, Ct)).EnsureSuccessStatusCode();
-        await WaitAsync(() => Task.FromResult(factory.TacticusApi.GuildRaidSeasonCalls(token).Count == 1));
-        Assert.False(await IsFinalAsync(factory, tag));
+        try
+        {
+            (await client.PostAsync("/api/v1/guild/raid-status/refresh", null, Ct)).EnsureSuccessStatusCode();
+            await WaitAsync(() => Task.FromResult(factory.TacticusApi.GuildRaidSeasonCalls(token).Count == 1));
+            Assert.False(await IsFinalAsync(factory, tag));
+        }
+        finally
+        {
+            gate.TrySetResult(new GuildRaidResponse { Season = 70, SeasonConfigId = "guild_boss_season_config_1" });
+        }
 
-        gate.SetResult(new GuildRaidResponse { Season = 70, SeasonConfigId = "guild_boss_season_config_1" });
         await WaitAsync(() => IsFinalAsync(factory, tag));
     }
 
@@ -43,14 +50,15 @@ public sealed class GuildRaidSeasonCaptureWorkerTests
         await WaitAsync(() => IsFinalAsync(factory, tag));
         await WaitAsync(async () => (await StateAsync(factory, tag)).CaptureNotBefore is null);
 
-        // The list is applied, so the next run starts with the missing table, outside its own failure handling.
+        using var crashes = new CrashLog();
+        factory.Services.GetRequiredService<ILoggerFactory>().AddProvider(crashes);
+
+        // Seasons are planned, so the next run starts with the missing table, outside its own failure handling.
         await ExecuteAsync(factory, db => db.Database.ExecuteSqlRawAsync(
             "ALTER TABLE guild_raid_season_captures RENAME TO captures_away", Ct));
         await ExpireCooldownAsync(factory);
         (await client.PostAsync(refreshPath, null, Ct)).EnsureSuccessStatusCode();
-        var requests = factory.Services.GetRequiredService<GuildRaidSeasonCaptureRequests>();
-        await WaitAsync(() => Task.FromResult(requests.Reader.Count == 0));
-        await Task.Delay(500, Ct);
+        await crashes.Crashed.WaitAsync(TimeSpan.FromSeconds(30), Ct);
 
         await ExecuteAsync(factory, db => db.Database.ExecuteSqlRawAsync(
             "ALTER TABLE captures_away RENAME TO guild_raid_season_captures", Ct));
@@ -103,6 +111,36 @@ public sealed class GuildRaidSeasonCaptureWorkerTests
         await using var scope = factory.Services.CreateAsyncScope();
         return await scope.ServiceProvider.GetRequiredService<PlannerDbContext>().GuildRaidSyncStates.AsNoTracking()
             .SingleAsync(state => state.Guild!.Tag == tag, Ct);
+    }
+
+    /// <summary>Completes when the worker logs a crashed run.</summary>
+    private sealed class CrashLog : ILoggerProvider, ILogger
+    {
+        private readonly TaskCompletionSource crashed = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public Task Crashed => crashed.Task;
+
+        public ILogger CreateLogger(string categoryName) =>
+            categoryName == typeof(GuildRaidSeasonCaptureWorker).FullName
+                ? this
+                : Microsoft.Extensions.Logging.Abstractions.NullLogger.Instance;
+
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+
+        public bool IsEnabled(LogLevel logLevel) => logLevel == LogLevel.Error;
+
+        public void Log<TState>(
+            LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+        {
+            if (logLevel == LogLevel.Error && exception is not null)
+            {
+                crashed.TrySetResult();
+            }
+        }
+
+        public void Dispose()
+        {
+        }
     }
 
     private static async Task WaitAsync(Func<Task<bool>> condition)

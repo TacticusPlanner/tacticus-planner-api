@@ -35,7 +35,7 @@ public sealed class GuildRaidEntryNormalizerTests
         Assert.Equal(tier, attack.Tier);
     }
 
-    public static TheoryData<string> MalformedEntries => ["player", "completion", "unit", "suffix", "zeroSuffix", "remaining", "maximum"];
+    public static TheoryData<string> MalformedEntries => ["player", "completion", "unit", "suffix", "zeroSuffix", "onlySuffix", "blankPrefix", "remaining", "maximum"];
 
     [Theory]
     [MemberData(nameof(MalformedEntries))]
@@ -49,6 +49,8 @@ public sealed class GuildRaidEntryNormalizerTests
             case "unit": entry.UnitId = " "; break;
             case "suffix": entry.UnitId = "boss:x"; break;
             case "zeroSuffix": entry.UnitId = "boss:0"; break;
+            case "onlySuffix": entry.UnitId = ":3"; break;
+            case "blankPrefix": entry.UnitId = " :3"; break;
             case "remaining": entry.RemainingHp = -1; break;
             case "maximum": entry.MaxHp = -1; break;
         }

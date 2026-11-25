@@ -96,8 +96,21 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
         var guildCalls = factory.TacticusApi.GuildCallCount(guild.Token);
 
         var runs = Enumerable.Range(0, 4).Select(_ => RunAsync(guild)).ToArray();
-        await Task.WhenAny(Task.WhenAll(runs), Task.Delay(TimeSpan.FromSeconds(1), Ct));
-        gate.SetResult(Season(113, Entry()));
+        try
+        {
+            // The one that claimed the guild is held at the gate until the others have given up.
+            while (runs.Count(run => run.IsCompleted) < 3)
+            {
+                await Task.WhenAny(runs.Where(run => !run.IsCompleted)).WaitAsync(TimeSpan.FromSeconds(30), Ct);
+            }
+
+            Assert.Equal(1, runs.Count(run => !run.IsCompleted));
+        }
+        finally
+        {
+            gate.TrySetResult(Season(113, Entry()));
+        }
+
         await Task.WhenAll(runs);
 
         Assert.Equal(guildCalls + 1, factory.TacticusApi.GuildCallCount(guild.Token));
@@ -423,6 +436,27 @@ public sealed class GuildRaidSeasonCaptureTests(PlannerApiFactory factory) : ICl
         await ReplanAsync(guild);
         Assert.Equal(GuildRaidSeasonCaptureStatus.Unavailable, await StatusOfAsync(guild, 112));
         Assert.Equal([112, 113, 112, 112], factory.TacticusApi.GuildRaidSeasonCalls(guild.Token));
+    }
+
+    [Fact]
+    public async Task LateNotFoundLeavesASeasonAnotherRunFinalizedAlone()
+    {
+        var guild = await ActiveGuildAsync(113);
+        factory.TacticusApi.ConfigureGuildRaidSeason(guild.Token, 113, async () =>
+        {
+            await using var other = Db();
+            await other.GuildRaidSeasonCaptures.Where(capture => capture.GuildId == guild.Id).ExecuteUpdateAsync(
+                set => set.SetProperty(capture => capture.Status, GuildRaidSeasonCaptureStatus.Final)
+                    .SetProperty(capture => capture.NotFoundAttempts, 2),
+                Ct);
+            throw await FakeTacticusApi.CreateGuildApiExceptionAsync(HttpStatusCode.NotFound);
+        });
+
+        await RunAsync(guild);
+
+        await using var db = Db();
+        var capture = Assert.Single(await CapturesAsync(db, guild));
+        Assert.Equal((GuildRaidSeasonCaptureStatus.Final, 2), (capture.Status, capture.NotFoundAttempts));
     }
 
     [Fact]

@@ -69,7 +69,7 @@ Verification SHALL NOT change the guild's members or roles.
 
 A past hit SHALL be stored with the season, tier, set, encounter, unit set, rarity, HP, damage, times and units reported by Tacticus, whether or not its position or season config exists in the current catalog. `progressionIndex` SHALL be the number in the hit's own unit id suffix, or null when there is none. The upstream tier SHALL be stored unchanged.
 
-An entry with no player id, no completion time, no unit id, a malformed unit id suffix, or negative HP SHALL be skipped and counted. It SHALL NOT prevent the other entries from being stored.
+An entry with no player id, no completion time, no unit id, no unit before its suffix, a malformed unit id suffix, or negative HP SHALL be skipped and counted. It SHALL NOT prevent the other entries from being stored.
 
 #### Scenario: The config changed after the season
 
@@ -117,7 +117,7 @@ Capture SHALL NOT change the guild's live observation, its active season, or its
 
 ### Requirement: Capture failures are retried and lost seasons are reported
 
-A rejected key (400, 401 or 403), a timeout or a server error SHALL end the run and leave its seasons pending. A season whose successful response cannot be read SHALL store nothing and stay pending while the run continues with the next. A 404 SHALL leave its season pending and continue with the next; its third 404 SHALL make it `unavailable` permanently.
+A rejected key (400, 401 or 403), a timeout or a server error SHALL end the run and leave its seasons pending. A season whose successful response cannot be read SHALL store nothing and stay pending while the run continues with the next. A 404 SHALL leave its season pending and continue with the next; its third 404 SHALL make it `unavailable` permanently. A 404 SHALL NOT change a season that is no longer pending.
 
 A season missing from the Tacticus list SHALL NOT become `unavailable` for that reason. Stored hits SHALL be kept in every case. Credentials and full Tacticus user ids SHALL NOT be logged.
 

@@ -368,18 +368,20 @@ public sealed partial class GuildRaidSeasonCaptureService(
 
     private async Task<bool> RecordNotFoundAsync(GuildId guildId, int seasonNumber, CancellationToken ct)
     {
-        db.ChangeTracker.Clear();
-        var capture = await db.GuildRaidSeasonCaptures
-            .SingleAsync(entity => entity.GuildId == guildId && entity.SeasonNumber == seasonNumber, ct);
-        capture.LastAttemptedAt = Now();
-        capture.NotFoundAttempts++;
-        if (capture.NotFoundAttempts >= MaxNotFoundAttempts)
-        {
-            capture.Status = GuildRaidSeasonCaptureStatus.Unavailable;
-        }
-
-        await db.SaveChangesAsync(ct);
-        return capture.Status == GuildRaidSeasonCaptureStatus.Unavailable;
+        // Only while pending: a run that lost its lease may report a 404 after another run captured the season.
+        var now = Now();
+        var pending = db.GuildRaidSeasonCaptures.Where(capture => capture.GuildId == guildId
+            && capture.SeasonNumber == seasonNumber
+            && capture.Status == GuildRaidSeasonCaptureStatus.Pending);
+        await pending.ExecuteUpdateAsync(
+            setters => setters
+                .SetProperty(capture => capture.LastAttemptedAt, now)
+                .SetProperty(capture => capture.UpdatedAt, now)
+                .SetProperty(capture => capture.NotFoundAttempts, capture => capture.NotFoundAttempts + 1),
+            ct);
+        await pending.Where(capture => capture.NotFoundAttempts >= MaxNotFoundAttempts).ExecuteUpdateAsync(
+            setters => setters.SetProperty(capture => capture.Status, GuildRaidSeasonCaptureStatus.Unavailable), ct);
+        return !await pending.AnyAsync(ct);
     }
 
     private async Task<bool> SkipUnreadableAsync(GuildId guildId, int seasonNumber, Exception? exception, CancellationToken ct)

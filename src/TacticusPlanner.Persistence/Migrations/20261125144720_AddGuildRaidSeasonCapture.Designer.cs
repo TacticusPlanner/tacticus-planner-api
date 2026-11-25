@@ -13,7 +13,7 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Persistence.Migrations
 {
     [DbContext(typeof(PlannerDbContext))]
-    [Migration("20261124151457_AddGuildRaidSeasonCapture")]
+    [Migration("20261125144720_AddGuildRaidSeasonCapture")]
     partial class AddGuildRaidSeasonCapture
     {
         /// <inheritdoc />
