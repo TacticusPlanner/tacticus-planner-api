@@ -6,7 +6,7 @@ Provides the backend game catalog's consolidated non-playable-unit reference dat
 
 ### Requirement: The catalog serves one flat `npcs` dataset built from the per-faction raw sources
 
-The game catalog SHALL serve a dataset keyed `npcs` built from the pinned datamine copy `gameconfig/units/npc.json` (keyed by NPC id), with damage profiles from `gameconfig/units/abilities.json`. The catalog SHALL keep no hand-kept NPC files. NPCs SHALL be grouped per faction under the source key `npcs-<faction>` (lowercased `FactionId`); records without a `FactionId` (loot objects) form the `npcs-objects` bucket. The served dataset SHALL be a single flat list of NPC records ordered by source key (ordinal) and then by id (ordinal).
+The game catalog SHALL serve a dataset keyed `npcs` built from the pinned datamine copy `gameconfig/units/npc.json` (keyed by NPC id), with damage profiles from `gameconfig/units/abilities.json`. The catalog SHALL keep no hand-kept NPC files other than the `npc-characters` exceptions (see the character link requirement). NPCs SHALL be grouped per faction under the source key `npcs-<faction>` (lowercased `FactionId`); records without a `FactionId` (loot objects) form the `npcs-objects` bucket. The served dataset SHALL be a single flat list of NPC records ordered by source key (ordinal) and then by id (ordinal).
 
 #### Scenario: Records from every raw source are present
 
@@ -24,6 +24,7 @@ Every record in the `npcs` dataset SHALL carry exactly these fields:
 | `factionId` | string | `FactionId` (`Objects` when absent) |
 | `alliance` | string | `GrandAllianceId` (`Neutral` when absent) |
 | `kind` | `unit` \| `machineOfWar` \| `object` | derived — see the classification requirement |
+| `characterId` | string \| null | derived — the playable character this NPC is a version of; see the character link requirement |
 | `meleeDamage` | string | `weapons[0].DamageProfile`; `""` when the unit has no weapon |
 | `meleeHits` | integer | `weapons[0].hits`; `0` when the unit has no weapon |
 | `rangedDamage` | string \| null | `weapons[1].DamageProfile`; `null` when the unit has no ranged weapon |
@@ -86,6 +87,30 @@ The classification SHALL NOT depend on the spelling of the record's `id`. The ca
 
 - **WHEN** a raw record such as `genesDecoy` is loaded from a faction file, lacks the `MachineOfWar` trait, and every stat row is all zeros
 - **THEN** it is served with `kind` `unit` and its zero stat rows unchanged; hiding it is a client presentation decision
+
+### Requirement: Each NPC record links the playable character it is a version of
+
+The denormalization SHALL set `characterId` to the id of the character (a `lineup.json` unit without the `MachineOfWar` trait) whose game `name` and `FactionId` equal the NPC's, else `null`. The curated `npc-characters` file (keyed by NPC id, never served on its own) SHALL override that match for the NPCs it lists: a character id links an NPC whose name differs from the character's, and `null` unlinks a same-named NPC that is not the character. Loading SHALL fail, naming `npc-characters`, when a curated key is not an NPC, a curated value is not a character, or an entry repeats what the name match already gives. A Machine of War is not a character, so an NPC copy of a MoW has `characterId` `null`.
+
+#### Scenario: Same name and faction
+
+- **WHEN** the NPC `necroNpcWarden` and the character `necroWarden` are both named `Makhotep` in `Necrons`
+- **THEN** the served `necroNpcWarden` has `characterId` `necroWarden`
+
+#### Scenario: Curated link for a name that differs
+
+- **WHEN** the NPC `eldarBossMauganRaUltra` is named `Harvester of Souls` and `npc-characters` maps it to `eldarMauganRa`
+- **THEN** the served `eldarBossMauganRaUltra` has `characterId` `eldarMauganRa`
+
+#### Scenario: Same name in another faction
+
+- **WHEN** an NPC shares a character's name but not its faction, and `npc-characters` does not list it
+- **THEN** its served `characterId` is `null`
+
+#### Scenario: Redundant curated entry
+
+- **WHEN** `npc-characters` maps an NPC to the character the name match already gives
+- **THEN** loading fails naming `npc-characters` and the NPC
 
 ### Requirement: An unreadable NPC fails startup
 

@@ -152,7 +152,9 @@ public static class GameCatalogLoader
 
         // ---- build denormalized served datasets ------------------------------------------------
         var characterViews = GameCatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances, summonsByUnit, abilitiesByUnit);
-        var npcList = GameCatalogDenormalizer.BuildNpcs(npcsByFaction);
+        var characterByNpc = GameCatalogDenormalizer.ReadNpcCharacters(
+            LoadDataset<Dictionary<string, string?>>(GameCatalogDatasets.NpcCharacters), npcsByFaction, unitsByFaction);
+        var npcList = GameCatalogDenormalizer.BuildNpcs(npcsByFaction, characterByNpc);
         var mowList = GameCatalogDenormalizer.BuildMows(unitsByFaction, summonsByUnit, abilitiesByUnit);
         var mowUpgradeCostViews = GameCatalogDenormalizer.BuildMowUpgradeCosts(mowUpgradeCosts);
         var characterAbilityCostViews = GameCatalogDenormalizer.BuildCharacterAbilityCosts(characterAbilityCosts);

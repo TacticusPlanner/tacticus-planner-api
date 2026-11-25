@@ -13731,6 +13731,7 @@
           "factionId",
           "alliance",
           "kind",
+          "characterId",
           "meleeDamage",
           "meleeHits",
           "rangedDamage",
@@ -13760,6 +13761,12 @@
           },
           "kind": {
             "type": "string"
+          },
+          "characterId": {
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "meleeDamage": {
             "type": "string"

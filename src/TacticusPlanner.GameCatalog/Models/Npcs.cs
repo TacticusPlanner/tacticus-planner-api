@@ -43,6 +43,8 @@ public sealed record GameCatalogRawNpc(
 /// <c>object</c> for a record from <c>npcs-objects.json</c>, <c>machineOfWar</c> for a record carrying the
 /// <c>MachineOfWar</c> trait, and <c>unit</c> otherwise — never derived from the id's spelling.
 /// <see cref="Stats"/> is served in raw source order: it is neither sorted nor unique on (rank, stars).
+/// <see cref="CharacterId"/> is the playable character this NPC is a version of (same name and faction, or curated in
+/// <c>npc-characters</c>), else null.
 /// </summary>
 public sealed record GameCatalogNpc(
     string Id,
@@ -50,6 +52,7 @@ public sealed record GameCatalogNpc(
     string FactionId,
     string Alliance,
     string Kind,
+    string? CharacterId,
     string MeleeDamage,
     int MeleeHits,
     string? RangedDamage,
