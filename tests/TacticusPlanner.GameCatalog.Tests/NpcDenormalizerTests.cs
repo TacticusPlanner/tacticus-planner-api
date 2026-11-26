@@ -24,7 +24,9 @@ public sealed class NpcDenormalizerTests
         new(alliance, factionId, factionId + " display", npcs);
 
     private static IReadOnlyList<GameCatalogNpc> Build(params (string key, GameCatalogFactionNpcs faction)[] files) =>
-        GameCatalogDenormalizer.BuildNpcs(files.ToDictionary(file => file.key, file => file.faction, StringComparer.Ordinal));
+        GameCatalogDenormalizer.BuildNpcs(
+            files.ToDictionary(file => file.key, file => file.faction, StringComparer.Ordinal),
+            new Dictionary<string, string>(StringComparer.Ordinal) { ["necroBossWarden"] = "necroWarden" });
 
     [Fact]
     public void StampsFactionAndAllianceFromTheOwningSourceFile()
@@ -36,10 +38,12 @@ public sealed class NpcDenormalizerTests
         var warden = Assert.Single(served, npc => npc.Id == "necroBossWarden");
         Assert.Equal("Necrons", warden.FactionId);
         Assert.Equal("Xenos", warden.Alliance);
+        Assert.Equal("necroWarden", warden.CharacterId);
 
         var ammoBox = Assert.Single(served, npc => npc.Id == "LootObj_AmmoBox");
         Assert.Equal("Objects", ammoBox.FactionId);
         Assert.Equal("Neutral", ammoBox.Alliance);
+        Assert.Null(ammoBox.CharacterId);
     }
 
     [Fact]
@@ -99,7 +103,7 @@ public sealed class NpcDenormalizerTests
 
         string[] expected =
         [
-            "id", "name", "factionId", "alliance", "kind", "meleeDamage", "meleeHits", "rangedDamage", "rangedHits",
+            "id", "name", "factionId", "alliance", "kind", "characterId", "meleeDamage", "meleeHits", "rangedDamage", "rangedHits",
             "distance", "movement", "traits", "activeAbilityDamage", "activeAbilities", "passiveAbilityDamage",
             "passiveAbilities", "stats",
         ];

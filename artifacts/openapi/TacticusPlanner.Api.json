@@ -185,7 +185,7 @@
           "Account"
         ],
         "summary": "Replaces this staging account's planner data with a copy from production.",
-        "description": "Staging only (404 elsewhere). Redeems a code from production's POST account/staging-transfer-code and, in one transaction, replaces goals, projects, Legendary Event plans and run records, event shop plans, personal roster snapshots, teams, settings and progress overrides. The Tacticus API key, player data and guild are not copied. 400 when the code is invalid or expired; 502 when production cannot be reached.",
+        "description": "Staging only (404 elsewhere). Redeems a code from production's POST account/staging-transfer-code and, in one transaction, replaces goals, projects, Legendary Event plans and run records, event shop plans, personal roster snapshots, teams, Guild Wars, settings and progress overrides. The Tacticus API key, player data and guild are not copied. 400 when the code is invalid or expired; 502 when production cannot be reached.",
         "operationId": "TacticusPlannerApiFeaturesStagingTransferImportFromProductionEndpoint",
         "requestBody": {
           "content": {
@@ -2091,6 +2091,104 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfGameCatalogGuildRaidMetaView"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/guild-war": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Guild War config per season.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogGuildWarEndpoint1",
+        "responses": {
+          "200": {
+            "description": "One record per live Guild War season, ordered by id: zones in layout order with their buff and score, zone tiers with the rarity cap of each of their five slots, battlefield levels with each zone's tier and the per-attempt debuff, buffs with their ability variables, the map pool, scoring and the per-rarity power caps. The game does not say which season is live.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogGuildWarSeason"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/guild-war/{envelopeHash}": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Guild War config per season.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogGuildWarEndpoint2",
+        "parameters": [
+          {
+            "name": "envelopeHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One record per live Guild War season, ordered by id: zones in layout order with their buff and score, zone tiers with the rarity cap of each of their five slots, battlefield levels with each zone's tier and the per-attempt debuff, buffs with their ability variables, the map pool, scoring and the per-rarity power caps. The game does not say which season is live.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogGuildWarSeason"
                 }
               }
             }
@@ -4807,6 +4905,587 @@
         ]
       }
     },
+    "/api/v1/guild-wars": {
+      "post": {
+        "tags": [
+          "Guild-Wars"
+        ],
+        "summary": "Ends the current war, keeping it and its attacks, and starts a new one.",
+        "description": "currentWarId is the war the caller means to end, or null when it sees none. When another war is current (a retried request already started one), nothing changes.",
+        "operationId": "TacticusPlannerApiFeaturesGuildWarsStartGuildWarEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartGuildWarRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The new current war, with no attacks.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuildWarResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "guildWarUnknownSeason, guildWarUnknownLevel, or an invalid shape.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "guildWarRevisionStale: currentWarId is not the current war; current is the war as it stands.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Guild-Wars"
+        ],
+        "summary": "Reads a page of the caller's ended wars, newest first, each with its attacks.",
+        "description": "Ordered by startedAt then id, both descending; the current war is not listed. limit is 1–50 (default 20); after is the opaque nextAfter of the previous page, null on the last one.",
+        "operationId": "TacticusPlannerApiFeaturesGuildWarsListGuildWarsEndpoint",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "integer"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastGuildWarsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "limit is out of range or after is not a valid cursor.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/guild-wars/current": {
+      "get": {
+        "tags": [
+          "Guild-Wars"
+        ],
+        "summary": "Reads the caller's current Guild War with its attacks.",
+        "description": "war is null when the caller has never started a war.",
+        "operationId": "TacticusPlannerApiFeaturesGuildWarsGetCurrentGuildWarEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentGuildWarResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Guild-Wars"
+        ],
+        "summary": "Sets the current war's season and battlefield level, creating the war when there is none.",
+        "description": "revision is ignored when the war is created. Changing the level keeps the rarityCap of attacks already logged. The season can change only while the war has no attacks, since logged attacks name the season's zones, buffs and maps.",
+        "operationId": "TacticusPlannerApiFeaturesGuildWarsSetCurrentGuildWarEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetCurrentGuildWarRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The current war, as GET returns it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuildWarResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "guildWarUnknownSeason, guildWarUnknownLevel, or an invalid shape.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "guildWarRevisionStale, or guildWarHasAttacks for a season change once attacks are logged; current is the war as it stands.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/guild-wars/current/attacks": {
+      "post": {
+        "tags": [
+          "Guild-Wars"
+        ],
+        "summary": "Logs an attack in the current war.",
+        "description": "The server derives rarityCap from the zone, the slot and the war's battlefield level. attackedAt defaults to now.",
+        "operationId": "TacticusPlannerApiFeaturesGuildWarsCreateGuildWarAttackEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGuildWarAttackRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The current war, as GET returns it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuildWarResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The first broken rule (guildWarUnknownZone, guildWarUnknownUnit, guildWarUnitDeployed, guildWarTokensSpent), or an invalid shape.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "guildWarNotStarted: the caller has no current war.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/guild-wars/{warId}/attacks/{attackId}": {
+      "put": {
+        "tags": [
+          "Guild-Wars"
+        ],
+        "summary": "Replaces an attack's fields when the revision matches.",
+        "description": "An attack of an ended war may be edited. rarityCap is derived again only when the zone or slot changes; attackedAt is kept.",
+        "operationId": "TacticusPlannerApiFeaturesGuildWarsUpdateGuildWarAttackEndpoint",
+        "parameters": [
+          {
+            "name": "warId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attackId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGuildWarAttackRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The attack's war, as GET returns it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuildWarResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The first broken rule (guildWarUnknownZone, guildWarUnknownUnit, guildWarUnitDeployed), or an invalid shape.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The war or attack does not exist or belongs to another profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "guildWarAttackRevisionStale; current is the attack's war as it stands.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Guild-Wars"
+        ],
+        "summary": "Removes an attack (Undo), freeing its token and units.",
+        "operationId": "TacticusPlannerApiFeaturesGuildWarsDeleteGuildWarAttackEndpoint",
+        "parameters": [
+          {
+            "name": "warId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attackId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The attack's war, as GET returns it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuildWarResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The war or attack does not exist or belongs to another profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/guild/raid-status": {
       "get": {
         "tags": [
@@ -6157,6 +6836,96 @@
           },
           "409": {
             "description": "expectedRevision is stale or another write won (issueCode legendaryEventPlanStale), or a reorder's ids are not the lane's team set (legendaryEventOrderSetMismatch). current is the plan as it stands.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/legendary-event-run-records": {
+      "get": {
+        "tags": [
+          "Legendary-Event-Run-Records"
+        ],
+        "summary": "Reads a page of the caller's run records across every Legendary Event, newest first.",
+        "description": "Lists every record of the caller's profile, whether or not a plan exists for its event, ordered by startedAt then id, both descending. Each item is a summary (no lanes, teams or roster): read the roster from /legendary-event-plans/{eventId}/run-records/{recordId}/roster. limit is 1–100 (default 20); after is the opaque nextAfter of the previous page, null on the last one. A profile with no records reads as an empty page.",
+        "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansListLegendaryEventRunRecordsEndpoint",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "integer"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegendaryEventRunRecordSummariesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "limit is out of range or after is not a valid cursor.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -8231,8 +9000,40 @@
           "Userjot-Token"
         ],
         "summary": "Issues a short-lived signed identity token for the UserJot feedback widget.",
-        "description": "The token proves the caller's identity to UserJot's widget SDK (signed identity) so feedback and messages cannot be attributed to a spoofed identity from the browser. Each call returns a fresh token, valid for at most one hour.",
+        "description": "The token proves the caller's identity to UserJot's widget SDK (signed identity) so feedback and messages cannot be attributed to a spoofed identity from the browser. Each call returns a fresh token, valid for at most one hour. Its traits carry the optional appVersion, appMode and language query values when they are well formed, plus the browser family with its major version and the OS family read from the User-Agent header (never the full header).",
         "operationId": "TacticusPlannerApiFeaturesUserJotGetUserJotTokenEndpoint",
+        "parameters": [
+          {
+            "name": "appVersion",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "appMode",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "A signed UserJot identity token for the current user.",
@@ -8886,6 +9687,103 @@
           }
         }
       },
+      "CreateGuildWarAttackRequest": {
+        "const": null,
+        "required": [
+          "zoneId",
+          "slot",
+          "characters",
+          "mow",
+          "result",
+          "lostUnitIds",
+          "enemy",
+          "notes",
+          "attackedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "zoneId": {
+            "const": null,
+            "maxLength": 64,
+            "minLength": 0,
+            "type": "string"
+          },
+          "slot": {
+            "const": null,
+            "maximum": 4,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "characters": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGuildWarLineupUnitDto"
+          },
+          "mow": {
+            "const": null,
+            "oneOf": [
+              {
+                "const": null,
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarLineupUnitDto"
+              }
+            ]
+          },
+          "result": {
+            "const": null,
+            "oneOf": [
+              {
+                "const": null,
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarAttackResult"
+              }
+            ]
+          },
+          "lostUnitIds": {
+            "const": null,
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "const": null,
+              "type": "string"
+            }
+          },
+          "enemy": {
+            "const": null,
+            "oneOf": [
+              {
+                "const": null,
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarEnemyDto"
+              }
+            ]
+          },
+          "notes": {
+            "const": null,
+            "maxLength": 200,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "attackedAt": {
+            "const": null,
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
       "CreateLegendaryEventTeamRequest": {
         "const": null,
         "required": [
@@ -9107,6 +10005,24 @@
               },
               {
                 "$ref": "#/components/schemas/TeamRarityCap"
+              }
+            ]
+          }
+        }
+      },
+      "CurrentGuildWarResponse": {
+        "required": [
+          "war"
+        ],
+        "type": "object",
+        "properties": {
+          "war": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarResponse"
               }
             ]
           }
@@ -10628,6 +11544,48 @@
           }
         }
       },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogGuildWarSeason": {
+        "required": [
+          "version",
+          "schemaHash",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaHash": {
+            "type": "string"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "const": null,
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/GameCatalogGuildWarSeason"
+            }
+          }
+        }
+      },
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogHordeModeTiers": {
         "required": [
           "version",
@@ -12142,6 +13100,265 @@
           }
         }
       },
+      "GameCatalogGuildWarBuff": {
+        "required": [
+          "id",
+          "scope",
+          "abilities"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "abilities": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarBuffAbility"
+          }
+        }
+      },
+      "GameCatalogGuildWarBuffAbility": {
+        "required": [
+          "abilityId",
+          "rarity",
+          "variables"
+        ],
+        "type": "object",
+        "properties": {
+          "abilityId": {
+            "type": "string"
+          },
+          "rarity": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "variables": {
+            "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndIReadOnlyListOfInt32"
+          }
+        }
+      },
+      "GameCatalogGuildWarLevel": {
+        "required": [
+          "battlefieldLevel",
+          "attemptDebuffPercent",
+          "scoreFactorPercent",
+          "zones"
+        ],
+        "type": "object",
+        "properties": {
+          "battlefieldLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "attemptDebuffPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "scoreFactorPercent": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "zones": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarLevelZone"
+          }
+        }
+      },
+      "GameCatalogGuildWarLevelZone": {
+        "required": [
+          "zoneId",
+          "tierId"
+        ],
+        "type": "object",
+        "properties": {
+          "zoneId": {
+            "type": "string"
+          },
+          "tierId": {
+            "type": "string"
+          }
+        }
+      },
+      "GameCatalogGuildWarLineupScore": {
+        "required": [
+          "maxAttempts",
+          "maxUnitsLost",
+          "score"
+        ],
+        "type": "object",
+        "properties": {
+          "maxAttempts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxUnitsLost": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogGuildWarMap": {
+        "required": [
+          "boardId",
+          "spawnPointsSet"
+        ],
+        "type": "object",
+        "properties": {
+          "boardId": {
+            "type": "string"
+          },
+          "spawnPointsSet": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogGuildWarPowerCap": {
+        "required": [
+          "rarity",
+          "maxPower"
+        ],
+        "type": "object",
+        "properties": {
+          "rarity": {
+            "type": "string"
+          },
+          "maxPower": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogGuildWarScoring": {
+        "required": [
+          "unitKilled",
+          "lineupEliminated"
+        ],
+        "type": "object",
+        "properties": {
+          "unitKilled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lineupEliminated": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarLineupScore"
+          }
+        }
+      },
+      "GameCatalogGuildWarSeason": {
+        "required": [
+          "id",
+          "nextSeasonId",
+          "maxAttempts",
+          "zones",
+          "tiers",
+          "levels",
+          "buffs",
+          "maps",
+          "scoring",
+          "powerCaps"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "nextSeasonId": {
+            "type": "string"
+          },
+          "maxAttempts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "zones": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarZone"
+          },
+          "tiers": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarTier"
+          },
+          "levels": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarLevel"
+          },
+          "buffs": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarBuff"
+          },
+          "maps": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarMap"
+          },
+          "scoring": {
+            "$ref": "#/components/schemas/GameCatalogGuildWarScoring"
+          },
+          "powerCaps": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarPowerCap"
+          }
+        }
+      },
+      "GameCatalogGuildWarTier": {
+        "required": [
+          "id",
+          "rarityCaps"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "rarityCaps": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          }
+        }
+      },
+      "GameCatalogGuildWarZone": {
+        "required": [
+          "id",
+          "visualId",
+          "buffId",
+          "canBeMoved",
+          "score",
+          "row",
+          "column"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "visualId": {
+            "type": "string"
+          },
+          "buffId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "canBeMoved": {
+            "type": "boolean"
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "row": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "column": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "GameCatalogHeroPowerStep": {
         "required": [
           "step",
@@ -13641,6 +14858,7 @@
           "factionId",
           "alliance",
           "kind",
+          "characterId",
           "meleeDamage",
           "meleeHits",
           "rangedDamage",
@@ -13670,6 +14888,12 @@
           },
           "kind": {
             "type": "string"
+          },
+          "characterId": {
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "meleeDamage": {
             "type": "string"
@@ -15739,6 +16963,286 @@
         ],
         "type": "string"
       },
+      "GuildWarAttackResponse": {
+        "required": [
+          "id",
+          "revision",
+          "attackedAt",
+          "zoneId",
+          "slot",
+          "rarityCap",
+          "characters",
+          "mow",
+          "result",
+          "lostUnitIds",
+          "enemy",
+          "notes"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "attackedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "zoneId": {
+            "type": "string"
+          },
+          "slot": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rarityCap": {
+            "$ref": "#/components/schemas/GuildWarRarity"
+          },
+          "characters": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGuildWarLineupUnitDto"
+          },
+          "mow": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarLineupUnitDto"
+              }
+            ]
+          },
+          "result": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarAttackResult"
+              }
+            ]
+          },
+          "lostUnitIds": {
+            "const": null,
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "const": null,
+              "type": "string"
+            }
+          },
+          "enemy": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarEnemyDto"
+              }
+            ]
+          },
+          "notes": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "GuildWarAttackResult": {
+        "enum": [
+          "won",
+          "lost"
+        ],
+        "type": "string"
+      },
+      "GuildWarEnemyDto": {
+        "required": [
+          "characters",
+          "mow",
+          "buffIds",
+          "boardId"
+        ],
+        "type": "object",
+        "properties": {
+          "characters": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGuildWarEnemyUnitDto"
+          },
+          "mow": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarEnemyUnitDto"
+              }
+            ]
+          },
+          "buffIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "boardId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "GuildWarEnemyUnitDto": {
+        "required": [
+          "unitId",
+          "rarity",
+          "rank",
+          "state"
+        ],
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string"
+          },
+          "rarity": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarRarity"
+              }
+            ]
+          },
+          "rank": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/UnitRank"
+              }
+            ]
+          },
+          "state": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarEnemyUnitState"
+              }
+            ]
+          }
+        }
+      },
+      "GuildWarEnemyUnitState": {
+        "enum": [
+          "killed",
+          "damaged"
+        ],
+        "type": "string"
+      },
+      "GuildWarLineupUnitDto": {
+        "required": [
+          "unitId",
+          "progression",
+          "rank",
+          "xpLevel",
+          "abilityLevels"
+        ],
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string"
+          },
+          "progression": {
+            "$ref": "#/components/schemas/UnitProgression"
+          },
+          "rank": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/UnitRank"
+              }
+            ]
+          },
+          "xpLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "abilityLevels": {
+            "$ref": "#/components/schemas/IReadOnlyListOfInt32"
+          }
+        }
+      },
+      "GuildWarRarity": {
+        "enum": [
+          "Common",
+          "Uncommon",
+          "Rare",
+          "Epic",
+          "Legendary",
+          "Mythic"
+        ],
+        "type": "string"
+      },
+      "GuildWarResponse": {
+        "required": [
+          "id",
+          "revision",
+          "seasonId",
+          "battlefieldLevel",
+          "startedAt",
+          "endedAt",
+          "tokensUsed",
+          "deployedUnitIds",
+          "attacks"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "seasonId": {
+            "type": "string"
+          },
+          "battlefieldLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endedAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "tokensUsed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deployedUnitIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "attacks": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGuildWarAttackResponse"
+          }
+        }
+      },
       "ImportFromProductionRequest": {
         "const": null,
         "required": [
@@ -15763,6 +17267,7 @@
           "personalRosterSnapshots",
           "eventShopPlans",
           "teams",
+          "guildWars",
           "settings",
           "overrides"
         ],
@@ -15793,6 +17298,10 @@
             "format": "int32"
           },
           "teams": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "guildWars": {
             "type": "integer",
             "format": "int32"
           },
@@ -16302,6 +17811,60 @@
           "$ref": "#/components/schemas/GameCatalogGuildRaidMetaRecommendationView"
         }
       },
+      "IReadOnlyListOfGameCatalogGuildWarBuff": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarBuff"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarBuffAbility": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarBuffAbility"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarLevel": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarLevel"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarLevelZone": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarLevelZone"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarLineupScore": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarLineupScore"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarMap": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarMap"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarPowerCap": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarPowerCap"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarTier": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarTier"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarZone": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarZone"
+        }
+      },
       "IReadOnlyListOfGameCatalogHeroPowerStep": {
         "type": "array",
         "items": {
@@ -16651,6 +18214,30 @@
           "$ref": "#/components/schemas/GuildRaidPrimeStatusResponse"
         }
       },
+      "IReadOnlyListOfGuildWarAttackResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GuildWarAttackResponse"
+        }
+      },
+      "IReadOnlyListOfGuildWarEnemyUnitDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GuildWarEnemyUnitDto"
+        }
+      },
+      "IReadOnlyListOfGuildWarLineupUnitDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GuildWarLineupUnitDto"
+        }
+      },
+      "IReadOnlyListOfGuildWarResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GuildWarResponse"
+        }
+      },
       "IReadOnlyListOfIncursionBattleProgressOverrideRequest": {
         "type": "array",
         "items": {
@@ -16711,6 +18298,12 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/LegendaryEventRunRecordResponse"
+        }
+      },
+      "IReadOnlyListOfLegendaryEventRunRecordSummaryResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/LegendaryEventRunRecordSummaryResponse"
         }
       },
       "IReadOnlyListOfLegendaryEventRunRecordTeamResponse": {
@@ -17099,6 +18692,64 @@
           }
         }
       },
+      "LegendaryEventRunRecordSummariesResponse": {
+        "required": [
+          "records",
+          "nextAfter"
+        ],
+        "type": "object",
+        "properties": {
+          "records": {
+            "$ref": "#/components/schemas/IReadOnlyListOfLegendaryEventRunRecordSummaryResponse"
+          },
+          "nextAfter": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "LegendaryEventRunRecordSummaryResponse": {
+        "required": [
+          "id",
+          "eventId",
+          "run",
+          "startedAt",
+          "progressAt",
+          "catalogVersion",
+          "points"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": "string"
+          },
+          "run": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "progressAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "catalogVersion": {
+            "type": "string"
+          },
+          "points": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "LegendaryEventRunRecordTeamResponse": {
         "required": [
           "teamId",
@@ -17452,6 +19103,24 @@
           "Adamantine"
         ],
         "type": "string"
+      },
+      "PastGuildWarsResponse": {
+        "required": [
+          "items",
+          "nextAfter"
+        ],
+        "type": "object",
+        "properties": {
+          "items": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGuildWarResponse"
+          },
+          "nextAfter": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
       },
       "PersonalRosterSnapshotListResponse": {
         "required": [
@@ -18144,6 +19813,56 @@
         ],
         "type": "string"
       },
+      "SetCurrentGuildWarRequest": {
+        "const": null,
+        "required": [
+          "seasonId",
+          "battlefieldLevel",
+          "revision"
+        ],
+        "type": "object",
+        "properties": {
+          "seasonId": {
+            "const": null,
+            "type": "string"
+          },
+          "battlefieldLevel": {
+            "const": null,
+            "type": "integer",
+            "format": "int32"
+          },
+          "revision": {
+            "const": null,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "StartGuildWarRequest": {
+        "required": [
+          "seasonId",
+          "battlefieldLevel",
+          "currentWarId"
+        ],
+        "type": "object",
+        "properties": {
+          "seasonId": {
+            "type": "string"
+          },
+          "battlefieldLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currentWarId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "uuid"
+          }
+        }
+      },
       "TeamMode": {
         "enum": [
           "warOffense",
@@ -18516,6 +20235,101 @@
           },
           "target": {
             "$ref": "#/components/schemas/GoalTargetEditRequest"
+          }
+        }
+      },
+      "UpdateGuildWarAttackRequest": {
+        "const": null,
+        "required": [
+          "zoneId",
+          "slot",
+          "characters",
+          "mow",
+          "result",
+          "lostUnitIds",
+          "enemy",
+          "notes",
+          "revision"
+        ],
+        "type": "object",
+        "properties": {
+          "zoneId": {
+            "const": null,
+            "maxLength": 64,
+            "minLength": 0,
+            "type": "string"
+          },
+          "slot": {
+            "const": null,
+            "maximum": 4,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "characters": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGuildWarLineupUnitDto"
+          },
+          "mow": {
+            "const": null,
+            "oneOf": [
+              {
+                "const": null,
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarLineupUnitDto"
+              }
+            ]
+          },
+          "result": {
+            "const": null,
+            "oneOf": [
+              {
+                "const": null,
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarAttackResult"
+              }
+            ]
+          },
+          "lostUnitIds": {
+            "const": null,
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "const": null,
+              "type": "string"
+            }
+          },
+          "enemy": {
+            "const": null,
+            "oneOf": [
+              {
+                "const": null,
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildWarEnemyDto"
+              }
+            ]
+          },
+          "notes": {
+            "const": null,
+            "maxLength": 200,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "revision": {
+            "const": null,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
           }
         }
       },

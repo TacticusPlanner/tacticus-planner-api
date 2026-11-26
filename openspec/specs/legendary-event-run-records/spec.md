@@ -125,6 +125,28 @@ A run record SHALL store: `run` (1–3); `startedAt` and `progressAt` (UTC); the
 - **WHEN** the caller requests run records for `notAnEvent`, which has no records and is not in the catalog
 - **THEN** the response is 404
 
+### Requirement: Run records are readable across events
+
+`GET /legendary-event-run-records?limit=&after=` SHALL return `{ records, nextAfter }`, where `records` lists every run record of the caller's profile, whatever its event and whether or not that event has a plan, ordered by `startedAt DESC, id DESC`, each `{ id, eventId, run, startedAt, progressAt, catalogVersion, points }` (no lanes, teams or roster), at most `limit` (default 20, maximum 100). `after` and `nextAfter` SHALL be the same cursor as the per-event read, with the same next-page predicate, and the same 400 responses for a malformed `after` or an out-of-range `limit`. A profile with no records SHALL answer 200 with `records` `[]` and `nextAfter` null. Each record's roster SHALL be read through the per-event roster endpoint with the record's `eventId` and `id`.
+
+#### Scenario: Records of unplanned events are listed
+
+- **GIVEN** a caller with no Legendary Event plans and Uthar run 1, Uthar run 2 and Lysander run 1 records
+- **WHEN** the caller requests `GET /legendary-event-run-records`
+- **THEN** the response is 200 with all three records, newest `startedAt` first, each naming its `eventId`, and `nextAfter` null
+
+#### Scenario: Paging across events
+
+- **GIVEN** 3 Uthar and 3 Lysander records with distinct `startedAt`
+- **WHEN** the caller requests with `limit` 4 and then with `after` set to the returned `nextAfter`
+- **THEN** the first response holds the 4 newest across both events with a non-null `nextAfter`, the second holds the remaining 2 with `nextAfter` null, and no record appears twice
+
+#### Scenario: Another profile's records
+
+- **GIVEN** another profile has run records
+- **WHEN** the caller, who has none, requests `GET /legendary-event-run-records`
+- **THEN** the response is 200 with `records` `[]`
+
 ### Requirement: A run record's roster is read on demand
 
 `GET /legendary-event-plans/{eventId}/run-records/{recordId}/roster` SHALL return the record's roster snapshot as `{ takenAt, catalogVersion, characters, mows }` in the shapes defined by `roster-snapshots`. The response SHALL carry an `ETag` that changes whenever the roster is rewritten and SHALL answer 304 to a matching `If-None-Match`. A record not owned by the caller or not belonging to `eventId` SHALL answer 404.

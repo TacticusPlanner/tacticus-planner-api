@@ -61,7 +61,7 @@ Every served record SHALL have exactly this shape (ids and structured values onl
 - `definitionId`: string or null — the calendar `ShopEvent` definition of its occurrences (e.g. `armageddon-shop`), which the client names; null for an undated event, which the client names from `eventKey`.
 - `currency`: string — e.g. `seasonalEventCurrencyOctober2026`.
 - `startUtc`: string or null — ISO-8601 UTC instant of week 1's occurrence start; null for an undated event.
-- `dayCount`: integer — the served weeks' total length in whole days (`7 × weeks.length` unless the last week is shorter); day `n` (0-based) starts at `startUtc + n days` (for an undated event, an estimate of 7 per known week).
+- `dayCount`: integer — `7 × weeks.length`; day `n` (0-based) starts at `startUtc + n days` (for an undated event, an estimate from its known weeks).
 - `milestones`: array of reward tiers (shape below), ordered by `requiredProgress` ascending.
 - `weeks`: array ordered by `week` ascending, each:
   - `week`: integer, 1-based, contiguous.
@@ -78,11 +78,6 @@ The client SHALL derive calendar dates, the current event day, past/upcoming sta
 
 - **WHEN** event key `June2026` has three calendar weeks
 - **THEN** its served `dayCount` is 21
-
-#### Scenario: Day count follows a shorter last week
-
-- **WHEN** event key `November2026` has one calendar week from 2026-11-23 00:00 UTC to 2026-11-29 00:00 UTC
-- **THEN** its served `dayCount` is 6
 
 #### Scenario: Variants match the daily shop projection
 
@@ -165,7 +160,7 @@ CI SHALL also fail, naming the merchant, when a calendared event has a `Week<N>`
 
 ### Requirement: Dated events are validated
 
-For every event that has calendar weeks and at least one matching merchant, the build SHALL fail, naming the event key, when: the occurrences' `weekNumber`s are not exactly 1..W; an occurrence does not start at 00:00:00 UTC, or lasts other than exactly 7 days (other than the last week) or other than 1 to 7 whole days (the last week); week `N + 1` does not start exactly when week `N` ends; two occurrences share a `weekNumber`; a variant fails any `shops` variant rule (unparseable reward, cost or cron, empty day list, unresolvable shard unit); or a variant costs a currency other than `seasonalEventCurrency<Month><Year>`.
+For every event that has calendar weeks and at least one matching merchant, the build SHALL fail, naming the event key, when: the occurrences' `weekNumber`s are not exactly 1..W; an occurrence does not last exactly 7 days or does not start at 00:00:00 UTC; week `N + 1` does not start exactly when week `N` ends; two occurrences share a `weekNumber`; a variant fails any `shops` variant rule (unparseable reward, cost or cron, empty day list, unresolvable shard unit); or a variant costs a currency other than `seasonalEventCurrency<Month><Year>`. A shop week SHALL NOT be shortened to match the event's other runs (its home-screen events, theme window or quests): those usually end before the shop, whose last day is left for spending the remaining event currency.
 
 #### Scenario: Gap between weeks fails the build
 

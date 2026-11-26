@@ -28,6 +28,7 @@ public static partial class GameCatalogValidator
         RequireNonEmpty(GameCatalogDatasets.Factions, snapshot.FactionViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.DamageTypes, snapshot.DamageTypeViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.GlobalValues, snapshot.GlobalValuesViews.Count, errors);
+        RequireNonEmpty(GameCatalogDatasets.GuildWar, snapshot.GuildWarViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.ProgressionRules, snapshot.ProgressionRulesViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.Hre, snapshot.HreViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.Incursions, snapshot.IncursionViews.Count, errors);

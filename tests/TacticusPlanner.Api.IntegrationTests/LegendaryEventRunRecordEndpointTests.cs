@@ -294,6 +294,79 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
     }
 
     [Fact]
+    public async Task TheProfileWideReadListsEveryEventsRecordsWithoutAPlan()
+    {
+        var (client, token) = await CreateSyncingClientAsync();
+        await SyncAsync(client, token, Lre(Uthar, run: 1, points: 40, alpha: [([0], 10)]));
+        await SyncAsync(client, token, Lre(Uthar, run: 2, alpha: [([0], 10)]), Lre(Lysander, run: 1, alpha: [([0], 10)]));
+
+        var response = await ReadAllRecordsAsync(client);
+
+        // No plan exists for either event, yet all three records are listed, newest startedAt first.
+        Assert.Empty((await ReadPlansAsync(client)).Plans);
+        Assert.Equal(3, response.Records.Count);
+        Assert.Null(response.NextAfter);
+        Assert.Equal(
+            response.Records.OrderByDescending(record => record.StartedAt).Select(record => record.Id),
+            response.Records.Select(record => record.Id));
+        Assert.Equal([Lysander, Uthar], response.Records.Select(record => record.EventId).Distinct().Order());
+        var first = Assert.Single(response.Records, record => record.EventId == Uthar && record.Run == 1);
+        Assert.Equal(40, first.Points);
+        Assert.Equal(GameCatalogRelease.Version, first.CatalogVersion);
+        // Each summary names the record the per-event roster read accepts.
+        var roster = await ReadRosterAsync(client, first.EventId, first.Id);
+        Assert.Equal(first.ProgressAt, roster.TakenAt);
+    }
+
+    [Fact]
+    public async Task TheProfileWideReadIsPagedAcrossEvents()
+    {
+        var (client, profileId) = await CreateProfileAsync();
+        var start = new DateTimeOffset(2026, 10, 1, 0, 0, 0, TimeSpan.Zero);
+        var seeded = (await SeedRecordsAsync(profileId, Uthar, Enumerable.Range(0, 3).Select(day => start.AddDays(day * 2.0))))
+            .Concat(await SeedRecordsAsync(profileId, Lysander, Enumerable.Range(0, 3).Select(day => start.AddDays((day * 2.0) + 1))))
+            .ToList();
+
+        var first = await ReadAllRecordsAsync(client, "?limit=4");
+        var second = await ReadAllRecordsAsync(client, $"?limit=4&after={first.NextAfter}");
+
+        Assert.Equal(4, first.Records.Count);
+        Assert.NotNull(first.NextAfter);
+        Assert.Equal(2, second.Records.Count);
+        Assert.Null(second.NextAfter);
+        Assert.Equal(
+            seeded.OrderByDescending(record => record.StartedAt).Select(record => (record.Id.Value, record.EventId)),
+            first.Records.Concat(second.Records).Select(record => (record.Id, record.EventId)));
+    }
+
+    [Fact]
+    public async Task TheProfileWideReadIsScopedToTheCallersProfile()
+    {
+        var (client, token) = await CreateSyncingClientAsync();
+        await SyncAsync(client, token, Lre(Uthar, run: 1, alpha: [([0], 10)]));
+        var other = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await ReadAllRecordsAsync(other);
+
+        Assert.Empty(response.Records);
+        Assert.Null(response.NextAfter);
+    }
+
+    [Theory]
+    [InlineData("?after=not-a-cursor", "after")]
+    [InlineData("?limit=0", "limit")]
+    [InlineData("?limit=101", "limit")]
+    public async Task TheProfileWideReadRejectsInvalidPagingNamingTheField(string query, string field)
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.GetAsync($"/api/v1/legendary-event-run-records{query}", Ct);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.NotNull((await response.ReadProblemAsync())["errors"]![field]);
+    }
+
+    [Fact]
     public async Task ARosterIsReadOnDemandWithAnETag()
     {
         var (client, token) = await CreateSyncingClientAsync();
@@ -446,6 +519,10 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
     private static async Task<LegendaryEventRunRecordsResponse> ReadRecordsAsync(HttpClient client, string eventId, string query = "") =>
         await ReadAsync<LegendaryEventRunRecordsResponse>(
             await client.GetAsync($"/api/v1/legendary-event-plans/{eventId}/run-records{query}", Ct));
+
+    private static async Task<LegendaryEventRunRecordSummariesResponse> ReadAllRecordsAsync(HttpClient client, string query = "") =>
+        await ReadAsync<LegendaryEventRunRecordSummariesResponse>(
+            await client.GetAsync($"/api/v1/legendary-event-run-records{query}", Ct));
 
     private static async Task<RosterSnapshotResponse> ReadRosterAsync(HttpClient client, string eventId, Guid recordId) =>
         await ReadAsync<RosterSnapshotResponse>(

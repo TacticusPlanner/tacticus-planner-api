@@ -6,8 +6,50 @@ public static partial class GameCatalogValidator
 {
     private static readonly HashSet<string> ValidRecurrenceKinds = new(StringComparer.Ordinal) { "Fixed", "None" };
 
-    private static void ValidateEvents(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
+    /// <summary>The <c>guild-war-season</c> occurrence parameter naming the datamine season config that season runs.</summary>
+    public const string GuildWarSeasonConfigId = "seasonConfigId";
+
+    private static void ValidateEvents(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
+    {
         ValidateEvents(snapshot.EventDefinitions, snapshot.EventOccurrences, errors);
+        ValidateGuildWarSeasonConfigs(
+            snapshot.EventDefinitions,
+            snapshot.EventOccurrences,
+            [.. snapshot.GuildWarViews.Select(season => season.Id)],
+            errors);
+    }
+
+    /// <summary>
+    /// A <c>GuildWarSeason</c> occurrence may name the datamine season config it runs (<c>seasonConfigId</c>); when it
+    /// does, that config must be a served guild-war season, so clients can default a new war to it.
+    /// </summary>
+    internal static void ValidateGuildWarSeasonConfigs(
+        IReadOnlyList<GameCatalogEventDefinition> definitions,
+        IReadOnlyList<GameCatalogEventOccurrence> occurrences,
+        IReadOnlyCollection<string> seasonIds,
+        List<GameCatalogValidationError> errors)
+    {
+        var guildWarDefinitions = definitions
+            .Where(definition => definition.Type == "GuildWarSeason")
+            .Select(definition => definition.Id)
+            .ToHashSet(StringComparer.Ordinal);
+        foreach (var occurrence in occurrences.Where(occurrence => guildWarDefinitions.Contains(occurrence.DefinitionId)))
+        {
+            if (occurrence.Parameters?.TryGetValue(GuildWarSeasonConfigId, out var configId) != true)
+            {
+                continue;
+            }
+
+            if (configId.ValueKind != System.Text.Json.JsonValueKind.String
+                || !seasonIds.Contains(configId.GetString()!, StringComparer.Ordinal))
+            {
+                errors.Add(new GameCatalogValidationError(
+                    GameCatalogDatasets.EventOccurrences,
+                    "UnknownGuildWarSeasonConfig",
+                    $"'{occurrence.Id}' has {GuildWarSeasonConfigId} '{configId}'; expected a served guild-war season."));
+            }
+        }
+    }
 
     /// <summary>
     /// Takes only the raw event collections (not the full snapshot) so it is directly unit testable without

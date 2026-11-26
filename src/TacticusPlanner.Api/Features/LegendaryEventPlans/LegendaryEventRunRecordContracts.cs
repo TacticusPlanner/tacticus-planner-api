@@ -16,6 +16,29 @@ public sealed record LegendaryEventPlanListResponse(IReadOnlyList<LegendaryEvent
 public sealed record LegendaryEventRunRecordsResponse(
     string EventId, IReadOnlyList<LegendaryEventRunRecordResponse> Records, string? NextAfter);
 
+/// <summary>One page of the caller's run records across every event.</summary>
+/// <param name="Records">Newest <c>startedAt</c> first, then descending id.</param>
+/// <param name="NextAfter">The cursor of the next page; null on the last page.</param>
+public sealed record LegendaryEventRunRecordSummariesResponse(
+    IReadOnlyList<LegendaryEventRunRecordSummaryResponse> Records, string? NextAfter);
+
+/// <summary>A run record without its lanes, teams or roster: enough to list it as a roster source.</summary>
+/// <param name="EventId">The Legendary Event the record belongs to, whether or not it has a plan.</param>
+/// <param name="Run">The event run, 1–3.</param>
+/// <param name="StartedAt">The first sync that saw this occurrence (UTC).</param>
+/// <param name="ProgressAt">The last sync that changed its lanes (UTC); the roster is as of this time.</param>
+/// <param name="CatalogVersion">The catalog version at <c>progressAt</c>.</param>
+/// <param name="Points">The synced event points at <c>progressAt</c>.</param>
+public sealed record LegendaryEventRunRecordSummaryResponse(
+    Guid Id,
+    string EventId,
+    int Run,
+    DateTimeOffset StartedAt,
+    DateTimeOffset ProgressAt,
+    string CatalogVersion,
+    int Points
+);
+
 /// <summary>One run occurrence as of the last sync that changed its progress.</summary>
 /// <param name="Run">The event run, 1–3.</param>
 /// <param name="StartedAt">The first sync that saw this occurrence (UTC).</param>

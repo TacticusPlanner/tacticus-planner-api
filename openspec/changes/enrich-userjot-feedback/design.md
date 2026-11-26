@@ -1,0 +1,15 @@
+## Context
+
+`GET /api/v1/userjot-token` signs an HS256 JWT for UserJot's widget (`sub`, `iss`, `aud`, `iat`, `exp`, `firstName`). UserJot's signed-identity contract also accepts optional `traits` (flat scalars; nested objects and arrays are ignored). The companion apps change is `enrich-userjot-feedback`.
+
+## Decisions
+
+- **Client context travels as query parameters and is echoed into the signed token**, rather than sent unsigned beside the token. The widget runs signed identity only (`userjot-widget`), and a token value wins over an unsigned one anyway. The values are the caller's own context (build, display mode, language), so signing what the browser reports does not let anyone claim another identity; it only means the trait is "as reported by the client".
+- **Strict shapes, drop on mismatch.** `appVersion` must look like a tag, version or SHA (`^[0-9A-Za-z][0-9A-Za-z.+_-]{0,39}$`), `appMode` is `installed` or `browser`, `language` is a BCP 47 primary tag with optional region (`^[a-z]{2,3}(-[A-Z]{2})?$`). A mismatch drops that trait and still returns 200, so the deployed client (no parameters) and any odd value never break the widget.
+- **Browser and OS come from the `User-Agent` header, reduced to families.** The server already receives the header, so no client change is needed. Only the browser family with its major version and the OS family are kept: the full string adds fingerprinting detail without helping triage, and OS versions are frozen by browsers (Chrome reports Android 10 and macOS 10.15.7 everywhere). Rules run in a fixed order because Edge, Opera and Samsung Internet also claim Chrome and Safari. An iPad in desktop mode reports macOS; that is accepted.
+- **`traits` is left out when empty.** A request with no well-formed context signs the same claims as before, so the token is unchanged for the deployed client.
+- **No migration.** Nothing is stored; the values exist only in the short-lived token.
+
+## Risks
+
+- UserJot may later reserve a trait key; the SDK reports `RESERVED_TRAIT_KEY_IGNORED` and drops just that key, leaving identity intact.

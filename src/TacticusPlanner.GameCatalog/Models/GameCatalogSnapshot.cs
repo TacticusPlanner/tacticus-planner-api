@@ -75,7 +75,8 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogProgressionRules> ProgressionRulesViews,
     IReadOnlyList<GameCatalogHre> HreViews,
     IReadOnlyList<GameCatalogIncursion> IncursionViews,
-    IReadOnlyList<GameCatalogNpcEncounter> NpcEncounterViews
+    IReadOnlyList<GameCatalogNpcEncounter> NpcEncounterViews,
+    IReadOnlyList<GameCatalogGuildWarSeason> GuildWarViews
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the

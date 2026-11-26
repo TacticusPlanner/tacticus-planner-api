@@ -321,6 +321,135 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.ToTable("guild_raid_sync_states", (string)null);
                 });
 
+            modelBuilder.Entity("TacticusPlanner.Domain.GuildWars.GuildWar", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<int>("BattlefieldLevel")
+                        .HasColumnType("integer")
+                        .HasColumnName("battlefield_level");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset?>("EndedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ended_at");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("profile_id");
+
+                    b.Property<long>("Revision")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("revision");
+
+                    b.Property<string>("SeasonId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("season_id");
+
+                    b.Property<DateTimeOffset>("StartedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("started_at");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_guild_wars");
+
+                    b.HasIndex("ProfileId")
+                        .IsUnique()
+                        .HasDatabaseName("ux_guild_wars_profile_id_current")
+                        .HasFilter("ended_at IS NULL");
+
+                    b.HasIndex("ProfileId", "StartedAt", "Id")
+                        .IsDescending(false, true, true)
+                        .HasDatabaseName("ix_guild_wars_profile_id_started_at_id");
+
+                    b.ToTable("guild_wars", (string)null);
+                });
+
+            modelBuilder.Entity("TacticusPlanner.Domain.GuildWars.GuildWarAttack", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset>("AttackedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("attacked_at");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.PrimitiveCollection<List<string>>("LostUnitIds")
+                        .HasColumnType("text[]")
+                        .HasColumnName("lost_unit_ids");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("notes");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("RarityCap")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("rarity_cap");
+
+                    b.Property<string>("Result")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("result");
+
+                    b.Property<long>("Revision")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("revision");
+
+                    b.Property<int>("Slot")
+                        .HasColumnType("integer")
+                        .HasColumnName("slot");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<Guid>("WarId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("war_id");
+
+                    b.Property<string>("ZoneId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("zone_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_guild_war_attacks");
+
+                    b.HasIndex("ProfileId")
+                        .HasDatabaseName("ix_guild_war_attacks_profile_id");
+
+                    b.HasIndex("WarId")
+                        .HasDatabaseName("ix_guild_war_attacks_war_id");
+
+                    b.ToTable("guild_war_attacks", (string)null);
+                });
+
             modelBuilder.Entity("TacticusPlanner.Domain.Guilds.Guild", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1472,6 +1601,193 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Navigation("ActiveSeason");
 
                     b.Navigation("Guild");
+                });
+
+            modelBuilder.Entity("TacticusPlanner.Domain.GuildWars.GuildWar", b =>
+                {
+                    b.HasOne("TacticusPlanner.Domain.Profiles.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_guild_wars_profiles_profile_id");
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("TacticusPlanner.Domain.GuildWars.GuildWarAttack", b =>
+                {
+                    b.HasOne("TacticusPlanner.Domain.Profiles.Profile", null)
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_guild_war_attacks_profiles_profile_id");
+
+                    b.HasOne("TacticusPlanner.Domain.GuildWars.GuildWar", "War")
+                        .WithMany("Attacks")
+                        .HasForeignKey("WarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_guild_war_attacks_guild_wars_war_id");
+
+                    b.OwnsOne("TacticusPlanner.Domain.GuildWars.GuildWarEnemy", "Enemy", b1 =>
+                        {
+                            b1.Property<Guid>("GuildWarAttackId");
+
+                            b1.Property<string>("BoardId");
+
+                            b1.PrimitiveCollection<string>("BuffIds")
+                                .IsRequired();
+
+                            b1.HasKey("GuildWarAttackId");
+
+                            b1.ToTable("guild_war_attacks");
+
+                            b1
+                                .ToJson("enemy")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("GuildWarAttackId")
+                                .HasConstraintName("fk_guild_war_attacks_guild_war_attacks_id");
+
+                            b1.OwnsMany("TacticusPlanner.Domain.GuildWars.GuildWarEnemyUnit", "Characters", b2 =>
+                                {
+                                    b2.Property<Guid>("GuildWarEnemyGuildWarAttackId");
+
+                                    b2.Property<int>("__synthesizedOrdinal")
+                                        .ValueGeneratedOnAdd();
+
+                                    b2.Property<int?>("Rank");
+
+                                    b2.Property<string>("Rarity");
+
+                                    b2.Property<string>("State");
+
+                                    b2.Property<string>("UnitId")
+                                        .IsRequired();
+
+                                    b2.HasKey("GuildWarEnemyGuildWarAttackId", "__synthesizedOrdinal")
+                                        .HasName("pk_guild_war_attacks");
+
+                                    b2.ToTable("guild_war_attacks");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("GuildWarEnemyGuildWarAttackId")
+                                        .HasConstraintName("fk_guild_war_attacks_guild_war_attacks_guild_war_enemy_guild_war_at");
+                                });
+
+                            b1.OwnsOne("TacticusPlanner.Domain.GuildWars.GuildWarEnemyUnit", "Mow", b2 =>
+                                {
+                                    b2.Property<Guid>("GuildWarEnemyGuildWarAttackId");
+
+                                    b2.Property<int?>("Rank");
+
+                                    b2.Property<string>("Rarity");
+
+                                    b2.Property<string>("State");
+
+                                    b2.Property<string>("UnitId")
+                                        .IsRequired();
+
+                                    b2.HasKey("GuildWarEnemyGuildWarAttackId")
+                                        .HasName("pk_guild_war_attacks");
+
+                                    b2.ToTable("guild_war_attacks");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("GuildWarEnemyGuildWarAttackId")
+                                        .HasConstraintName("fk_guild_war_attacks_guild_war_attacks_guild_war_enemy_guild_war_at");
+                                });
+
+                            b1.Navigation("Characters");
+
+                            b1.Navigation("Mow");
+                        });
+
+                    b.OwnsOne("TacticusPlanner.Domain.GuildWars.GuildWarLineup", "Lineup", b1 =>
+                        {
+                            b1.Property<Guid>("GuildWarAttackId");
+
+                            b1.HasKey("GuildWarAttackId");
+
+                            b1.ToTable("guild_war_attacks");
+
+                            b1
+                                .ToJson("lineup")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("GuildWarAttackId")
+                                .HasConstraintName("fk_guild_war_attacks_guild_war_attacks_id");
+
+                            b1.OwnsMany("TacticusPlanner.Domain.GuildWars.GuildWarLineupUnit", "Characters", b2 =>
+                                {
+                                    b2.Property<Guid>("GuildWarLineupGuildWarAttackId");
+
+                                    b2.Property<int>("__synthesizedOrdinal")
+                                        .ValueGeneratedOnAdd();
+
+                                    b2.PrimitiveCollection<string>("AbilityLevels")
+                                        .IsRequired();
+
+                                    b2.Property<int>("Progression");
+
+                                    b2.Property<int?>("Rank");
+
+                                    b2.Property<string>("UnitId")
+                                        .IsRequired();
+
+                                    b2.Property<int>("XpLevel");
+
+                                    b2.HasKey("GuildWarLineupGuildWarAttackId", "__synthesizedOrdinal")
+                                        .HasName("pk_guild_war_attacks");
+
+                                    b2.ToTable("guild_war_attacks");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("GuildWarLineupGuildWarAttackId")
+                                        .HasConstraintName("fk_guild_war_attacks_guild_war_attacks_guild_war_lineup_guild_war_a");
+                                });
+
+                            b1.OwnsOne("TacticusPlanner.Domain.GuildWars.GuildWarLineupUnit", "Mow", b2 =>
+                                {
+                                    b2.Property<Guid>("GuildWarLineupGuildWarAttackId");
+
+                                    b2.PrimitiveCollection<string>("AbilityLevels")
+                                        .IsRequired();
+
+                                    b2.Property<int>("Progression");
+
+                                    b2.Property<int?>("Rank");
+
+                                    b2.Property<string>("UnitId")
+                                        .IsRequired();
+
+                                    b2.Property<int>("XpLevel");
+
+                                    b2.HasKey("GuildWarLineupGuildWarAttackId")
+                                        .HasName("pk_guild_war_attacks");
+
+                                    b2.ToTable("guild_war_attacks");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("GuildWarLineupGuildWarAttackId")
+                                        .HasConstraintName("fk_guild_war_attacks_guild_war_attacks_guild_war_lineup_guild_war_a");
+                                });
+
+                            b1.Navigation("Characters");
+
+                            b1.Navigation("Mow");
+                        });
+
+                    b.Navigation("Enemy");
+
+                    b.Navigation("Lineup")
+                        .IsRequired();
+
+                    b.Navigation("War");
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.Guilds.Guild", b =>
@@ -3569,6 +3885,11 @@ namespace TacticusPlanner.Persistence.Migrations
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.GuildRaids.GuildRaidSeason", b =>
+                {
+                    b.Navigation("Attacks");
+                });
+
+            modelBuilder.Entity("TacticusPlanner.Domain.GuildWars.GuildWar", b =>
                 {
                     b.Navigation("Attacks");
                 });

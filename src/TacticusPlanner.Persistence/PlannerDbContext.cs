@@ -4,6 +4,7 @@ using TacticusPlanner.Domain.EventShops;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.GuildRaids;
 using TacticusPlanner.Domain.Guilds;
+using TacticusPlanner.Domain.GuildWars;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
@@ -68,6 +69,10 @@ public sealed class PlannerDbContext(
     public DbSet<EventShopPlan> EventShopPlans => Set<EventShopPlan>();
 
     public DbSet<Team> Teams => Set<Team>();
+
+    public DbSet<GuildWar> GuildWars => Set<GuildWar>();
+
+    public DbSet<GuildWarAttack> GuildWarAttacks => Set<GuildWarAttack>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -139,6 +144,8 @@ public sealed class PlannerDbContext(
         modelBuilder.Entity<PersonalRosterSnapshot>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
         modelBuilder.Entity<EventShopPlan>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
         modelBuilder.Entity<Team>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
+        modelBuilder.Entity<GuildWar>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
+        modelBuilder.Entity<GuildWarAttack>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
 
         // Join table with no ProfileId of its own: scoped through its parent Project.
         modelBuilder.Entity<ProjectGoal>().HasQueryFilter(entity => entity.Project!.ProfileId == CurrentProfileId);

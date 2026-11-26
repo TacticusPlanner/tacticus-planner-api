@@ -44,3 +44,4 @@ globalconfig/guildBoss/guildBossSeasonDataConfigsGDTO.json   # raid-bosses
 globalconfig/guildBoss/modifiers.json                        # raid-bosses
 globalconfig/guildBoss/primarchs.json                        # raid-bosses
 globalconfig/guildBoss/unitSets.json                         # raid-bosses
+globalconfig/guildWar.json                                   # guild-war

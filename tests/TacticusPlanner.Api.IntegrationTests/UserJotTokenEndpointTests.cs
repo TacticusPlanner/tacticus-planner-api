@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -120,9 +121,67 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
         Assert.DoesNotContain(ProjectSecret, raw, StringComparison.Ordinal);
     }
 
-    private static async Task<string> GetTokenAsync(HttpClient client)
+    [Fact]
+    public async Task TokenCarriesWellFormedFeedbackContextAsTraits()
     {
-        var response = await client.GetAsync("/api/v1/userjot-token", TestContext.Current.CancellationToken);
+        var client = CreateAuthenticatedClient(NewSubject());
+        await ProvisionAccountAsync(client);
+
+        var token = ValidateAndReadToken(
+            await GetTokenAsync(client, "?appVersion=v2.6.0&appMode=installed&language=pt-BR")
+        );
+
+        var traits = ReadTraits(token);
+        Assert.Equal("v2.6.0", traits.GetProperty("appVersion").GetString());
+        Assert.Equal("installed", traits.GetProperty("appMode").GetString());
+        Assert.Equal("pt-BR", traits.GetProperty("language").GetString());
+    }
+
+    [Fact]
+    public async Task MalformedContextIsDroppedNotRejected()
+    {
+        var client = CreateAuthenticatedClient(NewSubject());
+        await ProvisionAccountAsync(client);
+
+        var response = await client.GetAsync(
+            "/api/v1/userjot-token?appVersion=%3Cscript%3E&appMode=tablet&language=english",
+            TestContext.Current.CancellationToken
+        );
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.Content.ReadFromJsonAsync<UserJotTokenResponse>(TestContext.Current.CancellationToken);
+
+        var token = ValidateAndReadToken(body!.Token);
+        Assert.DoesNotContain(token.Claims, claim => claim.Type == "traits");
+    }
+
+    [Fact]
+    public async Task UserAgentIsReducedToBrowserAndOs()
+    {
+        const string userAgent = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) "
+            + "Chrome/131.0.0.0 Mobile Safari/537.36";
+        var client = CreateAuthenticatedClient(NewSubject());
+        await ProvisionAccountAsync(client);
+        client.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
+
+        var rawToken = await GetTokenAsync(client);
+
+        var traits = ReadTraits(ValidateAndReadToken(rawToken));
+        Assert.Equal("Chrome 131", traits.GetProperty("browser").GetString());
+        Assert.Equal("Android", traits.GetProperty("os").GetString());
+        Assert.DoesNotContain("AppleWebKit", new JwtSecurityTokenHandler().ReadJwtToken(rawToken).Payload.SerializeToJson());
+    }
+
+    private static JsonElement ReadTraits(JwtSecurityToken token)
+    {
+        using var payload = JsonDocument.Parse(token.Payload.SerializeToJson());
+        var traits = payload.RootElement.GetProperty("traits");
+        Assert.Equal(JsonValueKind.Object, traits.ValueKind);
+        return traits.Clone();
+    }
+
+    private static async Task<string> GetTokenAsync(HttpClient client, string query = "")
+    {
+        var response = await client.GetAsync($"/api/v1/userjot-token{query}", TestContext.Current.CancellationToken);
         var body = await response.Content.ReadFromJsonAsync<UserJotTokenResponse>(TestContext.Current.CancellationToken);
         return body!.Token;
     }

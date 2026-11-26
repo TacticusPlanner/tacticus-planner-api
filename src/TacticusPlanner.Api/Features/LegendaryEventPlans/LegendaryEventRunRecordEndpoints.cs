@@ -172,6 +172,91 @@ public sealed class GetLegendaryEventRunRecordsEndpoint
             .ToList();
 }
 
+public sealed class ListLegendaryEventRunRecordsEndpoint
+    : Endpoint<GetLegendaryEventRunRecordsRequest, LegendaryEventRunRecordSummariesResponse>
+{
+    public override void Configure()
+    {
+        Get("legendary-event-run-records");
+        Summary(summary =>
+        {
+            summary.Summary = "Reads a page of the caller's run records across every Legendary Event, newest first.";
+            summary.Description = "Lists every record of the caller's profile, whether or not a plan exists for its "
+                + "event, ordered by startedAt then id, both descending. Each item is a summary (no lanes, teams or "
+                + "roster): read the roster from /legendary-event-plans/{eventId}/run-records/{recordId}/roster. "
+                + "limit is 1–100 (default 20); after is the opaque nextAfter of the previous page, null on the last "
+                + "one. A profile with no records reads as an empty page.";
+            summary.Response<LegendaryEventRunRecordSummariesResponse>(StatusCodes.Status200OK);
+            summary.Response(StatusCodes.Status400BadRequest, "limit is out of range or after is not a valid cursor.");
+            summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
+            summary.Response(StatusCodes.Status404NotFound, "The caller has no profile.");
+        });
+    }
+
+    public override async Task HandleAsync(GetLegendaryEventRunRecordsRequest req, CancellationToken ct)
+    {
+        if (ProcessorState<CurrentUserState>().ProfileId is null)
+        {
+            await this.SendNotFoundProblemAsync(ct);
+            return;
+        }
+
+        var limit = req.Limit ?? GetLegendaryEventRunRecordsEndpoint.DefaultLimit;
+        if (limit is < 1 or > GetLegendaryEventRunRecordsEndpoint.MaxLimit)
+            AddError(new ValidationFailure(
+                "limit", $"limit must be between 1 and {GetLegendaryEventRunRecordsEndpoint.MaxLimit}."));
+        RunRecordCursor? after = null;
+        if (req.After is { Length: > 0 } afterValue && !RunRecordCursor.TryDecode(afterValue, out after))
+            AddError(new ValidationFailure("after", "after is not a valid cursor; pass the nextAfter of the previous page."));
+        if (ValidationFailed)
+        {
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
+
+        // Scoped to the caller's profile by PlannerDbContext's global query filter. A profile holds a few records per
+        // event run, so ordering them past the (profile_id, ...) index prefix stays cheap without a new index.
+        var db = Resolve<PlannerDbContext>();
+        var records = after is { } cursor
+            ? db.LegendaryEventRunRecords.FromSql(
+                $"SELECT * FROM legendary_event_run_records WHERE (started_at, id) < ({cursor.StartedAt}, {cursor.Id})")
+            : db.LegendaryEventRunRecords;
+        var page = await records
+            .AsNoTracking()
+            .OrderByDescending(record => record.StartedAt)
+            .ThenByDescending(record => record.Id)
+            .Take(limit + 1)
+            .Select(record => new
+            {
+                record.Id,
+                record.EventId,
+                record.Run,
+                record.StartedAt,
+                record.ProgressAt,
+                record.CatalogVersion,
+                record.Points,
+            })
+            .ToListAsync(ct);
+
+        var hasMore = page.Count > limit;
+        var items = page.Take(limit)
+            .Select(record => new LegendaryEventRunRecordSummaryResponse(
+                record.Id.Value,
+                record.EventId,
+                record.Run,
+                record.StartedAt,
+                record.ProgressAt,
+                record.CatalogVersion,
+                record.Points))
+            .ToList();
+        await Send.OkAsync(
+            new LegendaryEventRunRecordSummariesResponse(
+                items,
+                hasMore ? new RunRecordCursor(items[^1].StartedAt, items[^1].Id).Encode() : null),
+            ct);
+    }
+}
+
 public sealed class GetLegendaryEventRunRecordRosterEndpoint : EndpointWithoutRequest<RosterSnapshotResponse>
 {
     public override void Configure()

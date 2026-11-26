@@ -14,7 +14,7 @@ public sealed class UserJotTokenSigner(IOptions<UserJotOptions> options, TimePro
 {
     private const string Audience = "userjot";
 
-    public string CreateToken(Guid accountId, string displayName)
+    public string CreateToken(Guid accountId, string displayName, IReadOnlyDictionary<string, object> traits)
     {
         var issuedAt = timeProvider.GetUtcNow();
         var payload = new JwtPayload
@@ -37,6 +37,12 @@ public sealed class UserJotTokenSigner(IOptions<UserJotOptions> options, TimePro
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.ProjectSecret)),
             SecurityAlgorithms.HmacSha256
         );
+        // Flat, non-identifying feedback context (see UserJotTraits); UserJot stores it on the member.
+        if (traits.Count > 0)
+        {
+            payload["traits"] = traits;
+        }
+
         var token = new JwtSecurityToken(new JwtHeader(signingCredentials), payload);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

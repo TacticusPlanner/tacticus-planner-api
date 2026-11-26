@@ -1,6 +1,6 @@
 ﻿{
-  version: 1.44.88.3089+420051bf20ef,
-  schemaHash: 09974640d910b900f7d20f2649776b5b9d7dda08a00a856a1bea74ff2aa7354f,
+  version: 1.44.88.3089+45126a2eaab6,
+  schemaHash: 5975ffaefaa56ab36e00e0099275c4971e8edfa9e3503ed5ba5a2c00b680bd57,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},
   datasets: [
@@ -41,12 +41,12 @@
     },
     {
       key: event-definitions,
-      hash: 73880a47691a09a0fb4aa766153305416c9a5a8e2129ce64f825e561848c519b,
+      hash: 7d8a9f411fd3ef8ef381e66b7bc94d93bc1b961d1be433e5a24b4b9fc1ebf4fa,
       url: /api/v1/game-catalog/event-definitions/{envelopeHash}
     },
     {
       key: event-shops,
-      hash: aab59fdc8a65084ba1423b878b47a035bda8997047f886b0c126d1b9825cbbb3,
+      hash: 96cc8a47a883c7af7a97f460e36c7b7e32a72d2d31138244b61d8e70108d2ca2,
       url: /api/v1/game-catalog/event-shops/{envelopeHash}
     },
     {
@@ -68,6 +68,11 @@
       key: guild-raid-meta,
       hash: 624de84a3265d6c701eba416483749cfb34f49a04e6381f00ca4ed71991ec80e,
       url: /api/v1/game-catalog/guild-raid-meta/{envelopeHash}
+    },
+    {
+      key: guild-war,
+      hash: 4db1bf46c21ab69730a6a6cceb28e76cf3ef4ef88274f7e701d75044197a5766,
+      url: /api/v1/game-catalog/guild-war/{envelopeHash}
     },
     {
       key: horde-mode-tiers,
@@ -121,7 +126,7 @@
     },
     {
       key: npcs,
-      hash: b19cb417dd7705dec82c1a40c5e99d241c357b34bd56e3f133fc338140a9cd03,
+      hash: 5f3c92041cb63f690009b0a2993a11fee1959feadd3d0214fdd42f203ed0e4e0,
       url: /api/v1/game-catalog/npcs/{envelopeHash}
     },
     {

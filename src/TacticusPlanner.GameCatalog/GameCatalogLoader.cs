@@ -94,6 +94,8 @@ public static class GameCatalogLoader
                 chests,
                 shopProducts),
             JsonOptions);
+        var guildWarViews = GameCatalogDenormalizer.ReadDatamineGuildWar(
+            LoadDatamine<DatamineGuildWar>(GameCatalogDenormalizer.DatamineGuildWarPath));
         var incursionViews = GameCatalogDenormalizer.ReadDatamineIncursions(
             LoadDatamine<List<DatamineMowEvent>>(GameCatalogDenormalizer.DatamineMowEventPath),
             chests);
@@ -152,7 +154,9 @@ public static class GameCatalogLoader
 
         // ---- build denormalized served datasets ------------------------------------------------
         var characterViews = GameCatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances, summonsByUnit, abilitiesByUnit);
-        var npcList = GameCatalogDenormalizer.BuildNpcs(npcsByFaction);
+        var characterByNpc = GameCatalogDenormalizer.ReadNpcCharacters(
+            LoadDataset<Dictionary<string, string?>>(GameCatalogDatasets.NpcCharacters), npcsByFaction, unitsByFaction);
+        var npcList = GameCatalogDenormalizer.BuildNpcs(npcsByFaction, characterByNpc);
         var mowList = GameCatalogDenormalizer.BuildMows(unitsByFaction, summonsByUnit, abilitiesByUnit);
         var mowUpgradeCostViews = GameCatalogDenormalizer.BuildMowUpgradeCosts(mowUpgradeCosts);
         var characterAbilityCostViews = GameCatalogDenormalizer.BuildCharacterAbilityCosts(characterAbilityCosts);
@@ -239,6 +243,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Hre] = HashServed(GameCatalogDatasets.Hre, hreViews),
             [GameCatalogDatasets.Incursions] = HashServed(GameCatalogDatasets.Incursions, incursionViews),
             [GameCatalogDatasets.NpcEncounters] = HashServed(GameCatalogDatasets.NpcEncounters, npcEncounterViews),
+            [GameCatalogDatasets.GuildWar] = HashServed(GameCatalogDatasets.GuildWar, guildWarViews),
         };
 
         var schemaHash = GameCatalogContractHashing.ComputeContractHash(payloadTypes, JsonOptions);
@@ -304,7 +309,8 @@ public static class GameCatalogLoader
             progressionRulesViews,
             hreViews,
             incursionViews,
-            npcEncounterViews);
+            npcEncounterViews,
+            guildWarViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)
