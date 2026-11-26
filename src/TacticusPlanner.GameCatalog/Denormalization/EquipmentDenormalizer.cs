@@ -19,13 +19,22 @@ internal static partial class GameCatalogDenormalizer
     };
 
     /// <summary>
+    /// Whether the game has not named an item: its config name is a placeholder, the id with a leading
+    /// <c>_</c> (<c>_I_Block_C005</c>), for the unreleased items the game ships with no text.
+    /// </summary>
+    public static bool IsUnnamedItem(DatamineItem item) =>
+        item.Name.StartsWith('_');
+
+    /// <summary>
     /// Reads the datamine <c>items.json</c> (keyed by item id) into catalog equipment grouped by item type, each
-    /// type's items ordered by id (ordinal). Each level's stat names are mapped to the served names, and its
-    /// <c>goldCost</c> / <c>dustCost</c> / <c>mythicDustCost</c> (absent = 0) become the item's upgrade ladder.
+    /// type's items ordered by id (ordinal). Items the game has not named (<see cref="IsUnnamedItem"/>) are left
+    /// out. Each level's stat names are mapped to the served names, and its <c>goldCost</c> / <c>dustCost</c> /
+    /// <c>mythicDustCost</c> (absent = 0) become the item's upgrade ladder.
     /// </summary>
     public static IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>> ReadDatamineEquipment(
         IReadOnlyDictionary<string, DatamineItem> items) =>
         items
+            .Where(pair => !IsUnnamedItem(pair.Value))
             .Select(pair => new GameCatalogEquipment(
                 pair.Key,
                 pair.Value.Name,
