@@ -56,7 +56,7 @@
           "Account"
         ],
         "summary": "Permanently deletes the authenticated user's planner account and all related data.",
-        "description": "Deletes the profile and every row it owns for the caller. This cannot be undone. With deleteSignInAccount=true it also makes a best-effort attempt to delete the caller's Microsoft Entra External ID user (see IExternalIdentityDeleter). The X-Sign-In-Account-Deleted response header (true|false) reports whether the sign-in account was actually deleted. Idempotent: repeating the request after the account is gone still succeeds.",
+        "description": "Deletes the profile and every row it owns for the caller. This cannot be undone. With deleteSignInAccount=true it also makes a best-effort attempt to delete the caller's Microsoft Entra External ID user (see IExternalIdentityDeleter). The X-Sign-In-Account-Deleted response header (true|false) reports whether the sign-in account was actually deleted during the request; when it was not, the deletion is retried in the background. Idempotent: repeating the request after the account is gone still succeeds.",
         "operationId": "TacticusPlannerApiFeaturesAccountManagementPurgeAccountEndpoint",
         "parameters": [
           {

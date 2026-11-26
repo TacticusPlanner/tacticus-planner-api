@@ -190,6 +190,9 @@ do not commit secrets.
 | `ExternalIdentity__ManagedIdentityClientId` | Client id of the user-assigned managed identity the app registration trusts through a federated credential (audience `api://AzureADTokenExchange`) |
 | `ExternalIdentity__ClientSecret` | **Secret.** Fallback to the federated credential, e.g. for local development |
 | `ExternalIdentity__PermanentlyDelete` | Default `true`: also removes the user from deleted items so the email can sign up again at once |
+| `BackgroundJobs__ServerEnabled` | Default `true`. Runs the Hangfire server (the workers that execute queued jobs) in the API process; the test hosts set it to `false` and only enqueue (see [Background jobs](#background-jobs)) |
+| `BackgroundJobs__WorkerCount` | Optional, default `2`. Hangfire workers per replica |
+| `BackgroundJobs__StoragePoolSize` | Optional, default `2`. Hangfire's own Npgsql pool per replica, derived from `planner-db`; counted in the infra connection budget |
 | `StagingTransfer__ServiceKey` | **Secret.** Shared by production and staging; staging presents it when redeeming a transfer code. Set alone (production) it serves the code and export endpoints; see [Copy production data to staging](#copy-production-data-to-staging) |
 | `StagingTransfer__SourceBaseUrl` | Staging only. Production API base URL (`https://api.tacticusplanner.app`); with the service key it serves `POST account/import-from-production` |
 | `FeatureManagement__<Flag>` | `true` turns a feature flag on (see [Feature flags](#feature-flags)) |
@@ -204,6 +207,21 @@ so `dotnet run`/`dotnet test` work locally with no setup. It only ever
 protects data in a local database and must never be reused outside
 `Development`. Staging/production supply their own key(s) via deployment
 configuration (Key Vault-backed), never through a committed `appsettings*.json`.
+
+### Background jobs
+
+The API runs [Hangfire](https://www.hangfire.io/) in process, with PostgreSQL storage in the planner database's
+`hangfire` schema. Hangfire creates and upgrades that schema itself on first use; EF Core migrations never
+touch it. Endpoints enqueue through `IBackgroundJobClient`; each replica's server runs the `default` queue with
+`BackgroundJobs__WorkerCount` workers. There is no dashboard and there are no recurring jobs yet.
+
+| Job | Enqueued by | Retries |
+| --- | --- | --- |
+| `ExternalIdentityDeletionJob` | `DELETE account?deleteSignInAccount=true` when the inline Graph deletion fails | 8 attempts with Hangfire's growing delay (about two hours), then stays failed |
+
+Jobs take ids, never entities or secrets (Hangfire stores arguments as plain JSON), and must be safe to run
+twice: a deploy stops in-flight jobs and Hangfire runs them again. A failed job's exception is in the logs;
+`hangfire.job` and `hangfire.state` hold its history.
 
 ### Feature flags
 

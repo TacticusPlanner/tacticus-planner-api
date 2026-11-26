@@ -18,5 +18,10 @@ internal sealed class RecordingExternalIdentityDeleter : IExternalIdentityDelete
     /// <summary>Makes deleting <paramref name="objectId"/> report failure, as Graph does when it cannot.</summary>
     public void Refuse(string objectId) => refusedObjectIds[objectId] = true;
 
+    /// <summary>Lets deleting <paramref name="objectId"/> succeed again, as Graph does once it recovers.</summary>
+    public void Allow(string objectId) => refusedObjectIds.TryRemove(objectId, out _);
+
+    public int RequestCount(string objectId) => requestedObjectIds.Count(id => id == objectId);
+
     public bool WasRequested(string objectId) => requestedObjectIds.Contains(objectId);
 }
