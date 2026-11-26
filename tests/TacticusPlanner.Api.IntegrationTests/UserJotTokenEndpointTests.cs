@@ -154,6 +154,23 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
         Assert.DoesNotContain(token.Claims, claim => claim.Type == "traits");
     }
 
+    [Fact]
+    public async Task UserAgentIsReducedToBrowserAndOs()
+    {
+        const string userAgent = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) "
+            + "Chrome/131.0.0.0 Mobile Safari/537.36";
+        var client = CreateAuthenticatedClient(NewSubject());
+        await ProvisionAccountAsync(client);
+        client.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
+
+        var rawToken = await GetTokenAsync(client);
+
+        var traits = ReadTraits(ValidateAndReadToken(rawToken));
+        Assert.Equal("Chrome 131", traits.GetProperty("browser").GetString());
+        Assert.Equal("Android", traits.GetProperty("os").GetString());
+        Assert.DoesNotContain("AppleWebKit", new JwtSecurityTokenHandler().ReadJwtToken(rawToken).Payload.SerializeToJson());
+    }
+
     private static JsonElement ReadTraits(JwtSecurityToken token)
     {
         using var payload = JsonDocument.Parse(token.Payload.SerializeToJson());

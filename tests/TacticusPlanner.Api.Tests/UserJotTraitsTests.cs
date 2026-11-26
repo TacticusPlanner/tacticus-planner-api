@@ -55,6 +55,65 @@ public sealed class UserJotTraitsTests
         Assert.Equal(kept, traits.ContainsKey(UserJotTraits.Language));
     }
 
+    [Theory]
+    [InlineData(
+        "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36",
+        "Chrome 131",
+        "Android"
+    )]
+    [InlineData(
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1",
+        "Safari 17",
+        "iOS"
+    )]
+    [InlineData(
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/131.0.6778.73 Mobile/15E148 Safari/604.1",
+        "Chrome 131",
+        "iOS"
+    )]
+    [InlineData(
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15",
+        "Safari 18",
+        "macOS"
+    )]
+    [InlineData(
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0",
+        "Edge 131",
+        "Windows"
+    )]
+    [InlineData(
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 OPR/115.0.0.0",
+        "Opera 115",
+        "Windows"
+    )]
+    [InlineData("Mozilla/5.0 (X11; Linux x86_64; rv:133.0) Gecko/20100101 Firefox/133.0", "Firefox 133", "Linux")]
+    [InlineData(
+        "Mozilla/5.0 (Linux; Android 14; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/26.0 Chrome/122.0.0.0 Mobile Safari/537.36",
+        "Samsung Internet 26",
+        "Android"
+    )]
+    [InlineData(
+        "Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "Chrome 131",
+        "ChromeOS"
+    )]
+    public void UserAgentIsReducedToBrowserAndOsFamilies(string userAgent, string browser, string os)
+    {
+        var traits = UserJotTraits.Build(null, null, null, userAgent);
+
+        Assert.Equal(browser, traits[UserJotTraits.Browser]);
+        Assert.Equal(os, traits[UserJotTraits.OperatingSystem]);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("curl/8.5.0")]
+    public void UnknownUserAgentAddsNoBrowserOrOs(string? userAgent)
+    {
+        Assert.Empty(UserJotTraits.Build(null, null, null, userAgent));
+    }
+
     [Fact]
     public void NoContextBuildsNoTraits()
     {

@@ -38,7 +38,8 @@ public sealed class GetUserJotTokenEndpoint : Endpoint<GetUserJotTokenRequest, U
             summary.Description = "The token proves the caller's identity to UserJot's widget SDK (signed "
                 + "identity) so feedback and messages cannot be attributed to a spoofed identity from the "
                 + "browser. Each call returns a fresh token, valid for at most one hour. Its traits carry the optional "
-                + "appVersion, appMode and language query values when they are well formed.";
+                + "appVersion, appMode and language query values when they are well formed, plus the browser family "
+                + "with its major version and the OS family read from the User-Agent header (never the full header).";
             summary.Response<UserJotTokenResponse>(
                 StatusCodes.Status200OK,
                 "A signed UserJot identity token for the current user."
@@ -68,7 +69,12 @@ public sealed class GetUserJotTokenEndpoint : Endpoint<GetUserJotTokenRequest, U
             displayName = FallbackName;
         }
 
-        var traits = UserJotTraits.Build(req.AppVersion, req.AppMode, req.Language);
+        var traits = UserJotTraits.Build(
+            req.AppVersion,
+            req.AppMode,
+            req.Language,
+            HttpContext.Request.Headers.UserAgent.ToString()
+        );
         var token = Resolve<UserJotTokenSigner>().CreateToken(profileId.Value, displayName, traits);
 
         HttpContext.Response.Headers.CacheControl = "no-store";

@@ -4,7 +4,8 @@ Feedback posts on UserJot arrive with no context: every author's traits are empt
 
 ## What Changes
 
-- The UserJot identity token gains a `traits` claim with non-identifying feedback context: `appVersion`, `appMode` (`installed` | `browser`) and `language`, taken from optional query parameters on `GET /api/v1/userjot-token` and echoed only when well formed. Anything malformed is dropped, never rejected, so the deployed client that sends none keeps working.
+- The UserJot identity token gains a `traits` claim with non-identifying feedback context: `appVersion`, `appMode` (`installed` | `browser`) and `language`, taken from optional query parameters on `GET /api/v1/userjot-token` and echoed only when well formed.
+  - `browser` and `os`, derived on the server from the token request's `User-Agent` header and reduced to a browser family with its major version (`Chrome 131`) and an OS family (`Android`). The full header is never stored or forwarded. Anything malformed is dropped, never rejected, so the deployed client that sends none keeps working.
 - No email, key, Tacticus id or other contact data is added; the existing "nothing else identifying" rule still holds.
 
 Companion change: `enrich-userjot-feedback` in `tacticus-planner-apps` sends the query parameters and also sets the widget's page context, reply popups, a "Report a bug" entry point, deep links and an in-widget roadmap.
@@ -17,5 +18,5 @@ Companion change: `enrich-userjot-feedback` in `tacticus-planner-apps` sends the
 
 ## Impact
 
-- `Features/UserJot` (endpoint request DTO, `UserJotTraits`, signer) and the generated OpenAPI artifact (three optional query parameters, additive).
+- `Features/UserJot` (endpoint request DTO, `UserJotTraits`, `CoarseUserAgent`, signer) and the generated OpenAPI artifact (three optional query parameters, additive).
 - No database change or migration.

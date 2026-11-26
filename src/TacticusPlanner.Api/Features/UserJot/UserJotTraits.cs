@@ -4,22 +4,26 @@ namespace TacticusPlanner.Api.Features.UserJot;
 
 /// <summary>
 /// Builds the flat, non-identifying <c>traits</c> claim of the UserJot identity token: context that helps triage
-/// feedback (which build, installed app or browser, UI language). The client-supplied
+/// feedback (which build, installed app or browser, UI language, browser and OS). The client-supplied
 /// values are only echoed when they match a strict shape, so a stray or hostile value is dropped instead of
-/// reaching UserJot; UserJot ignores nested objects and arrays in traits, so every value is a scalar.
+/// reaching UserJot. Browser and OS come from the request's <c>User-Agent</c> header, reduced to families by
+/// <see cref="CoarseUserAgent"/>. UserJot ignores nested objects and arrays in traits, so every value is a scalar.
 /// </summary>
 public static partial class UserJotTraits
 {
     public const string AppVersion = "appVersion";
     public const string AppMode = "appMode";
     public const string Language = "language";
+    public const string Browser = "browser";
+    public const string OperatingSystem = "os";
 
     private static readonly HashSet<string> AppModes = new(StringComparer.Ordinal) { "installed", "browser" };
 
     public static Dictionary<string, object> Build(
         string? appVersion,
         string? appMode,
-        string? language
+        string? language,
+        string? userAgent = null
     )
     {
         var traits = new Dictionary<string, object>();
@@ -37,6 +41,16 @@ public static partial class UserJotTraits
         if (language is not null && LanguagePattern().IsMatch(language))
         {
             traits[Language] = language;
+        }
+
+        if (CoarseUserAgent.Browser(userAgent) is { } browser)
+        {
+            traits[Browser] = browser;
+        }
+
+        if (CoarseUserAgent.OperatingSystem(userAgent) is { } operatingSystem)
+        {
+            traits[OperatingSystem] = operatingSystem;
         }
 
         return traits;
