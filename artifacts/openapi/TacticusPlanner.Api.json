@@ -9000,8 +9000,40 @@
           "Userjot-Token"
         ],
         "summary": "Issues a short-lived signed identity token for the UserJot feedback widget.",
-        "description": "The token proves the caller's identity to UserJot's widget SDK (signed identity) so feedback and messages cannot be attributed to a spoofed identity from the browser. Each call returns a fresh token, valid for at most one hour.",
+        "description": "The token proves the caller's identity to UserJot's widget SDK (signed identity) so feedback and messages cannot be attributed to a spoofed identity from the browser. Each call returns a fresh token, valid for at most one hour. Its traits carry the optional appVersion, appMode and language query values when they are well formed, plus the browser family with its major version and the OS family read from the User-Agent header (never the full header).",
         "operationId": "TacticusPlannerApiFeaturesUserJotGetUserJotTokenEndpoint",
+        "parameters": [
+          {
+            "name": "appVersion",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "appMode",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "A signed UserJot identity token for the current user.",
