@@ -1,9 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Features.UserJot;
 
 namespace TacticusPlanner.Api.IntegrationTests;
@@ -120,9 +122,70 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
         Assert.DoesNotContain(ProjectSecret, raw, StringComparison.Ordinal);
     }
 
-    private static async Task<string> GetTokenAsync(HttpClient client)
+    [Fact]
+    public async Task TokenCarriesWellFormedFeedbackContextAsTraits()
     {
-        var response = await client.GetAsync("/api/v1/userjot-token", TestContext.Current.CancellationToken);
+        var client = CreateAuthenticatedClient(NewSubject());
+        await ProvisionAccountAsync(client);
+
+        var token = ValidateAndReadToken(
+            await GetTokenAsync(client, "?appVersion=v2.6.0&appMode=installed&language=pt-BR")
+        );
+
+        var traits = ReadTraits(token);
+        Assert.Equal("v2.6.0", traits.GetProperty("appVersion").GetString());
+        Assert.Equal("installed", traits.GetProperty("appMode").GetString());
+        Assert.Equal("pt-BR", traits.GetProperty("language").GetString());
+        Assert.False(traits.GetProperty("tacticusApiLinked").GetBoolean());
+    }
+
+    [Fact]
+    public async Task MalformedContextIsDroppedNotRejected()
+    {
+        var client = CreateAuthenticatedClient(NewSubject());
+        await ProvisionAccountAsync(client);
+
+        var response = await client.GetAsync(
+            "/api/v1/userjot-token?appVersion=%3Cscript%3E&appMode=tablet&language=english",
+            TestContext.Current.CancellationToken
+        );
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.Content.ReadFromJsonAsync<UserJotTokenResponse>(TestContext.Current.CancellationToken);
+
+        var traits = ReadTraits(ValidateAndReadToken(body!.Token));
+        Assert.Equal(["tacticusApiLinked"], traits.EnumerateObject().Select(property => property.Name));
+    }
+
+    [Fact]
+    public async Task TraitsReportALinkedTacticusApiKeyWithoutTheKey()
+    {
+        var client = CreateAuthenticatedClient(NewSubject());
+        await ProvisionAccountAsync(client);
+        var apiKey = $"userjot-traits-{Guid.NewGuid()}";
+        factory.TacticusApi.ConfigurePlayerResponse(apiKey, FakeTacticusApi.BuildPlayerResponse());
+        (await client.PutAsJsonAsync(
+            "/api/v1/account/tacticus-integration",
+            new UpdateTacticusIntegrationRequest(apiKey, null),
+            TestContext.Current.CancellationToken
+        )).EnsureSuccessStatusCode();
+
+        var token = ValidateAndReadToken(await GetTokenAsync(client));
+
+        Assert.True(ReadTraits(token).GetProperty("tacticusApiLinked").GetBoolean());
+        Assert.DoesNotContain(apiKey, token.Payload.SerializeToJson(), StringComparison.Ordinal);
+    }
+
+    private static JsonElement ReadTraits(JwtSecurityToken token)
+    {
+        using var payload = JsonDocument.Parse(token.Payload.SerializeToJson());
+        var traits = payload.RootElement.GetProperty("traits");
+        Assert.Equal(JsonValueKind.Object, traits.ValueKind);
+        return traits.Clone();
+    }
+
+    private static async Task<string> GetTokenAsync(HttpClient client, string query = "")
+    {
+        var response = await client.GetAsync($"/api/v1/userjot-token{query}", TestContext.Current.CancellationToken);
         var body = await response.Content.ReadFromJsonAsync<UserJotTokenResponse>(TestContext.Current.CancellationToken);
         return body!.Token;
     }

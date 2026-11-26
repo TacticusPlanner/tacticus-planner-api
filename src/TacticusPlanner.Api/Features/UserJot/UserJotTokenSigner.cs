@@ -14,7 +14,7 @@ public sealed class UserJotTokenSigner(IOptions<UserJotOptions> options, TimePro
 {
     private const string Audience = "userjot";
 
-    public string CreateToken(Guid accountId, string displayName)
+    public string CreateToken(Guid accountId, string displayName, IReadOnlyDictionary<string, object> traits)
     {
         var issuedAt = timeProvider.GetUtcNow();
         var payload = new JwtPayload
@@ -28,6 +28,8 @@ public sealed class UserJotTokenSigner(IOptions<UserJotOptions> options, TimePro
             // display name is a single free-text field, so it goes in firstName rather than being
             // split on whitespace into a firstName/lastName guess.
             { "firstName", displayName },
+            // Flat, non-identifying feedback context (see UserJotTraits); UserJot stores it on the member.
+            { "traits", traits },
             // Not part of UserJot's claim contract; guarantees two tokens minted within the same second
             // are still distinct, per the "fresh token per call" requirement.
             { "jti", Guid.NewGuid().ToString() },
