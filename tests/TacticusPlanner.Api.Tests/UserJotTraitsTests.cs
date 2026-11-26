@@ -13,7 +13,7 @@ public sealed class UserJotTraitsTests
     [InlineData("1a950e1d0f3c4b2a8e7d6c5b4a3f2e1d0c9b8a7f")]
     public void WellFormedAppVersionIsKept(string appVersion)
     {
-        var traits = UserJotTraits.Build(appVersion, null, null, tacticusApiLinked: false);
+        var traits = UserJotTraits.Build(appVersion, null, null);
 
         Assert.Equal(appVersion, traits[UserJotTraits.AppVersion]);
     }
@@ -25,7 +25,7 @@ public sealed class UserJotTraitsTests
     [InlineData("12345678901234567890123456789012345678901")]
     public void MalformedAppVersionIsDropped(string appVersion)
     {
-        var traits = UserJotTraits.Build(appVersion, null, null, tacticusApiLinked: false);
+        var traits = UserJotTraits.Build(appVersion, null, null);
 
         Assert.False(traits.ContainsKey(UserJotTraits.AppVersion));
     }
@@ -37,7 +37,7 @@ public sealed class UserJotTraitsTests
     [InlineData("tablet", false)]
     public void OnlyKnownAppModesAreKept(string appMode, bool kept)
     {
-        var traits = UserJotTraits.Build(null, appMode, null, tacticusApiLinked: false);
+        var traits = UserJotTraits.Build(null, appMode, null);
 
         Assert.Equal(kept, traits.ContainsKey(UserJotTraits.AppMode));
     }
@@ -50,28 +50,33 @@ public sealed class UserJotTraitsTests
     [InlineData("en-us", false)]
     public void OnlyLanguageTagsAreKept(string language, bool kept)
     {
-        var traits = UserJotTraits.Build(null, null, language, tacticusApiLinked: false);
+        var traits = UserJotTraits.Build(null, null, language);
 
         Assert.Equal(kept, traits.ContainsKey(UserJotTraits.Language));
     }
 
     [Fact]
-    public void TacticusApiLinkedIsAlwaysPresent()
+    public void NoContextBuildsNoTraits()
     {
-        Assert.Equal(true, UserJotTraits.Build(null, null, null, tacticusApiLinked: true)[UserJotTraits.TacticusApiLinked]);
-        Assert.Equal(false, UserJotTraits.Build(null, null, null, tacticusApiLinked: false)[UserJotTraits.TacticusApiLinked]);
+        Assert.Empty(UserJotTraits.Build(null, null, null));
+    }
+
+    [Fact]
+    public void SignedTokenLeavesOutEmptyTraits()
+    {
+        var token = new JwtSecurityTokenHandler().ReadJwtToken(
+            CreateSigner().CreateToken(Guid.NewGuid(), "Ada", UserJotTraits.Build(null, null, null))
+        );
+
+        Assert.DoesNotContain(token.Claims, claim => claim.Type == "traits");
     }
 
     [Fact]
     public void SignedTokenCarriesTraitsAsAFlatObject()
     {
-        var signer = new UserJotTokenSigner(
-            Options.Create(new UserJotOptions { ProjectId = "project", ProjectSecret = new string('s', 32) }),
-            TimeProvider.System
-        );
-        var traits = UserJotTraits.Build("v2.6.0", "browser", "en", tacticusApiLinked: true);
+        var traits = UserJotTraits.Build("v2.6.0", "browser", "en");
 
-        var token = new JwtSecurityTokenHandler().ReadJwtToken(signer.CreateToken(Guid.NewGuid(), "Ada", traits));
+        var token = new JwtSecurityTokenHandler().ReadJwtToken(CreateSigner().CreateToken(Guid.NewGuid(), "Ada", traits));
 
         using var payload = JsonDocument.Parse(token.Payload.SerializeToJson());
         var claim = payload.RootElement.GetProperty("traits");
@@ -79,8 +84,13 @@ public sealed class UserJotTraitsTests
         Assert.Equal("v2.6.0", claim.GetProperty("appVersion").GetString());
         Assert.Equal("browser", claim.GetProperty("appMode").GetString());
         Assert.Equal("en", claim.GetProperty("language").GetString());
-        Assert.True(claim.GetProperty("tacticusApiLinked").GetBoolean());
         Assert.All(claim.EnumerateObject(), property =>
             Assert.DoesNotContain(property.Value.ValueKind, new[] { JsonValueKind.Object, JsonValueKind.Array }));
     }
+
+    private static UserJotTokenSigner CreateSigner() =>
+        new(
+            Options.Create(new UserJotOptions { ProjectId = "project", ProjectSecret = new string('s', 32) }),
+            TimeProvider.System
+        );
 }

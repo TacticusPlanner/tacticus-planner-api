@@ -28,8 +28,6 @@ public sealed class UserJotTokenSigner(IOptions<UserJotOptions> options, TimePro
             // display name is a single free-text field, so it goes in firstName rather than being
             // split on whitespace into a firstName/lastName guess.
             { "firstName", displayName },
-            // Flat, non-identifying feedback context (see UserJotTraits); UserJot stores it on the member.
-            { "traits", traits },
             // Not part of UserJot's claim contract; guarantees two tokens minted within the same second
             // are still distinct, per the "fresh token per call" requirement.
             { "jti", Guid.NewGuid().ToString() },
@@ -39,6 +37,12 @@ public sealed class UserJotTokenSigner(IOptions<UserJotOptions> options, TimePro
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.ProjectSecret)),
             SecurityAlgorithms.HmacSha256
         );
+        // Flat, non-identifying feedback context (see UserJotTraits); UserJot stores it on the member.
+        if (traits.Count > 0)
+        {
+            payload["traits"] = traits;
+        }
+
         var token = new JwtSecurityToken(new JwtHeader(signingCredentials), payload);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

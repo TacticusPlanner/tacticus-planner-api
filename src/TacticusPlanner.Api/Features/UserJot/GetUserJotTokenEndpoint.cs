@@ -37,9 +37,8 @@ public sealed class GetUserJotTokenEndpoint : Endpoint<GetUserJotTokenRequest, U
             summary.Summary = "Issues a short-lived signed identity token for the UserJot feedback widget.";
             summary.Description = "The token proves the caller's identity to UserJot's widget SDK (signed "
                 + "identity) so feedback and messages cannot be attributed to a spoofed identity from the "
-                + "browser. Each call returns a fresh token, valid for at most one hour. Its traits carry non-identifying "
-                + "feedback context: whether a Tacticus API key is linked, plus the optional appVersion, appMode and "
-                + "language query values when they are well formed.";
+                + "browser. Each call returns a fresh token, valid for at most one hour. Its traits carry the optional "
+                + "appVersion, appMode and language query values when they are well formed.";
             summary.Response<UserJotTokenResponse>(
                 StatusCodes.Status200OK,
                 "A signed UserJot identity token for the current user."
@@ -60,22 +59,16 @@ public sealed class GetUserJotTokenEndpoint : Endpoint<GetUserJotTokenRequest, U
 
         var db = Resolve<PlannerDbContext>();
         // Public identity: only a name the user confirmed. Provider/V1/legacy suggestions never reach UserJot.
-        var profile = await db.Profiles
-            .Where(entity => entity.Id == profileId)
-            .Select(entity => new
-            {
-                entity.DisplayName,
-                TacticusApiLinked = entity.TacticusIntegration != null
-                    && entity.TacticusIntegration.TacticusApiKey != null,
-            })
+        var displayName = await db.Profiles
+            .Where(profile => profile.Id == profileId)
+            .Select(profile => profile.DisplayName)
             .FirstAsync(ct);
-        var displayName = profile.DisplayName;
         if (displayName == GetCurrentUserEndpoint.NoDisplayName)
         {
             displayName = FallbackName;
         }
 
-        var traits = UserJotTraits.Build(req.AppVersion, req.AppMode, req.Language, profile.TacticusApiLinked);
+        var traits = UserJotTraits.Build(req.AppVersion, req.AppMode, req.Language);
         var token = Resolve<UserJotTokenSigner>().CreateToken(profileId.Value, displayName, traits);
 
         HttpContext.Response.Headers.CacheControl = "no-store";

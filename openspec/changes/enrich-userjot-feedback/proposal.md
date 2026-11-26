@@ -4,9 +4,7 @@ Feedback posts on UserJot arrive with no context: every author's traits are empt
 
 ## What Changes
 
-- The UserJot identity token gains a `traits` claim with non-identifying feedback context:
-  - `tacticusApiLinked` (boolean, from the server): whether the account has a Tacticus API key linked.
-  - `appVersion`, `appMode` (`installed` | `browser`) and `language`, taken from optional query parameters on `GET /api/v1/userjot-token` and echoed only when well formed. Anything malformed is dropped, never rejected, so the deployed client that sends none keeps working.
+- The UserJot identity token gains a `traits` claim with non-identifying feedback context: `appVersion`, `appMode` (`installed` | `browser`) and `language`, taken from optional query parameters on `GET /api/v1/userjot-token` and echoed only when well formed. Anything malformed is dropped, never rejected, so the deployed client that sends none keeps working.
 - No email, key, Tacticus id or other contact data is added; the existing "nothing else identifying" rule still holds.
 
 Companion change: `enrich-userjot-feedback` in `tacticus-planner-apps` sends the query parameters and also sets the widget's page context, reply popups, a "Report a bug" entry point, deep links and an in-widget roadmap.
