@@ -44,7 +44,7 @@
     "type": "GuildWarSeason",
     "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 15, "anchorUtc": "2026-10-23T09:00:00Z" },
     "requiredParameters": [],
-    "config": { "seasonLengthDays": 15, "warsPerSeason": 6, "preparationPhaseHours": 24, "activeFightingPhaseHours": 36, "seasonNumberAtAnchor": 28 }
+    "config": { "seasonLengthDays": 15, "warsPerSeason": 6, "preparationPhaseHours": 24, "firstWarPreparationBonusHours": 48, "activeFightingPhaseHours": 36, "seasonNumberAtAnchor": 28 }
   },
   {
     "id": "always-double-xp-sunday",
