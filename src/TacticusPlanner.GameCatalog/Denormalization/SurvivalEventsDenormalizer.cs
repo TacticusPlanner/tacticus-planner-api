@@ -25,9 +25,6 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>Characters a Survival team may field besides the featured hero, who always fights.</summary>
     public const int SurvivalMaxCharacters = 10;
 
-    /// <summary>Machines of War a Survival team may field when the event allows them.</summary>
-    public const int SurvivalMaxMows = 3;
-
     private const string SummonPowerUpPrefix = "powupSummonSpawn_";
     private const string CloneWaveScoreKey = "CLONE_WAVE";
     private const string GlobalAbilityModifier = "battleGlobalActiveAbility";
@@ -124,7 +121,6 @@ internal static partial class GameCatalogDenormalizer
             [.. sources.FactionIds.Where(faction => !disallowed.Contains(faction))],
             mowsAllowed,
             SurvivalMaxCharacters,
-            mowsAllowed ? SurvivalMaxMows : 0,
             new GameCatalogSurvivalStamina(
                 RequiredInt(survival.StartStamina, "survival.startStamina"),
                 RequiredInt(survival.MaxStamina, "survival.maxStamina"),

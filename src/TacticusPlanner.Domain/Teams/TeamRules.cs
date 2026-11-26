@@ -5,10 +5,10 @@ public sealed record TeamCampaignFacts(IReadOnlySet<string> AlliesFactions, IRea
 
 /// <summary>
 /// A Survival event a team can be built for: its featured hero (always fights, never stored), the factions its battle
-/// allows and its caps on stored characters and MoWs (0 MoWs when the event bars them).
+/// allows, its cap on stored characters and whether its battle takes MoWs at all.
 /// </summary>
 public sealed record TeamSurvivalFacts(
-    string FeaturedCharacterId, IReadOnlySet<string> AllowedFactions, int MaxCharacters, int MaxMows);
+    string FeaturedCharacterId, IReadOnlySet<string> AllowedFactions, int MaxCharacters, bool MowsAllowed);
 
 /// <summary>
 /// The catalog facts <see cref="TeamRules"/> reads, as plain values so the domain keeps no catalog reference
@@ -122,7 +122,8 @@ public static class TeamRules
 
     /// <summary>
     /// A team tied to a Survival event fields the Horde mode alone, does not store the event's featured hero (it always
-    /// fights), stays within the event's character and MoW caps and takes characters only from allowed factions.
+    /// fights), stays within the event's character cap, takes MoWs only when the event allows them and takes characters
+    /// only from allowed factions.
     /// </summary>
     private static void EvaluateSurvival(
         TeamDraft draft, TeamRuleFacts facts, HashSet<TeamMode> modes, string? storedKey, SortedSet<TeamRuleCode> broken)
@@ -146,10 +147,8 @@ public static class TeamRules
             broken.Add(TeamRuleCode.SurvivalFeaturedCharacter);
         if (draft.CharacterIds.Count > survival.MaxCharacters)
             broken.Add(TeamRuleCode.SurvivalTooManyCharacters);
-        if (draft.MowIds.Count > 0 && survival.MaxMows == 0)
+        if (draft.MowIds.Count > 0 && !survival.MowsAllowed)
             broken.Add(TeamRuleCode.MowsNotAllowed);
-        else if (draft.MowIds.Count > survival.MaxMows)
-            broken.Add(TeamRuleCode.SurvivalTooManyMows);
         if (!AllCharactersFrom(draft, facts, survival.AllowedFactions))
             broken.Add(TeamRuleCode.FactionNotAllowed);
     }

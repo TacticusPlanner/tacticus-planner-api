@@ -125,8 +125,8 @@ public sealed record GameCatalogSurvivalEvent(
     IReadOnlyList<GameCatalogSurvivalOffer> Offers);
 
 /// <summary>
-/// Who may fight and how: allowed factions (every faction the battle does not disallow), the character and MoW caps
-/// (the featured hero always fights and is not counted), stamina, the per-Stat-Boost bonus, Last Stand, the global
+/// Who may fight and how: allowed factions (every faction the battle does not disallow), whether MoWs may fight, the
+/// character cap (the featured hero always fights and is not counted), stamina, the per-Stat-Boost bonus, Last Stand, the global
 /// summon ability, enemy rarity-ups that stay for the rest of the run, and the featured hero's crit and block per
 /// rarity.
 /// </summary>
@@ -134,7 +134,6 @@ public sealed record GameCatalogSurvivalRules(
     IReadOnlyList<string> AllowedFactionIds,
     bool MowsAllowed,
     int MaxCharacters,
-    int MaxMows,
     GameCatalogSurvivalStamina Stamina,
     int StatBoostPct,
     IReadOnlyList<string> StatBoostStats,

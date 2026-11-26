@@ -26,7 +26,7 @@ The battle lists the factions it bars. The record serves every served faction it
 
 ### D5: A Survival team is a Horde team with a `survivalEventKey`
 
-The key is a served `survival-events` id. The featured hero always fights and is never stored. The caps are the record's `maxCharacters` (10) and `maxMows` (3 when the event allows MoWs, else 0), counted over every stored unit (Survival has no flex). A team keeps its key after its event ends and is only labelled by it in lists, never hidden.
+The key is a served `survival-events` id. The featured hero always fights and is never stored. The cap is the record's `maxCharacters` (10), counted over every stored character (Survival has no flex). MoWs are refused when the record's `mowsAllowed` is false; there is no Survival MoW cap of its own, because no event has ever allowed MoWs and the game publishes none. A team keeps its key after its event ends and is only labelled by it in lists, never hidden.
 
 ### D6: Prices are the US store price in cents
 

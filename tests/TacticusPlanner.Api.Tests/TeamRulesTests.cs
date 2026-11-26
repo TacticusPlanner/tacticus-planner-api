@@ -289,12 +289,28 @@ public sealed class TeamRulesTests
             Evaluate(Draft([TeamMode.Horde], mows: ["ultraDreadnought"], survival: "december-2026")));
 
     [Fact]
+    public void ASurvivalEventThatAllowsMowsHasNoMowCapOfItsOwn()
+    {
+        var december = Facts.SurvivalEvents!["december-2026"];
+        var facts = Facts with
+        {
+            SurvivalEvents = new Dictionary<string, TeamSurvivalFacts>(StringComparer.Ordinal)
+            {
+                ["december-2026"] = december with { MowsAllowed = true },
+            },
+        };
+        string[] fourMows = [.. Facts.MowIds.Order(StringComparer.Ordinal).Take(4)];
+
+        Assert.Empty(TeamRules.Evaluate(Draft([TeamMode.Horde], mows: fourMows, survival: "december-2026"), facts));
+    }
+
+    [Fact]
     public void SurvivalFactsComeFromTheServedEvents()
     {
         var december = Facts.SurvivalEvents!["december-2026"];
         Assert.Equal("admecManipulus", december.FeaturedCharacterId);
         Assert.Equal(10, december.MaxCharacters);
-        Assert.Equal(0, december.MaxMows);
+        Assert.False(december.MowsAllowed);
         Assert.Contains("AdeptusMechanicus", december.AllowedFactions);
     }
 }

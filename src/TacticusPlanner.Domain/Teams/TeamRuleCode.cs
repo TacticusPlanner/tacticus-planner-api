@@ -29,5 +29,4 @@ public enum TeamRuleCode
     [JsonStringEnumMemberName("unknownSurvivalEvent")] UnknownSurvivalEvent,
     [JsonStringEnumMemberName("survivalFeaturedCharacter")] SurvivalFeaturedCharacter,
     [JsonStringEnumMemberName("survivalTooManyCharacters")] SurvivalTooManyCharacters,
-    [JsonStringEnumMemberName("survivalTooManyMows")] SurvivalTooManyMows,
 }

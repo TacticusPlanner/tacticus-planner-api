@@ -1,6 +1,6 @@
 ﻿{
   version: 1.44.88.3089+9c497545687d,
-  schemaHash: 78cfaa88663db6fb09f62d1f71c5cf142887fc6c4de145ad34a2326043e90672,
+  schemaHash: 643ada73c113ec297371a455b9f5689ae7bedd3eae668ae3b4cdbc00461afd61,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},
   datasets: [
@@ -161,7 +161,7 @@
     },
     {
       key: survival-events,
-      hash: b3cf70c18e3385f182f342523a6100cf9d0afc3ca684c5ec312e22e47104f34e,
+      hash: 8d6c453e8954975f747717507235bc139f2c863eded993ede1898b430df69a61,
       url: /api/v1/game-catalog/survival-events/{envelopeHash}
     },
     {

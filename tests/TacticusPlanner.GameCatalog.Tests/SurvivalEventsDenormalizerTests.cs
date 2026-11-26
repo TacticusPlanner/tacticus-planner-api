@@ -47,7 +47,6 @@ public sealed class SurvivalEventsDenormalizerTests
             rules.AllowedFactionIds);
         Assert.False(rules.MowsAllowed);
         Assert.Equal(10, rules.MaxCharacters);
-        Assert.Equal(0, rules.MaxMows);
         Assert.Equal(new GameCatalogSurvivalStamina(2, 5, 43201, 1), rules.Stamina);
         Assert.Equal(new GameCatalogSurvivalLastStand("RepairField", 25), rules.LastStand);
         Assert.Null(rules.Summon);

@@ -42,7 +42,7 @@ public static class TeamCatalogFacts
                 survivalEvent.FeaturedCharacterId,
                 survivalEvent.Rules.AllowedFactionIds.ToHashSet(StringComparer.Ordinal),
                 survivalEvent.Rules.MaxCharacters,
-                survivalEvent.Rules.MaxMows),
+                survivalEvent.Rules.MowsAllowed),
             StringComparer.Ordinal);
 
         return new TeamRuleFacts(characterFactions, mowIds, campaigns, incursions, survivalEvents);
