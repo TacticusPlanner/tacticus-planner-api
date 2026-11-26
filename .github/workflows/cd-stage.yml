@@ -32,9 +32,21 @@ jobs:
     with:
       ref: ${{ github.sha }}
 
+  publish-jobs:
+    name: Publish jobs
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/_publish-api.yml
+    with:
+      ref: ${{ github.sha }}
+      repository: tacticus-planner-jobs
+      dockerfile: src/TacticusPlanner.Jobs/Dockerfile
+
   deploy:
     name: Deploy Stage
-    needs: publish
+    needs: [publish, publish-jobs]
     permissions:
       contents: read
       id-token: write
@@ -42,4 +54,5 @@ jobs:
     with:
       environment: stage
       image: ${{ needs.publish.outputs.image }}
+      jobs-image: ${{ needs.publish-jobs.outputs.image }}
       allow-missing-app: true

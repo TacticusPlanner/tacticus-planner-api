@@ -28,6 +28,11 @@ and .NET Aspire for local orchestration.
   re-run. The test hosts set `BackgroundJobs:ServerEnabled=false` (a host
   setting via `UseSetting`, since `Program` reads it while registering
   services); test jobs by calling them directly. See README "Background jobs".
+- `src/TacticusPlanner.Jobs`: the batch jobs console host, its own image
+  (`tacticus-planner-jobs`) run by a Manual Container Apps Job. One keyed
+  `IBatchJob` per job name (`JobRegistration.AddBatchJobs`); it refuses to run
+  with pending migrations and has no column-encryption key. Not for work an
+  endpoint enqueues (that is Hangfire). See README "Batch jobs container".
 - `tests/TacticusPlanner.Api.Tests`: Docker-free pure tests and database-independent catalog HTTP tests.
 - `tests/TacticusPlanner.Api.IntegrationTests`: database-backed endpoint tests with production pooled Npgsql, migrations, and external-boundary fakes. Shares a disposable PostgreSQL container; each factory owns an isolated database. Requires Docker.
 - `tests/TacticusPlanner.GameCatalog.Tests`: catalog manifest/denormalization tests.
@@ -145,4 +150,5 @@ dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore
 dotnet build TacticusPlanner.slnx -c Release --no-restore
 dotnet test TacticusPlanner.slnx -c Release --no-build
 docker build -f src/TacticusPlanner.Api/Dockerfile -t tacticus-planner-api:local .
+docker build -f src/TacticusPlanner.Jobs/Dockerfile -t tacticus-planner-jobs:local .
 ```

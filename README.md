@@ -223,6 +223,40 @@ Jobs take ids, never entities or secrets (Hangfire stores arguments as plain JSO
 twice: a deploy stops in-flight jobs and Hangfire runs them again. A failed job's exception is in the logs;
 `hangfire.job` and `hangfire.state` hold its history.
 
+### Batch jobs container
+
+Work too long or too heavy for a request runs in a separate image, `tacticus-planner-jobs`, built from
+`src/TacticusPlanner.Jobs`. It is a console host, not a web server: it runs one batch job, named by its first
+argument, and exits. In Azure it is the Container Apps Job `caj-tp-jobs-<env>` (tacticus-planner-infra) on a
+Manual trigger, so nothing runs, and nothing is billed, until someone starts an execution:
+
+```bash
+az containerapp job start --name caj-tp-jobs-stg --resource-group rg-tp-stg
+```
+
+The job's arguments pick what runs (`smoke` as deployed). To run another job, change them first with
+`az containerapp job update --name caj-tp-jobs-stg --resource-group rg-tp-stg --container-name jobs --args <job-name>`;
+a later workload deploy resets them to `smoke`. Don't override the template on `job start` itself: an override
+replaces the container definition, dropping the Key Vault-backed environment variables.
+
+| Job | What it does |
+| --- | --- |
+| `smoke` | Connects to the database and logs the applied migration and profile counts. Proves the image, the connection string and the private network path work. |
+
+The runner refuses to run while the database has pending migrations (the API applies them at startup, so a
+job never runs against an older schema), and its exit code is the execution's result: `0` succeeded, `1` the
+job threw, `2` unknown job name, `3` migrations pending. It uses its own connection string
+(`planner-db-jobs-connection-string`, pool of 2) and has no column-encryption key, so a job that needs an
+encrypted column fails fast instead of reading ciphertext.
+
+To add a batch job, implement `IBatchJob` and register it under its name in `JobRegistration.AddBatchJobs`.
+Run it locally against the Aspire database with
+`dotnet run --project src/TacticusPlanner.Jobs -- <job-name>` and `ConnectionStrings__planner-db` set.
+
+CD Stage and CD Prod publish the jobs image beside the API image and point the Container Apps Job at it once
+the API revision is healthy. Until the infra has created the job and granted the deployment identity access
+to it, that step is skipped with a warning.
+
 ### Feature flags
 
 Unfinished work merged to `main` stays hidden behind a feature flag
@@ -413,6 +447,12 @@ docker build -f src/TacticusPlanner.Api/Dockerfile -t tacticus-planner-api:local
 The image runs as a non-root user and listens on port `8080`. Aspire is only a
 local development dependency and is not included in the runtime image.
 
+The batch jobs image builds the same way and runs the `smoke` job by default:
+
+```powershell
+docker build -f src/TacticusPlanner.Jobs/Dockerfile -t tacticus-planner-jobs:local .
+```
+
 ## Validation
 
 ```powershell
@@ -422,6 +462,7 @@ dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore
 dotnet build TacticusPlanner.slnx -c Release --no-restore
 dotnet test TacticusPlanner.slnx -c Release --no-build
 docker build -f src/TacticusPlanner.Api/Dockerfile -t tacticus-planner-api:local .
+docker build -f src/TacticusPlanner.Jobs/Dockerfile -t tacticus-planner-jobs:local .
 ```
 
 The test projects have separate responsibilities:

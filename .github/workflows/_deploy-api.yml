@@ -11,6 +11,11 @@ on:
         description: Immutable image reference (<acr>.azurecr.io/tacticus-planner-api@sha256:...).
         required: true
         type: string
+      jobs-image:
+        description: Immutable jobs image reference (<acr>.azurecr.io/tacticus-planner-jobs@sha256:...), set on the Container Apps Job once the API is healthy. Empty skips it.
+        required: false
+        type: string
+        default: ""
       allow-missing-app:
         description: Report success without deploying when the Container App does not exist yet (first staging bootstrap).
         required: false
@@ -45,6 +50,20 @@ jobs:
         run: |
           if [[ ! "$REFERENCE" =~ ^$ACR_NAME\.azurecr\.io/tacticus-planner-api@sha256:[0-9a-f]{64}$ ]]; then
             echo "::error::$REFERENCE is not an immutable $ACR_NAME image reference."
+            exit 1
+          fi
+          echo "reference=$REFERENCE" >> "$GITHUB_OUTPUT"
+
+      - name: Check jobs image reference
+        id: jobs-image
+        if: inputs.jobs-image != ''
+        shell: bash
+        env:
+          ACR_NAME: ${{ vars.ACR_NAME }}
+          REFERENCE: ${{ inputs.jobs-image }}
+        run: |
+          if [[ ! "$REFERENCE" =~ ^$ACR_NAME\.azurecr\.io/tacticus-planner-jobs@sha256:[0-9a-f]{64}$ ]]; then
+            echo "::error::$REFERENCE is not an immutable $ACR_NAME jobs image reference."
             exit 1
           fi
           echo "reference=$REFERENCE" >> "$GITHUB_OUTPUT"
@@ -159,6 +178,57 @@ jobs:
         env:
           IMAGE_REFERENCE: ${{ steps.image.outputs.reference }}
         run: echo "Deployed $IMAGE_REFERENCE" >> "$GITHUB_STEP_SUMMARY"
+
+      # The job exists only after a workload deploy with --jobs-image, and the deployment identity can
+      # read it only after `access post` (tacticus-planner-infra). Until both, the update is skipped
+      # with a warning; ARM answers a missing resource outside the identity's scope with
+      # AuthorizationFailed, not ResourceNotFound, so both mean "not set up yet".
+      - name: Update jobs image
+        if: steps.check.outputs.exists == 'true' && steps.jobs-image.outputs.reference != ''
+        shell: bash
+        env:
+          IMAGE_REFERENCE: ${{ steps.jobs-image.outputs.reference }}
+          CONTAINER_APP_JOB_NAME: ${{ vars.CONTAINER_APP_JOB_NAME }}
+          RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+        run: |
+          if [[ -z "$CONTAINER_APP_JOB_NAME" ]]; then
+            echo "::warning::CONTAINER_APP_JOB_NAME is not set; run access pre in tacticus-planner-infra."
+            echo "Jobs image not deployed: CONTAINER_APP_JOB_NAME is not set." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          if ! output="$(az containerapp job show \
+            --name "$CONTAINER_APP_JOB_NAME" \
+            --resource-group "$RESOURCE_GROUP_NAME" \
+            --output none 2>&1)"; then
+            if grep -qE 'ResourceNotFound|AuthorizationFailed' <<< "$output"; then
+              echo "::warning::Container Apps Job $CONTAINER_APP_JOB_NAME is missing or not readable yet; deploy the workload with --jobs-image, then run access post."
+              echo "Jobs image not deployed: $CONTAINER_APP_JOB_NAME is missing or not readable yet." >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            echo "$output"
+            echo "::error::Could not read Container Apps Job $CONTAINER_APP_JOB_NAME."
+            exit 1
+          fi
+
+          # Only the image changes; the next execution (az containerapp job start) runs it.
+          az containerapp job update \
+            --name "$CONTAINER_APP_JOB_NAME" \
+            --resource-group "$RESOURCE_GROUP_NAME" \
+            --container-name jobs \
+            --image "$IMAGE_REFERENCE" \
+            --output none
+
+          job_image="$(az containerapp job show \
+            --name "$CONTAINER_APP_JOB_NAME" \
+            --resource-group "$RESOURCE_GROUP_NAME" \
+            --query 'properties.template.containers[0].image' \
+            --output tsv)"
+          if [[ "$job_image" != "$IMAGE_REFERENCE" ]]; then
+            echo "::error::Container Apps Job $CONTAINER_APP_JOB_NAME runs $job_image, not $IMAGE_REFERENCE."
+            exit 1
+          fi
+          echo "Deployed jobs image $IMAGE_REFERENCE" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Record skipped deployment
         if: steps.check.outputs.exists == 'false'

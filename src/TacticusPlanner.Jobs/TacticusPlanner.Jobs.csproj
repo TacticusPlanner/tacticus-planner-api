@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TacticusPlanner.Jobs</RootNamespace>
+    <!-- Workstation GC, like the API: one short-lived process in a small container. -->
+    <ServerGarbageCollector>false</ServerGarbageCollector>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\orchestration\TacticusPlanner.ServiceDefaults\TacticusPlanner.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\TacticusPlanner.Persistence\TacticusPlanner.Persistence.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="TacticusPlanner.Jobs.Tests" />
+  </ItemGroup>
+</Project>
