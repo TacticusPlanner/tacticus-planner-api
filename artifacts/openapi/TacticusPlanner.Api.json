@@ -4971,73 +4971,6 @@
         ]
       }
     },
-    "/api/v1/guild/raid/seasons": {
-      "get": {
-        "tags": [
-          "Guild"
-        ],
-        "summary": "Lists the Guild Raid seasons held for the caller's guild.",
-        "description": "Returns season numbers and capture status only, newest first: no hits and no player data. This endpoint never calls the upstream Guild Raid API.",
-        "operationId": "TacticusPlannerApiFeaturesGuildsGetMyGuildRaidSeasonsEndpoint",
-        "responses": {
-          "200": {
-            "description": "The guild's known seasons.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GuildRaidSeasonsResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiProblem"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiProblem"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "The authenticated profile has not been provisioned.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiProblem"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "No registered guild is linked (issueCode guildRaidNotReady).",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiProblem"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWTBearerAuth": [ ]
-          }
-        ]
-      }
-    },
     "/api/v1/guild/register": {
       "post": {
         "tags": [
@@ -15710,82 +15643,6 @@
           }
         }
       },
-      "GuildRaidSeasonResponse": {
-        "required": [
-          "seasonNumber",
-          "seasonConfigId",
-          "status",
-          "hasHits",
-          "skippedEntryCount",
-          "observedAt",
-          "finalizedAt"
-        ],
-        "type": "object",
-        "properties": {
-          "seasonNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "seasonConfigId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "status": {
-            "$ref": "#/components/schemas/GuildRaidSeasonStatus"
-          },
-          "hasHits": {
-            "type": "boolean"
-          },
-          "skippedEntryCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "observedAt": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
-          },
-          "finalizedAt": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
-          }
-        }
-      },
-      "GuildRaidSeasonsResponse": {
-        "required": [
-          "currentSeasonNumber",
-          "seasons"
-        ],
-        "type": "object",
-        "properties": {
-          "currentSeasonNumber": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "format": "int32"
-          },
-          "seasons": {
-            "$ref": "#/components/schemas/IReadOnlyListOfGuildRaidSeasonResponse"
-          }
-        }
-      },
-      "GuildRaidSeasonStatus": {
-        "enum": [
-          "live",
-          "pending",
-          "final",
-          "unavailable"
-        ],
-        "type": "string"
-      },
       "GuildRaidSeasonStatusResponse": {
         "required": [
           "seasonNumber",
@@ -16792,12 +16649,6 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GuildRaidPrimeStatusResponse"
-        }
-      },
-      "IReadOnlyListOfGuildRaidSeasonResponse": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/GuildRaidSeasonResponse"
         }
       },
       "IReadOnlyListOfIncursionBattleProgressOverrideRequest": {

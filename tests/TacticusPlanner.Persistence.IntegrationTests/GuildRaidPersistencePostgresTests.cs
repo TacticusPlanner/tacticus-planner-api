@@ -59,7 +59,7 @@ public sealed class GuildRaidPersistencePostgresTests
             .AddScoped(_ => new PlannerDbContext(options, new PassthroughEncryption(), new NoProfile()))
             .AddScoped<GuildRaidStatusService>()
             .AddSingleton<GuildRaidRefreshCoordinator>()
-            .AddSingleton<GuildRaidSeasonCaptureRequests>()
+            .AddScoped<GuildRaidEndedSeasonService>()
             .BuildServiceProvider();
 
         var coordinator = services.GetRequiredService<GuildRaidRefreshCoordinator>();
@@ -139,7 +139,7 @@ public sealed class GuildRaidPersistencePostgresTests
     }
 
     [Fact]
-    public async Task SeasonCaptureMigrationKeepsExistingAttacksAndGuildDeletionCascades()
+    public async Task MigrationKeepsExistingAttacksAndGuildDeletionCascades()
     {
         var ct = TestContext.Current.CancellationToken;
         await using var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
@@ -180,14 +180,12 @@ public sealed class GuildRaidPersistencePostgresTests
         captured.ProgressionIndex = null;
         captured.TacticusUserIdSuffix = "3bc4";
         db.GuildRaidAttacks.Add(captured);
-        db.GuildRaidSeasonCaptures.Add(new GuildRaidSeasonCapture { GuildId = guildId, SeasonNumber = 77 });
         await db.SaveChangesAsync(ct);
         db.ChangeTracker.Clear();
         Assert.Null((await db.GuildRaidAttacks.AsNoTracking().SingleAsync(attack => attack.Id == captured.Id, ct)).ProgressionIndex);
 
         await db.Guilds.Where(guild => guild.Id == guildId).ExecuteDeleteAsync(ct);
-        Assert.Equal(0, await db.GuildRaidAttacks.CountAsync(ct) + await db.GuildRaidSeasons.CountAsync(ct)
-            + await db.GuildRaidSeasonCaptures.CountAsync(ct));
+        Assert.Equal(0, await db.GuildRaidAttacks.CountAsync(ct) + await db.GuildRaidSeasons.CountAsync(ct));
     }
 
     private static GuildRaidAttack Attack(

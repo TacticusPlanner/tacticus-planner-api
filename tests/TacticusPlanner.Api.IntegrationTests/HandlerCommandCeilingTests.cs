@@ -1,14 +1,11 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Features.Teams;
 using TacticusPlanner.Domain.Goals;
-using TacticusPlanner.Domain.GuildRaids;
 using TacticusPlanner.Domain.Teams;
 using TacticusPlanner.GameCatalog;
-using TacticusPlanner.Persistence;
 using TacticusPlanner.TacticusApi.Models.Guild;
 using TacticusPlanner.TacticusApi.Models.GuildRaid;
 using TacticusPlanner.TacticusApi.Models.Shared;
@@ -32,8 +29,6 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     private const int LegendaryEventPlanMutation = 3;
     // Three more small reads than the single whole-season load they replace, in exchange for O(1) rows.
     private const int RaidStatus = 7;
-    // The caller lookup, then membership, active season, stored seasons and captures, however many seasons there are.
-    private const int RaidSeasons = 5;
     // Plus the automatic roster snapshot check: its savepoint, the setting, the profile lock and one recency read.
     private const int PlayerSync = 10;
     // Teams: the caller lookup, then (writes) the profile lock, one count or set read, and one write or list read.
@@ -189,30 +184,6 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
         (await client.PostAsync("/api/v1/guild/raid-status/refresh", null, ct)).EnsureSuccessStatusCode();
 
         AssertWithin(RaidStatus, await client.GetAsync("/api/v1/guild/raid-status", ct));
-
-        await using (var scope = factory.Services.CreateAsyncScope())
-        {
-            var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
-            var guildId = await db.GuildMembers.Where(member => member.Guild!.Name == "Ceiling Guild")
-                .Select(member => member.GuildId).SingleAsync(ct);
-            foreach (var number in Enumerable.Range(1, 10))
-            {
-                db.GuildRaidSeasons.Add(new GuildRaidSeason
-                {
-                    Id = GuildRaidSeasonId.From(Guid.CreateVersion7()),
-                    GuildId = guildId,
-                    SeasonNumber = number,
-                    SeasonConfigId = "guild_boss_season_config_1",
-                });
-                db.GuildRaidSeasonCaptures.Add(new GuildRaidSeasonCapture { GuildId = guildId, SeasonNumber = number });
-            }
-
-            await db.SaveChangesAsync(ct);
-        }
-
-        var seasons = await client.GetAsync("/api/v1/guild/raid/seasons", ct);
-        Assert.Equal(11, (await seasons.Content.ReadFromJsonAsync<GuildRaidSeasonsResponse>(ct))!.Seasons.Count);
-        AssertWithin(RaidSeasons, seasons);
     }
 
     [Fact]

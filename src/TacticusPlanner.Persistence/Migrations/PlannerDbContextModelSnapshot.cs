@@ -193,7 +193,7 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("maximum_hp");
 
-                    b.Property<int?>("ProgressionIndex")
+                    b.Property<int>("ProgressionIndex")
                         .HasColumnType("integer")
                         .HasColumnName("progression_index");
 
@@ -214,11 +214,6 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("bytea")
                         .HasColumnName("tacticus_user_id_hash");
-
-                    b.Property<string>("TacticusUserIdSuffix")
-                        .HasMaxLength(4)
-                        .HasColumnType("character varying(4)")
-                        .HasColumnName("tacticus_user_id_suffix");
 
                     b.Property<int>("Tier")
                         .HasColumnType("integer")
@@ -285,52 +280,6 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.ToTable("guild_raid_seasons", (string)null);
                 });
 
-            modelBuilder.Entity("TacticusPlanner.Domain.GuildRaids.GuildRaidSeasonCapture", b =>
-                {
-                    b.Property<Guid>("GuildId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("guild_id");
-
-                    b.Property<int>("SeasonNumber")
-                        .HasColumnType("integer")
-                        .HasColumnName("season_number");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<DateTimeOffset?>("FinalizedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("finalized_at");
-
-                    b.Property<DateTimeOffset?>("LastAttemptedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_attempted_at");
-
-                    b.Property<int>("NotFoundAttempts")
-                        .HasColumnType("integer")
-                        .HasColumnName("not_found_attempts");
-
-                    b.Property<int>("SkippedEntryCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("skipped_entry_count");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)")
-                        .HasColumnName("status");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.HasKey("GuildId", "SeasonNumber")
-                        .HasName("pk_guild_raid_season_captures");
-
-                    b.ToTable("guild_raid_season_captures", (string)null);
-                });
-
             modelBuilder.Entity("TacticusPlanner.Domain.GuildRaids.GuildRaidSyncState", b =>
                 {
                     b.Property<Guid>("GuildId")
@@ -340,10 +289,6 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Property<Guid?>("ActiveSeasonId")
                         .HasColumnType("uuid")
                         .HasColumnName("active_season_id");
-
-                    b.Property<DateTimeOffset?>("CaptureNotBefore")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("capture_not_before");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -356,10 +301,6 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Property<DateTimeOffset?>("ObservedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("observed_at");
-
-                    b.Property<int?>("SeasonsPlannedFor")
-                        .HasColumnType("integer")
-                        .HasColumnName("seasons_planned_for");
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -1509,18 +1450,6 @@ namespace TacticusPlanner.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_guild_raid_seasons_guilds_guild_id");
-
-                    b.Navigation("Guild");
-                });
-
-            modelBuilder.Entity("TacticusPlanner.Domain.GuildRaids.GuildRaidSeasonCapture", b =>
-                {
-                    b.HasOne("TacticusPlanner.Domain.Guilds.Guild", "Guild")
-                        .WithMany()
-                        .HasForeignKey("GuildId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_guild_raid_season_captures_guilds_guild_id");
 
                     b.Navigation("Guild");
                 });

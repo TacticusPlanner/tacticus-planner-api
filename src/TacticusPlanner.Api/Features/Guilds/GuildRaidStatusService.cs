@@ -18,7 +18,7 @@ public sealed partial class GuildRaidStatusService(
     IColumnHashService hashService,
     IGameCatalogProvider catalogProvider,
     GuildRaidRefreshCoordinator coordinator,
-    GuildRaidSeasonCaptureRequests captureQueue,
+    GuildRaidEndedSeasonService endedSeasons,
     TimeProvider timeProvider,
     ILogger<GuildRaidStatusService> logger)
 {
@@ -101,12 +101,9 @@ public sealed partial class GuildRaidStatusService(
         try
         {
             var persisted = await PersistAsync(guild.Id, response, attemptedAt, ct);
-            if (persisted.SyncState.ActiveSeasonId is not null)
-            {
-                captureQueue.Enqueue(guild.Id);
-            }
-
-            return Project(persisted, guild, GuildRaidFreshness.Fresh);
+            var result = Project(persisted, guild, GuildRaidFreshness.Fresh);
+            await RunFollowUpsAsync(guild, persisted.SyncState.ActiveSeasonId is not null, ct);
+            return result;
         }
         catch (DbUpdateException)
         {
@@ -120,6 +117,18 @@ public sealed partial class GuildRaidStatusService(
         {
             LogObservationRejected(logger, exception, guild.Id);
             return new GuildRaidRefreshResult.Rejected(exception.Message);
+        }
+    }
+
+    /// <summary>
+    /// Work due at most once per season or day, inside the shared operation so joined callers wait for it. Each step
+    /// contains its own failures: none may change or fail the refresh that already succeeded.
+    /// </summary>
+    private async Task RunFollowUpsAsync(Guild guild, bool seasonActive, CancellationToken ct)
+    {
+        if (seasonActive)
+        {
+            await endedSeasons.ReadIfDueAsync(guild.Id, guild.GuildApiToken!, ct);
         }
     }
 
@@ -308,6 +317,7 @@ public sealed partial class GuildRaidStatusService(
         if (db.Entry(season).State == EntityState.Detached)
         {
             db.GuildRaidSeasons.Add(season);
+            await MarkEndedSeasonAsync(state, guildId, response.Season, ct);
         }
         season.SeasonConfigId = response.SeasonConfigId;
         season.ObservedAt = observedAt;
@@ -336,6 +346,22 @@ public sealed partial class GuildRaidStatusService(
         state.ActiveSeasonId = season.Id;
         await db.SaveChangesAsync(ct);
         return new RetainedObservation(state, season);
+    }
+
+    /// <summary>
+    /// On the first observation of a season, the latest earlier one the guild stored becomes its ended season, to be
+    /// read once more by <see cref="GuildRaidEndedSeasonService"/>. Seasons the guild never stored are not read.
+    /// </summary>
+    private async Task MarkEndedSeasonAsync(GuildRaidSyncState state, GuildId guildId, int season, CancellationToken ct)
+    {
+        var ended = await db.GuildRaidSeasons.AsNoTracking()
+            .Where(entity => entity.GuildId == guildId && entity.SeasonNumber < season)
+            .OrderByDescending(entity => entity.SeasonNumber)
+            .Select(entity => new { entity.SeasonNumber, entity.FinalizedAt })
+            .FirstOrDefaultAsync(ct);
+        state.EndedSeasonNumber = ended is { FinalizedAt: null } ? ended.SeasonNumber : null;
+        state.EndedSeasonAttemptedAt = null;
+        state.EndedSeasonNotFoundCount = 0;
     }
 
     private static int ResolveProgressionIndex(

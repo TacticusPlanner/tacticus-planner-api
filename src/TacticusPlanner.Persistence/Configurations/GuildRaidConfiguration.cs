@@ -49,22 +49,6 @@ public sealed class GuildRaidSeasonConfiguration : IEntityTypeConfiguration<Guil
     }
 }
 
-public sealed class GuildRaidSeasonCaptureConfiguration : IEntityTypeConfiguration<GuildRaidSeasonCapture>
-{
-    public void Configure(EntityTypeBuilder<GuildRaidSeasonCapture> builder)
-    {
-        builder.ToTable("guild_raid_season_captures");
-        builder.HasKey(entity => new { entity.GuildId, entity.SeasonNumber });
-        builder.Property(entity => entity.GuildId).HasVogenConversion();
-        builder.Property(entity => entity.SeasonNumber).ValueGeneratedNever();
-        builder.Property(entity => entity.Status).HasConversion<string>().HasMaxLength(32).IsRequired();
-        builder.Property(entity => entity.CreatedAt).IsRequired();
-        builder.Property(entity => entity.UpdatedAt).IsRequired();
-        builder.HasOne(entity => entity.Guild).WithMany()
-            .HasForeignKey(entity => entity.GuildId).OnDelete(DeleteBehavior.Cascade);
-    }
-}
-
 public sealed class GuildRaidAttackConfiguration : IEntityTypeConfiguration<GuildRaidAttack>
 {
     public void Configure(EntityTypeBuilder<GuildRaidAttack> builder)
