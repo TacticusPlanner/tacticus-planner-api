@@ -48,6 +48,8 @@ public sealed class PlannerDbContext(
 
     public DbSet<GuildMember> GuildMembers => Set<GuildMember>();
 
+    public DbSet<GuildPlayer> GuildPlayers => Set<GuildPlayer>();
+
     public DbSet<GuildRaidSyncState> GuildRaidSyncStates => Set<GuildRaidSyncState>();
 
     public DbSet<GuildRaidSeason> GuildRaidSeasons => Set<GuildRaidSeason>();

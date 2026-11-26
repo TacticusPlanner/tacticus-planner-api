@@ -36,6 +36,17 @@ public sealed class GuildMemberConfiguration : IEntityTypeConfiguration<GuildMem
         builder.Property(entity => entity.LastActiveInPlannerOn);
         builder.Property(entity => entity.LinkedPlayerName);
         builder.Property(entity => entity.LastSyncedAt).IsRequired();
+        // Plain columns without a foreign key: a claim is verified or rejected only while they equal ProfileId.
+        builder.Property(entity => entity.VerifiedProfileId)
+            .HasConversion(
+                id => id.HasValue ? id.Value.Value : (Guid?)null,
+                value => value.HasValue ? ProfileId.From(value.Value) : (ProfileId?)null);
+        builder.Property(entity => entity.VerificationMethod).HasConversion<string>().HasMaxLength(32);
+        builder.Property(entity => entity.VerifiedAt);
+        builder.Property(entity => entity.RejectedProfileId)
+            .HasConversion(
+                id => id.HasValue ? id.Value.Value : (Guid?)null,
+                value => value.HasValue ? ProfileId.From(value.Value) : (ProfileId?)null);
         builder.Property(entity => entity.Revision).IsConcurrencyToken();
         builder.Property(entity => entity.CreatedAt).IsRequired();
         builder.Property(entity => entity.UpdatedAt).IsRequired();
@@ -64,5 +75,28 @@ public sealed class GuildMemberConfiguration : IEntityTypeConfiguration<GuildMem
             .WithMany()
             .HasForeignKey(entity => entity.ProfileId)
             .OnDelete(DeleteBehavior.SetNull);
+    }
+}
+
+public sealed class GuildPlayerConfiguration : IEntityTypeConfiguration<GuildPlayer>
+{
+    public void Configure(EntityTypeBuilder<GuildPlayer> builder)
+    {
+        builder.ToTable("guild_players");
+        builder.HasKey(entity => entity.Id);
+        builder.Property(entity => entity.Id).HasVogenConversion().ValueGeneratedNever();
+        builder.Property(entity => entity.GuildId).HasVogenConversion().IsRequired();
+        builder.Property(entity => entity.TacticusUserIdHash)
+            .HasConversion(hash => hash.Value, value => TacticusUserIdHash.From(value))
+            .HasMaxLength(32)
+            .IsRequired();
+        builder.Property(entity => entity.TacticusUserIdSuffix).HasMaxLength(4);
+        builder.Property(entity => entity.AssignedName).HasMaxLength(50);
+        builder.Property(entity => entity.Revision).IsConcurrencyToken();
+        builder.Property(entity => entity.CreatedAt).IsRequired();
+        builder.Property(entity => entity.UpdatedAt).IsRequired();
+        builder.HasIndex(entity => new { entity.GuildId, entity.TacticusUserIdHash }).IsUnique();
+        builder.HasOne(entity => entity.Guild).WithMany()
+            .HasForeignKey(entity => entity.GuildId).OnDelete(DeleteBehavior.Cascade);
     }
 }

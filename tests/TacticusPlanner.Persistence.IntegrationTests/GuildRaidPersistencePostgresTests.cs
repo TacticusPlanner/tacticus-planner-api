@@ -149,7 +149,7 @@ public sealed class GuildRaidPersistencePostgresTests
             .UseSnakeCaseNamingConvention()
             .Options;
         await using var db = new PlannerDbContext(options, new PassthroughEncryption(), new NoProfile());
-        await db.GetService<IMigrator>().MigrateAsync("AddTeams", ct);
+        await db.GetService<IMigrator>().MigrateAsync("AddGuildWars", ct);
 
         // Raw SQL: the model already has the columns this migration adds.
         await db.Database.ExecuteSqlRawAsync(

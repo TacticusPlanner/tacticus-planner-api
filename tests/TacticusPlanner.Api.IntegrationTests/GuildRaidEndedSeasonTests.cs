@@ -230,7 +230,7 @@ public sealed class GuildRaidEndedSeasonTests(PlannerApiFactory factory) : IClas
         }
 
         var refreshed = await ActivateAsync(guild, Active);
-        Assert.Contains($"\"season\":{Active}", refreshed);
+        Assert.Contains("\"state\":\"active\"", refreshed);
         await RefreshAsync(guild);
         Assert.Equal([Ended], factory.TacticusApi.GuildRaidSeasonCalls(guild.Token));
 
@@ -276,17 +276,23 @@ public sealed class GuildRaidEndedSeasonTests(PlannerApiFactory factory) : IClas
         factory.TacticusApi.ConfigureGuildRaidSeasonRejection(guild.Token, Ended, HttpStatusCode.NotFound);
 
         await ActivateAsync(guild, Active);
-        foreach (var _ in Enumerable.Range(0, 3))
+        foreach (var _ in Enumerable.Range(0, 2))
         {
             await MoveAttemptBackAsync(guild);
             await RefreshAsync(guild);
         }
 
         Assert.Equal([Ended, Ended, Ended], factory.TacticusApi.GuildRaidSeasonCalls(guild.Token));
-        await using var db = Db();
-        AssertCleared(await StateAsync(db, guild));
-        Assert.Null(await FinalizedAtAsync(db, guild, Ended));
-        Assert.Equal(1, await HitsAsync(db, guild, Ended));
+        await using (var db = Db())
+        {
+            AssertCleared(await StateAsync(db, guild));
+            Assert.Null(await FinalizedAtAsync(db, guild, Ended));
+            Assert.Equal(1, await HitsAsync(db, guild, Ended));
+        }
+
+        await MoveAttemptBackAsync(guild);
+        await RefreshAsync(guild);
+        Assert.Equal(3, factory.TacticusApi.GuildRaidSeasonCalls(guild.Token).Count);
     }
 
     [Fact]

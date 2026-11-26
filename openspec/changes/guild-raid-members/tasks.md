@@ -1,11 +1,11 @@
 ## 1. Rework the branch
 
-- [ ] 1.1 Remove the capture worker, queue, lease, season planning, `GuildRaidSeasonCapture`, the two capture sync-state columns, `GET guild/raid/seasons` and their tests; delete the branch's migration; keep the normalizer, the suffix and nullable progression; verify the solution builds and the remaining tests pass
-- [ ] 1.2 Rebase on `main`; verify the build and the guild sync and Guild War tests pass
+- [x] 1.1 Remove the capture worker, queue, lease, season planning, `GuildRaidSeasonCapture`, the two capture sync-state columns, `GET guild/raid/seasons` and their tests; delete the branch's migration; keep the normalizer, the suffix and nullable progression; verify the solution builds and the remaining tests pass
+- [ ] 1.2 Merge `main` into the branch (a merge keeps the PR's review threads, unlike a rebase); verify the build and the guild sync and Guild War tests pass
 
 ## 2. Schema
 
-- [ ] 2.1 Add the three ended-season sync-state fields, `GuildRaidSeason.FinalizedAt`, `GuildPlayer`, the four `GuildMember` fields and the method enum with EF configuration; verify the solution builds
+- [x] 2.1 Add the three ended-season sync-state fields, `GuildRaidSeason.FinalizedAt`, `GuildPlayer`, the four `GuildMember` fields and the method enum with EF configuration; verify the solution builds
 - [ ] 2.2 Generate the migration with `dotnet ef migrations add AddGuildRaidMembers --project src/TacticusPlanner.Persistence --startup-project src/TacticusPlanner.Api` and leave it unedited; verify Postgres tests cover the upgrade with existing members and attacks, uniqueness, cascade from the guild, a null progression, and that deleting a profile leaves its claim unverified
 
 ## 3. Hits
@@ -13,8 +13,8 @@
 - [x] 3.1 Extract the shared normalizer from `PersistCoreAsync` with no live behavior change; verify existing raid status, projector and persistence tests pass unchanged
 - [x] 3.2 Store the id suffix on new live hits and fill it on matched ones; verify with an integration test that the full id is in no raid column
 - [x] 3.3 Add the own-data progression rule and entry skipping; verify unit tests for suffix, no suffix, malformed suffix, missing player, missing completion time, negative HP, and tier 6 and 7 kept as reported
-- [ ] 3.4 Set the ended-season pointer in `PersistCoreAsync`; verify tests for a higher season, the same season, no active season, and several seasons missed
-- [ ] 3.5 Add the ended-season step to the refresh operation with its hourly claim; verify tests for storing and finalizing, a changed position, a partly live season, a differing config hash, kept missing hits, an empty response with and without stored hits, the wrong season number, 404 three times, 403, timeout, two instances, joined callers, unchanged `GET guild/raid-status` body, and a failing step leaving the refresh at 200
+- [x] 3.4 Set the ended-season pointer in `PersistCoreAsync`; verify tests for a higher season, the same season, no active season, and several seasons missed
+- [x] 3.5 Add the ended-season step to the refresh operation with its hourly claim; verify tests for storing and finalizing, a changed position, a partly live season, a differing config hash, kept missing hits, an empty response with and without stored hits, the wrong season number, 404 three times, 403, timeout, two instances, joined callers, unchanged `GET guild/raid-status` body, and a failing step leaving the refresh at 200
 
 ## 4. Players and claims
 
