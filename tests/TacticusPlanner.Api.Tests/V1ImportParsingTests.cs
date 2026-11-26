@@ -143,6 +143,18 @@ public sealed class V1ImportParsingTests
     }
 
     [Fact]
+    public void ANonArrayTeams2KeepsTheSurvivalTeams()
+    {
+        var data = JsonSerializer.Deserialize<V1UserData>(
+            """{"teams2": {}, "survivalTeams": {"season_december_2026_event": ["ultraCalgar"]}}""", WebJsonOptions)!;
+
+        var result = TacticusV1Client.ReadTeams(data.Teams2, data.SurvivalTeams);
+
+        Assert.True(result.IsPresent);
+        Assert.Equal("season_december_2026_event", Assert.Single(result.Teams!).SurvivalEventName);
+    }
+
+    [Fact]
     public void Teams2EntriesAreReadLeniently()
     {
         var result = ReadTeams("""

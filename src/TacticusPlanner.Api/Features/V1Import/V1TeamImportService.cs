@@ -133,7 +133,8 @@ public sealed record V1TeamImportResult(ImportPartResult Part, IReadOnlyList<V1T
 /// </summary>
 public sealed class V1TeamImportService(PlannerDbContext db, IGameCatalogProvider catalogProvider, TeamsService teams)
 {
-    /// <summary>The most V1 teams one import processes; any beyond get no outcome.</summary>
+    /// <summary>The most V1 <c>teams2</c> entries one import processes; any beyond get no outcome. Survival teams are
+    /// not counted.</summary>
     internal const int MaxTeams = 100;
 
     private static readonly Dictionary<string, string> Storylines = new(StringComparer.Ordinal)
@@ -172,12 +173,16 @@ public sealed class V1TeamImportService(PlannerDbContext db, IGameCatalogProvide
         var catalog = catalogProvider.Current;
         var facts = TeamCatalogFacts.For(catalog);
         var units = new UnitResolver(catalog);
+        // The cap is V1's teams2 list; Survival teams (one per event) follow it and are never cut by it.
         var candidates = source.Teams
+            .Where(team => team.SurvivalEventName is null)
             .Select((team, index) => (Team: team, Index: index))
             .OrderBy(entry => entry.Team.Priority ?? double.MaxValue)
             .ThenBy(entry => entry.Index)
             .Take(MaxTeams)
-            .Select(entry => Map(entry.Team, units, facts))
+            .Select(entry => entry.Team)
+            .Concat(source.Teams.Where(team => team.SurvivalEventName is not null))
+            .Select(team => Map(team, units, facts))
             .ToList();
 
         // Earlier V1 import parts save but leave their entities tracked (the roster snapshots with their JSON-owned

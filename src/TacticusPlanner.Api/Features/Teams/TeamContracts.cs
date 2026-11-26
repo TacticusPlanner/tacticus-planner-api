@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using FluentValidation;
 using TacticusPlanner.Domain.Teams;
@@ -39,7 +40,7 @@ public sealed record TeamResponse(
         team.Notes,
         team.RarityCap,
         team.SurvivalEventKey,
-        TeamRules.Evaluate(team.ToDraft(), facts));
+        TeamRules.Evaluate(team.ToDraft(), facts, team.SurvivalEventKey));
 }
 
 public sealed record ListTeamsResponse(IReadOnlyList<TeamResponse> Teams);
@@ -82,7 +83,11 @@ public sealed record CreateTeamRequest(
     string? SurvivalEventKey = null
 ) : ITeamFields;
 
-/// <summary>Replaces every editable field when <see cref="Revision"/> matches the stored team.</summary>
+/// <summary>
+/// Replaces every editable field when <see cref="Revision"/> matches the stored team. <see cref="SurvivalEventKey"/> is
+/// the exception: a body without it (a client from before Survival teams) keeps the stored key; an explicit null
+/// clears it.
+/// </summary>
 public sealed record UpdateTeamRequest(
     string Name,
     IReadOnlyList<TeamMode> Modes,
@@ -94,9 +99,26 @@ public sealed record UpdateTeamRequest(
     IReadOnlyList<string> IncursionMowIds,
     string? Notes,
     TeamRarityCap? RarityCap,
-    long Revision,
-    string? SurvivalEventKey = null
-) : ITeamFields;
+    long Revision
+) : ITeamFields
+{
+    private readonly string? _survivalEventKey;
+
+    /// <summary>The Survival event the team is for; null for none. Absent from the body keeps the stored key.</summary>
+    public string? SurvivalEventKey
+    {
+        get => _survivalEventKey;
+        init
+        {
+            _survivalEventKey = value;
+            HasSurvivalEventKey = true;
+        }
+    }
+
+    /// <summary>Whether the body named <see cref="SurvivalEventKey"/> (System.Text.Json sets only properties present).</summary>
+    [JsonIgnore]
+    public bool HasSurvivalEventKey { get; private init; }
+}
 
 /// <summary>The profile's complete team list in its new order.</summary>
 public sealed record UpdateTeamOrderRequest(IReadOnlyList<Guid> TeamIds);

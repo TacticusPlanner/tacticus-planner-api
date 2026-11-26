@@ -31,7 +31,12 @@ public static class TeamRules
 {
     private static readonly TeamMode[] SizeLimitedModes = [TeamMode.WarOffense, TeamMode.WarDefense, TeamMode.TournamentArena];
 
-    public static IReadOnlyList<TeamRuleCode> Evaluate(TeamDraft draft, TeamRuleFacts facts)
+    /// <param name="draft">The team as it would be saved.</param>
+    /// <param name="facts">The catalog facts the rules read.</param>
+    /// <param name="storedSurvivalEventKey">The Survival event key the team already has (null for a new team). When
+    /// the draft keeps that key and the catalog no longer serves the event, the key is only a label: the Survival rules
+    /// are skipped, so the team stays editable after a datamine drops its event.</param>
+    public static IReadOnlyList<TeamRuleCode> Evaluate(TeamDraft draft, TeamRuleFacts facts, string? storedSurvivalEventKey = null)
     {
         var broken = new SortedSet<TeamRuleCode>();
         var modes = draft.Modes.ToHashSet();
@@ -62,7 +67,7 @@ public static class TeamRules
 
         EvaluateCampaign(draft, facts, campaign, broken);
         EvaluateIncursion(draft, facts, incursion, broken);
-        EvaluateSurvival(draft, facts, modes, broken);
+        EvaluateSurvival(draft, facts, modes, storedSurvivalEventKey, broken);
 
         return [.. broken];
     }
@@ -119,13 +124,19 @@ public static class TeamRules
     /// A team tied to a Survival event fields the Horde mode alone, does not store the event's featured hero (it always
     /// fights), stays within the event's character and MoW caps and takes characters only from allowed factions.
     /// </summary>
-    private static void EvaluateSurvival(TeamDraft draft, TeamRuleFacts facts, HashSet<TeamMode> modes, SortedSet<TeamRuleCode> broken)
+    private static void EvaluateSurvival(
+        TeamDraft draft, TeamRuleFacts facts, HashSet<TeamMode> modes, string? storedKey, SortedSet<TeamRuleCode> broken)
     {
         if (draft.SurvivalEventKey is null)
             return;
+        var survival = facts.SurvivalEvents?.GetValueOrDefault(draft.SurvivalEventKey);
+        var served = survival is not null;
+        // An event the catalog stopped serving: a kept key is a label only, a new or changed key is unknown.
+        if (!served && string.Equals(draft.SurvivalEventKey, storedKey, StringComparison.Ordinal))
+            return;
         if (!modes.SetEquals([TeamMode.Horde]))
             broken.Add(TeamRuleCode.SurvivalModeRequired);
-        if (facts.SurvivalEvents?.TryGetValue(draft.SurvivalEventKey, out var survival) != true || survival is null)
+        if (survival is null)
         {
             broken.Add(TeamRuleCode.UnknownSurvivalEvent);
             return;

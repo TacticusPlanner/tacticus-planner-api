@@ -463,4 +463,22 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(["ultraCalgar", "ultraTitus", "ultraApothecary"], team.CharacterIds);
         Assert.Empty(team.Issues);
     }
+
+    [Fact]
+    public async Task SurvivalTeamsAreNotCutByTheTeams2Cap()
+    {
+        using var roomy = factory.WithWebHostBuilder(builder => builder.UseSetting("Teams:Limit", "200"));
+        var client = roomy.CreateClient();
+        client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, $"v1-team-import-{Guid.NewGuid()}");
+        await client.GetAsync("/api/v1/account", Ct);
+        var teams2 = string.Join(",", Enumerable.Range(1, V1TeamImportService.MaxTeams + 1).Select(i => Team($"Team {i}")));
+        const string survival = """{"season_december_2026_event": ["ultraCalgar", "ultraTitus", "ultraApothecary"]}""";
+        var username = Configure($$"""{"teams2": [{{teams2}}], "survivalTeams": {{survival}}}""");
+
+        var body = await ImportAsync(client, username);
+
+        Assert.Equal(V1TeamImportService.MaxTeams + 1, body.TeamOutcomes.Count);
+        Assert.All(body.TeamOutcomes, outcome => Assert.Equal(ImportPartStatus.Imported, outcome.Status));
+        Assert.Contains(await ListAsync(client), team => team.SurvivalEventKey == "december-2026");
+    }
 }

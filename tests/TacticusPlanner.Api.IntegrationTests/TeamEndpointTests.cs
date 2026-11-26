@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,8 +32,10 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
 
     private static UpdateTeamRequest Update(TeamResponse team, string? name = null, string[]? characters = null) =>
         new(name ?? team.Name, team.Modes, characters ?? team.CharacterIds, team.FlexStartIndex, team.MowIds,
-            team.MowFlexStartIndex, team.CampaignGroupId, team.IncursionMowIds, team.Notes, team.RarityCap, team.Revision,
-            team.SurvivalEventKey);
+            team.MowFlexStartIndex, team.CampaignGroupId, team.IncursionMowIds, team.Notes, team.RarityCap, team.Revision)
+        {
+            SurvivalEventKey = team.SurvivalEventKey,
+        };
 
     private async Task<(HttpClient Client, string Subject)> ClientAsync()
     {
@@ -464,5 +467,48 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
         Assert.Equal(HttpStatusCode.OK, renamed.StatusCode);
         Assert.Equal("december-2026", (await renamed.Content.ReadFromJsonAsync<TeamResponse>(Ct))!.SurvivalEventKey);
         Assert.Equal(["factionNotAllowed", "survivalFeaturedCharacter"], rules.Select(rule => rule!.GetValue<string>()));
+    }
+
+    [Fact]
+    public async Task AnUpdateWithoutTheSurvivalKeyKeepsItAndAnExplicitNullClearsIt()
+    {
+        var (client, _) = await ClientAsync();
+        var created = await CreateAsync(client, Create("Survival Dec") with { SurvivalEventKey = "december-2026" });
+
+        var omitted = await PutRawAsync(client, created, survivalEventKey: null, includeKey: false);
+        var cleared = await PutRawAsync(client, omitted, survivalEventKey: null, includeKey: true);
+
+        Assert.Equal("december-2026", omitted.SurvivalEventKey);
+        Assert.Null(cleared.SurvivalEventKey);
+    }
+
+    [Fact]
+    public async Task ATeamWhoseEventLeftTheCatalogStaysEditable()
+    {
+        var (client, subject) = await ClientAsync();
+        await SeedAsync(subject, Seeded("Old event") with { SurvivalEventKey = "crescendo-01" });
+        var team = Assert.Single(await ListAsync(client));
+
+        var renamed = await client.PutAsJsonAsync($"{Url}/{team.Id}", Update(team, "Old event, renamed"), Ct);
+        var moved = await RulesAsync(await client.PutAsJsonAsync(
+            $"{Url}/{team.Id}", Update(team, "Moved") with { SurvivalEventKey = "march-2020", Revision = team.Revision + 1 }, Ct));
+
+        Assert.Empty(team.Issues);
+        Assert.Equal(HttpStatusCode.OK, renamed.StatusCode);
+        Assert.Equal("crescendo-01", (await renamed.Content.ReadFromJsonAsync<TeamResponse>(Ct))!.SurvivalEventKey);
+        Assert.Equal("unknownSurvivalEvent", Assert.Single(moved)!.GetValue<string>());
+    }
+
+    private static async Task<TeamResponse> PutRawAsync(HttpClient client, TeamResponse team, string? survivalEventKey, bool includeKey)
+    {
+        var body = JsonSerializer.SerializeToNode(Update(team), TestJson.Options)!.AsObject();
+        body.Remove("survivalEventKey");
+        if (includeKey)
+            body["survivalEventKey"] = survivalEventKey;
+
+        using var content = new StringContent(body.ToJsonString(), System.Text.Encoding.UTF8, "application/json");
+        var response = await client.PutAsync($"{Url}/{team.Id}", content, Ct);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        return (await response.Content.ReadFromJsonAsync<TeamResponse>(Ct))!;
     }
 }

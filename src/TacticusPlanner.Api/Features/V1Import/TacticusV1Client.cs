@@ -330,7 +330,8 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
     /// <see cref="V1UserData"/> so a malformed one fails only this part (<c>v1-team-import</c>). No key or an empty
     /// array is missing; anything but an array is invalid. Each entry is read leniently, so an entry that cannot be
     /// read is reported on its own outcome and the rest still import. V1 <c>survivalTeams</c> (event name to unit ids)
-    /// follow as one Survival team per event; a malformed one is left out without failing the part.
+    /// follow as one Survival team per event; a malformed one is left out without failing the part, and a malformed
+    /// <c>teams2</c> does not drop them.
     /// </summary>
     internal static V1TeamImportData ReadTeams(JsonElement? element, JsonElement? survivalTeams = null)
     {
@@ -338,7 +339,7 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
         if (Present(element) is not { } present)
             return survival.Count == 0 ? V1TeamImportData.Missing() : V1TeamImportData.Valid(survival);
         if (present.ValueKind != JsonValueKind.Array)
-            return V1TeamImportData.Invalid();
+            return survival.Count == 0 ? V1TeamImportData.Invalid() : V1TeamImportData.Valid(survival);
         if (present.GetArrayLength() == 0 && survival.Count == 0)
             return V1TeamImportData.Missing();
 

@@ -245,6 +245,26 @@ public sealed class TeamRulesTests
         Assert.Equal([TeamRuleCode.UnknownSurvivalEvent], Evaluate(Draft([TeamMode.Horde], survival: "crescendo-01")));
 
     [Fact]
+    public void AStoredKeyTheCatalogNoLongerServesIsOnlyALabel()
+    {
+        var kept = Draft([TeamMode.WarOffense], Ultras[..5], survival: "crescendo-01");
+        var changed = Draft([TeamMode.Horde], survival: "march-2020");
+
+        Assert.Empty(TeamRules.Evaluate(kept, Facts, storedSurvivalEventKey: "crescendo-01"));
+        Assert.Equal(
+            [TeamRuleCode.UnknownSurvivalEvent],
+            TeamRules.Evaluate(changed, Facts, storedSurvivalEventKey: "crescendo-01"));
+    }
+
+    [Fact]
+    public void AStoredKeyTheCatalogStillServesKeepsItsRules() =>
+        Assert.Equal(
+            [TeamRuleCode.SurvivalFeaturedCharacter],
+            TeamRules.Evaluate(
+                Draft([TeamMode.Horde], [.. Ultras[..3], "admecManipulus"], survival: "december-2026"), Facts,
+                storedSurvivalEventKey: "december-2026"));
+
+    [Fact]
     public void TheFeaturedHeroIsNotStored() =>
         Assert.Equal(
             [TeamRuleCode.SurvivalFeaturedCharacter],
