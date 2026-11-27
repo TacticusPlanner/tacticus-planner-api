@@ -14,11 +14,14 @@ gameconfig/liveEvents/homeScreenEvent.json                   # event-definitions
 gameconfig/liveEvents/legendaryHeroEvent.json                # lres, lre-battles
 gameconfig/liveEvents/linearHeroEvent.json                   # quest-events
 gameconfig/liveEvents/mowEvent.json                          # incursions
+gameconfig/liveEvents/seasonalEvent.json                     # survival-events
 gameconfig/loot/chests.json                                  # lres (shards per chest), hre, incursions
 gameconfig/loot/tieredProgressRewards.json                   # event-definitions (config.hse ladders), lres (points ladder)
 gameconfig/quests/groups.json                                # mythic-quests, lres (missions), hre
 gameconfig/shop/merchants.json                               # shops
+gameconfig/shop/offers.json                                  # survival-events (offers)
 gameconfig/shop/products.json                                # lres (chest costs), global-values (energy shop), hre
+gameconfig/shop/realMoneyProducts.json                       # survival-events (offer prices and rewards)
 gameconfig/shop/segments.json                                # lres (chest ladder)
 gameconfig/shop/staminaShopTiers.json                        # global-values (energy shop)
 gameconfig/units/abilities.json                              # characters, mows, npcs (damage profiles, MoW recipes), HSE stat boosts

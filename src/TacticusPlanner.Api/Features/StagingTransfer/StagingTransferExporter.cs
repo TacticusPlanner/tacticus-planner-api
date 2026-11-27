@@ -155,6 +155,7 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
                 IncursionMowIds = team.IncursionMowIds,
                 Notes = team.Notes,
                 RarityCap = team.RarityCap,
+                SurvivalEventKey = team.SurvivalEventKey,
                 ImportKey = team.ImportKey,
             }).ToList(),
             GuildWars = guildWars.Select(war => new StagingTransferGuildWar

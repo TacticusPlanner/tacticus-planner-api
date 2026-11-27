@@ -4,6 +4,13 @@ namespace TacticusPlanner.Domain.Teams;
 public sealed record TeamCampaignFacts(IReadOnlySet<string> AlliesFactions, IReadOnlyList<string> CoreCharacterIds);
 
 /// <summary>
+/// A Survival event a team can be built for: its featured hero (always fights, never stored), the factions its battle
+/// allows, its cap on stored characters and whether its battle takes MoWs at all.
+/// </summary>
+public sealed record TeamSurvivalFacts(
+    string FeaturedCharacterId, IReadOnlySet<string> AllowedFactions, int MaxCharacters, bool MowsAllowed);
+
+/// <summary>
 /// The catalog facts <see cref="TeamRules"/> reads, as plain values so the domain keeps no catalog reference
 /// (design D3). Built once per catalog snapshot by the API.
 /// </summary>
@@ -11,7 +18,8 @@ public sealed record TeamRuleFacts(
     IReadOnlyDictionary<string, string> CharacterFactions,
     IReadOnlySet<string> MowIds,
     IReadOnlyDictionary<string, TeamCampaignFacts> Campaigns,
-    IReadOnlyDictionary<string, IReadOnlySet<string>> IncursionFactionsByMowId
+    IReadOnlyDictionary<string, IReadOnlySet<string>> IncursionFactionsByMowId,
+    IReadOnlyDictionary<string, TeamSurvivalFacts>? SurvivalEvents = null
 );
 
 /// <summary>
@@ -23,7 +31,12 @@ public static class TeamRules
 {
     private static readonly TeamMode[] SizeLimitedModes = [TeamMode.WarOffense, TeamMode.WarDefense, TeamMode.TournamentArena];
 
-    public static IReadOnlyList<TeamRuleCode> Evaluate(TeamDraft draft, TeamRuleFacts facts)
+    /// <param name="draft">The team as it would be saved.</param>
+    /// <param name="facts">The catalog facts the rules read.</param>
+    /// <param name="storedSurvivalEventKey">The Survival event key the team already has (null for a new team). When
+    /// the draft keeps that key and the catalog no longer serves the event, the key is only a label: the Survival rules
+    /// are skipped, so the team stays editable after a datamine drops its event.</param>
+    public static IReadOnlyList<TeamRuleCode> Evaluate(TeamDraft draft, TeamRuleFacts facts, string? storedSurvivalEventKey = null)
     {
         var broken = new SortedSet<TeamRuleCode>();
         var modes = draft.Modes.ToHashSet();
@@ -54,6 +67,7 @@ public static class TeamRules
 
         EvaluateCampaign(draft, facts, campaign, broken);
         EvaluateIncursion(draft, facts, incursion, broken);
+        EvaluateSurvival(draft, facts, modes, storedSurvivalEventKey, broken);
 
         return [.. broken];
     }
@@ -103,6 +117,39 @@ public static class TeamRules
         if (shared.Count == 0)
             broken.Add(TeamRuleCode.NoSharedIncursionFaction);
         if (incursion && !AllCharactersFrom(draft, facts, shared))
+            broken.Add(TeamRuleCode.FactionNotAllowed);
+    }
+
+    /// <summary>
+    /// A team tied to a Survival event fields the Horde mode alone, does not store the event's featured hero (it always
+    /// fights), stays within the event's character cap, takes MoWs only when the event allows them and takes characters
+    /// only from allowed factions.
+    /// </summary>
+    private static void EvaluateSurvival(
+        TeamDraft draft, TeamRuleFacts facts, HashSet<TeamMode> modes, string? storedKey, SortedSet<TeamRuleCode> broken)
+    {
+        if (draft.SurvivalEventKey is null)
+            return;
+        var survival = facts.SurvivalEvents?.GetValueOrDefault(draft.SurvivalEventKey);
+        var served = survival is not null;
+        // An event the catalog stopped serving: a kept key is a label only, a new or changed key is unknown.
+        if (!served && string.Equals(draft.SurvivalEventKey, storedKey, StringComparison.Ordinal))
+            return;
+        if (!modes.SetEquals([TeamMode.Horde]))
+            broken.Add(TeamRuleCode.SurvivalModeRequired);
+        if (survival is null)
+        {
+            broken.Add(TeamRuleCode.UnknownSurvivalEvent);
+            return;
+        }
+
+        if (draft.CharacterIds.Contains(survival.FeaturedCharacterId, StringComparer.Ordinal))
+            broken.Add(TeamRuleCode.SurvivalFeaturedCharacter);
+        if (draft.CharacterIds.Count > survival.MaxCharacters)
+            broken.Add(TeamRuleCode.SurvivalTooManyCharacters);
+        if (draft.MowIds.Count > 0 && !survival.MowsAllowed)
+            broken.Add(TeamRuleCode.MowsNotAllowed);
+        if (!AllCharactersFrom(draft, facts, survival.AllowedFactions))
             broken.Add(TeamRuleCode.FactionNotAllowed);
     }
 

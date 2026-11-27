@@ -34,6 +34,7 @@ public sealed class TeamConfiguration : IEntityTypeConfiguration<Team>
         builder.PrimitiveCollection(entity => entity.MowIds).IsRequired();
         builder.Property(entity => entity.MowFlexStartIndex);
         builder.Property(entity => entity.CampaignGroupId).HasMaxLength(TeamValidation.MaxUnitIdLength);
+        builder.Property(entity => entity.SurvivalEventKey).HasMaxLength(TeamValidation.MaxUnitIdLength);
         builder.PrimitiveCollection(entity => entity.IncursionMowIds).IsRequired();
         builder.Property(entity => entity.Notes).HasMaxLength(TeamValidation.MaxNotesLength);
         // Stored by name ("Epic"), as the modes are, so the column reads without the enum (D13).

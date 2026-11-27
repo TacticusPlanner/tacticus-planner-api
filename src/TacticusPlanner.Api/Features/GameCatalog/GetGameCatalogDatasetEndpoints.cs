@@ -447,3 +447,15 @@ public sealed class GetGameCatalogGuildWarEndpoint(IGameCatalogProvider catalog)
             "One record per live Guild War season, ordered by id: zones in layout order with their buff and score, zone tiers with the rarity cap of each of their five slots, battlefield levels with each zone's tier and the per-attempt debuff, buffs with their ability variables, the map pool, scoring and the per-rarity power caps. The game does not say which season is live.");
     }
 }
+
+public sealed class GetGameCatalogSurvivalEventsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogSurvivalEvent>>(catalog, GameCatalogDatasets.SurvivalEvents)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/survival-events", "game-catalog/survival-events/{envelopeHash}");
+        ConfigureServed(
+            "Gets the Survival events.",
+            "One record per seasonal event with Survival, ordered by id (december-2026, crescendo-a, ...): the featured hero, the team rules (allowed factions, character and MoW caps, stamina, stat boost, Last Stand, global summon), the waves with grouped enemies, clone waves and what each wave grants, scoring (medals, points per kill), the points each source pays, milestones, progress chests, missions and offers with their US price. Dates come from the calendar's survival occurrences and are null while undated.");
+    }
+}

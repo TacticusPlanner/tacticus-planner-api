@@ -149,6 +149,21 @@ public static class GameCatalogLoader
         var rawEventShops = GameCatalogDenormalizer.ReadDatamineEventShops(
             merchants, eventDefinitions, eventOccurrences, JsonOptions);
 
+        var survivalEventViews = GameCatalogDenormalizer.BuildSurvivalEvents(
+            new DatamineSurvivalSources(
+                LoadDatamine<List<DatamineSeasonalEvent>>(GameCatalogDenormalizer.DatamineSeasonalEventsPath),
+                battleSets,
+                tieredProgressRewards,
+                shopProducts,
+                chests,
+                questGroups,
+                LoadDatamine<List<JsonElement>>(GameCatalogDenormalizer.DatamineOffersPath),
+                LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineRealMoneyProductsPath),
+                [.. factionViews.Select(faction => faction.Id)],
+                eventDefinitions,
+                eventOccurrences),
+            JsonOptions);
+
         var raidBossRawData = LoadRaidBossRawData();
         var guildRaidMetaRawData = LoadGuildRaidMetaRawData();
 
@@ -244,6 +259,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Incursions] = HashServed(GameCatalogDatasets.Incursions, incursionViews),
             [GameCatalogDatasets.NpcEncounters] = HashServed(GameCatalogDatasets.NpcEncounters, npcEncounterViews),
             [GameCatalogDatasets.GuildWar] = HashServed(GameCatalogDatasets.GuildWar, guildWarViews),
+            [GameCatalogDatasets.SurvivalEvents] = HashServed(GameCatalogDatasets.SurvivalEvents, survivalEventViews),
         };
 
         var schemaHash = GameCatalogContractHashing.ComputeContractHash(payloadTypes, JsonOptions);
@@ -310,7 +326,8 @@ public static class GameCatalogLoader
             hreViews,
             incursionViews,
             npcEncounterViews,
-            guildWarViews);
+            guildWarViews,
+            survivalEventViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

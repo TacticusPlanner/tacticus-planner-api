@@ -23,7 +23,8 @@ public sealed record TeamDraft(
     IReadOnlyList<string> IncursionMowIds,
     string? Notes,
     int? MowFlexStartIndex = null,
-    TeamRarityCap? RarityCap = null
+    TeamRarityCap? RarityCap = null,
+    string? SurvivalEventKey = null
 )
 {
     /// <summary>The number of core characters: those before the flex section.</summary>
@@ -90,6 +91,11 @@ public class Team : BaseEntity<TeamId>, IRevisionedEntity
     /// every one of them allows. Required with the Incursion mode and empty without it.</summary>
     public List<string> IncursionMowIds { get; private set; } = [];
 
+    /// <summary>The served <c>survival-events</c> id a Survival team is built for (<c>december-2026</c>): it then needs
+    /// the Horde mode alone and follows that event's rules (featured hero implied, character and MoW caps, allowed
+    /// factions). Null for any other team. A team stays tied to its event after the event ends.</summary>
+    public string? SurvivalEventKey { get; private set; }
+
     /// <summary>Free-text notes for the player, trimmed; null when blank. At most 300 characters.</summary>
     public string? Notes { get; private set; }
 
@@ -127,9 +133,10 @@ public class Team : BaseEntity<TeamId>, IRevisionedEntity
         IncursionMowIds = [.. draft.IncursionMowIds];
         Notes = TeamValidation.NormalizeNotes(draft.Notes);
         RarityCap = draft.RarityCap;
+        SurvivalEventKey = draft.SurvivalEventKey;
     }
 
     public TeamDraft ToDraft() =>
         new(Name, Modes, CharacterIds, FlexStartIndex, MowIds, CampaignGroupId, IncursionMowIds, Notes, MowFlexStartIndex,
-            RarityCap);
+            RarityCap, SurvivalEventKey);
 }

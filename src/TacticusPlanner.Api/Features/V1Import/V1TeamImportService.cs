@@ -5,6 +5,7 @@ using TacticusPlanner.Api.Features.Teams;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Teams;
 using TacticusPlanner.GameCatalog;
+using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.V1Import;
@@ -23,7 +24,9 @@ public sealed record V1TeamImportData(bool IsPresent, IReadOnlyList<V1TeamSource
 /// <summary>
 /// One V1 <c>ITeam2</c> entry, read leniently from its raw JSON. <see cref="Name"/> is null when V1 held no string
 /// name; <see cref="Chars"/> is null when <c>chars</c> is not an array, which makes the entry unreadable. Unit
-/// references keep V1's raw text so an unrecognised one can be reported as it was.
+/// references keep V1's raw text so an unrecognised one can be reported as it was. A V1 Survival team
+/// (<c>survivalTeams</c>) carries its V1 event name in <see cref="SurvivalEventName"/>, its units in <see cref="Chars"/>
+/// (characters and MoWs together, as V1 kept them) and the Horde mode.
 /// </summary>
 public sealed record V1TeamSource(
     string? Name,
@@ -34,7 +37,8 @@ public sealed record V1TeamSource(
     IReadOnlyList<TeamMode> Modes,
     string? CampaignStoryline,
     IReadOnlyList<string> IncursionMows,
-    string? Notes)
+    string? Notes,
+    string? SurvivalEventName = null)
 {
     private static readonly (string Flag, TeamMode Mode)[] ModeFlags =
     [
@@ -71,6 +75,22 @@ public sealed record V1TeamSource(
             String(entry, "notes"));
     }
 
+    /// <summary>One Survival team per V1 <c>survivalTeams</c> entry with a non-empty list of unit ids, in V1's key
+    /// order; anything else is left out.</summary>
+    public static IReadOnlyList<V1TeamSource> ReadSurvivalTeams(JsonElement? element)
+    {
+        if (element is not { ValueKind: JsonValueKind.Object } teams)
+            return [];
+
+        return
+        [
+            .. teams.EnumerateObject()
+                .Where(team => team.Value.ValueKind == JsonValueKind.Array && team.Value.GetArrayLength() > 0)
+                .Select(team => new V1TeamSource(
+                    null, null, References(team.Value), null, [], [TeamMode.Horde], null, [], null, team.Name)),
+        ];
+    }
+
     private static bool Bool(JsonElement entry, string name) =>
         entry.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.True;
 
@@ -85,7 +105,8 @@ public sealed record V1TeamSource(
 /// <param name="Name">The V1 name, or null when V1 held none.</param>
 /// <param name="Status"><c>Imported</c>, <c>Skipped</c> or <c>Failed</c>.</param>
 /// <param name="Code">Null when imported; otherwise <c>already_imported</c>, <c>duplicate_name</c>,
-/// <c>team_limit_reached</c>, <c>no_units</c> or <c>invalid_team</c>.</param>
+/// <c>team_limit_reached</c>, <c>no_units</c>, <c>invalid_team</c> or <c>survival_event_not_recognised</c> (a V1 Survival
+/// team for an event the catalog does not serve).</param>
 /// <param name="TeamId">The created team's id.</param>
 /// <param name="Issues"><c>unit_not_recognised</c> (value: the V1 reference), <c>campaign_not_recognised</c> (value:
 /// the V1 storyline), <c>duplicate_unit</c> (value: the repeated V1 reference), <c>flex_dropped</c> (V1's flex
@@ -112,7 +133,8 @@ public sealed record V1TeamImportResult(ImportPartResult Part, IReadOnlyList<V1T
 /// </summary>
 public sealed class V1TeamImportService(PlannerDbContext db, IGameCatalogProvider catalogProvider, TeamsService teams)
 {
-    /// <summary>The most V1 teams one import processes; any beyond get no outcome.</summary>
+    /// <summary>The most V1 <c>teams2</c> entries one import processes; any beyond get no outcome. Survival teams are
+    /// not counted.</summary>
     internal const int MaxTeams = 100;
 
     private static readonly Dictionary<string, string> Storylines = new(StringComparer.Ordinal)
@@ -151,12 +173,16 @@ public sealed class V1TeamImportService(PlannerDbContext db, IGameCatalogProvide
         var catalog = catalogProvider.Current;
         var facts = TeamCatalogFacts.For(catalog);
         var units = new UnitResolver(catalog);
+        // The cap is V1's teams2 list; Survival teams (one per event) follow it and are never cut by it.
         var candidates = source.Teams
+            .Where(team => team.SurvivalEventName is null)
             .Select((team, index) => (Team: team, Index: index))
             .OrderBy(entry => entry.Team.Priority ?? double.MaxValue)
             .ThenBy(entry => entry.Index)
             .Take(MaxTeams)
-            .Select(entry => Map(entry.Team, units, facts))
+            .Select(entry => entry.Team)
+            .Concat(source.Teams.Where(team => team.SurvivalEventName is not null))
+            .Select(team => Map(team, units, facts))
             .ToList();
 
         // Earlier V1 import parts save but leave their entities tracked (the roster snapshots with their JSON-owned
@@ -232,6 +258,9 @@ public sealed class V1TeamImportService(PlannerDbContext db, IGameCatalogProvide
 
     private static Candidate Map(V1TeamSource source, UnitResolver units, TeamRuleFacts facts)
     {
+        if (source.SurvivalEventName is { } eventName)
+            return MapSurvival(source, eventName, units, facts);
+
         var issues = new List<V1TeamIssue>();
         var trimmed = source.Name?.Trim();
         if (string.IsNullOrEmpty(trimmed) || source.Chars is null)
@@ -305,6 +334,52 @@ public sealed class V1TeamImportService(PlannerDbContext db, IGameCatalogProvide
         int? mowFlexStart = mows.Count > 1 ? 1 : null;
         var draft = new TeamDraft(name, modes, characters, flexStart, mows, campaign, incursions, notes, mowFlexStart);
         return new(source.Name, draft, importKey, issues, null);
+    }
+
+    /// <summary>
+    /// A V1 Survival team as a Horde team tied to its event, named <c>Survival · December 2026</c>. Characters and MoWs
+    /// are split by what they resolve to; the featured hero, which V1 never stored, is dropped if present. An event the
+    /// catalog does not serve (Crescendo 01) is skipped.
+    /// </summary>
+    private static Candidate MapSurvival(V1TeamSource source, string eventName, UnitResolver units, TeamRuleFacts facts)
+    {
+        var issues = new List<V1TeamIssue>();
+        var survivalEventKey = GameCatalogSurvivalEventIds.FromEventName(eventName);
+        if (survivalEventKey is null || facts.SurvivalEvents?.TryGetValue(survivalEventKey, out var survival) != true || survival is null)
+        {
+            issues.Add(new("survival_event_not_recognised", eventName));
+            return new(null, null, null, issues, new(null, ImportPartStatus.Skipped, "survival_event_not_recognised", null, issues));
+        }
+
+        var name = $"Survival · {string.Join(' ', survivalEventKey.Split('-').Select(part =>
+            string.Concat(char.ToUpperInvariant(part[0]).ToString(), part[1..])))}";
+        var characters = new List<string>();
+        var mows = new List<string>();
+        foreach (var reference in source.Chars ?? [])
+        {
+            var id = units.Resolve(reference);
+            var target = id is null ? null
+                : facts.CharacterFactions.ContainsKey(id) ? characters
+                : facts.MowIds.Contains(id) ? mows
+                : null;
+            if (target is null)
+                issues.Add(new("unit_not_recognised", reference));
+            else if (id == survival.FeaturedCharacterId)
+                continue;
+            else if (target.Contains(id!, StringComparer.Ordinal))
+                issues.Add(new("duplicate_unit", reference));
+            else
+                target.Add(id!);
+        }
+
+        if (characters.Count == 0 && mows.Count == 0)
+            return new(name, null, null, issues, new(name, ImportPartStatus.Skipped, "no_units", null, issues));
+
+        var importKey = V1ImportText.CutToLength(
+            $"survival:{eventName.ToLower(CultureInfo.InvariantCulture)}", TeamValidation.MaxImportKeyLength);
+        var draft = new TeamDraft(
+            name, [TeamMode.Horde], characters, null, mows, null, [], null, SurvivalEventKey: survivalEventKey);
+        return new(name, draft, importKey, issues, null);
     }
 
     private static List<string> ResolveMows(

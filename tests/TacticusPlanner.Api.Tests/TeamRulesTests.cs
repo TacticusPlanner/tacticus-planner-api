@@ -23,8 +23,9 @@ public sealed class TeamRulesTests
         string[]? incursions = null,
         string name = "Test team",
         int? mowFlex = null,
-        TeamRarityCap? cap = null) =>
-        new(name, modes, characters ?? ["ultraCalgar", "ultraTitus", "ultraApothecary"], flex, mows ?? [], campaign, incursions ?? [], null, mowFlex, cap);
+        TeamRarityCap? cap = null,
+        string? survival = null) =>
+        new(name, modes, characters ?? ["ultraCalgar", "ultraTitus", "ultraApothecary"], flex, mows ?? [], campaign, incursions ?? [], null, mowFlex, cap, survival);
 
     private static IReadOnlyList<TeamRuleCode> Evaluate(TeamDraft draft) => TeamRules.Evaluate(draft, Facts);
 
@@ -224,5 +225,92 @@ public sealed class TeamRulesTests
         Assert.DoesNotContain("elite1", Facts.Campaigns.Keys);
         Assert.Equal(["ultraTigurius", "ultraEliminatorSgt", "ultraInceptorSgt"], Facts.Campaigns["campaign1"].CoreCharacterIds);
         Assert.Equal(6, Facts.IncursionFactionsByMowId["orksRukkatrukk"].Count);
+    }
+
+    [Fact]
+    public void ASurvivalTeamWithinItsEventsRulesBreaksNoRule() =>
+        Assert.Empty(Evaluate(Draft([TeamMode.Horde], [.. Ultras, "admecDominus"], survival: "december-2026")));
+
+    [Fact]
+    public void ASurvivalTeamIsAHordeTeamOnly()
+    {
+        Assert.Equal([TeamRuleCode.SurvivalModeRequired], Evaluate(Draft([TeamMode.GuildRaid], survival: "december-2026")));
+        Assert.Equal(
+            [TeamRuleCode.SurvivalModeRequired],
+            Evaluate(Draft([TeamMode.Horde, TeamMode.GuildRaid], survival: "december-2026")));
+    }
+
+    [Fact]
+    public void ASurvivalEventMustBeServed() =>
+        Assert.Equal([TeamRuleCode.UnknownSurvivalEvent], Evaluate(Draft([TeamMode.Horde], survival: "crescendo-01")));
+
+    [Fact]
+    public void AStoredKeyTheCatalogNoLongerServesIsOnlyALabel()
+    {
+        var kept = Draft([TeamMode.WarOffense], Ultras[..5], survival: "crescendo-01");
+        var changed = Draft([TeamMode.Horde], survival: "march-2020");
+
+        Assert.Empty(TeamRules.Evaluate(kept, Facts, storedSurvivalEventKey: "crescendo-01"));
+        Assert.Equal(
+            [TeamRuleCode.UnknownSurvivalEvent],
+            TeamRules.Evaluate(changed, Facts, storedSurvivalEventKey: "crescendo-01"));
+    }
+
+    [Fact]
+    public void AStoredKeyTheCatalogStillServesKeepsItsRules() =>
+        Assert.Equal(
+            [TeamRuleCode.SurvivalFeaturedCharacter],
+            TeamRules.Evaluate(
+                Draft([TeamMode.Horde], [.. Ultras[..3], "admecManipulus"], survival: "december-2026"), Facts,
+                storedSurvivalEventKey: "december-2026"));
+
+    [Fact]
+    public void TheFeaturedHeroIsNotStored() =>
+        Assert.Equal(
+            [TeamRuleCode.SurvivalFeaturedCharacter],
+            Evaluate(Draft([TeamMode.Horde], [.. Ultras[..3], "admecManipulus"], survival: "december-2026")));
+
+    [Fact]
+    public void ASurvivalTeamHasAtMostTenCharactersFromAllowedFactions()
+    {
+        string[] eleven = [.. Ultras, "admecDominus", "admecRuststalker", "admecMarshall", "astraYarrick", "astraPrimarisPsy"];
+        Assert.Equal(
+            [TeamRuleCode.SurvivalTooManyCharacters],
+            Evaluate(Draft([TeamMode.Horde], eleven, survival: "december-2026")));
+        Assert.Equal(
+            [TeamRuleCode.FactionNotAllowed],
+            Evaluate(Draft([TeamMode.Horde], [.. Ultras[..3], "necroSpyder"], survival: "december-2026")));
+    }
+
+    [Fact]
+    public void ASurvivalEventThatBarsMowsTakesNone() =>
+        Assert.Equal(
+            [TeamRuleCode.MowsNotAllowed],
+            Evaluate(Draft([TeamMode.Horde], mows: ["ultraDreadnought"], survival: "december-2026")));
+
+    [Fact]
+    public void ASurvivalEventThatAllowsMowsHasNoMowCapOfItsOwn()
+    {
+        var december = Facts.SurvivalEvents!["december-2026"];
+        var facts = Facts with
+        {
+            SurvivalEvents = new Dictionary<string, TeamSurvivalFacts>(StringComparer.Ordinal)
+            {
+                ["december-2026"] = december with { MowsAllowed = true },
+            },
+        };
+        string[] fourMows = [.. Facts.MowIds.Order(StringComparer.Ordinal).Take(4)];
+
+        Assert.Empty(TeamRules.Evaluate(Draft([TeamMode.Horde], mows: fourMows, survival: "december-2026"), facts));
+    }
+
+    [Fact]
+    public void SurvivalFactsComeFromTheServedEvents()
+    {
+        var december = Facts.SurvivalEvents!["december-2026"];
+        Assert.Equal("admecManipulus", december.FeaturedCharacterId);
+        Assert.Equal(10, december.MaxCharacters);
+        Assert.False(december.MowsAllowed);
+        Assert.Contains("AdeptusMechanicus", december.AllowedFactions);
     }
 }

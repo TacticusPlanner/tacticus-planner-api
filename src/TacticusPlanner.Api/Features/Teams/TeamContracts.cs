@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using FluentValidation;
 using TacticusPlanner.Domain.Teams;
@@ -20,6 +21,7 @@ public sealed record TeamResponse(
     IReadOnlyList<string> IncursionMowIds,
     string? Notes,
     TeamRarityCap? RarityCap,
+    string? SurvivalEventKey,
     IReadOnlyList<TeamRuleCode> Issues
 )
 {
@@ -37,7 +39,8 @@ public sealed record TeamResponse(
         team.IncursionMowIds,
         team.Notes,
         team.RarityCap,
-        TeamRules.Evaluate(team.ToDraft(), facts));
+        team.SurvivalEventKey,
+        TeamRules.Evaluate(team.ToDraft(), facts, team.SurvivalEventKey));
 }
 
 public sealed record ListTeamsResponse(IReadOnlyList<TeamResponse> Teams);
@@ -55,13 +58,15 @@ public interface ITeamFields
     IReadOnlyList<string> IncursionMowIds { get; }
     string? Notes { get; }
     TeamRarityCap? RarityCap { get; }
+    string? SurvivalEventKey { get; }
 }
 
 internal static class TeamFieldsExtensions
 {
     public static TeamDraft ToDraft(this ITeamFields fields) => new(
         fields.Name, fields.Modes, fields.CharacterIds, fields.FlexStartIndex, fields.MowIds, fields.CampaignGroupId,
-        fields.IncursionMowIds, fields.Notes, fields.MowFlexStartIndex, fields.RarityCap);
+        fields.IncursionMowIds, fields.Notes, fields.MowFlexStartIndex, fields.RarityCap,
+        fields.SurvivalEventKey);
 }
 
 public sealed record CreateTeamRequest(
@@ -74,10 +79,15 @@ public sealed record CreateTeamRequest(
     string? CampaignGroupId,
     IReadOnlyList<string> IncursionMowIds,
     string? Notes,
-    TeamRarityCap? RarityCap
+    TeamRarityCap? RarityCap,
+    string? SurvivalEventKey = null
 ) : ITeamFields;
 
-/// <summary>Replaces every editable field when <see cref="Revision"/> matches the stored team.</summary>
+/// <summary>
+/// Replaces every editable field when <see cref="Revision"/> matches the stored team. <see cref="SurvivalEventKey"/> is
+/// the exception: a body without it (a client from before Survival teams) keeps the stored key; an explicit null
+/// clears it.
+/// </summary>
 public sealed record UpdateTeamRequest(
     string Name,
     IReadOnlyList<TeamMode> Modes,
@@ -90,7 +100,25 @@ public sealed record UpdateTeamRequest(
     string? Notes,
     TeamRarityCap? RarityCap,
     long Revision
-) : ITeamFields;
+) : ITeamFields
+{
+    private readonly string? _survivalEventKey;
+
+    /// <summary>The Survival event the team is for; null for none. Absent from the body keeps the stored key.</summary>
+    public string? SurvivalEventKey
+    {
+        get => _survivalEventKey;
+        init
+        {
+            _survivalEventKey = value;
+            HasSurvivalEventKey = true;
+        }
+    }
+
+    /// <summary>Whether the body named <see cref="SurvivalEventKey"/> (System.Text.Json sets only properties present).</summary>
+    [JsonIgnore]
+    public bool HasSurvivalEventKey { get; private init; }
+}
 
 /// <summary>The profile's complete team list in its new order.</summary>
 public sealed record UpdateTeamOrderRequest(IReadOnlyList<Guid> TeamIds);
@@ -142,6 +170,7 @@ internal static class TeamFieldsValidation
             .WithMessage("mowFlexStartIndex must hold at least one flex MoW.");
         validator.RuleFor(request => request.RarityCap).IsInEnum().When(request => request.RarityCap is not null);
         validator.RuleFor(request => request.CampaignGroupId).MaximumLength(TeamValidation.MaxUnitIdLength);
+        validator.RuleFor(request => request.SurvivalEventKey).MaximumLength(TeamValidation.MaxUnitIdLength);
         validator.RuleFor(request => request.Notes).MaximumLength(TeamValidation.MaxNotesLength);
     }
 }

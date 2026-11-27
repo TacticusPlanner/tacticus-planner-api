@@ -171,8 +171,7 @@ public sealed class UpdateTeamEndpoint : Endpoint<UpdateTeamRequest, TeamRespons
 
         var service = Resolve<TeamsService>();
         var facts = service.Facts;
-        var draft = req.ToDraft();
-        var broken = TeamRules.Evaluate(draft, facts);
+        IReadOnlyList<TeamRuleCode> broken = [];
 
         var db = Resolve<PlannerDbContext>();
         // Under the profile lock, like create, delete, reorder and the V1 import: a rename cannot take a name the
@@ -185,6 +184,9 @@ public sealed class UpdateTeamEndpoint : Endpoint<UpdateTeamRequest, TeamRespons
                 return (UpdateOutcome.NotFound, null);
             if (team.Revision != req.Revision)
                 return (UpdateOutcome.Stale, team);
+            // A body without the Survival key (a client from before Survival teams) keeps the stored one.
+            var draft = req.HasSurvivalEventKey ? req.ToDraft() : req.ToDraft() with { SurvivalEventKey = team.SurvivalEventKey };
+            broken = TeamRules.Evaluate(draft, facts, team.SurvivalEventKey);
             if (broken.Count > 0)
                 return (UpdateOutcome.RulesBroken, null);
             if (await service.IsNameTakenAsync(draft.Name, teamId, ct))

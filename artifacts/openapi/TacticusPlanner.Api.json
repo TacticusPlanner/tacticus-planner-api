@@ -3920,6 +3920,104 @@
         }
       }
     },
+    "/api/v1/game-catalog/survival-events": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Survival events.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogSurvivalEventsEndpoint1",
+        "responses": {
+          "200": {
+            "description": "One record per seasonal event with Survival, ordered by id (december-2026, crescendo-a, ...): the featured hero, the team rules (allowed factions, character and MoW caps, stamina, stat boost, Last Stand, global summon), the waves with grouped enemies, clone waves and what each wave grants, scoring (medals, points per kill), the points each source pays, milestones, progress chests, missions and offers with their US price. Dates come from the calendar's survival occurrences and are null while undated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogSurvivalEvent"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/survival-events/{envelopeHash}": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Survival events.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogSurvivalEventsEndpoint2",
+        "parameters": [
+          {
+            "name": "envelopeHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One record per seasonal event with Survival, ordered by id (december-2026, crescendo-a, ...): the featured hero, the team rules (allowed factions, character and MoW caps, stamina, stat boost, Last Stand, global summon), the waves with grouped enemies, clone waves and what each wave grants, scoring (medals, points per kill), the points each source pays, milestones, progress chests, missions and offers with their US price. Dates come from the calendar's survival occurrences and are null while undated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogSurvivalEvent"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/unit-power": {
       "get": {
         "tags": [
@@ -10007,6 +10105,15 @@
                 "$ref": "#/components/schemas/TeamRarityCap"
               }
             ]
+          },
+          "survivalEventKey": {
+            "const": null,
+            "maxLength": 64,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
           }
         }
       },
@@ -12254,6 +12361,48 @@
             ],
             "items": {
               "$ref": "#/components/schemas/GameCatalogShopView"
+            }
+          }
+        }
+      },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogSurvivalEvent": {
+        "required": [
+          "version",
+          "schemaHash",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaHash": {
+            "type": "string"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "const": null,
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/GameCatalogSurvivalEvent"
             }
           }
         }
@@ -16103,6 +16252,558 @@
           }
         }
       },
+      "GameCatalogSurvivalChest": {
+        "required": [
+          "level",
+          "cost",
+          "rewards"
+        ],
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cost": {
+            "$ref": "#/components/schemas/GameCatalogSurvivalCost"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogRewardRangeView"
+          }
+        }
+      },
+      "GameCatalogSurvivalCost": {
+        "required": [
+          "type",
+          "amount"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogSurvivalEvent": {
+        "required": [
+          "id",
+          "eventKey",
+          "definitionId",
+          "startUtc",
+          "endUtc",
+          "featuredCharacterId",
+          "currency",
+          "rules",
+          "waves",
+          "scoring",
+          "points",
+          "milestones",
+          "chests",
+          "missions",
+          "offers"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "eventKey": {
+            "type": "string"
+          },
+          "definitionId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "startUtc": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "endUtc": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "featuredCharacterId": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "rules": {
+            "$ref": "#/components/schemas/GameCatalogSurvivalRules"
+          },
+          "waves": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogSurvivalWave"
+          },
+          "scoring": {
+            "$ref": "#/components/schemas/GameCatalogSurvivalScoring"
+          },
+          "points": {
+            "$ref": "#/components/schemas/GameCatalogSurvivalPoints"
+          },
+          "milestones": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogRewardTierView"
+          },
+          "chests": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogSurvivalChest"
+          },
+          "missions": {
+            "$ref": "#/components/schemas/GameCatalogEventShopMissionsView"
+          },
+          "offers": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogSurvivalOffer"
+          }
+        }
+      },
+      "GameCatalogSurvivalKillScore": {
+        "required": [
+          "npcId",
+          "statsIndex",
+          "score"
+        ],
+        "type": "object",
+        "properties": {
+          "npcId": {
+            "type": "string"
+          },
+          "statsIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogSurvivalLastStand": {
+        "required": [
+          "buffId",
+          "strategicMultiplier"
+        ],
+        "type": "object",
+        "properties": {
+          "buffId": {
+            "type": "string"
+          },
+          "strategicMultiplier": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogSurvivalMedal": {
+        "required": [
+          "medal",
+          "wave",
+          "rewards"
+        ],
+        "type": "object",
+        "properties": {
+          "medal": {
+            "type": "string"
+          },
+          "wave": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogRewardRangeView"
+          }
+        }
+      },
+      "GameCatalogSurvivalOffer": {
+        "required": [
+          "id",
+          "kind",
+          "priceCents",
+          "maxPurchases",
+          "rewards"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "priceCents": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxPurchases": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogRewardRangeView"
+          }
+        }
+      },
+      "GameCatalogSurvivalPoints": {
+        "required": [
+          "max",
+          "freeMissions",
+          "premiumMissions",
+          "survivalFree",
+          "survivalPremium"
+        ],
+        "type": "object",
+        "properties": {
+          "max": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "freeMissions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "premiumMissions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "survivalFree": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "survivalPremium": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogSurvivalPowerUp": {
+        "required": [
+          "id",
+          "npcId",
+          "statsIndex",
+          "count"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "npcId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "statsIndex": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogSurvivalRarityMilestone": {
+        "required": [
+          "rarity",
+          "rewards"
+        ],
+        "type": "object",
+        "properties": {
+          "rarity": {
+            "type": "string"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogRewardRangeView"
+          }
+        }
+      },
+      "GameCatalogSurvivalRarityWave": {
+        "required": [
+          "rarity",
+          "wave"
+        ],
+        "type": "object",
+        "properties": {
+          "rarity": {
+            "type": "string"
+          },
+          "wave": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogSurvivalRules": {
+        "required": [
+          "allowedFactionIds",
+          "mowsAllowed",
+          "maxCharacters",
+          "stamina",
+          "statBoostPct",
+          "statBoostStats",
+          "lastStand",
+          "summon",
+          "persistentRarityUps",
+          "featuredHeroStats"
+        ],
+        "type": "object",
+        "properties": {
+          "allowedFactionIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "mowsAllowed": {
+            "type": "boolean"
+          },
+          "maxCharacters": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "stamina": {
+            "$ref": "#/components/schemas/GameCatalogSurvivalStamina"
+          },
+          "statBoostPct": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "statBoostStats": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "lastStand": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GameCatalogSurvivalLastStand"
+              }
+            ]
+          },
+          "summon": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GameCatalogSurvivalSummon"
+              }
+            ]
+          },
+          "persistentRarityUps": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogSurvivalRarityWave"
+          },
+          "featuredHeroStats": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogSurvivalStatOverride"
+          }
+        }
+      },
+      "GameCatalogSurvivalScoring": {
+        "required": [
+          "medals",
+          "killScores",
+          "cloneWaveScore",
+          "skippedTurnScore",
+          "rarityMilestones"
+        ],
+        "type": "object",
+        "properties": {
+          "medals": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogSurvivalMedal"
+          },
+          "killScores": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogSurvivalKillScore"
+          },
+          "cloneWaveScore": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "skippedTurnScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rarityMilestones": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogSurvivalRarityMilestone"
+          }
+        }
+      },
+      "GameCatalogSurvivalStamina": {
+        "required": [
+          "start",
+          "max",
+          "regenSeconds",
+          "regenAmount"
+        ],
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "regenSeconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "regenAmount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogSurvivalStatOverride": {
+        "required": [
+          "rarity",
+          "critChance",
+          "critDamage",
+          "blockChance",
+          "blockDamage"
+        ],
+        "type": "object",
+        "properties": {
+          "rarity": {
+            "type": "string"
+          },
+          "critChance": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "critDamage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "blockChance": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "blockDamage": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogSurvivalSummon": {
+        "required": [
+          "unitId",
+          "levels"
+        ],
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string"
+          },
+          "levels": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogSurvivalSummonLevel"
+          }
+        }
+      },
+      "GameCatalogSurvivalSummonLevel": {
+        "required": [
+          "rarityCap",
+          "abilityLevel"
+        ],
+        "type": "object",
+        "properties": {
+          "rarityCap": {
+            "type": "string"
+          },
+          "abilityLevel": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogSurvivalUnitCount": {
+        "required": [
+          "npcId",
+          "statsIndex",
+          "count"
+        ],
+        "type": "object",
+        "properties": {
+          "npcId": {
+            "type": "string"
+          },
+          "statsIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogSurvivalWave": {
+        "required": [
+          "wave",
+          "round",
+          "power",
+          "score",
+          "cloneHealthPct",
+          "enemies",
+          "enemyRarityOnClear",
+          "powerUpsOnClear"
+        ],
+        "type": "object",
+        "properties": {
+          "wave": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "round": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "power": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cloneHealthPct": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "enemies": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogSurvivalUnitCount"
+          },
+          "enemyRarityOnClear": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "powerUpsOnClear": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogSurvivalPowerUp"
+          }
+        }
+      },
       "GameCatalogTraitPowerModifier": {
         "required": [
           "traitId",
@@ -18153,6 +18854,72 @@
           "$ref": "#/components/schemas/GameCatalogStaminaShopTier"
         }
       },
+      "IReadOnlyListOfGameCatalogSurvivalChest": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogSurvivalChest"
+        }
+      },
+      "IReadOnlyListOfGameCatalogSurvivalKillScore": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogSurvivalKillScore"
+        }
+      },
+      "IReadOnlyListOfGameCatalogSurvivalMedal": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogSurvivalMedal"
+        }
+      },
+      "IReadOnlyListOfGameCatalogSurvivalOffer": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogSurvivalOffer"
+        }
+      },
+      "IReadOnlyListOfGameCatalogSurvivalPowerUp": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogSurvivalPowerUp"
+        }
+      },
+      "IReadOnlyListOfGameCatalogSurvivalRarityMilestone": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogSurvivalRarityMilestone"
+        }
+      },
+      "IReadOnlyListOfGameCatalogSurvivalRarityWave": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogSurvivalRarityWave"
+        }
+      },
+      "IReadOnlyListOfGameCatalogSurvivalStatOverride": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogSurvivalStatOverride"
+        }
+      },
+      "IReadOnlyListOfGameCatalogSurvivalSummonLevel": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogSurvivalSummonLevel"
+        }
+      },
+      "IReadOnlyListOfGameCatalogSurvivalUnitCount": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogSurvivalUnitCount"
+        }
+      },
+      "IReadOnlyListOfGameCatalogSurvivalWave": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogSurvivalWave"
+        }
+      },
       "IReadOnlyListOfGameCatalogTraitPowerModifier": {
         "type": "array",
         "items": {
@@ -19901,6 +20668,7 @@
           "incursionMowIds",
           "notes",
           "rarityCap",
+          "survivalEventKey",
           "issues"
         ],
         "type": "object",
@@ -19968,6 +20736,12 @@
               }
             ]
           },
+          "survivalEventKey": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
           "issues": {
             "$ref": "#/components/schemas/IReadOnlyListOfTeamRuleCode"
           }
@@ -19989,7 +20763,11 @@
           "factionNotAllowed",
           "incursionRequired",
           "unknownIncursion",
-          "noSharedIncursionFaction"
+          "noSharedIncursionFaction",
+          "survivalModeRequired",
+          "unknownSurvivalEvent",
+          "survivalFeaturedCharacter",
+          "survivalTooManyCharacters"
         ],
         "type": "string"
       },
@@ -20912,6 +21690,15 @@
             "minimum": 0,
             "type": "integer",
             "format": "int64"
+          },
+          "survivalEventKey": {
+            "const": null,
+            "maxLength": 64,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
           }
         }
       },

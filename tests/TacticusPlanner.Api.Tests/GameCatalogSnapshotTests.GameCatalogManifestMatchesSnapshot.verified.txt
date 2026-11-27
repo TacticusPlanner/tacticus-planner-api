@@ -1,6 +1,6 @@
 ﻿{
-  version: 1.44.88.3089+45126a2eaab6,
-  schemaHash: 5975ffaefaa56ab36e00e0099275c4971e8edfa9e3503ed5ba5a2c00b680bd57,
+  version: 1.44.88.3089+2e9830276c23,
+  schemaHash: 643ada73c113ec297371a455b9f5689ae7bedd3eae668ae3b4cdbc00461afd61,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},
   datasets: [
@@ -41,7 +41,7 @@
     },
     {
       key: event-definitions,
-      hash: 7d8a9f411fd3ef8ef381e66b7bc94d93bc1b961d1be433e5a24b4b9fc1ebf4fa,
+      hash: 859922a357df724079ad6430c70432c39b9d5c1b6a4cb9fc00cebc8cd5c43eb2,
       url: /api/v1/game-catalog/event-definitions/{envelopeHash}
     },
     {
@@ -158,6 +158,11 @@
       key: shops,
       hash: 2c077ac117fce981f6f4dfb2bbbaa9edca1b1f6253a106fbe4087958e5150518,
       url: /api/v1/game-catalog/shops/{envelopeHash}
+    },
+    {
+      key: survival-events,
+      hash: 8d6c453e8954975f747717507235bc139f2c863eded993ede1898b430df69a61,
+      url: /api/v1/game-catalog/survival-events/{envelopeHash}
     },
     {
       key: unit-power,
