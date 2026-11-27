@@ -1,4 +1,5 @@
 using System.Net;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.AccountManagement;
@@ -102,6 +103,7 @@ public sealed class PurgeAccountEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         Assert.True(factory.ExternalIdentityDeleter.WasRequested(objectId));
         Assert.Equal("true", SignInAccountDeleted(response));
+        Assert.DoesNotContain(objectId, EnqueuedDeletionRetries());
     }
 
     [Fact]
@@ -121,6 +123,37 @@ public sealed class PurgeAccountEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         Assert.True(factory.ExternalIdentityDeleter.WasRequested(objectId));
         Assert.Equal("false", SignInAccountDeleted(response));
+        Assert.Contains(objectId, EnqueuedDeletionRetries());
+    }
+
+    [Fact]
+    public async Task TheBackgroundServerRetriesTheDeletionUntilGraphAccepts()
+    {
+        var objectId = Guid.NewGuid().ToString();
+        factory.ExternalIdentityDeleter.Refuse(objectId);
+        var client = factory.CreateClient();
+        client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, NewSubject());
+        client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.ObjectIdHeader, objectId);
+        await client.DeleteAsync("/api/v1/account?deleteSignInAccount=true", TestContext.Current.CancellationToken);
+        factory.ExternalIdentityDeleter.Allow(objectId);
+
+        // Same database and fakes, with the job server on: it picks the queued retry up as it starts.
+        await using var server = factory.WithWebHostBuilder(builder =>
+            builder.UseSetting("BackgroundJobs:ServerEnabled", "true"));
+        _ = server.Services;
+        var monitoring = server.Services.GetRequiredService<JobStorage>().GetMonitoringApi();
+        var deadline = DateTimeOffset.UtcNow.AddSeconds(60);
+        while (factory.ExternalIdentityDeleter.RequestCount(objectId) < 2 && DateTimeOffset.UtcNow < deadline)
+        {
+            await Task.Delay(250, TestContext.Current.CancellationToken);
+        }
+        while (monitoring.EnqueuedCount("default") > 0 && DateTimeOffset.UtcNow < deadline)
+        {
+            await Task.Delay(250, TestContext.Current.CancellationToken);
+        }
+
+        Assert.Equal(2, factory.ExternalIdentityDeleter.RequestCount(objectId));
+        Assert.DoesNotContain(objectId, EnqueuedDeletionRetries());
     }
 
     [Fact]
@@ -157,6 +190,17 @@ public sealed class PurgeAccountEndpointTests(PlannerApiFactory factory) : IClas
             .Content.ReadFromJsonAsync<MyGuildResponse>(TestContext.Current.CancellationToken);
         return Assert.Single(guild!.Guild!.Members, member => member.MaskedTacticusUserId.EndsWith(tacticusUserId.ToString()[^4..], StringComparison.Ordinal));
     }
+
+    /// <summary>Object ids of the deletion retries waiting in this host's Hangfire storage (its own database).</summary>
+    private List<string> EnqueuedDeletionRetries() =>
+        [
+            .. factory.Services.GetRequiredService<JobStorage>()
+                .GetMonitoringApi()
+                .EnqueuedJobs("default", 0, 1000)
+                .Select(entry => entry.Value.Job)
+                .Where(job => job?.Type == typeof(ExternalIdentityDeletionJob))
+                .Select(job => (string)job!.Args[0]),
+        ];
 
     private static string? SignInAccountDeleted(HttpResponseMessage response) =>
         response.Headers.TryGetValues(PurgeAccountEndpoint.SignInAccountDeletedHeader, out var values) ? values.Single() : null;

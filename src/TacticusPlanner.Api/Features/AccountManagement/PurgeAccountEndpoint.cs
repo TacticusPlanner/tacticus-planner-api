@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using FastEndpoints;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Domain.Profiles;
@@ -20,7 +21,8 @@ public sealed class PurgeAccountRequest
 public sealed class PurgeAccountEndpoint : Endpoint<PurgeAccountRequest>
 {
     /// <summary>Response header on the 204: <c>true</c> only when the Entra sign-in account was actually
-    /// deleted, <c>false</c> when it was not asked for or the best-effort deletion did not happen.</summary>
+    /// deleted, <c>false</c> when it was not asked for or the deletion did not complete during the request (it is
+    /// then retried in the background by <see cref="ExternalIdentityDeletionJob"/>).</summary>
     public const string SignInAccountDeletedHeader = "X-Sign-In-Account-Deleted";
 
     public override void Configure()
@@ -33,7 +35,8 @@ public sealed class PurgeAccountEndpoint : Endpoint<PurgeAccountRequest>
                 + "This cannot be undone. With deleteSignInAccount=true it also makes a best-effort attempt to "
                 + "delete the caller's Microsoft Entra External ID user (see IExternalIdentityDeleter). "
                 + "The " + SignInAccountDeletedHeader + " response header (true|false) reports whether the sign-in "
-                + "account was actually deleted. "
+                + "account was actually deleted during the request; when it was not, the deletion is retried in the "
+                + "background. "
                 + "Idempotent: repeating the request after the account is gone still succeeds.";
             summary.Response(StatusCodes.Status204NoContent, "The account and all related data were deleted.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
@@ -73,7 +76,16 @@ public sealed class PurgeAccountEndpoint : Endpoint<PurgeAccountRequest>
         {
             // Best-effort only: application-side deletion above is authoritative and already complete regardless
             // of whether the external identity could also be removed.
-            signInAccountDeleted = await Resolve<IExternalIdentityDeleter>().TryDeleteAsync(User.FindFirstValue("oid"), ct);
+            var deleter = Resolve<IExternalIdentityDeleter>();
+            var objectId = User.FindFirstValue("oid");
+            signInAccountDeleted = await deleter.TryDeleteAsync(objectId, ct);
+
+            // A token without a usable oid can never succeed, and without a Graph credential nothing would.
+            if (!signInAccountDeleted && deleter.IsConfigured && Guid.TryParse(objectId, out _))
+            {
+                Resolve<IBackgroundJobClient>().Enqueue<ExternalIdentityDeletionJob>(
+                    job => job.RunAsync(objectId, CancellationToken.None));
+            }
         }
 
         HttpContext.Response.Headers[SignInAccountDeletedHeader] = signInAccountDeleted ? "true" : "false";

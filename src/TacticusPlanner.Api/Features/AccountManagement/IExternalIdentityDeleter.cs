@@ -7,6 +7,9 @@ namespace TacticusPlanner.Api.Features.AccountManagement;
 /// </summary>
 public interface IExternalIdentityDeleter
 {
+    /// <summary>False when deletion is switched off (no Graph credential), so a failure is not worth retrying.</summary>
+    bool IsConfigured => true;
+
     /// <param name="objectId">The Entra user's object id: the access token's <c>oid</c> claim.</param>
     Task<bool> TryDeleteAsync(string? objectId, CancellationToken cancellationToken);
 }
@@ -20,6 +23,8 @@ public interface IExternalIdentityDeleter
 public sealed partial class NoOpExternalIdentityDeleter(ILogger<NoOpExternalIdentityDeleter> logger)
     : IExternalIdentityDeleter
 {
+    public bool IsConfigured => false;
+
     public Task<bool> TryDeleteAsync(string? objectId, CancellationToken cancellationToken)
     {
         LogEntraDeletionSkipped(logger);

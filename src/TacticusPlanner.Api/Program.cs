@@ -24,6 +24,7 @@ using TacticusPlanner.Api.Features.UpstreamRateLimiting;
 using TacticusPlanner.Api.Features.UserJot;
 using TacticusPlanner.Api.Features.V1Import;
 using TacticusPlanner.Api.Http;
+using TacticusPlanner.BackgroundJobs;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
@@ -81,6 +82,8 @@ builder.Services.AddTacticusApi(builder.Configuration["TacticusApi:BaseUrl"]);
 builder.Services.AddAccountManagementFeature(builder.Configuration);
 builder.Services.AddAnalyticsFeature(builder.Configuration, validateOnStart: !isOpenApiDocumentGeneration);
 builder.Services.AddAuthFeature(builder.Configuration);
+// The OpenAPI tool only inspects endpoint metadata, so it never runs the job server (or connects for storage).
+builder.Services.AddBackgroundJobs(builder.Configuration, runServer: !isOpenApiDocumentGeneration);
 builder.AddFeatureFlagsFeature();
 builder.Services.AddEventShopPlansFeature();
 builder.Services.AddGoalsFeature();

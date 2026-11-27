@@ -67,6 +67,9 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
     {
         builder.UseEnvironment("Development");
         builder.UseSetting("Analytics:ProjectToken", "");
+        // Jobs are enqueued into real storage but never executed by the host; tests run them directly. A host
+        // setting, not app configuration: Program reads it while registering services.
+        builder.UseSetting("BackgroundJobs:ServerEnabled", "false");
         builder.UseSetting("ConnectionStrings:planner-db", ConnectionString);
         builder.ConfigureAppConfiguration((_, configuration) =>
         {

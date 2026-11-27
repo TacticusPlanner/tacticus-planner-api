@@ -22,6 +22,9 @@ public sealed class GameCatalogApiFactory : WebApplicationFactory<Program>
     {
         builder.UseEnvironment("Development");
         builder.UseSetting("Analytics:ProjectToken", "");
+        // No database here, so no Hangfire server polling storage it cannot reach. A host setting, not app
+        // configuration: Program reads it while registering services.
+        builder.UseSetting("BackgroundJobs:ServerEnabled", "false");
         builder.ConfigureAppConfiguration((_, configuration) =>
         {
             configuration.AddInMemoryCollection(new Dictionary<string, string?>
