@@ -1,8 +1,8 @@
-name: Publish API image
+name: Publish image
 
-# Builds the API image for a commit and pushes it to the shared registry, tagged with the commit
-# SHA. A commit that already has an image (for example a release cut from main, which CD Stage
-# built) is not rebuilt, so production runs the same digest staging ran.
+# Builds an image (the API, or the jobs container) for a commit and pushes it to the shared
+# registry, tagged with the commit SHA. A commit that already has an image (for example a release
+# cut from main, which CD Stage built) is not rebuilt, so production runs the same digest staging ran.
 on:
   workflow_call:
     inputs:
@@ -10,9 +10,19 @@ on:
         description: Git ref to build.
         required: true
         type: string
+      repository:
+        description: Registry repository (image name).
+        required: false
+        type: string
+        default: tacticus-planner-api
+      dockerfile:
+        description: Dockerfile that builds the image.
+        required: false
+        type: string
+        default: src/TacticusPlanner.Api/Dockerfile
     outputs:
       image:
-        description: Immutable image reference (<acr>.azurecr.io/tacticus-planner-api@sha256:...).
+        description: Immutable image reference (<acr>.azurecr.io/<repository>@sha256:...).
         value: ${{ jobs.publish.outputs.image }}
 
 permissions:
@@ -48,6 +58,7 @@ jobs:
         shell: bash
         env:
           ACR_NAME: ${{ vars.ACR_NAME }}
+          REPOSITORY: ${{ inputs.repository }}
         run: |
           sha="$(git rev-parse HEAD)"
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
@@ -56,7 +67,7 @@ jobs:
           errors="$RUNNER_TEMP/acr-lookup.err"
           if digest="$(az acr repository show \
             --name "$ACR_NAME" \
-            --image "tacticus-planner-api:$sha" \
+            --image "$REPOSITORY:$sha" \
             --query digest \
             --output tsv 2> "$errors")"; then
             :
@@ -82,11 +93,12 @@ jobs:
         uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: .
-          file: src/TacticusPlanner.Api/Dockerfile
+          file: ${{ inputs.dockerfile }}
           push: true
-          tags: ${{ vars.ACR_NAME }}.azurecr.io/tacticus-planner-api:${{ steps.source.outputs.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ vars.ACR_NAME }}.azurecr.io/${{ inputs.repository }}:${{ steps.source.outputs.sha }}
+          # One cache per image, so the two images never evict each other's layers.
+          cache-from: type=gha,scope=${{ inputs.repository }}
+          cache-to: type=gha,mode=max,scope=${{ inputs.repository }}
 
       - name: Set immutable image reference
         id: image
@@ -94,7 +106,7 @@ jobs:
         env:
           DIGEST: ${{ steps.source.outputs.digest || steps.build.outputs.digest }}
         run: |
-          reference="${{ vars.ACR_NAME }}.azurecr.io/tacticus-planner-api@$DIGEST"
+          reference="${{ vars.ACR_NAME }}.azurecr.io/${{ inputs.repository }}@$DIGEST"
           echo "reference=$reference" >> "$GITHUB_OUTPUT"
           echo "### Published image" >> "$GITHUB_STEP_SUMMARY"
           echo "\`$reference\`" >> "$GITHUB_STEP_SUMMARY"

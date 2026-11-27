@@ -11,7 +11,15 @@
 - [x] 2.2 `PurgeAccountEndpoint` enqueues it when the inline deletion fails, the oid is a GUID and Graph is configured
 - [x] 2.3 Unit tests for the job; integration tests for enqueueing and for a server run that completes the deletion
 
+## 3. Batch jobs container
+
+- [x] 3.1 `TacticusPlanner.Jobs` console host: keyed `IBatchJob` by name, exit codes, refuses pending migrations
+- [x] 3.2 `smoke` job; runner unit tests and a Testcontainers test for the migrated and unmigrated database
+- [x] 3.3 `tacticus-planner-jobs` Dockerfile, CI image build, CD Stage/Prod publish and Container Apps Job image update
+- [x] 3.4 README "Batch jobs container", AGENTS.md, Dependabot base-image entry
+
 ## Deferred / out-of-session
 
-- [ ] 3.1 Apply the infra change (prod max 2 replicas) before this deploys
-- [ ] 3.2 After the prod deploy, confirm the `hangfire` schema exists and the server started in the logs
+- [ ] 4.1 Apply the infra change (prod max 2 replicas) before this deploys
+- [ ] 4.2 After the prod deploy, confirm the `hangfire` schema exists and the server started in the logs
+- [ ] 4.3 After the first jobs image publishes: workload deploy with `--jobs-image`, then `access post`, then `az containerapp job start` the smoke job in staging and production

@@ -14,7 +14,7 @@ on:
         type: string
         default: ""
       build-image:
-        description: Build the container image. CI skips it when no file that feeds the image changed.
+        description: Build the container images (API and jobs). CI skips them when no file that feeds an image changed.
         required: false
         type: boolean
         default: true
@@ -109,6 +109,10 @@ jobs:
       - name: Build container image
         if: ${{ inputs.build-image }}
         run: docker build --file src/TacticusPlanner.Api/Dockerfile --tag tacticus-planner-api:${{ github.sha }} .
+
+      - name: Build jobs container image
+        if: ${{ inputs.build-image }}
+        run: docker build --file src/TacticusPlanner.Jobs/Dockerfile --tag tacticus-planner-jobs:${{ github.sha }} .
 
   build:
     name: Build API

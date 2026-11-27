@@ -14,7 +14,7 @@ docs-only:
           - "LICENSE"
 
 # Gate: the container image is built on a PR only when something that feeds it changed.
-# Only files the API image is built from. Directory.Packages.props is left out on purpose: restore runs
+# Only files the API and jobs images are built from. Directory.Packages.props is left out on purpose: restore runs
 # in locked mode, so a version bump that reaches the image always changes a src/ lock file too, while a
 # test-only bump (xunit, Verify, Testcontainers) touches just tests/ lock files and needs no image build.
 area:docker:
@@ -65,6 +65,11 @@ area:api:
   - changed-files:
       - any-glob-to-any-file:
           - "src/TacticusPlanner.Api/**"
+
+area:jobs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/TacticusPlanner.Jobs/**"
 
 area:domain:
   - changed-files:

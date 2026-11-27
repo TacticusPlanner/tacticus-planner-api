@@ -126,6 +126,16 @@ updates:
         update-types:
           - version-update:semver-major
 
+  - package-ecosystem: docker
+    directory: /src/TacticusPlanner.Jobs
+    multi-ecosystem-group: dotnet-sdk
+    patterns:
+      - "*"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
+
   # global.json: SDK feature-band and patch updates within .NET 10.
   - package-ecosystem: dotnet-sdk
     directory: /
