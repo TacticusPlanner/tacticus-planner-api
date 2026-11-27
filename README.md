@@ -213,7 +213,8 @@ configuration (Key Vault-backed), never through a committed `appsettings*.json`.
 The API runs [Hangfire](https://www.hangfire.io/) in process, with PostgreSQL storage in the planner database's
 `hangfire` schema. Hangfire creates and upgrades that schema itself on first use; EF Core migrations never
 touch it. Endpoints enqueue through `IBackgroundJobClient`; each replica's server runs the `default` queue with
-`BackgroundJobs__WorkerCount` workers. There is no dashboard and there are no recurring jobs yet.
+`BackgroundJobs__WorkerCount` workers. There is no dashboard and there are no recurring jobs yet. The Hangfire setup lives in
+`src/TacticusPlanner.BackgroundJobs` (`AddBackgroundJobs`); job classes stay with their feature in the API.
 
 | Job | Enqueued by | Retries |
 | --- | --- | --- |

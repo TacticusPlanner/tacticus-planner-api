@@ -1,9 +1,11 @@
 using Hangfire;
 using Hangfire.PostgreSql;
 using Hangfire.PostgreSql.Factories;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 
-namespace TacticusPlanner.Api.Features.BackgroundJobs;
+namespace TacticusPlanner.BackgroundJobs;
 
 public static class DependencyInjection
 {
@@ -15,7 +17,7 @@ public static class DependencyInjection
     /// everywhere through <see cref="IBackgroundJobClient"/>; the server that executes jobs runs only when
     /// <paramref name="runServer"/> and <see cref="BackgroundJobsOptions.ServerEnabled"/> are both true.
     /// </summary>
-    public static IServiceCollection AddBackgroundJobsFeature(
+    public static IServiceCollection AddBackgroundJobs(
         this IServiceCollection services,
         IConfiguration configuration,
         bool runServer = true

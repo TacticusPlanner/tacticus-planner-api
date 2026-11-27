@@ -18,6 +18,6 @@ No companion apps change: the response contract is unchanged.
 
 ## Impact
 
-- `src/TacticusPlanner.Api/Features/BackgroundJobs` (new), `Features/AccountManagement`, `Program.cs`, `Directory.Packages.props` (Hangfire.Core, Hangfire.NetCore, Hangfire.PostgreSql; Newtonsoft.Json pinned to 13.0.4).
+- `src/TacticusPlanner.BackgroundJobs` (new project: Hangfire setup and options), `src/TacticusPlanner.Api` `Features/AccountManagement`, `Program.cs`, `Directory.Packages.props` (Hangfire.Core, Hangfire.NetCore, Hangfire.PostgreSql; Newtonsoft.Json pinned to 13.0.4).
 - Database: a new `hangfire` schema managed by Hangfire, not by EF migrations.
 - Infra: tacticus-planner-infra caps prod at 2 replicas so (11 API + 2 Hangfire) x 2 + 2 jobs = 28 of the 35 usable connections. It must be applied before this deploys.

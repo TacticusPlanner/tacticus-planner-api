@@ -15,9 +15,6 @@
     <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" />
     <PackageReference Include="FastEndpoints" />
     <PackageReference Include="FastEndpoints.OpenApi" />
-    <PackageReference Include="Hangfire.Core" />
-    <PackageReference Include="Hangfire.NetCore" />
-    <PackageReference Include="Hangfire.PostgreSql" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <PrivateAssets>all</PrivateAssets>
@@ -36,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\orchestration\TacticusPlanner.ServiceDefaults\TacticusPlanner.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\TacticusPlanner.BackgroundJobs\TacticusPlanner.BackgroundJobs.csproj" />
     <ProjectReference Include="..\TacticusPlanner.Domain\TacticusPlanner.Domain.csproj" />
     <ProjectReference Include="..\TacticusPlanner.GameCatalog\TacticusPlanner.GameCatalog.csproj" />
     <ProjectReference Include="..\TacticusPlanner.Persistence\TacticusPlanner.Persistence.csproj" />

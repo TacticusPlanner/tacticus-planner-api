@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>TacticusPlanner.BackgroundJobs</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Configuration binding, DI and hosting come from the shared framework, like ServiceDefaults. -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Hangfire.Core" />
+    <PackageReference Include="Hangfire.NetCore" />
+    <PackageReference Include="Hangfire.PostgreSql" />
+  </ItemGroup>
+</Project>
