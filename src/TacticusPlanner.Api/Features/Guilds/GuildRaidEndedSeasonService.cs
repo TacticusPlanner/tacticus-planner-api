@@ -20,6 +20,7 @@ public sealed partial class GuildRaidEndedSeasonService(
     PlannerDbContext db,
     ITacticusApi tacticusApi,
     IColumnHashService hashService,
+    GuildPlayerRegistry playerRegistry,
     TimeProvider timeProvider,
     ILogger<GuildRaidEndedSeasonService> logger)
 {
@@ -210,6 +211,8 @@ public sealed partial class GuildRaidEndedSeasonService(
             }
         }
 
+        await playerRegistry.AddAsync(
+            guildId, attacks.Select(attack => (attack.TacticusUserIdHash, attack.TacticusUserIdSuffix)), ct);
         await ClearAsync(guildId, response.Season, ct);
         return true;
     }

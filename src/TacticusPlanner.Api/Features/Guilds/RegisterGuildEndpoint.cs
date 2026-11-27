@@ -106,7 +106,7 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
             return;
         }
 
-        AddError(GuildSyncResultMapper.GetMessage(result));
+        AddError(GuildSyncResultMapper.GetMessage(result), GuildSyncResultMapper.GetIssueCode(result));
         await Send.ErrorsAsync(GuildSyncResultMapper.GetStatusCode(result), ct);
     }
 }

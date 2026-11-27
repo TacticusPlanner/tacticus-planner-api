@@ -39,6 +39,26 @@ internal static class GuildTestHelpers
         return (client, tacticusUserId);
     }
 
+    /// <summary>The player a confirmed leader sees for the member with <paramref name="tacticusUserId"/>.</summary>
+    public static async Task<GuildPlayerSummary> PlayerOfAsync(HttpClient leader, Guid tacticusUserId)
+    {
+        var players = await leader.GetFromJsonAsync<GuildPlayersResponse>(
+            "/api/v1/guild/players", TestContext.Current.CancellationToken);
+        return players!.Players.Single(player => player.MaskedTacticusUserId?.EndsWith(
+            tacticusUserId.ToString()[^4..], StringComparison.Ordinal) == true);
+    }
+
+    /// <summary>Has <paramref name="leader"/>, a confirmed leader, confirm the claim on the member with
+    /// <paramref name="tacticusUserId"/>.</summary>
+    public static async Task ConfirmClaimAsync(HttpClient leader, Guid tacticusUserId)
+    {
+        var member = (await PlayerOfAsync(leader, tacticusUserId)).Member!;
+        (await leader.PostAsJsonAsync(
+            $"/api/v1/guild/members/{member.GuildMemberId}/confirm",
+            new GuildClaimDecisionRequest(member.Claim!.ProfileClaimId),
+            TestContext.Current.CancellationToken)).EnsureSuccessStatusCode();
+    }
+
     /// <summary>Backdates every guild's last sync attempt past <see cref="GuildSyncService.CooldownWindow"/>, so a
     /// test can <c>POST guild/sync</c> right after registering (which counts as an attempt).</summary>
     public static async Task ExpireSyncCooldownAsync(PlannerApiFactory factory)

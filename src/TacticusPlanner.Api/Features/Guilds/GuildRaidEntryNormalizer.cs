@@ -147,6 +147,9 @@ internal static class GuildRaidEntryNormalizer
 
     public static string UserIdSuffix(Guid userId) => userId.ToString()[^UserIdSuffixLength..];
 
+    /// <summary>The same four characters from a canonical id string.</summary>
+    public static string UserIdSuffixOf(string userId) => userId[^UserIdSuffixLength..];
+
     public static string BuildContentHash(GuildRaidEntry entry)
     {
         var canonical = string.Join('|',

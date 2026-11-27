@@ -57,6 +57,9 @@ public sealed class PurgeGuildEndpoint : EndpointWithoutRequest
         });
     }
 
+    private const string VerificationRequiredMessage =
+        "A confirmed Leader or Co-Leader must confirm you in Planner before you can delete this guild's registration.";
+
     public override async Task HandleAsync(CancellationToken ct)
     {
         var state = ProcessorState<CurrentUserState>();
@@ -85,7 +88,7 @@ public sealed class PurgeGuildEndpoint : EndpointWithoutRequest
         var membership = await db.GuildMembers
             .AsNoTracking()
             .Where(entity => entity.ProfileId == profileId)
-            .Select(entity => new { entity.GuildId, entity.Role, entity.Guild!.GuildApiToken })
+            .Select(entity => new { entity.GuildId, entity.Role, entity.VerifiedProfileId, entity.Guild!.GuildApiToken })
             .SingleOrDefaultAsync(ct);
 
         if (membership is null)
@@ -110,6 +113,14 @@ public sealed class PurgeGuildEndpoint : EndpointWithoutRequest
             return;
         }
 
+        // Someone who entered a leader's id is linked as that leader, but only a confirmed claim may delete.
+        if (membership.VerifiedProfileId != profileId)
+        {
+            AddError(VerificationRequiredMessage, GuildSyncResult.VerificationRequired.IssueCode);
+            await Send.ErrorsAsync(StatusCodes.Status403Forbidden, ct);
+            return;
+        }
+
         // Synchronizing first both re-verifies the caller against the fresh roster and is the only authority:
         // any non-success (not Leader/Co-Leader upstream, token rejected, Tacticus unavailable) deletes nothing.
         var result = await Resolve<GuildSyncService>()
@@ -117,7 +128,7 @@ public sealed class PurgeGuildEndpoint : EndpointWithoutRequest
 
         if (result is not GuildSyncResult.Success success)
         {
-            AddError(GuildSyncResultMapper.GetMessage(result));
+            AddError(GuildSyncResultMapper.GetMessage(result), GuildSyncResultMapper.GetIssueCode(result));
             await Send.ErrorsAsync(GuildSyncResultMapper.GetStatusCode(result), ct);
             return;
         }
@@ -126,6 +137,13 @@ public sealed class PurgeGuildEndpoint : EndpointWithoutRequest
         if (success.Guild.Id != membership.GuildId)
         {
             AddError("Only the guild's Leader or Co-Leader can delete its Planner registration.");
+            await Send.ErrorsAsync(StatusCodes.Status403Forbidden, ct);
+            return;
+        }
+
+        if (GuildClaimEvaluator.StateOf(success.CallerMember) != GuildClaimState.Verified)
+        {
+            AddError(VerificationRequiredMessage, GuildSyncResult.VerificationRequired.IssueCode);
             await Send.ErrorsAsync(StatusCodes.Status403Forbidden, ct);
             return;
         }

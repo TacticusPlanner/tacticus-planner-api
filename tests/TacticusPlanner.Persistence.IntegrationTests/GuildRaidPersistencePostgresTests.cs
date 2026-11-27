@@ -60,6 +60,10 @@ public sealed class GuildRaidPersistencePostgresTests
             .AddScoped<GuildRaidStatusService>()
             .AddSingleton<GuildRaidRefreshCoordinator>()
             .AddScoped<GuildRaidEndedSeasonService>()
+            .AddScoped<GuildPlayerRegistry>()
+            .AddScoped<GuildClaimEvaluator>()
+            .AddScoped<GuildSyncService>()
+            .AddScoped<GuildRosterRefreshService>()
             .BuildServiceProvider();
 
         var coordinator = services.GetRequiredService<GuildRaidRefreshCoordinator>();

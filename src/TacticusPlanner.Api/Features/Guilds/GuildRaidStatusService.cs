@@ -19,6 +19,8 @@ public sealed partial class GuildRaidStatusService(
     IGameCatalogProvider catalogProvider,
     GuildRaidRefreshCoordinator coordinator,
     GuildRaidEndedSeasonService endedSeasons,
+    GuildRosterRefreshService rosterRefresh,
+    GuildPlayerRegistry playerRegistry,
     TimeProvider timeProvider,
     ILogger<GuildRaidStatusService> logger)
 {
@@ -130,6 +132,8 @@ public sealed partial class GuildRaidStatusService(
         {
             await endedSeasons.ReadIfDueAsync(guild.Id, guild.GuildApiToken!, ct);
         }
+
+        await rosterRefresh.RunIfDueAsync(guild.Id, ct);
     }
 
     /// <summary>
@@ -345,6 +349,10 @@ public sealed partial class GuildRaidStatusService(
         state.State = GuildRaidObservationState.Active;
         state.ActiveSeasonId = season.Id;
         await db.SaveChangesAsync(ct);
+        await playerRegistry.AddAsync(
+            guildId,
+            season.Attacks.Select(attack => (attack.TacticusUserIdHash, attack.TacticusUserIdSuffix)),
+            ct);
         return new RetainedObservation(state, season);
     }
 

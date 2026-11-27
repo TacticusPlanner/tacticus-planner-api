@@ -457,6 +457,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         GuildSyncResult.InvalidUpstreamData value => ("guild_invalid_upstream_data", value.Message),
         GuildSyncResult.CallerNotAuthorized value => ("guild_caller_not_authorized", value.Message),
         GuildSyncResult.Conflict value => ("guild_conflict", value.Message),
+        GuildSyncResult.VerificationRequired value => ("guild_verification_required", value.Message),
         _ => ("guild_registration_failed", "Guild registration failed."),
     };
 

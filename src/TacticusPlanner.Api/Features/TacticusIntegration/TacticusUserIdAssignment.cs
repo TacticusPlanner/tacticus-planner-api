@@ -43,6 +43,9 @@ internal static class TacticusUserIdAssignment
                 member.ProfileId = null;
                 member.LinkedPlayerName = null;
                 member.LastActiveInPlannerOn = null;
+
+                // Returning to the same id later must not bring the verification back.
+                Guilds.GuildClaimEvaluator.ClearVerification(member);
             }
         }
 
