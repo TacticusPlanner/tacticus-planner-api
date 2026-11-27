@@ -9,15 +9,12 @@ namespace TacticusPlanner.GameCatalog;
 /// Compiles the embedded raw game catalog into a <see cref="GameCatalogCompilation"/>: reads the raw files,
 /// denormalizes the served datasets, hashes them and validates the result. Source files are discovered by
 /// convention — each dataset key maps to the embedded <c>{key}.json</c> (no manifest file) — and release metadata
-/// comes from <see cref="GameCatalogRelease"/>. The API reads the lean <see cref="GameCatalogSnapshot"/> built from
+/// comes from <see cref="GameCatalogSourceRelease"/>. The API reads the lean <see cref="GameCatalogSnapshot"/> built from
 /// it (<see cref="GameCatalogLoader"/>); the full compilation is for validation and the catalog tests.
 /// </summary>
 public static class GameCatalogCompiler
 {
-    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
-    {
-        PropertyNameCaseInsensitive = true,
-    };
+    private static readonly JsonSerializerOptions JsonOptions = GameCatalogCompiledFiles.JsonOptions;
 
     /// <summary>Compiles the embedded catalog, denormalizes the served datasets, and validates the result.</summary>
     /// <exception cref="InvalidOperationException">A source file is missing/empty or validation fails.</exception>
@@ -264,13 +261,13 @@ public static class GameCatalogCompiler
         };
 
         var schemaHash = GameCatalogContractHashing.ComputeContractHash(payloadTypes, JsonOptions);
-        var gameVersion = GameCatalogRelease.GameVersion;
+        var gameVersion = GameCatalogSourceRelease.GameVersion;
         var snapshot = new GameCatalogCompilation(
-            GameCatalogRelease.Version,
+            GameCatalogSourceRelease.Version,
             schemaHash,
             gameVersion,
             GameCatalogHashing.ComputeSnapshotHash(
-                GameCatalogRelease.Version, schemaHash, gameVersion, datasetHashes),
+                GameCatalogSourceRelease.Version, schemaHash, gameVersion, datasetHashes),
             new ReadOnlyDictionary<string, string>(datasetHashes),
             unitsByFaction,
             new ReadOnlyCollection<GameCatalogMowUpgradeCost>(mowUpgradeCosts.ToArray()),

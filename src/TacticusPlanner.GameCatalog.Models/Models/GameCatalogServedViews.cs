@@ -37,4 +37,45 @@ public sealed record GameCatalogServedViews(
     IReadOnlyList<GameCatalogNpcEncounter> NpcEncounterViews,
     IReadOnlyList<GameCatalogGuildWarSeason> GuildWarViews,
     IReadOnlyList<GameCatalogSurvivalEvent> SurvivalEventViews
-);
+)
+{
+    /// <summary>The served dataset key of each payload, mapped to its property here. Every served dataset except
+    /// <c>events-calendar</c> is listed once.</summary>
+    public static IReadOnlyDictionary<string, string> PropertiesByDataset { get; } = new Dictionary<string, string>(StringComparer.Ordinal)
+    {
+        [GameCatalogDatasets.Characters] = nameof(CharacterViews),
+        [GameCatalogDatasets.Npcs] = nameof(NpcList),
+        [GameCatalogDatasets.Mows] = nameof(MowList),
+        [GameCatalogDatasets.MowUpgradeCostsServed] = nameof(MowUpgradeCostViews),
+        [GameCatalogDatasets.CharacterAbilityCostsServed] = nameof(CharacterAbilityCostViews),
+        [GameCatalogDatasets.MythicQuestsServed] = nameof(MythicQuestViews),
+        [GameCatalogDatasets.QuestEvents] = nameof(QuestEventViews),
+        [GameCatalogDatasets.QuestCrates] = nameof(QuestCrateViews),
+        [GameCatalogDatasets.AscensionCostsServed] = nameof(AscensionCostViews),
+        [GameCatalogDatasets.UnlockShardCostsServed] = nameof(UnlockShardCostViews),
+        [GameCatalogDatasets.OnslaughtRewards] = nameof(OnslaughtRewards),
+        [GameCatalogDatasets.Upgrades] = nameof(UpgradeViews),
+        [GameCatalogDatasets.Equipment] = nameof(EquipmentViews),
+        [GameCatalogDatasets.CampaignBattles] = nameof(CampaignBattleViews),
+        [GameCatalogDatasets.CampaignDefinitions] = nameof(CampaignDefinitionViews),
+        [GameCatalogDatasets.Lres] = nameof(LreViews),
+        [GameCatalogDatasets.LreBattles] = nameof(LreBattleViews),
+        [GameCatalogDatasets.HordeModeTiers] = nameof(HordeModeTiersViews),
+        [GameCatalogDatasets.NpcTiers] = nameof(NpcTiersViews),
+        [GameCatalogDatasets.UnitPower] = nameof(UnitPowerViews),
+        [GameCatalogDatasets.Factions] = nameof(FactionViews),
+        [GameCatalogDatasets.DamageTypes] = nameof(DamageTypeViews),
+        [GameCatalogDatasets.GlobalValues] = nameof(GlobalValuesViews),
+        [GameCatalogDatasets.GuildWar] = nameof(GuildWarViews),
+        [GameCatalogDatasets.SurvivalEvents] = nameof(SurvivalEventViews),
+        [GameCatalogDatasets.ProgressionRules] = nameof(ProgressionRulesViews),
+        [GameCatalogDatasets.Hre] = nameof(HreViews),
+        [GameCatalogDatasets.Incursions] = nameof(IncursionViews),
+        [GameCatalogDatasets.NpcEncounters] = nameof(NpcEncounterViews),
+        [GameCatalogDatasets.EventDefinitionsServed] = nameof(EventDefinitionViews),
+        [GameCatalogDatasets.Shops] = nameof(ShopViews),
+        [GameCatalogDatasets.EventShops] = nameof(EventShopViews),
+        [GameCatalogDatasets.RaidBosses] = nameof(RaidBossesView),
+        [GameCatalogDatasets.GuildRaidMeta] = nameof(GuildRaidMetaView),
+    };
+}

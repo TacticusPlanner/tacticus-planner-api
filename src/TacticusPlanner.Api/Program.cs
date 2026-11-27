@@ -196,8 +196,8 @@ if (app.Environment.IsDevelopment())
 
 app.MapDefaultEndpoints();
 
-// Eagerly load + validate the embedded game catalog at startup so bad data fails fast (rather than on the
-// first catalog request).
+// Read the game catalog compiled into TacticusPlanner.GameCatalog at startup (rather than on the first catalog
+// request). Bad catalog data already failed the build.
 _ = app.Services.GetRequiredService<IGameCatalogProvider>();
 
 app.Run();

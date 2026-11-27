@@ -14,10 +14,10 @@
 
 ## 3. Compile at build time (PR 3)
 
-- [ ] 3.1 Compiler entry point writes `manifest.json`, `datasets/{key}.json` and `runtime.json`, exits non-zero on validation errors
-- [ ] 3.2 Runtime build target runs the compiler (inputs: compiler assembly) and embeds the outputs; compiler reference without its output assembly
-- [ ] 3.3 Runtime loader deserializes the compiled catalog and projects the calendar; provider re-projects only the calendar on a day change
-- [ ] 3.4 Faithfulness test: in-process compilation and runtime snapshot serve identical bytes and manifests
-- [ ] 3.5 Dockerfile builds and the published image has no compiler or raw data
-- [ ] 3.6 Measure cold load and day change on one core with production GC settings; record in the PR
-- [ ] 3.7 Update the `game-catalog-data` skill and `AGENTS.md`
+- [x] 3.1 Compiler entry point writes `manifest.json`, `datasets/{key}.json` and `runtime.json`, exits non-zero on validation errors
+- [x] 3.2 Runtime build target runs the compiler (inputs: compiler assembly) and embeds the outputs; compiler reference without its output assembly
+- [x] 3.3 Runtime loader deserializes the compiled catalog and projects the calendar; provider re-projects only the calendar on a day change
+- [x] 3.4 Faithfulness test: in-process compilation and runtime snapshot serve identical bytes and manifests
+- [x] 3.5 Dockerfile builds and the published image has no compiler or raw data
+- [x] 3.6 Measure cold load and day change on one core with production GC settings; record in the PR
+- [x] 3.7 Update the `game-catalog-data` skill and `AGENTS.md`

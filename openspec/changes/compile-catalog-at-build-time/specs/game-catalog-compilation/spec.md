@@ -25,7 +25,7 @@ The compiler SHALL write every served dataset except `events-calendar` as JSON s
 
 ### Requirement: The runtime serves exactly what the compiler produced
 
-The runtime SHALL load the compiled catalog without re-running denormalization, validation or payload hashing. For a given UTC day, every served dataset's payload SHALL serialize to the same bytes the compiler wrote, and `version`, `schemaHash`, `gameVersion`, every dataset hash and `sourceHash` SHALL equal what a full in-process compilation of the same raw data computes for that day.
+The runtime SHALL load the compiled catalog without re-running denormalization, validation or payload hashing. Every dataset the compiler wrote SHALL serialize to the same bytes the compiler wrote. For a given UTC day, every served dataset's payload, `events-calendar` included, SHALL serialize to the same bytes a full in-process compilation of the same raw data produces for that day, and `version`, `schemaHash`, `gameVersion`, every dataset hash and `sourceHash` SHALL equal what a full in-process compilation of the same raw data computes for that day.
 
 #### Scenario: Compiled and runtime catalogs agree
 

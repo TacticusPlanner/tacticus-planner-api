@@ -4,11 +4,11 @@ using System.Text;
 namespace TacticusPlanner.GameCatalog.Models;
 
 /// <summary>
-/// Release metadata for the embedded game catalog, derived from the embedded data so nothing is bumped by
-/// hand. The served schema hash is derived separately from the payload types (see
+/// Release metadata of the raw catalog the compiler embeds, derived from the embedded data so nothing is bumped by
+/// hand. The compiled manifest carries it to the runtime (<c>GameCatalogRelease</c>). The served schema hash is derived separately from the payload types (see
 /// <c>GameCatalogContractHashing</c>).
 /// </summary>
-public static class GameCatalogRelease
+public static class GameCatalogSourceRelease
 {
     /// <summary>The game build the pinned datamine was extracted from (its <c>raw/VERSION</c>, e.g.
     /// <c>1.43.157.2989</c>).</summary>
@@ -31,7 +31,7 @@ public static class GameCatalogRelease
 
     private static string ComputeDataDigest()
     {
-        var assembly = typeof(GameCatalogRelease).Assembly;
+        var assembly = typeof(GameCatalogSourceRelease).Assembly;
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         foreach (var name in assembly.GetManifestResourceNames().Order(StringComparer.Ordinal))
         {

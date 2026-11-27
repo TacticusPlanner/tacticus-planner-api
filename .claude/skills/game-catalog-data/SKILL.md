@@ -1,6 +1,6 @@
 ---
 name: game-catalog-data
-description: How the server-side Game Catalog (TacticusPlanner.GameCatalog) is structured — embedded raw datasets, runtime denormalization into served datasets, hashing/manifest, the non-obvious data conventions (drop-chances, difficulty enums, LRE filters and the LRE split, equipment cost ladders), AND how to refresh it to a new in-game version (bump the pinned tacticus-planner-data-mines REF; V1 datamine for datasets not yet migrated). Use when adding/changing catalog data, the served projections, or bumping the game version.
+description: How the server-side Game Catalog is structured — raw datasets compiled at build time (TacticusPlanner.GameCatalog.Compiler) into served datasets, hashing/manifest, the runtime that embeds the compiled catalog (TacticusPlanner.GameCatalog), the non-obvious data conventions (drop-chances, difficulty enums, LRE filters and the LRE split, equipment cost ladders), AND how to refresh it to a new in-game version (bump the pinned tacticus-planner-data-mines REF; V1 datamine for datasets not yet migrated). Use when adding/changing catalog data, the served projections, or bumping the game version.
 ---
 
 # Game Catalog data
@@ -8,7 +8,7 @@ description: How the server-side Game Catalog (TacticusPlanner.GameCatalog) is s
 The Game Catalog is a **manifest-driven, server-side denormalized** dataset. Clients read
 `/api/v1/game-catalog/manifest`, compare per-dataset hashes, and re-download only changed datasets. Raw
 data lives as embedded JSON under `src/TacticusPlanner.GameCatalog.Compiler/Data/**`; the served surface is a small
-set of consolidated, self-contained datasets computed at runtime (reference tables inlined — the client
+set of consolidated, self-contained datasets computed **at build time** (reference tables inlined — the client
 never joins). The served data carries only **structural/identity** fields: presentation is the client's job
 (no `icon`/`roundIcon`/`iconId`/`wikiLink` on served records — the client derives icons and links from ids).
 Raw `Data/**` records may still carry extra fields the models don't bind (`icon`, `wikiLink`, `iconId` on LRE
@@ -16,7 +16,20 @@ restrictions); these are silently ignored on deserialize.
 
 ## Pipeline (where things live — read the code for current values, not this file)
 
-- **Release metadata** — `Models/GameCatalogRelease.cs`, all derived, nothing to bump: `Version` is `gameVersion` plus a
+- **Three projects** — `TacticusPlanner.GameCatalog.Models` (every record type, `GameCatalogDatasets`, the hashing
+  helpers, the events calendar projection), `TacticusPlanner.GameCatalog.Compiler` (the raw `Data/**`, datamine
+  readers, denormalizers, validators; an exe) and `TacticusPlanner.GameCatalog` (the runtime the API references).
+  The runtime's build runs the compiler (`CompileGameCatalog` target; only when the compiler's assemblies changed) and
+  embeds its output under `compiled/`: `manifest.json` (release metadata + every dataset hash but the calendar's),
+  `datasets/{key}.json` (every served payload but `events-calendar`) and `runtime.json` (`GameCatalogRuntimeData`).
+  **Bad data fails `dotnet build`** (the compiler validates before it writes); "fails startup" / "fails the load"
+  below means that. The API never runs a denormalizer or validator: `GameCatalogLoader.Load(asOf)` deserializes the
+  compiled catalog and projects only the calendar (`GameCatalogEventsCalendar`), and the provider re-projects only
+  the calendar when the UTC day changes. `CompiledGameCatalogTests` proves the runtime serves exactly what an
+  in-process compilation serves. A new served dataset also needs its row in `GameCatalogServedViews` and
+  `PropertiesByDataset`.
+
+- **Release metadata** — the compiler's `Models/GameCatalogSourceRelease.cs`, carried to the runtime's `GameCatalogRelease` by the compiled manifest; all derived, nothing to bump: `Version` is `gameVersion` plus a
   short digest of every embedded data file (e.g. `1.43.157.2989+cd03e6b758ce`). The manifest's `gameVersion` is the pinned datamine's `raw/VERSION` (e.g.
   `1.43.157.2989`, refreshed by `scripts/pull-datamine.cs`), and its `schemaHash` is **derived**, never
   bumped: `Utils/GameCatalogContractHashing.cs` hashes the JSON contract of every served payload type (field
@@ -27,8 +40,7 @@ restrictions); these are silently ignored on deserialize.
   `Served` list. Enumerate `GameCatalogDatasets.Served` for the authoritative set of served datasets.
 - **Loading** — `GameCatalogCompiler.Compile()` reads, denormalizes, hashes and validates everything into the
   full `GameCatalogCompilation` (raw collections + served views; validators and catalog tests use it). The API reads
-  the lean `GameCatalogSnapshot` from `GameCatalogLoader.Load()` (called eagerly at app startup in `Program.cs` to
-  fail fast): release metadata, the served views (`Views`), the calendar and `Runtime` (`GameCatalogRuntimeData`:
+  the lean `GameCatalogSnapshot` from `GameCatalogLoader.Load()` (built from the compiled catalog): release metadata, the served views (`Views`), the calendar and `Runtime` (`GameCatalogRuntimeData`:
   event definitions/occurrences plus the few raw facts no view carries). An API feature reads a served view; add a
   raw fact to `GameCatalogRuntimeData` only when no view has it. Source files are discovered **by convention**: dataset key `foo-bar` → embedded `foo-bar.json`
   (matched by leaf filename, so subfolders don't matter). The csproj embeds `Data/**/*.json` by glob, so a
@@ -255,8 +267,8 @@ restrictions); these are silently ignored on deserialize.
   - **`lre-battles`** — the bulky per-battle records (`waves` trees), keyed `"{lreId}-{track}-{number}"`,
     tagged with `lreId` + `track`.
 - **events** — `event-definitions` is served roughly as-is (structural rules); `events-calendar` is a
-  date-indexed projection built from `event-definitions` + `event-occurrences` relative to load-time
-  "now", so its hash (and `sourceHash`) legitimately changes every process start.
+  date-indexed projection built at runtime from `event-definitions` + `event-occurrences` for the current UTC day,
+  so its hash (and `sourceHash`) legitimately changes every day.
   A Home Screen Event definition scored by a datamine `liveEvents/homeScreenEvent.json` event gets that
   scoring merged into its served `config` as `config.hse` (variants → tiers/milestones/repeat, trackers, modifiers; see
   `EventsDenormalizer.BuildEventDefinitions`). An occurrence resolves its variant by `hseVariant`, else
@@ -478,7 +490,7 @@ Then run the checklist below and promote the manifest snapshot.
 2. If a **served shape** changes: update the relevant `Models/*` view record + the
    `Denormalization/*Denormalizer` builder + any `Validation/*` cross-ref (the derived `schemaHash` follows;
    nothing to bump).
-3. `dotnet build TacticusPlanner.slnx` (startup load + validation fails fast on bad data), then
+3. `dotnet build TacticusPlanner.slnx` (the catalog compile fails the build on bad data), then
    `dotnet test tests/TacticusPlanner.GameCatalog.Tests/...` and
    `dotnet test tests/TacticusPlanner.Api.Tests/...`.
 4. The manifest snapshot is an **API-level** Verify test

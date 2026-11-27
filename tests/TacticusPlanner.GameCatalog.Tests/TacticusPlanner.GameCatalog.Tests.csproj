@@ -20,5 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\TacticusPlanner.GameCatalog\TacticusPlanner.GameCatalog.csproj" />
+    <ProjectReference Include="..\..\src\TacticusPlanner.GameCatalog.Compiler\TacticusPlanner.GameCatalog.Compiler.csproj" />
   </ItemGroup>
 </Project>
