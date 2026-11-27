@@ -11,6 +11,8 @@ public sealed class EquipmentDenormalizerTests
     private static DatamineItem Item(string type, string rarity, params DatamineItemLevel[] levels) =>
         new("Name", type, rarity, levels, null, null, null, null, null);
 
+    private static readonly DatamineItemLevel EmptyLevel = new(new Dictionary<string, int>(), null, null, null);
+
     [Fact]
     public void StatNamesAreMappedToTheServedNames()
     {
@@ -49,11 +51,37 @@ public sealed class EquipmentDenormalizerTests
     }
 
     [Fact]
+    public void ItemsTheGameHasNotNamedAreLeftOut()
+    {
+        var items = new Dictionary<string, DatamineItem>(StringComparer.Ordinal)
+        {
+            ["I_Block_C004"] = Item("I_Block", "Common", EmptyLevel),
+            ["I_Block_C005"] = Item("I_Block", "Common", EmptyLevel) with { Name = "_I_Block_C005" },
+        };
+
+        var item = Assert.Single(GameCatalogDenormalizer.ReadDatamineEquipment(items)["I_Block"]);
+
+        Assert.Equal("I_Block_C004", item.Id);
+    }
+
+    [Fact]
+    public void ServedEquipmentHoldsOnlyNamedItems()
+    {
+        var catalog = GameCatalogLoader.Load();
+
+        Assert.DoesNotContain(catalog.EquipmentViews, item => item.Name.StartsWith('_'));
+        Assert.DoesNotContain(
+            catalog.CharacterViews.SelectMany(character => character.EligibleEquipment).SelectMany(slot => slot.EquipmentIds),
+            id => !catalog.EquipmentViews.Any(item => item.Id == id));
+    }
+
+    [Fact]
     public void ServedEquipmentIsOrderedByTypeThenId()
     {
         var views = GameCatalogLoader.Load().EquipmentViews;
 
-        Assert.Equal(217, views.Count);
+        // 217 items at v1.44.88.3089, less the 12 unnamed placeholders.
+        Assert.Equal(205, views.Count);
         Assert.Equal(
             views.OrderBy(item => item.Type, StringComparer.Ordinal).ThenBy(item => item.Id, StringComparer.Ordinal).Select(item => item.Id),
             views.Select(item => item.Id));
