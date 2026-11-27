@@ -43,7 +43,8 @@ public sealed class PurgeGuildEndpoint : EndpointWithoutRequest
             summary.Response(
                 StatusCodes.Status403Forbidden,
                 "No Tacticus User ID, no linked/registered guild or stored token, or the caller is not currently "
-                    + "Leader/Co-Leader in the fresh Tacticus roster."
+                    + "Leader/Co-Leader in the fresh Tacticus roster; guildVerificationRequired when the caller's claim "
+                    + "is not confirmed."
             );
             summary.Response(
                 StatusCodes.Status404NotFound,

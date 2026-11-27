@@ -291,6 +291,46 @@ public sealed class GuildMemberVerificationTests(PlannerApiFactory factory) : IC
     }
 
     [Fact]
+    public async Task TheRegistrarOfAGuildFromBeforeVerificationIsVerifiedAtTheNextSync()
+    {
+        var guild = await GuildAsync(UpstreamRole.MEMBER);
+        await using (var db = Db())
+        {
+            await db.GuildMembers.Where(member => member.Guild!.Tag == guild.Tag).ExecuteUpdateAsync(set => set
+                .SetProperty(member => member.VerifiedProfileId, (ProfileId?)null)
+                .SetProperty(member => member.VerificationMethod, (Domain.Guilds.GuildClaimVerificationMethod?)null)
+                .SetProperty(member => member.VerifiedAt, (DateTimeOffset?)null), Ct);
+        }
+
+        Assert.Equal(GuildClaimStatus.Pending, (await GuildOfAsync(guild.Leader.Client)).CallerClaimState);
+        await SyncGuildAsync(guild);
+
+        Assert.Equal(GuildClaimStatus.Verified, (await GuildOfAsync(guild.Leader.Client)).CallerClaimState);
+        Assert.Equal(GuildClaimStatus.Pending, (await GuildOfAsync(guild.Members[0].Client)).CallerClaimState);
+    }
+
+    [Fact]
+    public async Task MovingToAnotherGuildEndsVerification()
+    {
+        var first = await GuildAsync(UpstreamRole.MEMBER);
+        var mover = first.Members[0];
+        await GuildTestHelpers.ConfirmClaimAsync(first.Leader.Client, mover.TacticusUserId);
+
+        // Another guild's roster now lists the mover; the first guild has not synced since.
+        var otherLeader = await AccountAsync();
+        var otherToken = $"guild-token-{Guid.NewGuid()}";
+        factory.TacticusApi.ConfigureGuildResponse(otherToken, Roster(Guid.NewGuid(), $"M{Guid.NewGuid():N}"[..10],
+            [(otherLeader.TacticusUserId, UpstreamRole.LEADER), (mover.TacticusUserId, UpstreamRole.MEMBER)]));
+        (await otherLeader.Client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(otherToken), Ct))
+            .EnsureSuccessStatusCode();
+        Assert.Null((await MemberAsync(first, mover)).Claim);
+
+        // Back on the first guild's roster, the claim starts over.
+        await SyncGuildAsync(first);
+        Assert.Equal(GuildClaimStatus.Pending, (await GuildOfAsync(mover.Client)).CallerClaimState);
+    }
+
+    [Fact]
     public async Task PromotionKeepsVerification()
     {
         var guild = await GuildAsync(UpstreamRole.OFFICER);

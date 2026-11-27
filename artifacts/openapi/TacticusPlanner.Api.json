@@ -4848,7 +4848,7 @@
             }
           },
           "403": {
-            "description": "No Tacticus User ID, no linked/registered guild or stored token, or the caller is not currently Leader/Co-Leader in the fresh Tacticus roster.",
+            "description": "No Tacticus User ID, no linked/registered guild or stored token, or the caller is not currently Leader/Co-Leader in the fresh Tacticus roster; guildVerificationRequired when the caller's claim is not confirmed.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -5486,6 +5486,410 @@
         ]
       }
     },
+    "/api/v1/guild/members/confirm": {
+      "post": {
+        "tags": [
+          "Guild"
+        ],
+        "summary": "Confirms several pending claims on players without an assigned name.",
+        "description": "Each claim is confirmed only while it is pending, still held by the account the caller was shown, on a player without a name, and not the caller's own; every other one is skipped and left unchanged. A confirmed player gets the claimant's synced Tacticus name when known.",
+        "operationId": "TacticusPlannerApiFeaturesGuildsConfirmGuildClaimsEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmGuildClaimsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Which members were confirmed and skipped.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmGuildClaimsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No claims, or more than 100.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "guildVerificationRequired: the caller is not a confirmed Leader or Co-Leader.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The authenticated account/profile has not been provisioned.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "guildNotLinked, or concurrency.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/guild/members/{guildMemberId}/confirm": {
+      "post": {
+        "tags": [
+          "Guild"
+        ],
+        "summary": "Confirms the claim on a guild member, whatever its state.",
+        "description": "Carries the profileClaimId the caller was shown. Gives the player the claimant's synced Tacticus name when it has no name and that name is known.",
+        "operationId": "TacticusPlannerApiFeaturesGuildsConfirmGuildClaimEndpoint",
+        "parameters": [
+          {
+            "name": "guildMemberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuildClaimDecisionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "The claim is verified."
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "guildVerificationRequired, or forbidden for the caller's own claim.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The profile is not provisioned, or no such member is in the caller's guild.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "guildClaimChanged: another account holds the claim now, or none does; guildNotLinked; or concurrency.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/guild/members/{guildMemberId}/reject": {
+      "post": {
+        "tags": [
+          "Guild"
+        ],
+        "summary": "Rejects a pending or verified claim on a guild member.",
+        "description": "Ends any verification, removes the link, and clears the claimant's Tacticus user id when it is still the member's, so another account can enter it. The same account claiming again stays rejected until a leader confirms it.",
+        "operationId": "TacticusPlannerApiFeaturesGuildsRejectGuildClaimEndpoint",
+        "parameters": [
+          {
+            "name": "guildMemberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuildClaimDecisionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "The claim is rejected."
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "guildVerificationRequired; or forbidden for the caller's own claim, or a Co-Leader rejecting a verified Leader or Co-Leader.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The profile is not provisioned, or no such member is in the caller's guild.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "guildClaimChanged, guildNotLinked, or concurrency.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/guild/players": {
+      "get": {
+        "tags": [
+          "Guild"
+        ],
+        "summary": "Lists the guild's players, current members first, with their claims.",
+        "description": "For a confirmed Leader or Co-Leader. Former members are the players seen in the guild's stored raid hits who are no longer on the roster, newest hit first. Never calls the Tacticus API and returns no profile id, display name, hash or full Tacticus user id.",
+        "operationId": "TacticusPlannerApiFeaturesGuildsGetGuildPlayersEndpoint",
+        "responses": {
+          "200": {
+            "description": "The guild's players.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuildPlayersResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "guildVerificationRequired: the caller is not a confirmed Leader or Co-Leader.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The authenticated account/profile has not been provisioned.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "guildNotLinked: no registered guild is linked to the caller.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/guild/players/{playerId}/name": {
+      "put": {
+        "tags": [
+          "Guild"
+        ],
+        "summary": "Sets or clears the name a confirmed leader gives a guild player.",
+        "description": "The name is trimmed; blank or null clears it. Duplicates are allowed. A saved name can verify a pending Officer or Member claim whose synced Tacticus name equals it.",
+        "operationId": "TacticusPlannerApiFeaturesGuildsSetGuildPlayerNameEndpoint",
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetGuildPlayerNameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "The name was saved."
+          },
+          "400": {
+            "description": "A name over 50 characters or with control characters.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "guildVerificationRequired: the caller is not a confirmed Leader or Co-Leader.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The profile is not provisioned, or no such player is in the caller's guild.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "guildNotLinked, or concurrency.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/guild/raid-status": {
       "get": {
         "tags": [
@@ -5700,7 +6104,7 @@
             }
           },
           "403": {
-            "description": "The caller is absent from the guild or below Co-Leader.",
+            "description": "The caller is absent from the guild or below Co-Leader; or guildVerificationRequired: the guild has a confirmed leader and the caller is not confirmed, so the stored key was kept.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9494,6 +9898,32 @@
         },
         "additionalProperties": false
       },
+      "ConfirmGuildClaimsRequest": {
+        "required": [
+          "claims"
+        ],
+        "type": "object",
+        "properties": {
+          "claims": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGuildClaimReference"
+          }
+        }
+      },
+      "ConfirmGuildClaimsResponse": {
+        "required": [
+          "confirmed",
+          "skipped"
+        ],
+        "type": "object",
+        "properties": {
+          "confirmed": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGuid"
+          },
+          "skipped": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGuid"
+          }
+        }
+      },
       "CreateCombinedGoalsRequest": {
         "const": null,
         "required": [
@@ -10761,6 +11191,165 @@
           }
         }
       },
+      "GameCatalogCharacterAbilityCostView": {
+        "required": [
+          "level",
+          "gold",
+          "badges"
+        ],
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "badges": {
+            "$ref": "#/components/schemas/GameCatalogAmountByRarity"
+          }
+        }
+      },
+      "GameCatalogCharacterRankUp": {
+        "required": [
+          "rank",
+          "upgradeIds"
+        ],
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "string"
+          },
+          "upgradeIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          }
+        }
+      },
+      "GameCatalogCharacterView": {
+        "required": [
+          "id",
+          "name",
+          "faction",
+          "alliance",
+          "health",
+          "damage",
+          "armour",
+          "initialRarity",
+          "meleeDamage",
+          "meleeHits",
+          "rangedDamage",
+          "rangedHits",
+          "rangeDistance",
+          "movement",
+          "traits",
+          "activeAbilityDamage",
+          "activeAbilityNames",
+          "passiveAbilityDamage",
+          "passiveAbilityNames",
+          "equipmentSlots",
+          "rankUpUpgrades",
+          "shardLocations",
+          "eligibleEquipment",
+          "summons",
+          "abilities"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "faction": {
+            "type": "string"
+          },
+          "alliance": {
+            "type": "string"
+          },
+          "health": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "damage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "armour": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "initialRarity": {
+            "type": "string"
+          },
+          "meleeDamage": {
+            "type": "string"
+          },
+          "meleeHits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rangedDamage": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "rangedHits": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "rangeDistance": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "movement": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "traits": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "activeAbilityDamage": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "activeAbilityNames": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "passiveAbilityDamage": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "passiveAbilityNames": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "equipmentSlots": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "rankUpUpgrades": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogCharacterRankUp"
+          },
+          "shardLocations": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogFarmLocation"
+          },
+          "eligibleEquipment": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEquipmentSlot"
+          },
+          "summons": {
+            "type": "string"
+          },
+          "abilities": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogUnitAbility"
+          }
+        }
+      },
       "GameCatalogDamageProfileModifier": {
         "required": [
           "damageType",
@@ -11045,6 +11634,90 @@
             ],
             "items": {
               "$ref": "#/components/schemas/GameCatalogCampaignDefinitionView"
+            }
+          }
+        }
+      },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogCharacterAbilityCostView": {
+        "required": [
+          "version",
+          "schemaHash",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaHash": {
+            "type": "string"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "const": null,
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/GameCatalogCharacterAbilityCostView"
+            }
+          }
+        }
+      },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogCharacterView": {
+        "required": [
+          "version",
+          "schemaHash",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaHash": {
+            "type": "string"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "const": null,
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/GameCatalogCharacterView"
             }
           }
         }
@@ -11423,90 +12096,6 @@
             ],
             "items": {
               "$ref": "#/components/schemas/GameCatalogHre"
-            }
-          }
-        }
-      },
-      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogCharacterAbilityCostView": {
-        "required": [
-          "version",
-          "schemaHash",
-          "gameVersion",
-          "sourceHash",
-          "datasetKey",
-          "datasetHash",
-          "data"
-        ],
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string"
-          },
-          "schemaHash": {
-            "type": "string"
-          },
-          "gameVersion": {
-            "type": "string"
-          },
-          "sourceHash": {
-            "type": "string"
-          },
-          "datasetKey": {
-            "type": "string"
-          },
-          "datasetHash": {
-            "type": "string"
-          },
-          "data": {
-            "const": null,
-            "type": [
-              "null",
-              "array"
-            ],
-            "items": {
-              "$ref": "#/components/schemas/GameCatalogCharacterAbilityCostView"
-            }
-          }
-        }
-      },
-      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogCharacterView": {
-        "required": [
-          "version",
-          "schemaHash",
-          "gameVersion",
-          "sourceHash",
-          "datasetKey",
-          "datasetHash",
-          "data"
-        ],
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string"
-          },
-          "schemaHash": {
-            "type": "string"
-          },
-          "gameVersion": {
-            "type": "string"
-          },
-          "sourceHash": {
-            "type": "string"
-          },
-          "datasetKey": {
-            "type": "string"
-          },
-          "datasetHash": {
-            "type": "string"
-          },
-          "data": {
-            "const": null,
-            "type": [
-              "null",
-              "array"
-            ],
-            "items": {
-              "$ref": "#/components/schemas/GameCatalogCharacterView"
             }
           }
         }
@@ -13423,23 +14012,6 @@
           }
         }
       },
-      "GameCatalogHreDailyReward": {
-        "required": [
-          "position",
-          "currency"
-        ],
-        "type": "object",
-        "properties": {
-          "position": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "currency": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "GameCatalogHreChest": {
         "required": [
           "chestId",
@@ -13461,6 +14033,23 @@
             "format": "int32"
           },
           "maxShards": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogHreDailyReward": {
+        "required": [
+          "position",
+          "currency"
+        ],
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currency": {
             "type": "integer",
             "format": "int32"
           }
@@ -13647,165 +14236,6 @@
           }
         }
       },
-      "GameCatalogCharacterAbilityCostView": {
-        "required": [
-          "level",
-          "gold",
-          "badges"
-        ],
-        "type": "object",
-        "properties": {
-          "level": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "gold": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "badges": {
-            "$ref": "#/components/schemas/GameCatalogAmountByRarity"
-          }
-        }
-      },
-      "GameCatalogCharacterRankUp": {
-        "required": [
-          "rank",
-          "upgradeIds"
-        ],
-        "type": "object",
-        "properties": {
-          "rank": {
-            "type": "string"
-          },
-          "upgradeIds": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          }
-        }
-      },
-      "GameCatalogCharacterView": {
-        "required": [
-          "id",
-          "name",
-          "faction",
-          "alliance",
-          "health",
-          "damage",
-          "armour",
-          "initialRarity",
-          "meleeDamage",
-          "meleeHits",
-          "rangedDamage",
-          "rangedHits",
-          "rangeDistance",
-          "movement",
-          "traits",
-          "activeAbilityDamage",
-          "activeAbilityNames",
-          "passiveAbilityDamage",
-          "passiveAbilityNames",
-          "equipmentSlots",
-          "rankUpUpgrades",
-          "shardLocations",
-          "eligibleEquipment",
-          "summons",
-          "abilities"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "faction": {
-            "type": "string"
-          },
-          "alliance": {
-            "type": "string"
-          },
-          "health": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "damage": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "armour": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "initialRarity": {
-            "type": "string"
-          },
-          "meleeDamage": {
-            "type": "string"
-          },
-          "meleeHits": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "rangedDamage": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "rangedHits": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "format": "int32"
-          },
-          "rangeDistance": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "format": "int32"
-          },
-          "movement": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "traits": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          },
-          "activeAbilityDamage": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          },
-          "activeAbilityNames": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          },
-          "passiveAbilityDamage": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          },
-          "passiveAbilityNames": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          },
-          "equipmentSlots": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
-          },
-          "rankUpUpgrades": {
-            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogCharacterRankUp"
-          },
-          "shardLocations": {
-            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogFarmLocation"
-          },
-          "eligibleEquipment": {
-            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEquipmentSlot"
-          },
-          "summons": {
-            "type": "string"
-          },
-          "abilities": {
-            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogUnitAbility"
-          }
-        }
-      },
       "GameCatalogIncursion": {
         "required": [
           "mowId",
@@ -13898,6 +14328,25 @@
           }
         }
       },
+      "GameCatalogIncursionChest": {
+        "required": [
+          "id",
+          "type",
+          "rewards"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          }
+        }
+      },
       "GameCatalogIncursionEnemy": {
         "required": [
           "npcId",
@@ -13946,25 +14395,6 @@
           },
           "stacks": {
             "type": "boolean"
-          }
-        }
-      },
-      "GameCatalogIncursionChest": {
-        "required": [
-          "id",
-          "type",
-          "rewards"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "rewards": {
-            "$ref": "#/components/schemas/IReadOnlyListOfString"
           }
         }
       },
@@ -14128,6 +14558,23 @@
           }
         }
       },
+      "GameCatalogLreChestsMilestone": {
+        "required": [
+          "chestLevel",
+          "engramCost"
+        ],
+        "type": "object",
+        "properties": {
+          "chestLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "engramCost": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "GameCatalogLreEnemy": {
         "required": [
           "id",
@@ -14165,23 +14612,6 @@
           },
           "exclude": {
             "type": "boolean"
-          }
-        }
-      },
-      "GameCatalogLreChestsMilestone": {
-        "required": [
-          "chestLevel",
-          "engramCost"
-        ],
-        "type": "object",
-        "properties": {
-          "chestLevel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "engramCost": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },
@@ -16669,6 +17099,49 @@
         ],
         "type": "string"
       },
+      "GuildClaimDecisionRequest": {
+        "required": [
+          "profileClaimId"
+        ],
+        "type": "object",
+        "properties": {
+          "profileClaimId": {
+            "type": "string"
+          }
+        }
+      },
+      "GuildClaimMethod": {
+        "enum": [
+          "key",
+          "nameMatch",
+          "leader"
+        ],
+        "type": "string"
+      },
+      "GuildClaimReference": {
+        "required": [
+          "guildMemberId",
+          "profileClaimId"
+        ],
+        "type": "object",
+        "properties": {
+          "guildMemberId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileClaimId": {
+            "type": "string"
+          }
+        }
+      },
+      "GuildClaimStatus": {
+        "enum": [
+          "pending",
+          "verified",
+          "rejected"
+        ],
+        "type": "string"
+      },
       "GuildMemberSummary": {
         "required": [
           "guildMemberId",
@@ -16722,6 +17195,149 @@
           },
           "displayLabel": {
             "type": "string"
+          }
+        }
+      },
+      "GuildNameMatch": {
+        "enum": [
+          "noAssignedName",
+          "noTacticusName",
+          "matches",
+          "differs",
+          "duplicate"
+        ],
+        "type": "string"
+      },
+      "GuildPlayerClaim": {
+        "required": [
+          "profileClaimId",
+          "state",
+          "method",
+          "tacticusName",
+          "nameMatch",
+          "isCaller",
+          "canReject"
+        ],
+        "type": "object",
+        "properties": {
+          "profileClaimId": {
+            "type": "string"
+          },
+          "state": {
+            "$ref": "#/components/schemas/GuildClaimStatus"
+          },
+          "method": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildClaimMethod"
+              }
+            ]
+          },
+          "tacticusName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "nameMatch": {
+            "$ref": "#/components/schemas/GuildNameMatch"
+          },
+          "isCaller": {
+            "type": "boolean"
+          },
+          "canReject": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GuildPlayerMembership": {
+        "required": [
+          "guildMemberId",
+          "role",
+          "level",
+          "claim"
+        ],
+        "type": "object",
+        "properties": {
+          "guildMemberId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "role": {
+            "$ref": "#/components/schemas/GuildRole"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "claim": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildPlayerClaim"
+              }
+            ]
+          }
+        }
+      },
+      "GuildPlayersResponse": {
+        "required": [
+          "players"
+        ],
+        "type": "object",
+        "properties": {
+          "players": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGuildPlayerSummary"
+          }
+        }
+      },
+      "GuildPlayerSummary": {
+        "required": [
+          "playerId",
+          "maskedTacticusUserId",
+          "assignedName",
+          "lastHitAt",
+          "member"
+        ],
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "maskedTacticusUserId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "assignedName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "lastHitAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "member": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GuildPlayerMembership"
+              }
+            ]
           }
         }
       },
@@ -17715,6 +18331,12 @@
           "$ref": "#/components/schemas/GameCatalogCampaignPotentialRewardView"
         }
       },
+      "IReadOnlyListOfGameCatalogCharacterRankUp": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogCharacterRankUp"
+        }
+      },
       "IReadOnlyListOfGameCatalogDamageProfileModifier": {
         "type": "array",
         "items": {
@@ -17883,16 +18505,16 @@
           "$ref": "#/components/schemas/GameCatalogHordeModeTier"
         }
       },
-      "IReadOnlyListOfGameCatalogHreDailyReward": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/GameCatalogHreDailyReward"
-        }
-      },
       "IReadOnlyListOfGameCatalogHreChest": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogHreChest"
+        }
+      },
+      "IReadOnlyListOfGameCatalogHreDailyReward": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogHreDailyReward"
         }
       },
       "IReadOnlyListOfGameCatalogHreMilestone": {
@@ -17925,12 +18547,6 @@
           "$ref": "#/components/schemas/GameCatalogHrePhaseChest"
         }
       },
-      "IReadOnlyListOfGameCatalogCharacterRankUp": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/GameCatalogCharacterRankUp"
-        }
-      },
       "IReadOnlyListOfGameCatalogIncursionBattle": {
         "type": "array",
         "items": {
@@ -17955,6 +18571,12 @@
           "$ref": "#/components/schemas/GameCatalogIncursionTier"
         }
       },
+      "IReadOnlyListOfGameCatalogLreChestsMilestone": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogLreChestsMilestone"
+        }
+      },
       "IReadOnlyListOfGameCatalogLreEnemy": {
         "type": "array",
         "items": {
@@ -17965,12 +18587,6 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogLreFilter"
-        }
-      },
-      "IReadOnlyListOfGameCatalogLreChestsMilestone": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/GameCatalogLreChestsMilestone"
         }
       },
       "IReadOnlyListOfGameCatalogLreMission": {
@@ -18196,10 +18812,22 @@
           "format": "uuid"
         }
       },
+      "IReadOnlyListOfGuildClaimReference": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GuildClaimReference"
+        }
+      },
       "IReadOnlyListOfGuildMemberSummary": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GuildMemberSummary"
+        }
+      },
+      "IReadOnlyListOfGuildPlayerSummary": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GuildPlayerSummary"
         }
       },
       "IReadOnlyListOfGuildRaidModifierStatusResponse": {
@@ -18342,16 +18970,16 @@
           "$ref": "#/components/schemas/RosterAbilityResponse"
         }
       },
-      "IReadOnlyListOfRosterEquipmentSlotResponse": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/RosterEquipmentSlotResponse"
-        }
-      },
       "IReadOnlyListOfRosterCharacterResponse": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/RosterCharacterResponse"
+        }
+      },
+      "IReadOnlyListOfRosterEquipmentSlotResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/RosterEquipmentSlotResponse"
         }
       },
       "IReadOnlyListOfRosterMowResponse": {
@@ -19586,7 +20214,10 @@
           "lastSyncSucceededAt",
           "callerRole",
           "canSynchronize",
-          "members"
+          "members",
+          "callerClaimState",
+          "canManageMembers",
+          "pendingClaimCount"
         ],
         "type": "object",
         "properties": {
@@ -19623,6 +20254,16 @@
           },
           "members": {
             "$ref": "#/components/schemas/IReadOnlyListOfGuildMemberSummary"
+          },
+          "callerClaimState": {
+            "$ref": "#/components/schemas/GuildClaimStatus"
+          },
+          "canManageMembers": {
+            "type": "boolean"
+          },
+          "pendingClaimCount": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -19659,26 +20300,6 @@
         "type": "object",
         "properties": {
           "abilityId": {
-            "type": "string"
-          },
-          "level": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "RosterEquipmentSlotResponse": {
-        "required": [
-          "slotId",
-          "equipmentId",
-          "level"
-        ],
-        "type": "object",
-        "properties": {
-          "slotId": {
-            "type": "string"
-          },
-          "equipmentId": {
             "type": "string"
           },
           "level": {
@@ -19735,6 +20356,26 @@
           },
           "equippedItems": {
             "$ref": "#/components/schemas/IReadOnlyListOfRosterEquipmentSlotResponse"
+          }
+        }
+      },
+      "RosterEquipmentSlotResponse": {
+        "required": [
+          "slotId",
+          "equipmentId",
+          "level"
+        ],
+        "type": "object",
+        "properties": {
+          "slotId": {
+            "type": "string"
+          },
+          "equipmentId": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -19836,6 +20477,20 @@
             "minimum": 0,
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "SetGuildPlayerNameRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
           }
         }
       },

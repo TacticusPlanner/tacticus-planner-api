@@ -61,7 +61,7 @@ A claim is verified only if `profile_id = verified_profile_id`, and rejected onl
 
 ### 6. One evaluator
 
-`GuildClaimEvaluator` applies, in one place and to tracked members: drop verification of changed links, the stored-key rule, then name matching. It runs inside the saves of `GuildSyncService`, the roster refresh, name changes and confirmations, and as an `IPlayerDataSyncDefaultStep` for the claimant's guild. That step runs behind a savepoint, so its failure cannot fail a player sync.
+`GuildClaimEvaluator` applies, in one place and to tracked members: drop verification of changed links, the stored-key rule, then name matching. It runs inside the saves of `GuildSyncService`, the roster refresh, name changes and confirmations, and as an `IPlayerDataSyncDefaultStep` for the claimant's guild. That step runs behind a savepoint, so its failure cannot fail a player sync. A sync that takes a manual roster snapshot replaces the default steps, so it does not evaluate claims; the next roster save, name change or plain sync does.
 
 The Tacticus name is `PlayerDetails.Name` where `snapshot.SyncedAt >= integration.TacticusSyncLastSucceededAt`. Names are compared trimmed, in NFC, upper-invariant. The stored-key rule reads `Guild.ConfiguredByProfileId`, so existing guilds need no data migration: they are verified at their next sync or daily refresh.
 
