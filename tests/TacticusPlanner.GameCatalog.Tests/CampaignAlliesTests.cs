@@ -45,7 +45,7 @@ public sealed class CampaignAlliesTests
     [MemberData(nameof(Expected))]
     public void EveryBattleOfAGroupCarriesTheGroupAllies(string groupId, string alliance, string[] factions)
     {
-        var battles = GameCatalogLoader.Load().CampaignBattleViews.Where(b => b.CampaignGroupId == groupId).ToArray();
+        var battles = GameCatalogCompiler.Compile().CampaignBattleViews.Where(b => b.CampaignGroupId == groupId).ToArray();
 
         Assert.NotEmpty(battles);
         Assert.All(battles, battle =>
@@ -58,7 +58,7 @@ public sealed class CampaignAlliesTests
     [Fact]
     public void EveryBattleHasAllies()
     {
-        Assert.All(GameCatalogLoader.Load().CampaignBattleViews, battle =>
+        Assert.All(GameCatalogCompiler.Compile().CampaignBattleViews, battle =>
         {
             Assert.False(string.IsNullOrWhiteSpace(battle.AlliesAlliance));
             Assert.NotEmpty(battle.AlliesFactions);
@@ -72,7 +72,7 @@ public sealed class CampaignAlliesTests
     [InlineData("Xenos", new[] { "NoSuchFaction" }, "alliesFactions")]
     public void ValidatorRejectsBrokenAllies(string alliance, string[] factions, string field)
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var broken = snapshot.CampaignGroups.ToDictionary(
             pair => pair.Key,
             pair => pair.Value.GroupId == "campaign3" ? pair.Value with { AlliesAlliance = alliance, AlliesFactions = factions } : pair.Value);

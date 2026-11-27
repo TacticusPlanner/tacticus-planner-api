@@ -7,7 +7,7 @@ namespace TacticusPlanner.GameCatalog.Tests;
 
 public sealed class QuestEventsDenormalizerTests
 {
-    private static readonly GameCatalogSnapshot Snapshot = GameCatalogLoader.Load();
+    private static readonly GameCatalogCompilation Snapshot = GameCatalogCompiler.Compile();
 
     private static GameCatalogQuestEventView Quest(string id) =>
         Snapshot.QuestEventViews.Single(quest => quest.FeaturedCharacterId == id);

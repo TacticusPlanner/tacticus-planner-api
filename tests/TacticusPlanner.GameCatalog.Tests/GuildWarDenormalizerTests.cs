@@ -6,7 +6,7 @@ namespace TacticusPlanner.GameCatalog.Tests;
 
 public sealed class GuildWarDenormalizerTests
 {
-    private static readonly IReadOnlyList<GameCatalogGuildWarSeason> Shipped = GameCatalogLoader.Load().GuildWarViews;
+    private static readonly IReadOnlyList<GameCatalogGuildWarSeason> Shipped = GameCatalogCompiler.Compile().GuildWarViews;
 
     private static GameCatalogGuildWarSeason Season(string id) => Shipped.Single(season => season.Id == id);
 

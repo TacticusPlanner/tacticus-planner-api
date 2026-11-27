@@ -4,7 +4,7 @@ namespace TacticusPlanner.GameCatalog.Validation;
 
 public static partial class GameCatalogValidator
 {
-    private static void ValidateReferences(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
+    private static void ValidateReferences(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors)
     {
         var unitIds = new HashSet<string>(snapshot.Characters.Select(character => character.Id), StringComparer.OrdinalIgnoreCase);
         var mowIds = new HashSet<string>(snapshot.Mows.Select(mow => mow.Id), StringComparer.OrdinalIgnoreCase);

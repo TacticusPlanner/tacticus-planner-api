@@ -4,7 +4,7 @@ namespace TacticusPlanner.GameCatalog.Validation;
 
 public static partial class GameCatalogValidator
 {
-    private static void ValidateRequiredFields(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
+    private static void ValidateRequiredFields(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors)
     {
         foreach (var (key, faction) in snapshot.UnitsByFaction)
         {

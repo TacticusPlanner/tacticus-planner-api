@@ -121,8 +121,8 @@ public sealed class UpdateBattleProgressEndpoint
         GameCatalogSnapshot catalog,
         out string? error)
     {
-        var groupsByBattleId = catalog.CampaignGroups.Values
-            .SelectMany(group => group.Battles.Select(battle => (battle, group)))
+        var groupsByBattleId = catalog.CampaignDefinitionViews
+            .SelectMany(group => catalog.CampaignBattlesByGroup[group.GroupId].Select(battle => (battle, group)))
             .ToDictionary(pair => pair.battle.Id, StringComparer.Ordinal);
         foreach (var entry in battles)
         {

@@ -27,7 +27,7 @@ public sealed class CampaignDatamineReaderTests
     private static GameCatalogCampaignCuration Curation(string campaign = "eventStandard1") =>
         new([new GameCatalogCampaignSourceCuration(campaign, "AMS")]);
 
-    private static readonly IReadOnlyDictionary<string, GameCatalogFactionUnits> Units = GameCatalogLoader.Load().UnitsByFaction;
+    private static readonly IReadOnlyDictionary<string, GameCatalogFactionUnits> Units = GameCatalogCompiler.Compile().UnitsByFaction;
 
     private static DatamineCampaignUnlockConditions Unlock(string[] factions, string[]? units = null, string? follows = null) => new(
         new DatamineCampaignRequiredUnits(factions, units),
@@ -248,7 +248,7 @@ public sealed class CampaignDatamineReaderTests
     [Fact]
     public void ShippedEventsServeThirtyThreeBattlesPerTypeWithThreeChallenges()
     {
-        var group = GameCatalogLoader.Load().CampaignGroups["campaign-battles-death-guard-vs-admech"];
+        var group = GameCatalogCompiler.Compile().CampaignGroups["campaign-battles-death-guard-vs-admech"];
 
         Assert.All(group.Types, type =>
         {
@@ -282,7 +282,7 @@ public sealed class CampaignDatamineReaderTests
     [Fact]
     public void ShippedGroupsNumberTheirCampaignsAndEarlyIndomitusHasNoLightningVictory()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var definitions = GameCatalogDenormalizer.BuildCampaignDefinitions(snapshot.CampaignGroups).ToDictionary(definition => definition.GroupId);
 
         Assert.Equal((1, 2, 4, 4, 6), (definitions["campaign1"].Number, definitions["mirror2"].Number, definitions["elite4"].Number, definitions["eliteMirror4"].Number, definitions["eventCampaign6"].Number));

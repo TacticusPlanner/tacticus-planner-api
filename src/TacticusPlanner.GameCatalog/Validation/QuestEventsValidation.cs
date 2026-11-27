@@ -27,7 +27,7 @@ public static partial class GameCatalogValidator
         "Coins", "RaidTicket", "XpBook", "AbilityBadge", "AscensionOrb",
     };
 
-    private static void ValidateQuestEvents(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
+    private static void ValidateQuestEvents(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors)
     {
         var characterIds = new HashSet<string>(snapshot.Characters.Select(character => character.Id), StringComparer.Ordinal);
         var factionIds = new HashSet<string>(

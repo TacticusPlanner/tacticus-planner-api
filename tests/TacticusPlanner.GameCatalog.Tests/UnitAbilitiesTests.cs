@@ -98,7 +98,7 @@ public sealed class UnitAbilitiesTests
     [Fact]
     public void TheShippedCatalogServesEveryUnitsAbilities()
     {
-        var catalog = GameCatalogLoader.Load();
+        var catalog = GameCatalogCompiler.Compile();
         var characters = catalog.CharacterViews.ToDictionary(character => character.Id, character => character.Abilities, StringComparer.Ordinal);
         var mows = catalog.MowList.ToDictionary(mow => mow.Id, mow => mow.Abilities, StringComparer.Ordinal);
 

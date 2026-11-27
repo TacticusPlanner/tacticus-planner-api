@@ -111,7 +111,7 @@ public sealed class LreDatamineReaderTests
                 [Unit] = new(null),
             },
             sources,
-            GameCatalogLoader.Load().UnitsByFaction,
+            GameCatalogCompiler.Compile().UnitsByFaction,
             JsonSerializerOptions.Web)).Value;
 
     [Fact]
@@ -203,7 +203,7 @@ public sealed class LreDatamineReaderTests
     [Fact]
     public void ShippedChaosTracksAlsoDisallowTheLostAndTheDamned()
     {
-        var gamma = GameCatalogLoader.Load().LresByEvent["lres-votanuthar"].Gamma;
+        var gamma = GameCatalogCompiler.Compile().LresByEvent["lres-votanuthar"].Gamma;
 
         Assert.All(gamma.Battles, battle => Assert.Contains("TheLostAndTheDamned", battle.DisallowedFactions));
     }
@@ -236,7 +236,7 @@ public sealed class LreDatamineReaderTests
     [Fact]
     public void ShippedEventsServeTheGamesTokenBankAndThreeRuns()
     {
-        var served = GameCatalogDenormalizer.BuildLres(GameCatalogLoader.Load().LresByEvent, GameCatalogLoader.Load().UnitsByFaction);
+        var served = GameCatalogDenormalizer.BuildLres(GameCatalogCompiler.Compile().LresByEvent, GameCatalogCompiler.Compile().UnitsByFaction);
 
         Assert.All(served, lre =>
         {

@@ -129,7 +129,7 @@ public sealed class GameCatalogDatasetCachingTests(GameCatalogApiFactory factory
         // Different content (and therefore dataset hash).
         catalog.Current = real with
         {
-            UpgradeViews = real.UpgradeViews.Skip(1).ToList(),
+            Views = real.Views with { UpgradeViews = real.UpgradeViews.Skip(1).ToList() },
             DatasetHashes = new Dictionary<string, string>(real.DatasetHashes) { [GameCatalogDatasets.Upgrades] = "changed" },
         };
         var changed = await GetAsync(client, "/api/v1/game-catalog/upgrades");

@@ -7,7 +7,7 @@ public static partial class GameCatalogValidator
     private static readonly int[] MythicQuestNumbers = [1, 2, 3, 4, 5];
     private const int MaxTasksPerQuest = 4;
 
-    private static void ValidateMythicQuests(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
+    private static void ValidateMythicQuests(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors)
     {
         var characterIds = new HashSet<string>(snapshot.Characters.Select(character => character.Id), StringComparer.Ordinal);
         var equipmentIds = new HashSet<string>(snapshot.Equipment.Select(item => item.Id), StringComparer.Ordinal);

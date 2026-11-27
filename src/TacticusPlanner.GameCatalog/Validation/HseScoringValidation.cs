@@ -45,7 +45,7 @@ public static partial class GameCatalogValidator
         "LinearHeroEvent",
     };
 
-    private static void ValidateHseScoring(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
+    private static void ValidateHseScoring(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors) =>
         ValidateHseScoring(snapshot.EventDefinitions, snapshot.EventOccurrences, snapshot.HseScoring, errors);
 
     /// <summary>

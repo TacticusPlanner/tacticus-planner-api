@@ -9,7 +9,7 @@ namespace TacticusPlanner.GameCatalog.Tests;
 
 public sealed class QuestEventsValidationTests
 {
-    private static readonly GameCatalogSnapshot Snapshot = GameCatalogLoader.Load();
+    private static readonly GameCatalogCompilation Snapshot = GameCatalogCompiler.Compile();
     private static readonly GameCatalogRawQuestEvent Nubari = Snapshot.QuestEvents.Single(quest => quest.UnitId == "astarEradicator");
 
     private static List<GameCatalogValidationError> Validate(

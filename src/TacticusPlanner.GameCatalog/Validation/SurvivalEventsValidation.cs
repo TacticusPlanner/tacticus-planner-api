@@ -5,7 +5,7 @@ namespace TacticusPlanner.GameCatalog.Validation;
 
 public static partial class GameCatalogValidator
 {
-    private static void ValidateSurvivalEvents(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
+    private static void ValidateSurvivalEvents(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors) =>
         ValidateSurvivalEvents(
             snapshot.SurvivalEventViews,
             [.. snapshot.CharacterViews.Select(character => character.Id)],

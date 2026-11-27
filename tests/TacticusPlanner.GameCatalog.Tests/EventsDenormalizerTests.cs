@@ -50,7 +50,7 @@ public sealed class EventsDenormalizerTests
     [Fact]
     public void GuildRaidSeasonProjectsAsAFourteenDayCycle()
     {
-        var definition = GameCatalogLoader.Load().EventDefinitions.Single(item => item.Id == "guild-raid-season");
+        var definition = GameCatalogCompiler.Compile().EventDefinitions.Single(item => item.Id == "guild-raid-season");
         var anchor = new DateTimeOffset(2026, 10, 21, 10, 0, 0, TimeSpan.Zero);
         Assert.Equal(new GameCatalogEventRecurrence("Fixed", 14, 13, anchor), definition.Recurrence);
 

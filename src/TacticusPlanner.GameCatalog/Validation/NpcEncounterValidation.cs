@@ -4,7 +4,7 @@ namespace TacticusPlanner.GameCatalog.Validation;
 
 public static partial class GameCatalogValidator
 {
-    private static void ValidateNpcEncounters(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
+    private static void ValidateNpcEncounters(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors) =>
         ValidateNpcEncounters(snapshot.NpcEncounterViews, snapshot, errors);
 
     /// <summary>
@@ -15,7 +15,7 @@ public static partial class GameCatalogValidator
     /// </summary>
     internal static void ValidateNpcEncounters(
         IReadOnlyList<GameCatalogNpcEncounter> encounters,
-        GameCatalogSnapshot snapshot,
+        GameCatalogCompilation snapshot,
         List<GameCatalogValidationError> errors)
     {
         var npcIds = snapshot.NpcList.Select(npc => npc.Id).ToHashSet(StringComparer.Ordinal);

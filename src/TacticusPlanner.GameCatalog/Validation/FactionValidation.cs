@@ -4,10 +4,10 @@ namespace TacticusPlanner.GameCatalog.Validation;
 
 public static partial class GameCatalogValidator
 {
-    private static void ValidateFactions(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
+    private static void ValidateFactions(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors) =>
         ValidateFactions(snapshot.FactionViews, snapshot.CharacterViews, snapshot.MowList, snapshot.NpcList, errors);
 
-    private static void ValidateDamageTypes(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
+    private static void ValidateDamageTypes(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors) =>
         ValidateDamageTypes(snapshot.DamageTypeViews, snapshot.CharacterViews, snapshot.NpcList, errors);
 
     /// <summary>

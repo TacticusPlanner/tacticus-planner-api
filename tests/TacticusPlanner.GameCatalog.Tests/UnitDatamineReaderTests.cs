@@ -130,7 +130,7 @@ public sealed class UnitDatamineReaderTests
     [Fact]
     public void TheShippedLineupAndNpcsLoad()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         Assert.Equal(120, snapshot.Characters.Count);
         Assert.Equal(12, snapshot.Mows.Count);

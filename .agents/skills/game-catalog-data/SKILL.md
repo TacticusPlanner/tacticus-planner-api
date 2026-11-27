@@ -25,8 +25,12 @@ restrictions); these are silently ignored on deserialize.
 - **Dataset registry** — `Models/GameCatalogDatasets.cs`: the raw source keys (per-faction unit/npc lists,
   upgrade rarities, campaign-battle groups, plus single-file keys) and the
   `Served` list. Enumerate `GameCatalogDatasets.Served` for the authoritative set of served datasets.
-- **Loading** — `GameCatalogLoader.Load()` (public; called eagerly at app startup in `Program.cs` to fail
-  fast). Source files are discovered **by convention**: dataset key `foo-bar` → embedded `foo-bar.json`
+- **Loading** — `GameCatalogCompiler.Compile()` reads, denormalizes, hashes and validates everything into the
+  full `GameCatalogCompilation` (raw collections + served views; validators and catalog tests use it). The API reads
+  the lean `GameCatalogSnapshot` from `GameCatalogLoader.Load()` (called eagerly at app startup in `Program.cs` to
+  fail fast): release metadata, the served views (`Views`), the calendar and `Runtime` (`GameCatalogRuntimeData`:
+  event definitions/occurrences plus the few raw facts no view carries). An API feature reads a served view; add a
+  raw fact to `GameCatalogRuntimeData` only when no view has it. Source files are discovered **by convention**: dataset key `foo-bar` → embedded `foo-bar.json`
   (matched by leaf filename, so subfolders don't matter). The csproj embeds `Data/**/*.json` by glob, so a
   new `{key}.json` only needs its key registered in `GameCatalogDatasets`. There is **no manifest file**.
   `Data/curated/` holds hand-kept data with no game source (event definitions/occurrences, horde-mode tiers,

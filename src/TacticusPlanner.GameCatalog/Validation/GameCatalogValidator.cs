@@ -3,14 +3,14 @@ using TacticusPlanner.GameCatalog.Models;
 namespace TacticusPlanner.GameCatalog.Validation;
 
 /// <summary>
-/// Validates a loaded <see cref="GameCatalogSnapshot"/> at startup (fail-fast): every served dataset is
+/// Validates a loaded <see cref="GameCatalogCompilation"/> at startup (fail-fast): every served dataset is
 /// present and non-empty, ids are unique, required fields are set, and cross-dataset references resolve.
 /// The checks are split by concern across the <c>Validation</c> folder; this file is the orchestrator and
 /// the shared assertion helpers.
 /// </summary>
 public static partial class GameCatalogValidator
 {
-    public static IReadOnlyList<GameCatalogValidationError> Validate(GameCatalogSnapshot snapshot)
+    public static IReadOnlyList<GameCatalogValidationError> Validate(GameCatalogCompilation snapshot)
     {
         var errors = new List<GameCatalogValidationError>();
         // Read from LresByEvent so a `snapshot with { LresByEvent = ... }` reaches the LRE checks

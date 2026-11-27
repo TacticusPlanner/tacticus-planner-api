@@ -26,7 +26,8 @@ public sealed partial class PlayerDataTransformer
     private CampaignEventProgressRecord MapCampaignEvent(TacticusApiPlayer.CampaignProgress campaign)
     {
         var completedIndices = new HashSet<int>((campaign.Battles ?? []).Select(battle => battle.BattleIndex));
-        var group = catalog.Current.CampaignGroups.Values.FirstOrDefault(value =>
+        var snapshot = catalog.Current;
+        var group = snapshot.CampaignDefinitionViews.FirstOrDefault(value =>
             string.Equals(value.GroupId, campaign.Id, StringComparison.Ordinal));
         if (group is null)
         {
@@ -37,7 +38,7 @@ public sealed partial class PlayerDataTransformer
             };
         }
 
-        var trackBattles = group.Battles
+        var trackBattles = snapshot.CampaignBattlesByGroup[group.GroupId]
             .Where(battle => string.Equals(battle.Type, campaign.Type, StringComparison.Ordinal));
         var completedRegular = 0;
         var completedChallenges = new List<string>();

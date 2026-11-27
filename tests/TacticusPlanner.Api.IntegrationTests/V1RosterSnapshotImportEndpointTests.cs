@@ -29,13 +29,13 @@ public sealed class V1RosterSnapshotImportEndpointTests(PlannerApiFactory factor
 
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
-    private GameCatalogCharacter CalgarUnit => catalog.Characters.Single(unit => unit.Id == Calgar);
+    private GameCatalogCharacterView CalgarUnit => catalog.CharacterViews.Single(unit => unit.Id == Calgar);
 
     /// <summary>An item that fits Calgar's second slot, with its 1-based slot id.</summary>
-    private (GameCatalogEquipment Item, string SlotId) CalgarItem =>
-        (catalog.Equipment.First(item => item.Type == CalgarUnit.EquipmentSlots[1]), "Slot2");
+    private (GameCatalogEquipmentView Item, string SlotId) CalgarItem =>
+        (catalog.EquipmentViews.First(item => item.Type == CalgarUnit.EquipmentSlots[1]), "Slot2");
 
-    private GameCatalogMow Mow => catalog.Mows[0];
+    private GameCatalogMow Mow => catalog.MowList[0];
 
     [Fact]
     public async Task NotSelectedLeavesSnapshotsAlone()

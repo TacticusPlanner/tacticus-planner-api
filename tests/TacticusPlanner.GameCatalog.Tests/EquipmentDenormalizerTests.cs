@@ -67,7 +67,7 @@ public sealed class EquipmentDenormalizerTests
     [Fact]
     public void ServedEquipmentHoldsOnlyNamedItems()
     {
-        var catalog = GameCatalogLoader.Load();
+        var catalog = GameCatalogCompiler.Compile();
 
         Assert.DoesNotContain(catalog.EquipmentViews, item => item.Name.StartsWith('_'));
         Assert.DoesNotContain(
@@ -78,7 +78,7 @@ public sealed class EquipmentDenormalizerTests
     [Fact]
     public void ServedEquipmentIsOrderedByTypeThenId()
     {
-        var views = GameCatalogLoader.Load().EquipmentViews;
+        var views = GameCatalogCompiler.Compile().EquipmentViews;
 
         // 217 items at v1.44.88.3089, less the 12 unnamed placeholders.
         Assert.Equal(205, views.Count);
@@ -90,7 +90,7 @@ public sealed class EquipmentDenormalizerTests
     [Fact]
     public void ServedEquipmentUsesOnlyServedStatNames()
     {
-        var statNames = GameCatalogLoader.Load().EquipmentViews
+        var statNames = GameCatalogCompiler.Compile().EquipmentViews
             .SelectMany(item => item.Levels)
             .SelectMany(level => level.Stats.Keys)
             .ToHashSet(StringComparer.Ordinal);
@@ -103,7 +103,7 @@ public sealed class EquipmentDenormalizerTests
     {
         // The game prices levels per item, but every item of a rarity shares one ladder (as the retired
         // equipment-upgrade-costs.json had it). A datamine bump that breaks this is worth a look.
-        var laddersByRarity = GameCatalogLoader.Load().EquipmentViews
+        var laddersByRarity = GameCatalogCompiler.Compile().EquipmentViews
             .GroupBy(item => item.Rarity, StringComparer.Ordinal)
             .Select(rarity => rarity.Select(item => item.UpgradeLevels).ToList());
         foreach (var ladders in laddersByRarity)

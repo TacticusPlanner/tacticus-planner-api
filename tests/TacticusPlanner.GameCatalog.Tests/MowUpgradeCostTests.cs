@@ -12,7 +12,7 @@ public sealed class MowUpgradeCostTests
     [Fact]
     public void ShippedLadderMatchesTheDatamineRowCountAndSampledRows()
     {
-        var views = GameCatalogLoader.Load().MowUpgradeCostViews;
+        var views = GameCatalogCompiler.Compile().MowUpgradeCostViews;
 
         Assert.Equal(Enumerable.Range(2, 59), views.Select(view => view.Level));
         // Sampled from the datamine units/abilityUpgradeCostsMoW.json.

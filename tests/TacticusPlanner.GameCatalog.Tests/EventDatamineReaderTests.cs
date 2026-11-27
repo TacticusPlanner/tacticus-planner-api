@@ -97,7 +97,7 @@ public sealed class EventDatamineReaderTests
     [Fact]
     public void ShippedHseScoringSkipsTheAgainstTheTideLowTierTheGameNoLongerHas()
     {
-        var scoring = GameCatalogLoader.Load().HseScoring.Single(definition => definition.DefinitionId == "hse-against-the-tide");
+        var scoring = GameCatalogCompiler.Compile().HseScoring.Single(definition => definition.DefinitionId == "hse-against-the-tide");
 
         Assert.Equal(["High", "Mid"], scoring.Variants.Single(variant => variant.VariantKey == "default").Tiers.Select(tier => tier.Tier));
         Assert.Equal(["High", "Mid", "Low"], scoring.Variants.Single(variant => variant.VariantKey == "run-2").Tiers.Select(tier => tier.Tier));
@@ -106,7 +106,7 @@ public sealed class EventDatamineReaderTests
     [Fact]
     public void QuestEventsReadTheTokenBankAndScorePoints()
     {
-        var quests = GameCatalogLoader.Load().QuestEvents;
+        var quests = GameCatalogCompiler.Compile().QuestEvents;
 
         Assert.All(quests, quest =>
         {

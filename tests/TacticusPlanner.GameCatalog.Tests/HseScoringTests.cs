@@ -40,7 +40,7 @@ public sealed class HseScoringTests
     }
 
     private static JsonElement ServedHse(string definitionId) =>
-        GameCatalogLoader.Load().EventDefinitionViews.Single(definition => definition.Id == definitionId).Config!.Value.GetProperty("hse");
+        GameCatalogCompiler.Compile().EventDefinitionViews.Single(definition => definition.Id == definitionId).Config!.Value.GetProperty("hse");
 
     private static JsonElement ServedVariant(string definitionId, string variantKey) =>
         ServedHse(definitionId).GetProperty("variants").EnumerateArray()
@@ -121,13 +121,13 @@ public sealed class HseScoringTests
         var tracker = Assert.Single(againstTheTide.GetProperty("trackers").EnumerateArray());
         Assert.Equal("DefeatWaves", tracker.GetProperty("kind").GetString());
         Assert.Equal(1, tracker.GetProperty("points").GetInt32());
-        Assert.DoesNotContain(GameCatalogLoader.Load().EventDefinitions, definition => definition.Id == "hse-defeat-waves");
+        Assert.DoesNotContain(GameCatalogCompiler.Compile().EventDefinitions, definition => definition.Id == "hse-defeat-waves");
     }
 
     [Fact]
     public void BundledScoringPassesValidation()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var errors = Validate(snapshot.EventDefinitions, snapshot.EventOccurrences, snapshot.HseScoring);
         Assert.Empty(errors);
     }

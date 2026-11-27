@@ -10,14 +10,14 @@ public sealed class BattleProgressOverrideValidationTests(GameCatalogApiFactory 
 {
     private GameCatalogSnapshot Catalog => factory.Services.GetRequiredService<IGameCatalogProvider>().Current;
 
-    private GameCatalogCampaignBattle StandingBattle(bool withLightningVictory) => Catalog.CampaignGroups.Values
+    private GameCatalogCampaignBattleView StandingBattle(bool withLightningVictory) => Catalog.CampaignDefinitionViews
         .Where(group => !string.Equals(group.ReleaseType, "event", StringComparison.OrdinalIgnoreCase))
-        .SelectMany(group => group.Battles)
+        .SelectMany(group => Catalog.CampaignBattlesByGroup[group.GroupId])
         .First(battle => battle.LightningVictoryTurns is not null == withLightningVictory);
 
-    private GameCatalogCampaignBattle EventBattle => Catalog.CampaignGroups.Values
+    private GameCatalogCampaignBattleView EventBattle => Catalog.CampaignDefinitionViews
         .Where(group => string.Equals(group.ReleaseType, "event", StringComparison.OrdinalIgnoreCase))
-        .SelectMany(group => group.Battles)
+        .SelectMany(group => Catalog.CampaignBattlesByGroup[group.GroupId])
         .First(battle => battle.LightningVictoryTurns is not null);
 
     private bool Validate(IReadOnlyList<BattleProgressOverrideRequest> battles) =>

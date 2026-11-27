@@ -11,7 +11,7 @@ namespace TacticusPlanner.GameCatalog.Tests;
 /// loader rejects malformed schedules.</summary>
 public sealed class LreRunScheduleTests
 {
-    private static readonly GameCatalogSnapshot Snapshot = GameCatalogLoader.Load();
+    private static readonly GameCatalogCompilation Snapshot = GameCatalogCompiler.Compile();
 
     private static readonly System.Text.Json.JsonSerializerOptions WebJson = new(System.Text.Json.JsonSerializerDefaults.Web);
 
@@ -86,7 +86,7 @@ public sealed class LreRunScheduleTests
     [Fact]
     public void TheCuratedEventsCarryNoDerivableScheduleFields()
     {
-        var assembly = typeof(GameCatalogLoader).Assembly;
+        var assembly = typeof(GameCatalogCompiler).Assembly;
         var resource = assembly.GetManifestResourceNames()
             .Single(name => name.EndsWith($".{GameCatalogDatasets.LreCuration}.json", StringComparison.Ordinal));
 

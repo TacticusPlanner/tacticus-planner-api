@@ -16,14 +16,14 @@ public sealed class ShopEventCalendarTests
     [Fact]
     public void EveryCurrentOrUpcomingShopEventWeekHasAnEventShop()
     {
-        var message = FindUndatedShopEventWeeks(GameCatalogLoader.Load(), DateTimeOffset.UtcNow);
+        var message = FindUndatedShopEventWeeks(GameCatalogCompiler.Compile(), DateTimeOffset.UtcNow);
         Assert.True(message is null, message);
     }
 
     [Fact]
     public void EveryPerWeekMerchantOfACalendaredEventHasACalendarWeek()
     {
-        var message = FindMerchantWeeksMissingFromTheCalendar(Merchants(), GameCatalogLoader.Load());
+        var message = FindMerchantWeeksMissingFromTheCalendar(Merchants(), GameCatalogCompiler.Compile());
         Assert.True(message is null, message);
     }
 
@@ -40,7 +40,7 @@ public sealed class ShopEventCalendarTests
             .Where(pair => !KnownUndatedEventKeys.Contains(pair.Key, StringComparer.Ordinal))
             .ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.Ordinal);
 
-        var message = FindCurrentMerchantsWithoutCalendarWeeks(merchants, GameCatalogLoader.Load(), DateTimeOffset.UtcNow);
+        var message = FindCurrentMerchantsWithoutCalendarWeeks(merchants, GameCatalogCompiler.Compile(), DateTimeOffset.UtcNow);
 
         Assert.True(message is null, message);
     }
@@ -48,7 +48,7 @@ public sealed class ShopEventCalendarTests
     [Fact]
     public void HelperFailsForAPerWeekMerchantBeyondTheCalendarWeeks()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var calendared = GameCatalogDenormalizerAccess.ShopEventWeeksByEventKey(snapshot).First();
         var extraWeek = calendared.Value.Max(week => week.Week) + 1;
         var merchants = new Dictionary<string, (string? Shared, SortedDictionary<int, string> PerWeek)>(StringComparer.Ordinal)
@@ -68,7 +68,7 @@ public sealed class ShopEventCalendarTests
     [Fact]
     public void HelperFailsForACurrentMerchantWithoutCalendarWeeksAndIgnoresPastOnes()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var merchants = new Dictionary<string, (string? Shared, SortedDictionary<int, string> PerWeek)>(StringComparer.Ordinal)
         {
             ["December2099"] = ("December2099EventShop", new SortedDictionary<int, string>()),
@@ -86,7 +86,7 @@ public sealed class ShopEventCalendarTests
     [Fact]
     public void HelperFailsForAnUpcomingWeekCutOffByAMissingPerWeekMerchant()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var served = snapshot.RawEventShops.First(shop => shop.Weeks.Count > 1);
 
         // Serve only week 1, as the denormalizer does when week 2's merchant is missing.
@@ -101,7 +101,7 @@ public sealed class ShopEventCalendarTests
     [Fact]
     public void HelperFailsForAnUpcomingWeekWithoutAnEventShop()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var start = new DateTimeOffset(2099, 11, 16, 0, 0, 0, TimeSpan.Zero);
         var november = new GameCatalogEventOccurrence(
             "occ-2099-11-16-armageddon-shop-week1", "armageddon-shop", start, start.AddDays(7),
@@ -122,7 +122,7 @@ public sealed class ShopEventCalendarTests
     [Fact]
     public void HelperIgnoresEndedWeeksWithoutAnEventShop()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         // The seeded weeks all have shops; drop them to simulate a datamine that no longer ships the merchants.
         var message = FindUndatedShopEventWeeks(
@@ -135,7 +135,7 @@ public sealed class ShopEventCalendarTests
     private static IReadOnlyDictionary<string, (string? Shared, SortedDictionary<int, string> PerWeek)> Merchants() =>
         GameCatalogDenormalizerAccess.DatamineEventMerchants();
 
-    private static string? FindUndatedShopEventWeeks(GameCatalogSnapshot snapshot, DateTimeOffset now)
+    private static string? FindUndatedShopEventWeeks(GameCatalogCompilation snapshot, DateTimeOffset now)
     {
         // A calendar week is served only when its event has a merchant for it (per-week events stop at the first
         // week with none), so any unserved week that has not ended is a gap.
@@ -158,7 +158,7 @@ public sealed class ShopEventCalendarTests
     /// and their plans are rejected, so the calendar is missing weeks.</summary>
     private static string? FindMerchantWeeksMissingFromTheCalendar(
         IReadOnlyDictionary<string, (string? Shared, SortedDictionary<int, string> PerWeek)> merchants,
-        GameCatalogSnapshot snapshot)
+        GameCatalogCompilation snapshot)
     {
         var calendar = GameCatalogDenormalizerAccess.ShopEventWeeksByEventKey(snapshot);
         var missing = merchants
@@ -177,7 +177,7 @@ public sealed class ShopEventCalendarTests
     /// event is not served, so its shop is missing while it runs.</summary>
     private static string? FindCurrentMerchantsWithoutCalendarWeeks(
         IReadOnlyDictionary<string, (string? Shared, SortedDictionary<int, string> PerWeek)> merchants,
-        GameCatalogSnapshot snapshot,
+        GameCatalogCompilation snapshot,
         DateTimeOffset now)
     {
         var calendar = GameCatalogDenormalizerAccess.ShopEventWeeksByEventKey(snapshot);
@@ -204,9 +204,9 @@ public sealed class ShopEventCalendarTests
 internal static class GameCatalogDenormalizerAccess
 {
     public static IReadOnlyDictionary<string, (string? Shared, SortedDictionary<int, string> PerWeek)> DatamineEventMerchants() =>
-        Denormalization.GameCatalogDenormalizer.DatamineEventMerchants(GameCatalogLoader.LoadDatamineMerchants());
+        Denormalization.GameCatalogDenormalizer.DatamineEventMerchants(GameCatalogCompiler.LoadDatamineMerchants());
 
     public static IReadOnlyDictionary<string, IReadOnlyList<(int Week, GameCatalogEventOccurrence Occurrence)>>
-        ShopEventWeeksByEventKey(GameCatalogSnapshot snapshot) =>
+        ShopEventWeeksByEventKey(GameCatalogCompilation snapshot) =>
         Denormalization.GameCatalogDenormalizer.ShopEventWeeksByEventKey(snapshot.EventDefinitions, snapshot.EventOccurrences);
 }

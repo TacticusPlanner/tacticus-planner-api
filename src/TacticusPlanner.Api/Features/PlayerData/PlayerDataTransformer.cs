@@ -30,7 +30,7 @@ public sealed partial class PlayerDataTransformer(IGameCatalogProvider catalog)
     public PlayerDataTransformResult Transform(TacticusApiPlayer.PlayerResponse response)
     {
         var snapshot = catalog.Current;
-        var mowIds = new HashSet<string>(snapshot.Mows.Select(mow => mow.Id), StringComparer.Ordinal);
+        var mowIds = new HashSet<string>(snapshot.MowList.Select(mow => mow.Id), StringComparer.Ordinal);
 
         var units = response.Player?.Units ?? [];
         var characters = units.Where(unit => !mowIds.Contains(unit.Id)).Select(MapCharacter).ToList();

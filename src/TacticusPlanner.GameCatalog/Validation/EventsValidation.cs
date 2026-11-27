@@ -9,7 +9,7 @@ public static partial class GameCatalogValidator
     /// <summary>The <c>guild-war-season</c> occurrence parameter naming the datamine season config that season runs.</summary>
     public const string GuildWarSeasonConfigId = "seasonConfigId";
 
-    private static void ValidateEvents(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
+    private static void ValidateEvents(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors)
     {
         ValidateEvents(snapshot.EventDefinitions, snapshot.EventOccurrences, errors);
         ValidateGuildWarSeasonConfigs(
@@ -53,7 +53,7 @@ public static partial class GameCatalogValidator
 
     /// <summary>
     /// Takes only the raw event collections (not the full snapshot) so it is directly unit testable without
-    /// constructing an entire <see cref="GameCatalogSnapshot"/>, mirroring the denormalizer's pure-function shape.
+    /// constructing an entire <see cref="GameCatalogCompilation"/>, mirroring the denormalizer's pure-function shape.
     /// </summary>
     internal static void ValidateEvents(
         IReadOnlyList<GameCatalogEventDefinition> definitions,

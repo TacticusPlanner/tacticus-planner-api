@@ -5,7 +5,8 @@ namespace TacticusPlanner.GameCatalog.Tests;
 
 public sealed class V1LegendaryEventObjectiveNamesTests
 {
-    private static readonly GameCatalogSnapshot Catalog = GameCatalogLoader.Load();
+    private static readonly GameCatalogCompilation Catalog = GameCatalogCompiler.Compile();
+    private static readonly GameCatalogSnapshot Runtime = GameCatalogLoader.FromCompilation(Catalog);
 
     public static TheoryData<string, string, bool, string> V1Names => new()
     {
@@ -79,10 +80,10 @@ public sealed class V1LegendaryEventObjectiveNamesTests
         foreach (var lre in Catalog.LreViews)
         {
             var raw = Catalog.Lres.Single(entry => entry.UnitSnowprintId == lre.Id);
-            Assert.Equal(lre.Id, Catalog.ServedLreIdForV1Id(raw.Id));
+            Assert.Equal(lre.Id, Runtime.ServedLreIdForV1Id(raw.Id));
         }
 
-        Assert.Null(Catalog.ServedLreIdForV1Id(10));
+        Assert.Null(Runtime.ServedLreIdForV1Id(10));
     }
 
     private static List<int> Resolve(GameCatalogLreTrackView lane, string v1Name) =>

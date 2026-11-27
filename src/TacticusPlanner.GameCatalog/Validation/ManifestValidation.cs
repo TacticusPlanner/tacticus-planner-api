@@ -7,7 +7,7 @@ public static partial class GameCatalogValidator
     private static readonly HashSet<string> ValidRarities =
         new(StringComparer.Ordinal) { "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic" };
 
-    private static void ValidateManifestDatasets(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
+    private static void ValidateManifestDatasets(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors)
     {
         errors.AddRange(GameCatalogDatasets.Served
             .Where(servedDataset => !snapshot.DatasetHashes.ContainsKey(servedDataset))
@@ -15,7 +15,7 @@ public static partial class GameCatalogValidator
                 servedDataset, "MissingDataset", $"Served dataset '{servedDataset}' is missing.")));
     }
 
-    private static void ValidateServedProjections(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
+    private static void ValidateServedProjections(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors)
     {
         RequireNonEmpty(GameCatalogDatasets.Characters, snapshot.CharacterViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.Npcs, snapshot.NpcList.Count, errors);

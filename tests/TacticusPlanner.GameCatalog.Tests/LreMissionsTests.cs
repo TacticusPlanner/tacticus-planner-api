@@ -12,7 +12,7 @@ namespace TacticusPlanner.GameCatalog.Tests;
 /// line no template matches or a label with no catalog mapping.</summary>
 public sealed class LreMissionsTests
 {
-    private static readonly GameCatalogSnapshot Snapshot = GameCatalogLoader.Load();
+    private static readonly GameCatalogCompilation Snapshot = GameCatalogCompiler.Compile();
 
     private static GameCatalogLreView View(string id) => Snapshot.LreViews.Single(view => view.Id == id);
 
@@ -268,7 +268,7 @@ public sealed class LreMissionsTests
 
     private static HashSet<string> EnumTraitIds()
     {
-        var assembly = typeof(GameCatalogLoader).Assembly;
+        var assembly = typeof(GameCatalogCompiler).Assembly;
         var name = assembly.GetManifestResourceNames().Single(resource => resource.EndsWith(".enums.json", StringComparison.Ordinal));
         using var stream = assembly.GetManifestResourceStream(name)!;
         using var document = JsonDocument.Parse(stream);

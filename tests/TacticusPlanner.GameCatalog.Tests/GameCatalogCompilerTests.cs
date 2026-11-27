@@ -12,8 +12,8 @@ public sealed class GameCatalogLoaderTests
         var day = new DateTimeOffset(2026, 11, 1, 0, 0, 0, TimeSpan.Zero);
         for (var offset = 0; offset < 7; offset++, day = day.AddDays(1))
         {
-            var early = GameCatalogLoader.Load(day.AddSeconds(1));
-            var late = GameCatalogLoader.Load(day.AddDays(1).AddSeconds(-1));
+            var early = GameCatalogCompiler.Compile(day.AddSeconds(1));
+            var late = GameCatalogCompiler.Compile(day.AddDays(1).AddSeconds(-1));
 
             Assert.Equal(early.SourceHash, late.SourceHash);
         }
@@ -22,7 +22,7 @@ public sealed class GameCatalogLoaderTests
     [Fact]
     public void AscensionCostsCoverEveryProgressionStepInLadderOrder()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         // The 20-step (rarity, stars) ascension ladder, ported 1:1 from V1's OrbAscensionCalculator
         // (mirrors the client's `packages/game-domain` progressionOrder ladder).
@@ -52,7 +52,7 @@ public sealed class GameCatalogLoaderTests
     [Fact]
     public void UnlockShardCostsCoverEveryStartingRarity()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         var byRarity = snapshot.UnlockShardCostViews.ToDictionary(cost => cost.Rarity, cost => cost.Shards);
 
@@ -71,7 +71,7 @@ public sealed class GameCatalogLoaderTests
     [Fact]
     public void OnslaughtRewardsCoverAllProgressCombinationsAndExposeMidpoints()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         Assert.Equal(21, snapshot.OnslaughtRewards.Count);
         Assert.All(snapshot.OnslaughtRewards, reward =>
@@ -79,8 +79,9 @@ public sealed class GameCatalogLoaderTests
             Assert.InRange(reward.Tier, 1, 3);
             Assert.Equal(5, reward.Regular.Count);
         });
-        Assert.Equal(15, snapshot.OnslaughtReward("Gold", 1, "Legendary", mythicShards: false).Midpoint);
-        Assert.Equal(2.5, snapshot.OnslaughtReward("Adamantine", 3, "Mythic", mythicShards: true).Midpoint);
+        var runtime = GameCatalogLoader.FromCompilation(snapshot);
+        Assert.Equal(15, runtime.OnslaughtReward("Gold", 1, "Legendary", mythicShards: false).Midpoint);
+        Assert.Equal(2.5, runtime.OnslaughtReward("Adamantine", 3, "Mythic", mythicShards: true).Midpoint);
     }
 
     [Theory]
@@ -88,7 +89,7 @@ public sealed class GameCatalogLoaderTests
     [InlineData("eldarMauganRa", "SHME40")]
     public void EliteShardLocationsCombineGuaranteedAndPotentialRewards(string characterId, string battleId)
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         var character = snapshot.CharacterViews.Single(character => character.Id == characterId);
         var location = Assert.Single(character.ShardLocations, location => location.BattleId == battleId);
@@ -104,7 +105,7 @@ public sealed class GameCatalogLoaderTests
     [Fact]
     public void EventDefinitionsIncludeFactionBoostAndFocusAsDistinctDefinitions()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         var factionBoost = snapshot.EventDefinitionViews.Single(definition => definition.Id == "hse-faction-boost");
         var factionFocus = snapshot.EventDefinitionViews.Single(definition => definition.Id == "hse-faction-focus");
@@ -116,7 +117,7 @@ public sealed class GameCatalogLoaderTests
     [Fact]
     public void EventsCalendarIncludesBothConfirmedAndProjectedEntries()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         Assert.NotEmpty(snapshot.EventsCalendar);
 
@@ -128,7 +129,7 @@ public sealed class GameCatalogLoaderTests
     [Fact]
     public void ShopsDatasetHasExactlyTheFourAlwaysOnDailyShops()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         Assert.Equal(
             ["guild", "war", "rogue-trader", "crusade"],
@@ -138,7 +139,7 @@ public sealed class GameCatalogLoaderTests
     [Fact]
     public void EveryShopVariantIsFullyNormalizedAndCrossReferenced()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var unitOrMowIds = new HashSet<string>(
             snapshot.Characters.Select(character => character.Id), StringComparer.OrdinalIgnoreCase);
         unitOrMowIds.UnionWith(snapshot.Mows.Select(mow => mow.Id));
@@ -176,7 +177,7 @@ public sealed class GameCatalogLoaderTests
     [Fact]
     public void RaidBossesDatasetSplitsBossesAndPrimesAndPreservesTheSeasonRotation()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var view = snapshot.RaidBossesView;
 
         Assert.NotEmpty(view.Bosses);
@@ -207,7 +208,7 @@ public sealed class GameCatalogLoaderTests
     [Fact]
     public void GuildRaidMetaProvidesCuratedTeamsAndV1CompGuidance()
     {
-        var meta = GameCatalogLoader.Load().GuildRaidMetaView;
+        var meta = GameCatalogCompiler.Compile().GuildRaidMetaView;
 
         Assert.Equal("terminus-maximus-and-cognitae-guild-raid-meta", meta.SourceId);
         Assert.Equal("2026-09-14", meta.UpdatedOn);
@@ -281,7 +282,7 @@ public sealed class GameCatalogLoaderTests
     [Fact]
     public void RaidBossEncountersResolveTheirUnitProgressionIndexAndInlinedModifiers()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var view = snapshot.RaidBossesView;
 
         var bossPrimeIds = new HashSet<string>(
@@ -315,7 +316,7 @@ public sealed class GameCatalogLoaderTests
     [Fact]
     public void GuildShopRoundTripsRefreshMetadataAndAKnownDayRestrictedShardSlot()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         var guild = snapshot.ShopViews.Single(shop => shop.Id == "guild");
         Assert.Equal("guildMerchant", guild.DisplayLocation);

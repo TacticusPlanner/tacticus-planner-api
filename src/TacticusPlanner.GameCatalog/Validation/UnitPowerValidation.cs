@@ -11,7 +11,7 @@ public static partial class GameCatalogValidator
     private static readonly HashSet<string> UnitPowerUpgradeStats =
         new(["Health", "Damage", "Armour"], StringComparer.Ordinal);
 
-    private static void ValidateUnitPower(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
+    private static void ValidateUnitPower(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors) =>
         ValidateUnitPower(
             snapshot.UnitPower,
             snapshot.Characters,

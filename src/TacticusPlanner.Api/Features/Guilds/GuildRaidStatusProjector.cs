@@ -207,23 +207,21 @@ public static class GuildRaidStatusProjector
             return currentIndex + 1;
         }
 
-        var raw = catalog.RaidBossRawData.Seasons.Values.FirstOrDefault(season =>
-            season.GuildBossSeasonConfigId == seasonConfigId);
-        if (raw?.LoopFromTier is null || raw.LoopFromSet is null)
+        if (!catalog.Runtime.RaidBossSeasonLoops.TryGetValue(seasonConfigId, out var loop))
         {
             return currentIndex;
         }
 
         for (var index = 0; index < positions.Count; index++)
         {
-            if (positions[index].Tier.Tier == raw.LoopFromTier && positions[index].Set.Set == raw.LoopFromSet)
+            if (positions[index].Tier.Tier == loop.Tier && positions[index].Set.Set == loop.Set)
             {
                 return index;
             }
         }
 
         throw new InvalidOperationException(
-            $"Guild Raid season config '{seasonConfigId}' has a loop target (tier {raw.LoopFromTier}, set {raw.LoopFromSet}) outside its own positions.");
+            $"Guild Raid season config '{seasonConfigId}' has a loop target (tier {loop.Tier}, set {loop.Set}) outside its own positions.");
     }
 
     private static DateTimeOffset? ResolveEndsAt(

@@ -48,7 +48,7 @@ public sealed class ProgressionCostTests
     [Fact]
     public void TheShippedLadderMatchesTheProgressionOrder()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var errors = new List<GameCatalogValidationError>();
 
         GameCatalogValidator.ValidateAscensionCosts(snapshot.AscensionCosts, errors);
@@ -62,7 +62,7 @@ public sealed class ProgressionCostTests
     [Fact]
     public void ADroppedStepFailsValidation()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var errors = new List<GameCatalogValidationError>();
 
         GameCatalogValidator.ValidateAscensionCosts(snapshot.AscensionCosts.Skip(1).ToArray(), errors);

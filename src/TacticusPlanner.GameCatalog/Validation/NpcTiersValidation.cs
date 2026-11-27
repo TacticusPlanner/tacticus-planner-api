@@ -4,7 +4,7 @@ namespace TacticusPlanner.GameCatalog.Validation;
 
 public static partial class GameCatalogValidator
 {
-    private static void ValidateNpcTiers(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
+    private static void ValidateNpcTiers(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors)
     {
         var npcIds = new HashSet<string>(snapshot.NpcList.Select(npc => npc.Id), StringComparer.Ordinal);
         var bossIds = new HashSet<string>(

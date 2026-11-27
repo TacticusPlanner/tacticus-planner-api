@@ -9,10 +9,10 @@ public static class GameCatalogLreLookups
     /// matches, provided it is also served. Null for an event the catalog does not carry.</summary>
     public static string? ServedLreIdForV1Id(this GameCatalogSnapshot catalog, int v1EventId)
     {
-        var raw = catalog.Lres.FirstOrDefault(lre => lre.Id == v1EventId);
-        return raw is not null && catalog.LreViews.Any(view => view.Id == raw.UnitSnowprintId)
-            ? raw.UnitSnowprintId
-            : null;
+        return catalog.Runtime.LreUnitIdsByV1Id.TryGetValue(v1EventId, out var unitId)
+            && catalog.LreViews.Any(view => view.Id == unitId)
+                ? unitId
+                : null;
     }
 
     /// <summary>The lane for a catalog track key (<c>alpha</c>, <c>beta</c>, <c>gamma</c>); null otherwise.</summary>

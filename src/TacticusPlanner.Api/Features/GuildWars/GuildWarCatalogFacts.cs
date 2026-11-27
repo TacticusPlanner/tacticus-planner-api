@@ -17,10 +17,10 @@ public static class GuildWarCatalogFacts
 
     private static GuildWarRuleFacts Build(GameCatalogSnapshot catalog)
     {
-        var characterIds = catalog.UnitsByFaction.Values
-            .SelectMany(faction => faction.Characters.Select(character => character.Id))
+        var characterIds = catalog.CharacterViews
+            .Select(character => character.Id)
             .ToHashSet(StringComparer.Ordinal);
-        var mowIds = catalog.Mows.Select(mow => mow.Id).ToHashSet(StringComparer.Ordinal);
+        var mowIds = catalog.MowList.Select(mow => mow.Id).ToHashSet(StringComparer.Ordinal);
         var seasons = catalog.GuildWarViews.ToDictionary(season => season.Id, SeasonFacts, StringComparer.Ordinal);
         return new GuildWarRuleFacts(characterIds, mowIds, seasons);
     }

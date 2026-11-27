@@ -42,7 +42,7 @@ public sealed class NpcValidationTests
     [Fact]
     public void TheEmbeddedCatalogClassifiesExactlyTheExpectedKinds()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         Assert.Equal(12, snapshot.NpcList.Count(npc => npc.Kind == "machineOfWar"));
         Assert.Equal(64, snapshot.NpcList.Count(npc => npc.Kind == "object"));
