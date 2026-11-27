@@ -6,7 +6,7 @@ namespace TacticusPlanner.GameCatalog.Tests;
 public sealed class V1LegendaryEventObjectiveNamesTests
 {
     private static readonly GameCatalogCompilation Catalog = GameCatalogCompiler.Compile();
-    private static readonly GameCatalogSnapshot Runtime = GameCatalogLoader.FromCompilation(Catalog);
+    private static readonly GameCatalogSnapshot Runtime = Catalog.ToSnapshot();
 
     public static TheoryData<string, string, bool, string> V1Names => new()
     {

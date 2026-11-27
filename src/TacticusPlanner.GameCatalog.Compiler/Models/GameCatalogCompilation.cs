@@ -120,6 +120,18 @@ public sealed record GameCatalogCompilation(
             GuildWarViews,
             SurvivalEventViews);
 
+    /// <summary>The lean runtime snapshot of this compilation: its release metadata, served payloads, calendar and
+    /// runtime data. The runtime builds the same snapshot from the compiled catalog.</summary>
+    public GameCatalogSnapshot ToSnapshot() => new(
+        Version,
+        SchemaHash,
+        GameVersion,
+        SourceHash,
+        DatasetHashes,
+        ToServedViews(),
+        EventsCalendar,
+        ToRuntimeData());
+
     /// <summary>The calendar inputs and the few raw facts the API reads at runtime that no served view carries.</summary>
     public GameCatalogRuntimeData ToRuntimeData() => new(
         EventDefinitions,

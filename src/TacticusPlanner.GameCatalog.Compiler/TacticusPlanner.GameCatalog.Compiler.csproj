@@ -1,7 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Builds the game catalog from the raw data: datamine readers, denormalizers, validators, hashes. The root
+  <!-- Builds the game catalog from the raw data at build time: datamine readers, denormalizers, validators, hashes.
+       TacticusPlanner.GameCatalog runs it during its build and embeds the output; it is never shipped. The root
        namespace keeps the embedded resource names (and so the derived release version) as they were. -->
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <RootNamespace>TacticusPlanner.GameCatalog</RootNamespace>
   </PropertyGroup>
   <ItemGroup>

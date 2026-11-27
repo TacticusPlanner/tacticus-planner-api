@@ -41,6 +41,33 @@ public sealed record GameCatalogSnapshot(
     public IReadOnlyDictionary<string, IReadOnlyList<GameCatalogCampaignBattleView>> CampaignBattlesByGroup =>
         CampaignBattleIndexes.GetValue(Views, IndexCampaignBattles);
 
+    /// <summary>The snapshot for <paramref name="asOf"/>'s UTC day: projects <c>events-calendar</c> from that day,
+    /// hashes it, and derives <c>sourceHash</c> from the compiled metadata and hashes plus the calendar's.</summary>
+    public static GameCatalogSnapshot ForDay(
+        GameCatalogCompiledManifest compiled,
+        GameCatalogServedViews views,
+        GameCatalogRuntimeData runtime,
+        DateTimeOffset asOf)
+    {
+        var calendarDay = new DateTimeOffset(asOf.UtcDateTime.Date, TimeSpan.Zero);
+        var calendar = GameCatalogEventsCalendar.Build(runtime.EventDefinitions, runtime.EventOccurrences, calendarDay);
+        var datasetHashes = new Dictionary<string, string>(compiled.DatasetHashes, StringComparer.Ordinal)
+        {
+            [GameCatalogDatasets.EventsCalendar] =
+                Utils.GameCatalogHashing.ComputeCanonicalJsonHash(calendar, GameCatalogCompiledFiles.JsonOptions),
+        };
+
+        return new GameCatalogSnapshot(
+            compiled.Version,
+            compiled.SchemaHash,
+            compiled.GameVersion,
+            Utils.GameCatalogHashing.ComputeSnapshotHash(compiled.Version, compiled.SchemaHash, compiled.GameVersion, datasetHashes),
+            datasetHashes,
+            views,
+            calendar,
+            runtime);
+    }
+
     public IReadOnlyList<GameCatalogEventDefinition> EventDefinitions => Runtime.EventDefinitions;
 
     public IReadOnlyList<GameCatalogEventOccurrence> EventOccurrences => Runtime.EventOccurrences;

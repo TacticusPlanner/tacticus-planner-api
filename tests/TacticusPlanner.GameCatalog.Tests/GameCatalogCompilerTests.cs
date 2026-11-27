@@ -2,7 +2,7 @@ using Xunit;
 
 namespace TacticusPlanner.GameCatalog.Tests;
 
-public sealed class GameCatalogLoaderTests
+public sealed class GameCatalogCompilerTests
 {
     [Fact]
     public void LoadsOnTheSameUtcDayServeTheSameSnapshotHash()
@@ -79,7 +79,7 @@ public sealed class GameCatalogLoaderTests
             Assert.InRange(reward.Tier, 1, 3);
             Assert.Equal(5, reward.Regular.Count);
         });
-        var runtime = GameCatalogLoader.FromCompilation(snapshot);
+        var runtime = snapshot.ToSnapshot();
         Assert.Equal(15, runtime.OnslaughtReward("Gold", 1, "Legendary", mythicShards: false).Midpoint);
         Assert.Equal(2.5, runtime.OnslaughtReward("Adamantine", 3, "Mythic", mythicShards: true).Midpoint);
     }

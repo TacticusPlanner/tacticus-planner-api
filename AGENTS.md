@@ -14,11 +14,16 @@ and .NET Aspire for local orchestration.
 - `src/TacticusPlanner.Persistence`: EF Core `DbContext`, entity
   configuration, and migrations (`dotnet ef migrations add ...` targets this
   project).
-- `src/TacticusPlanner.GameCatalog`: server-side game catalog — embedded raw
-  datasets, runtime denormalization into served datasets, hashing/manifest.
-  See the `game-catalog-data` skill before adding/changing catalog data.
+- `src/TacticusPlanner.GameCatalog.Compiler`: builds the game catalog at build time —
+  embedded raw datasets (`Data/**`), datamine readers, denormalization into served
+  datasets, validation, hashing/manifest. An exe run by the runtime project's build;
+  bad catalog data fails `dotnet build`. Never shipped.
+- `src/TacticusPlanner.GameCatalog`: the runtime catalog the API references — embeds
+  the compiled catalog, projects the events calendar per UTC day, lookups.
+- `src/TacticusPlanner.GameCatalog.Models`: catalog record types and hashing helpers
+  shared by both. See the `game-catalog-data` skill before adding/changing catalog data.
 - `scripts/pull-datamine.cs`: copies the allowlisted raw files of the private
-  `tacticus-planner-data-mines` repo into `GameCatalog/Data/datamine/` and pins
+  `tacticus-planner-data-mines` repo into `GameCatalog.Compiler/Data/datamine/` and pins
   the commit (`dotnet run scripts/pull-datamine.cs -- v<version>`).
 - `src/TacticusPlanner.TacticusApi`: client for the upstream Tacticus game API
   (used to validate personal API keys).

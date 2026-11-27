@@ -1,10 +1,48 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\TacticusPlanner.GameCatalog.Compiler\TacticusPlanner.GameCatalog.Compiler.csproj" />
+    <!-- Build-time only: the compiler is built first and run below, but neither referenced nor shipped. -->
+    <ProjectReference Include="..\TacticusPlanner.GameCatalog.Compiler\TacticusPlanner.GameCatalog.Compiler.csproj"
+      ReferenceOutputAssembly="false" Private="false" />
     <ProjectReference Include="..\TacticusPlanner.GameCatalog.Models\TacticusPlanner.GameCatalog.Models.csproj" />
     <ProjectReference Include="..\TacticusPlanner.GameDomain\TacticusPlanner.GameDomain.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
+
+  <!-- Compile the game catalog at build time and embed the result (see openspec change compile-catalog-at-build-time).
+       The compiler embeds the raw data, so its output assemblies are the only inputs: an unchanged catalog skips this. -->
+  <PropertyGroup>
+    <GameCatalogCompilerProject>..\TacticusPlanner.GameCatalog.Compiler\TacticusPlanner.GameCatalog.Compiler.csproj</GameCatalogCompilerProject>
+    <GameCatalogDotnet Condition="'$(DOTNET_HOST_PATH)' != ''">$(DOTNET_HOST_PATH)</GameCatalogDotnet>
+    <GameCatalogDotnet Condition="'$(DOTNET_HOST_PATH)' == ''">dotnet</GameCatalogDotnet>
+  </PropertyGroup>
+
+  <Target Name="ResolveGameCatalogCompiler" DependsOnTargets="ResolveProjectReferences">
+    <PropertyGroup>
+      <!-- Set here: IntermediateOutputPath is not defined yet where the project's own properties are evaluated. -->
+      <CompiledGameCatalogDir>$(IntermediateOutputPath)game-catalog/</CompiledGameCatalogDir>
+    </PropertyGroup>
+    <MSBuild Projects="$(GameCatalogCompilerProject)" Targets="GetTargetPath"
+      Properties="Configuration=$(Configuration);Platform=$(Platform)">
+      <Output TaskParameter="TargetOutputs" PropertyName="GameCatalogCompilerPath" />
+    </MSBuild>
+    <ItemGroup>
+      <GameCatalogCompilerFiles Include="$([System.IO.Path]::GetDirectoryName('$(GameCatalogCompilerPath)'))/*.dll" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="CompileGameCatalog" DependsOnTargets="ResolveGameCatalogCompiler" BeforeTargets="AssignTargetPaths"
+    Inputs="@(GameCatalogCompilerFiles)" Outputs="$(CompiledGameCatalogDir)manifest.json">
+    <Exec Command="&quot;$(GameCatalogDotnet)&quot; &quot;$(GameCatalogCompilerPath)&quot; &quot;$(CompiledGameCatalogDir)&quot;" />
+  </Target>
+
+  <Target Name="EmbedCompiledGameCatalog" DependsOnTargets="CompileGameCatalog" BeforeTargets="AssignTargetPaths">
+    <ItemGroup>
+      <CompiledGameCatalogFile Include="$(CompiledGameCatalogDir)**/*.json" />
+      <EmbeddedResource Include="@(CompiledGameCatalogFile)"
+        LogicalName="compiled/$([System.String]::Copy('%(CompiledGameCatalogFile.RecursiveDir)').Replace('\', '/'))%(CompiledGameCatalogFile.Filename)%(CompiledGameCatalogFile.Extension)" />
+      <FileWrites Include="@(CompiledGameCatalogFile)" />
+    </ItemGroup>
+  </Target>
 </Project>
