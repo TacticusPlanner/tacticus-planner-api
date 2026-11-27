@@ -1,11 +1,11 @@
-namespace TacticusPlanner.Api.Features.BackgroundJobs;
+namespace TacticusPlanner.BackgroundJobs;
 
 public sealed class BackgroundJobsOptions
 {
     public const string SectionName = "BackgroundJobs";
 
     /// <summary>
-    /// Runs a Hangfire server (the workers that execute queued jobs) in this API process. Off in the test hosts,
+    /// Runs a Hangfire server (the workers that execute queued jobs) in the host process. Off in the test hosts,
     /// which enqueue into real storage without executing; jobs are tested by calling them directly.
     /// </summary>
     public bool ServerEnabled { get; set; } = true;

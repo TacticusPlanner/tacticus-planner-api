@@ -22,8 +22,9 @@ and .NET Aspire for local orchestration.
   the commit (`dotnet run scripts/pull-datamine.cs -- v<version>`).
 - `src/TacticusPlanner.TacticusApi`: client for the upstream Tacticus game API
   (used to validate personal API keys).
-- Background jobs: Hangfire runs inside the API (`Features/BackgroundJobs`),
-  storing jobs in the `hangfire` schema that Hangfire manages itself (EF never
+- `src/TacticusPlanner.BackgroundJobs`: Hangfire setup (`AddBackgroundJobs`),
+  run inside the API process. Job classes stay with their API feature. It stores
+  jobs in the `hangfire` schema that Hangfire manages itself (EF never
   touches it). Jobs take ids, never entities or secrets, and must be safe to
   re-run. The test hosts set `BackgroundJobs:ServerEnabled=false` (a host
   setting via `UseSetting`, since `Program` reads it while registering
