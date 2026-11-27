@@ -1,6 +1,6 @@
 ## 1. Hangfire foundation
 
-- [x] 1.1 Hangfire with PostgreSQL storage in the `hangfire` schema, its own pool derived from `planner-db`
+- [x] 1.1 Hangfire with PostgreSQL storage in the `hangfire` schema of its own `hangfire-db` database (planner database fallback), its own pool
 - [x] 1.2 One server on the `default` queue, off via `BackgroundJobs:ServerEnabled` and during OpenAPI generation
 - [x] 1.3 Test hosts enqueue into real storage without a server
 - [x] 1.4 README configuration table and "Background jobs" section, AGENTS.md

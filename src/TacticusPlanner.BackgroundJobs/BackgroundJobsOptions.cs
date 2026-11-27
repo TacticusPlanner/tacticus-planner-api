@@ -14,7 +14,7 @@ public sealed class BackgroundJobsOptions
     public int WorkerCount { get; set; } = 2;
 
     /// <summary>
-    /// Hangfire's own Npgsql pool per replica, separate from the API's <c>planner-db</c> pool. The infra budget
+    /// Hangfire's own Npgsql pool per replica (to <c>hangfire-db</c>, separate from the API's <c>planner-db</c> pool). The infra budget
     /// (tacticus-planner-infra <c>modules/postgresql.bicep</c>) counts it: (11 API + 2 Hangfire) x 2 replicas +
     /// 2 jobs = 28 of the 35 connections Standard_B1ms leaves usable.
     /// </summary>

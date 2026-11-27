@@ -13,6 +13,8 @@ var postgres = builder
     .WithDataVolume("tacticus-planner-postgres-data");
 
 var plannerDatabase = postgres.AddDatabase("planner-db", "tacticus_planner");
+// Hangfire's own database on the same server, as in Azure.
+var hangfireDatabase = postgres.AddDatabase("hangfire-db", "tacticus_planner_hangfire");
 
 var persistenceProjectPath = Path.GetFullPath(
     Path.Combine(
@@ -29,6 +31,8 @@ var api = builder
     .AddProject<Projects.TacticusPlanner_Api>("api")
     .WithReference(plannerDatabase)
     .WaitFor(plannerDatabase)
+    .WithReference(hangfireDatabase)
+    .WaitFor(hangfireDatabase)
     .WithHttpHealthCheck("/health/ready");
 
 api.AddEFMigrations(
