@@ -7,7 +7,7 @@ description: How the server-side Game Catalog (TacticusPlanner.GameCatalog) is s
 
 The Game Catalog is a **manifest-driven, server-side denormalized** dataset. Clients read
 `/api/v1/game-catalog/manifest`, compare per-dataset hashes, and re-download only changed datasets. Raw
-data lives as embedded JSON under `src/TacticusPlanner.GameCatalog/Data/**`; the served surface is a small
+data lives as embedded JSON under `src/TacticusPlanner.GameCatalog.Compiler/Data/**`; the served surface is a small
 set of consolidated, self-contained datasets computed at runtime (reference tables inlined — the client
 never joins). The served data carries only **structural/identity** fields: presentation is the client's job
 (no `icon`/`roundIcon`/`iconId`/`wikiLink` on served records — the client derives icons and links from ids).

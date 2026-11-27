@@ -696,8 +696,20 @@
       "tacticusplanner.gamecatalog": {
         "type": "Project",
         "dependencies": {
+          "TacticusPlanner.GameCatalog.Compiler": "[1.0.0, )",
+          "TacticusPlanner.GameCatalog.Models": "[1.0.0, )",
           "TacticusPlanner.GameDomain": "[1.0.0, )"
         }
+      },
+      "tacticusplanner.gamecatalog.compiler": {
+        "type": "Project",
+        "dependencies": {
+          "TacticusPlanner.GameCatalog.Models": "[1.0.0, )",
+          "TacticusPlanner.GameDomain": "[1.0.0, )"
+        }
+      },
+      "tacticusplanner.gamecatalog.models": {
+        "type": "Project"
       },
       "tacticusplanner.gamedomain": {
         "type": "Project"

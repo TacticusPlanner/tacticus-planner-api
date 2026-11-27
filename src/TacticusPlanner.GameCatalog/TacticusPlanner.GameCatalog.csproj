@@ -1,17 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <ProjectReference Include="..\TacticusPlanner.GameCatalog.Compiler\TacticusPlanner.GameCatalog.Compiler.csproj" />
+    <ProjectReference Include="..\TacticusPlanner.GameCatalog.Models\TacticusPlanner.GameCatalog.Models.csproj" />
     <ProjectReference Include="..\TacticusPlanner.GameDomain\TacticusPlanner.GameDomain.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Data\**\*.json" Exclude="Data\datamine\**" />
-    <!-- Datamine copies keep their upstream raw/ path as the resource name (opened by DatamineFiles, never by
-         the leaf-name convention, since game leaf names like units.json or items.json repeat). -->
-    <EmbeddedResource Include="Data\datamine\raw\**\*.json"
-      LogicalName="datamine/$([System.String]::Copy('%(RecursiveDir)').Replace('\', '/'))%(Filename)%(Extension)" />
-    <!-- The datamine's own game build (e.g. 1.43.157.2989), served as the manifest gameVersion. -->
-    <EmbeddedResource Include="Data\datamine\raw\VERSION" LogicalName="datamine/VERSION" />
   </ItemGroup>
 </Project>

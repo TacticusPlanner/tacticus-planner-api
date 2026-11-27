@@ -121,7 +121,20 @@ public sealed record GameCatalogCompilation(
             SurvivalEventViews);
 
     /// <summary>The calendar inputs and the few raw facts the API reads at runtime that no served view carries.</summary>
-    public GameCatalogRuntimeData ToRuntimeData() => GameCatalogRuntimeData.From(this);
+    public GameCatalogRuntimeData ToRuntimeData() => new(
+        EventDefinitions,
+        EventOccurrences,
+        Lres
+            .GroupBy(lre => lre.Id)
+            .ToDictionary(group => group.Key, group => group.First().UnitSnowprintId),
+        RaidBossRawData.Seasons.Values
+            .GroupBy(season => season.GuildBossSeasonConfigId, StringComparer.Ordinal)
+            .Select(group => group.First())
+            .Where(season => season.LoopFromTier is not null && season.LoopFromSet is not null)
+            .ToDictionary(
+                season => season.GuildBossSeasonConfigId,
+                season => new GameCatalogRaidBossSeasonLoop(season.LoopFromTier!.Value, season.LoopFromSet!.Value),
+                StringComparer.Ordinal));
 
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the
     // constructor parameters only (a field initializer may not reference another computed property).

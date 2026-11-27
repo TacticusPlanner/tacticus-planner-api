@@ -15,23 +15,7 @@ public sealed record GameCatalogRuntimeData(
     IReadOnlyList<GameCatalogEventDefinition> EventDefinitions,
     IReadOnlyList<GameCatalogEventOccurrence> EventOccurrences,
     IReadOnlyDictionary<int, string> LreUnitIdsByV1Id,
-    IReadOnlyDictionary<string, GameCatalogRaidBossSeasonLoop> RaidBossSeasonLoops)
-{
-    public static GameCatalogRuntimeData From(GameCatalogCompilation compilation) => new(
-        compilation.EventDefinitions,
-        compilation.EventOccurrences,
-        compilation.Lres
-            .GroupBy(lre => lre.Id)
-            .ToDictionary(group => group.Key, group => group.First().UnitSnowprintId),
-        compilation.RaidBossRawData.Seasons.Values
-            .GroupBy(season => season.GuildBossSeasonConfigId, StringComparer.Ordinal)
-            .Select(group => group.First())
-            .Where(season => season.LoopFromTier is not null && season.LoopFromSet is not null)
-            .ToDictionary(
-                season => season.GuildBossSeasonConfigId,
-                season => new GameCatalogRaidBossSeasonLoop(season.LoopFromTier!.Value, season.LoopFromSet!.Value),
-                StringComparer.Ordinal));
-}
+    IReadOnlyDictionary<string, GameCatalogRaidBossSeasonLoop> RaidBossSeasonLoops);
 
 /// <summary>The tier and set a guild raid season config loops back to after its last boss.</summary>
 public sealed record GameCatalogRaidBossSeasonLoop(int Tier, int Set);

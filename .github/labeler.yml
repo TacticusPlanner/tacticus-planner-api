@@ -76,6 +76,8 @@ area:game-catalog:
   - changed-files:
       - any-glob-to-any-file:
           - "src/TacticusPlanner.GameCatalog/**"
+          - "src/TacticusPlanner.GameCatalog.Compiler/**"
+          - "src/TacticusPlanner.GameCatalog.Models/**"
 
 area:persistence:
   - changed-files:

@@ -167,7 +167,7 @@ public sealed partial class DatamineSourceTests : IDisposable
         {
             if (File.Exists(Path.Join(dir.FullName, "TacticusPlanner.slnx")))
             {
-                return Path.Join(dir.FullName, "src", "TacticusPlanner.GameCatalog", "Data", "datamine");
+                return Path.Join(dir.FullName, "src", "TacticusPlanner.GameCatalog.Compiler", "Data", "datamine");
             }
         }
 

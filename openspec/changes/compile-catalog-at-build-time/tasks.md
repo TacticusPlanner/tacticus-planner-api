@@ -7,10 +7,10 @@
 
 ## 2. Project split (PR 2)
 
-- [ ] 2.1 Create `TacticusPlanner.GameCatalog.Models` and move `Models/**`, `Utils/**`
-- [ ] 2.2 Create `TacticusPlanner.GameCatalog.Compiler` and move `Data/**`, `DatamineFiles`, `Denormalization/**`, `Validation/**`, the full loader
-- [ ] 2.3 Runtime references both normally; solution, lock files, Dockerfile restore/copy steps, test project references
-- [ ] 2.4 Build, targeted tests, `dotnet format`; no behavior change
+- [x] 2.1 Create `TacticusPlanner.GameCatalog.Models` and move `Models/**`, `Utils/**`
+- [x] 2.2 Create `TacticusPlanner.GameCatalog.Compiler` and move `Data/**`, `DatamineFiles`, `Denormalization/**`, `Validation/**`, the full loader
+- [x] 2.3 Runtime references both normally; solution, lock files, Dockerfile restore/copy steps, test project references
+- [x] 2.4 Build, targeted tests, `dotnet format`; no behavior change
 
 ## 3. Compile at build time (PR 3)
 
