@@ -15,7 +15,7 @@ public static class GameCatalogCompiledWriter
             Directory.Delete(outputDirectory, recursive: true);
         }
 
-        Directory.CreateDirectory(Path.Combine(outputDirectory, Path.GetDirectoryName(GameCatalogCompiledFiles.Dataset("x"))!));
+        Directory.CreateDirectory(Path.Join(outputDirectory, Path.GetDirectoryName(GameCatalogCompiledFiles.Dataset("x"))!));
 
         var views = compilation.ToServedViews();
         foreach (var (key, propertyName) in GameCatalogServedViews.PropertiesByDataset)
@@ -39,7 +39,7 @@ public static class GameCatalogCompiledWriter
 
     private static void WriteJson(string outputDirectory, string relativePath, object? value, Type type)
     {
-        using var stream = File.Create(Path.Combine(outputDirectory, relativePath));
+        using var stream = File.Create(Path.Join(outputDirectory, relativePath));
         JsonSerializer.Serialize(stream, value, type, GameCatalogCompiledFiles.JsonOptions);
     }
 }

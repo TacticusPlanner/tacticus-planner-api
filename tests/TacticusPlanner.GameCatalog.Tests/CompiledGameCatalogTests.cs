@@ -60,16 +60,16 @@ public sealed class CompiledGameCatalogTests
     [Fact]
     public void TheWriterWritesEveryCompiledFile()
     {
-        var directory = Path.Combine(Path.GetTempPath(), $"compiled-catalog-{Guid.NewGuid():N}");
+        var directory = Path.Join(Path.GetTempPath(), $"compiled-catalog-{Guid.NewGuid():N}");
         try
         {
             GameCatalogCompiledWriter.Write(GameCatalogCompiler.Compile(AsOf), directory);
 
-            Assert.True(File.Exists(Path.Combine(directory, GameCatalogCompiledFiles.Manifest)));
-            Assert.True(File.Exists(Path.Combine(directory, GameCatalogCompiledFiles.Runtime)));
+            Assert.True(File.Exists(Path.Join(directory, GameCatalogCompiledFiles.Manifest)));
+            Assert.True(File.Exists(Path.Join(directory, GameCatalogCompiledFiles.Runtime)));
             Assert.All(GameCatalogServedViews.PropertiesByDataset.Keys, key =>
-                Assert.True(File.Exists(Path.Combine(directory, GameCatalogCompiledFiles.Dataset(key)))));
-            Assert.False(File.Exists(Path.Combine(directory, GameCatalogCompiledFiles.Dataset(GameCatalogDatasets.EventsCalendar))));
+                Assert.True(File.Exists(Path.Join(directory, GameCatalogCompiledFiles.Dataset(key)))));
+            Assert.False(File.Exists(Path.Join(directory, GameCatalogCompiledFiles.Dataset(GameCatalogDatasets.EventsCalendar))));
         }
         finally
         {
