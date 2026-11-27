@@ -1,3 +1,4 @@
+using TacticusPlanner.GameCatalog.Models;
 using Xunit;
 
 namespace TacticusPlanner.GameCatalog.Tests;
@@ -19,7 +20,7 @@ public sealed class UnlockEligibilityTests
     [Fact]
     public void ShopOnlyCharacterIsIneligibleWithoutShops()
     {
-        var snapshot = GameCatalogLoader.Load() with { ShopViews = [] };
+        var snapshot = WithoutShops(GameCatalogLoader.Load());
 
         Assert.False(snapshot.IsUnlockEligible(ShopOnlyCharacter));
     }
@@ -30,13 +31,16 @@ public sealed class UnlockEligibilityTests
         var snapshot = GameCatalogLoader.Load();
         var mythicOnly = snapshot with
         {
-            ShopViews = [.. snapshot.ShopViews.Select(shop => shop with
+            Views = snapshot.Views with
             {
-                Slots = [.. shop.Slots.Select(slot => slot with
+                ShopViews = [.. snapshot.ShopViews.Select(shop => shop with
                 {
-                    Variants = [.. slot.Variants.Where(v => v.Reward.Type != $"shards_{ShopOnlyCharacter}")]
+                    Slots = [.. shop.Slots.Select(slot => slot with
+                    {
+                        Variants = [.. slot.Variants.Where(v => v.Reward.Type != $"shards_{ShopOnlyCharacter}")]
+                    })]
                 })]
-            })]
+            },
         };
 
         Assert.False(mythicOnly.IsUnlockEligible(ShopOnlyCharacter));
@@ -45,9 +49,12 @@ public sealed class UnlockEligibilityTests
     [Fact]
     public void CampaignCharacterStaysEligible()
     {
-        var snapshot = GameCatalogLoader.Load() with { ShopViews = [] };
+        var snapshot = WithoutShops(GameCatalogLoader.Load());
         var campaignCharacter = snapshot.CharacterViews.First(c => c.ShardLocations.Count > 0);
 
         Assert.True(snapshot.IsUnlockEligible(campaignCharacter.Id));
     }
+
+    private static GameCatalogSnapshot WithoutShops(GameCatalogSnapshot snapshot) =>
+        snapshot with { Views = snapshot.Views with { ShopViews = [] } };
 }

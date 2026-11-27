@@ -7,7 +7,7 @@ public static partial class GameCatalogValidator
     private static readonly TimeSpan EventShopWeekLength = TimeSpan.FromDays(7);
 
     private static void ValidateEventShops(
-        GameCatalogSnapshot snapshot, HashSet<string> unitOrMowIds, List<GameCatalogValidationError> errors) =>
+        GameCatalogCompilation snapshot, HashSet<string> unitOrMowIds, List<GameCatalogValidationError> errors) =>
         ValidateEventShops(snapshot.RawEventShops, snapshot.EventShopViews, unitOrMowIds, errors);
 
     /// <summary>

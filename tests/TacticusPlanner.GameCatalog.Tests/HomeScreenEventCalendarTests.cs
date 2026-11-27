@@ -18,7 +18,7 @@ public sealed class HomeScreenEventCalendarTests
     [Fact]
     public void HseCalendarIsNotStale()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var message = FindStaleCalendar(snapshot, DateTimeOffset.UtcNow);
         Assert.True(message is null, message);
     }
@@ -26,7 +26,7 @@ public sealed class HomeScreenEventCalendarTests
     [Fact]
     public void StaleCalendarHelperFailsForDateAfterLatestHseEnd()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var message = FindStaleCalendar(snapshot, DateTimeOffset.Parse("2099-01-01T00:00:00Z", System.Globalization.CultureInfo.InvariantCulture));
         Assert.NotNull(message);
         Assert.Contains("2026-12-20", message);
@@ -35,7 +35,7 @@ public sealed class HomeScreenEventCalendarTests
     [Fact]
     public void HseDefinitionsAndUpdate142To144OccurrencesExist()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var ids = snapshot.EventDefinitions.Where(d => d.Type == "HomeScreenEvent").Select(d => d.Id).ToHashSet();
         Assert.Equal(21, ids.Count(id => id.StartsWith("hse-", StringComparison.Ordinal)));
         foreach (var id in Added)
@@ -66,7 +66,7 @@ public sealed class HomeScreenEventCalendarTests
                 o.DefinitionId == def && o.StartUtc == DateTimeOffset.Parse(start, System.Globalization.CultureInfo.InvariantCulture) && o.EndUtc == DateTimeOffset.Parse(end, System.Globalization.CultureInfo.InvariantCulture));
     }
 
-    private static string? FindStaleCalendar(GameCatalogSnapshot snapshot, DateTimeOffset now)
+    private static string? FindStaleCalendar(GameCatalogCompilation snapshot, DateTimeOffset now)
     {
         var hse = snapshot.EventDefinitions.Where(d => d.Type == "HomeScreenEvent").Select(d => d.Id).ToHashSet();
         var latest = snapshot.EventOccurrences.Where(o => hse.Contains(o.DefinitionId)).Max(o => o.EndUtc);

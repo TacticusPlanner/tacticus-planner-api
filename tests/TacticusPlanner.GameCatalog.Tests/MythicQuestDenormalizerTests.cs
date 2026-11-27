@@ -18,7 +18,7 @@ public sealed class MythicQuestDenormalizerTests
     [Fact]
     public void ShippedDatasetCovers120CharactersWithFiveQuestsEach()
     {
-        var views = GameCatalogLoader.Load().MythicQuestViews;
+        var views = GameCatalogCompiler.Compile().MythicQuestViews;
 
         Assert.Equal(120, views.Count);
         Assert.All(views, view => Assert.Equal([1, 2, 3, 4, 5], view.Quests.Select(quest => quest.Number)));
@@ -28,7 +28,7 @@ public sealed class MythicQuestDenormalizerTests
     [Fact]
     public void AbaddonQuestOneIsServedWithParametersAndStructuredRewards()
     {
-        var abaddon = GameCatalogLoader.Load().MythicQuestViews.Single(view => view.UnitId == "blackAbaddon");
+        var abaddon = GameCatalogCompiler.Compile().MythicQuestViews.Single(view => view.UnitId == "blackAbaddon");
         var quest = abaddon.Quests[0];
 
         Assert.Equal(1, quest.Number);
@@ -50,7 +50,7 @@ public sealed class MythicQuestDenormalizerTests
     [Fact]
     public void AbaddonQuestFiveHasAnEquipmentRewardWithAmountOne()
     {
-        var abaddon = GameCatalogLoader.Load().MythicQuestViews.Single(view => view.UnitId == "blackAbaddon");
+        var abaddon = GameCatalogCompiler.Compile().MythicQuestViews.Single(view => view.UnitId == "blackAbaddon");
 
         Assert.Equal(new GameCatalogMythicQuestRewardView("Equipment", 1, EquipmentId: "I_Crit_M006"), abaddon.Quests[4].Rewards[^1]);
         Assert.Equal(3, abaddon.Quests[4].Tasks.Count);
@@ -81,7 +81,7 @@ public sealed class MythicQuestDenormalizerTests
     [Fact]
     public void EveryShippedRewardStringParses()
     {
-        var raw = GameCatalogLoader.Load().MythicQuests;
+        var raw = GameCatalogCompiler.Compile().MythicQuests;
         var rewards = raw.SelectMany(character => character.Quests).SelectMany(quest => quest.Rewards).ToArray();
 
         Assert.Equal(1800, rewards.Length);

@@ -10,7 +10,7 @@ public sealed class EventShopsDenormalizerTests
 {
     private static readonly JsonSerializerOptions WebOptions = new(JsonSerializerDefaults.Web);
 
-    private static readonly GameCatalogSnapshot Snapshot = GameCatalogLoader.Load();
+    private static readonly GameCatalogCompilation Snapshot = GameCatalogCompiler.Compile();
 
     private static GameCatalogEventShopView Event(string id) =>
         Assert.Single(Snapshot.EventShopViews, eventShop => eventShop.Id == id);

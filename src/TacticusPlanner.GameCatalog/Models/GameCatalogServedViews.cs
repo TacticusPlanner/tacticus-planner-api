@@ -1,0 +1,40 @@
+namespace TacticusPlanner.GameCatalog.Models;
+
+/// <summary>Every served dataset payload except the day-dependent <c>events-calendar</c>: what the catalog
+/// compiler produces and the API serves unchanged. <see cref="GameCatalogSnapshot"/> exposes each one by name.</summary>
+public sealed record GameCatalogServedViews(
+    IReadOnlyList<GameCatalogCharacterView> CharacterViews,
+    IReadOnlyList<GameCatalogNpc> NpcList,
+    IReadOnlyList<GameCatalogMow> MowList,
+    IReadOnlyList<GameCatalogMowUpgradeCostView> MowUpgradeCostViews,
+    IReadOnlyList<GameCatalogCharacterAbilityCostView> CharacterAbilityCostViews,
+    IReadOnlyList<GameCatalogAscensionCostView> AscensionCostViews,
+    IReadOnlyList<GameCatalogUnlockShardCostView> UnlockShardCostViews,
+    IReadOnlyList<GameCatalogOnslaughtReward> OnslaughtRewards,
+    IReadOnlyList<GameCatalogUpgradeView> UpgradeViews,
+    IReadOnlyList<GameCatalogEquipmentView> EquipmentViews,
+    IReadOnlyList<GameCatalogCampaignBattleView> CampaignBattleViews,
+    IReadOnlyList<GameCatalogCampaignDefinitionView> CampaignDefinitionViews,
+    IReadOnlyList<GameCatalogLreView> LreViews,
+    IReadOnlyList<GameCatalogLreBattleView> LreBattleViews,
+    IReadOnlyList<GameCatalogHordeModeTiers> HordeModeTiersViews,
+    IReadOnlyList<GameCatalogNpcTiers> NpcTiersViews,
+    IReadOnlyList<GameCatalogEventDefinition> EventDefinitionViews,
+    IReadOnlyList<GameCatalogShopView> ShopViews,
+    IReadOnlyList<GameCatalogEventShopView> EventShopViews,
+    GameCatalogRaidBossesView RaidBossesView,
+    GameCatalogGuildRaidMetaView GuildRaidMetaView,
+    IReadOnlyList<GameCatalogMythicQuestsView> MythicQuestViews,
+    IReadOnlyList<GameCatalogUnitPower> UnitPowerViews,
+    IReadOnlyList<GameCatalogQuestEventView> QuestEventViews,
+    IReadOnlyList<GameCatalogQuestCrate> QuestCrateViews,
+    IReadOnlyList<GameCatalogFaction> FactionViews,
+    IReadOnlyList<GameCatalogDamageType> DamageTypeViews,
+    IReadOnlyList<GameCatalogGlobalValues> GlobalValuesViews,
+    IReadOnlyList<GameCatalogProgressionRules> ProgressionRulesViews,
+    IReadOnlyList<GameCatalogHre> HreViews,
+    IReadOnlyList<GameCatalogIncursion> IncursionViews,
+    IReadOnlyList<GameCatalogNpcEncounter> NpcEncounterViews,
+    IReadOnlyList<GameCatalogGuildWarSeason> GuildWarViews,
+    IReadOnlyList<GameCatalogSurvivalEvent> SurvivalEventViews
+);

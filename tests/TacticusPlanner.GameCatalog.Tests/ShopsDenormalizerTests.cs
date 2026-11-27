@@ -27,7 +27,7 @@ public sealed class ShopsDenormalizerTests
     [Fact]
     public void EventMerchantsStayOutOfTheDailyShops()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         Assert.NotEmpty(snapshot.RawEventShops);
         Assert.Equal(["guild", "war", "rogue-trader", "crusade"], snapshot.ShopViews.Select(shop => shop.Id));

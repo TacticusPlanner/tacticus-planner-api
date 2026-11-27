@@ -5,7 +5,7 @@ namespace TacticusPlanner.GameCatalog.Validation;
 
 public static partial class GameCatalogValidator
 {
-    private static void ValidateGuildRaidMeta(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
+    private static void ValidateGuildRaidMeta(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors)
     {
         var characterIds = new HashSet<string>(snapshot.Characters.Select(character => character.Id), StringComparer.Ordinal);
         var mowIds = new HashSet<string>(snapshot.Mows.Select(mow => mow.Id), StringComparer.Ordinal);

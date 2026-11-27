@@ -7,14 +7,14 @@ public static partial class GameCatalogValidator
     private static readonly HashSet<string> ValidRaidBossEncounterTypes =
         new(StringComparer.Ordinal) { "Boss", "Crystal" };
 
-    private static void ValidateRaidBosses(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
+    private static void ValidateRaidBosses(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors)
     {
         ValidateRaidBosses(snapshot.RaidBossRawData, snapshot.RaidBossesView, errors);
     }
 
     /// <summary>
     /// Takes the raw + served raid-boss collections directly (not the whole snapshot) so it is
-    /// unit-testable without constructing a <see cref="GameCatalogSnapshot"/>, mirroring
+    /// unit-testable without constructing a <see cref="GameCatalogCompilation"/>, mirroring
     /// <see cref="ValidateShops"/> / <see cref="ValidateEvents"/>. Fails the build if an encounter's unit or
     /// field-npc id, a modifier id, or a season <c>unitSet</c> reference does not resolve; if a unit's
     /// progression ladder is empty; if an encounter type is unrecognized; or if the served bosses/primes

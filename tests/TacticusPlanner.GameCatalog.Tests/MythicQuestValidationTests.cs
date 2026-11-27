@@ -36,7 +36,7 @@ public sealed class MythicQuestValidationTests
     [Fact]
     public void ShippedSourceLoadsIncludingASummonAsTheTaskHero()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var marksmanTask = snapshot.MythicQuests.Single(character => character.CharacterId == "tauMarksman").Quests[0].Tasks[0];
 
         Assert.Equal("tauSmnDroneSniper", marksmanTask.TaskParameters["heroId"]);

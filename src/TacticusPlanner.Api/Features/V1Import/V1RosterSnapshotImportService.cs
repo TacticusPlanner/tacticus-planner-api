@@ -221,13 +221,13 @@ public sealed partial class V1RosterSnapshotImportService(
     /// catalog does not know are omitted and counted.</summary>
     private sealed class UnitMapper(GameCatalogSnapshot catalog)
     {
-        private readonly Dictionary<string, GameCatalogCharacter> characters =
-            catalog.Characters.ToDictionary(unit => unit.Id, StringComparer.Ordinal);
+        private readonly Dictionary<string, GameCatalogCharacterView> characters =
+            catalog.CharacterViews.ToDictionary(unit => unit.Id, StringComparer.Ordinal);
 
         private readonly Dictionary<string, GameCatalogMow> mows =
-            catalog.Mows.ToDictionary(unit => unit.Id, StringComparer.Ordinal);
+            catalog.MowList.ToDictionary(unit => unit.Id, StringComparer.Ordinal);
 
-        private readonly Dictionary<string, string> equipmentTypes = catalog.Equipment
+        private readonly Dictionary<string, string> equipmentTypes = catalog.EquipmentViews
             .GroupBy(item => item.Id, StringComparer.Ordinal)
             .ToDictionary(group => group.Key, group => group.First().Type, StringComparer.Ordinal);
 

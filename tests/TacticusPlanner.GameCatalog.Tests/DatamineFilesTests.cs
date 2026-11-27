@@ -44,7 +44,7 @@ public sealed class DatamineFilesTests
     [Fact]
     public void CatalogStillLoadsWithDatamineCopiesEmbedded()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         Assert.NotEmpty(snapshot.Manifest.Datasets);
     }

@@ -4,7 +4,7 @@ namespace TacticusPlanner.GameCatalog.Validation;
 
 public static partial class GameCatalogValidator
 {
-    private static void ValidateIncursions(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
+    private static void ValidateIncursions(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors) =>
         ValidateIncursions(snapshot.IncursionViews, snapshot.MowList, snapshot.NpcList, snapshot.FactionViews, errors);
 
     /// <summary>

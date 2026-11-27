@@ -23,11 +23,11 @@ internal sealed class UnitResolver(GameCatalogSnapshot catalog)
         ["Patermine"] = "genesPatriarch",
     };
 
-    private readonly HashSet<string> ids = catalog.Characters.Select(character => character.Id)
-        .Concat(catalog.Mows.Select(mow => mow.Id))
+    private readonly HashSet<string> ids = catalog.CharacterViews.Select(character => character.Id)
+        .Concat(catalog.MowList.Select(mow => mow.Id))
         .ToHashSet(StringComparer.Ordinal);
 
-    private readonly Dictionary<string, string> byName = catalog.Characters
+    private readonly Dictionary<string, string> byName = catalog.CharacterViews
         .GroupBy(character => character.Name, StringComparer.OrdinalIgnoreCase)
         .ToDictionary(group => group.Key, group => group.First().Id, StringComparer.OrdinalIgnoreCase);
 

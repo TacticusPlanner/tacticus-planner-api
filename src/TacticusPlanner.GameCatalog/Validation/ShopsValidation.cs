@@ -5,11 +5,11 @@ namespace TacticusPlanner.GameCatalog.Validation;
 public static partial class GameCatalogValidator
 {
     private static void ValidateShops(
-        GameCatalogSnapshot snapshot, HashSet<string> unitOrMowIds, List<GameCatalogValidationError> errors) =>
+        GameCatalogCompilation snapshot, HashSet<string> unitOrMowIds, List<GameCatalogValidationError> errors) =>
         ValidateShops(snapshot.RawShopsBySourceKey, snapshot.ShopViews, unitOrMowIds, errors);
 
     /// <summary>Character and MoW ids a shard offer may name (case-insensitive, as the shard reward types are).</summary>
-    private static HashSet<string> ShopUnitOrMowIds(GameCatalogSnapshot snapshot)
+    private static HashSet<string> ShopUnitOrMowIds(GameCatalogCompilation snapshot)
     {
         var unitOrMowIds = new HashSet<string>(
             snapshot.Characters.Select(character => character.Id), StringComparer.OrdinalIgnoreCase);
@@ -19,7 +19,7 @@ public static partial class GameCatalogValidator
 
     /// <summary>
     /// Takes the raw + served shop collections directly (not the whole snapshot) so it is unit-testable
-    /// without constructing a <see cref="GameCatalogSnapshot"/>, mirroring <see cref="ValidateEvents"/>.
+    /// without constructing a <see cref="GameCatalogCompilation"/>, mirroring <see cref="ValidateEvents"/>.
     /// Fails the build if any variant's <c>reward</c>/<c>freeOffer</c>/<c>cost</c> cannot be parsed, if a
     /// shard variant's resolved <c>unitId</c> does not resolve to a served character or MoW, or if any
     /// variant reduces to an empty day list.

@@ -243,11 +243,11 @@ public sealed class V1GoalImportService(
         var rawUnitId = sourceGoal.UnitId ?? sourceGoal.Character;
         var isMow = sourceGoal.Type == 4 || (sourceGoal.Type == 2 && sourceGoal.UnitId is not null);
         var entityId = isMow
-            ? catalog.Current.Mows.FirstOrDefault(item => Matches(item.Id, item.Name, rawUnitId))?.Id
-            : catalog.Current.Characters.FirstOrDefault(item => Matches(item.Id, item.Name, sourceGoal.Character))?.Id;
+            ? catalog.Current.MowList.FirstOrDefault(item => Matches(item.Id, item.Name, rawUnitId))?.Id
+            : catalog.Current.CharacterViews.FirstOrDefault(item => Matches(item.Id, item.Name, sourceGoal.Character))?.Id;
         if (entityId is null && sourceGoal.Type == 2 && !isMow)
         {
-            entityId = catalog.Current.Mows.FirstOrDefault(item => Matches(item.Id, item.Name, sourceGoal.Character))?.Id;
+            entityId = catalog.Current.MowList.FirstOrDefault(item => Matches(item.Id, item.Name, sourceGoal.Character))?.Id;
             isMow = entityId is not null;
         }
         var entityType = isMow ? GoalEntityType.Mow : GoalEntityType.Character;

@@ -7,9 +7,9 @@ namespace TacticusPlanner.GameCatalog.Tests;
 
 public sealed class UnitPowerTests
 {
-    private static readonly Lazy<GameCatalogSnapshot> Catalog = new(GameCatalogLoader.Load);
+    private static readonly Lazy<GameCatalogCompilation> Catalog = new(GameCatalogCompiler.Compile);
 
-    private static GameCatalogSnapshot Snapshot => Catalog.Value;
+    private static GameCatalogCompilation Snapshot => Catalog.Value;
 
     private static GameCatalogUnitPowerUnit Unit(GameCatalogUnitPower record, string unitId) =>
         Assert.Single(record.Units, unit => unit.UnitId == unitId);

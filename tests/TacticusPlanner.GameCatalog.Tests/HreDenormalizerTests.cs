@@ -8,9 +8,9 @@ namespace TacticusPlanner.GameCatalog.Tests;
 
 public sealed class HreDenormalizerTests
 {
-    private static readonly Lazy<GameCatalogSnapshot> Catalog = new(GameCatalogLoader.Load);
+    private static readonly Lazy<GameCatalogCompilation> Catalog = new(GameCatalogCompiler.Compile);
 
-    private static GameCatalogSnapshot Snapshot => Catalog.Value;
+    private static GameCatalogCompilation Snapshot => Catalog.Value;
 
     private static readonly JsonSerializerOptions Options = new(JsonSerializerDefaults.Web);
 

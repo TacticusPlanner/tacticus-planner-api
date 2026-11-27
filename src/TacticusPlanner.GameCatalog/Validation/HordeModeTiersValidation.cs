@@ -13,7 +13,7 @@ public static partial class GameCatalogValidator
     /// <summary>The most synergies one character may list: one row of portraits.</summary>
     private const int MaxHordeModeSynergies = 6;
 
-    private static void ValidateHordeModeTiers(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
+    private static void ValidateHordeModeTiers(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors)
     {
         var characterIds = new HashSet<string>(snapshot.Characters.Select(character => character.Id), StringComparer.Ordinal);
         var relicAllowedUnits = snapshot.Equipment

@@ -50,7 +50,7 @@ public sealed class NpcTiersTests
     [Fact]
     public void InitialDatasetListsTheRotationLegendaryEventNpcsWithTheFittedTiers()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         var record = Assert.Single(snapshot.NpcTiersViews);
         Assert.Equal("npc-tiers", record.Id);
@@ -103,7 +103,7 @@ public sealed class NpcTiersTests
     [Fact]
     public void DatasetIsListedInTheManifestWithAHash()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         var entry = Assert.Single(snapshot.Manifest.Datasets, dataset => dataset.Key == GameCatalogDatasets.NpcTiers);
         Assert.False(string.IsNullOrWhiteSpace(entry.Hash));

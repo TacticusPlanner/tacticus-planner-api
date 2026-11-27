@@ -7,7 +7,7 @@ namespace TacticusPlanner.GameCatalog.Tests;
 
 public sealed class ProgressionRulesDenormalizerTests
 {
-    private static readonly Lazy<GameCatalogSnapshot> Catalog = new(GameCatalogLoader.Load);
+    private static readonly Lazy<GameCatalogCompilation> Catalog = new(GameCatalogCompiler.Compile);
 
     private static GameCatalogProgressionRules Shipped => Assert.Single(Catalog.Value.ProgressionRulesViews);
 

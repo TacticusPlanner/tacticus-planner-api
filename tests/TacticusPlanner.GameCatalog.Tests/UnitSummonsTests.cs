@@ -81,7 +81,7 @@ public sealed class UnitSummonsTests
     [Fact]
     public void TheShippedCatalogServesEachUnitsSummonType()
     {
-        var catalog = GameCatalogLoader.Load();
+        var catalog = GameCatalogCompiler.Compile();
         var characters = catalog.CharacterViews.ToDictionary(character => character.Id, character => character.Summons, StringComparer.Ordinal);
         var mows = catalog.MowList.ToDictionary(mow => mow.Id, mow => mow.Summons, StringComparer.Ordinal);
 

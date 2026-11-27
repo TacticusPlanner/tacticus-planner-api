@@ -34,7 +34,7 @@ public sealed class GlobalValuesDenormalizerTests
     [Fact]
     public void TheShippedValuesAreTheGames()
     {
-        var values = Assert.Single(GameCatalogLoader.Load().GlobalValuesViews);
+        var values = Assert.Single(GameCatalogCompiler.Compile().GlobalValuesViews);
 
         Assert.Equal(60, values.MaxStamina);
         Assert.Equal(300, values.StaminaRegenerationTime);

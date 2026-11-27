@@ -21,7 +21,7 @@ public sealed class MowMythicAbilityTests
     [Fact]
     public void EveryServedMowCarriesADistinctMythicAbility()
     {
-        var mows = GameCatalogLoader.Load().MowList;
+        var mows = GameCatalogCompiler.Compile().MowList;
 
         Assert.Equal(12, mows.Count);
         Assert.All(mows, mow => Assert.False(string.IsNullOrWhiteSpace(mow.MythicAbility?.Name)));

@@ -58,7 +58,7 @@ public sealed class HordeModeTiersTests
     [Fact]
     public void InitialDatasetLoadsTheFiveTiersAndTheCuratedCharacters()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         var record = Assert.Single(snapshot.HordeModeTiersViews);
         Assert.Equal("horde-mode-tiers", record.Id);
@@ -74,7 +74,7 @@ public sealed class HordeModeTiersTests
     [Fact]
     public void InitialDatasetServesTheSeedSynergiesInAuthoringOrder()
     {
-        var characters = Assert.Single(GameCatalogLoader.Load().HordeModeTiersViews).Characters;
+        var characters = Assert.Single(GameCatalogCompiler.Compile().HordeModeTiersViews).Characters;
 
         Assert.Equal(
             ["deathRotbone", "worldTerminator", "blackAbaddon"],
@@ -86,7 +86,7 @@ public sealed class HordeModeTiersTests
     [Fact]
     public void DatasetIsListedInTheManifestWithAHash()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         var entry = Assert.Single(snapshot.Manifest.Datasets, dataset => dataset.Key == GameCatalogDatasets.HordeModeTiers);
         Assert.False(string.IsNullOrWhiteSpace(entry.Hash));
@@ -130,7 +130,7 @@ public sealed class HordeModeTiersTests
     public void MachineOfWarIdFails()
     {
         // Validate against the real catalog roster: a MoW id is a unit, but not a character.
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         Assert.Contains(snapshot.Mows, mow => mow.Id == "necroReanimator");
         var characterIds = new HashSet<string>(snapshot.Characters.Select(character => character.Id), StringComparer.Ordinal);
 
@@ -220,7 +220,7 @@ public sealed class HordeModeTiersTests
     [Fact]
     public void InitialDatasetServesTheSeedRelicRatings()
     {
-        var characters = Assert.Single(GameCatalogLoader.Load().HordeModeTiersViews).Characters;
+        var characters = Assert.Single(GameCatalogCompiler.Compile().HordeModeTiersViews).Characters;
 
         var revas = Assert.Single(characters, character => character.UnitId == "tauCrisis");
         var relic = Assert.Single(revas.Relics!);
@@ -347,7 +347,7 @@ public sealed class HordeModeTiersTests
     public void MoreThanSixSynergiesFail()
     {
         // Seven distinct real character ids, so only the count fails.
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
         var characterIds = new HashSet<string>(snapshot.Characters.Select(character => character.Id), StringComparer.Ordinal);
         var synergies = characterIds.Where(id => id != "ultraTigurius").Order(StringComparer.Ordinal).Take(7).ToArray();
 

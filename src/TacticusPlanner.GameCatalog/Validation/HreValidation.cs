@@ -4,7 +4,7 @@ namespace TacticusPlanner.GameCatalog.Validation;
 
 public static partial class GameCatalogValidator
 {
-    private static void ValidateHres(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
+    private static void ValidateHres(GameCatalogCompilation snapshot, List<GameCatalogValidationError> errors) =>
         ValidateHres(snapshot.HreViews, snapshot.CharacterViews, snapshot.FactionViews, snapshot.DamageTypeViews, errors);
 
     /// <summary>

@@ -119,7 +119,7 @@ public sealed class UpgradeDenormalizerTests
     [Fact]
     public void TheShippedUpgradesUseTheGamesUntranslatedNames()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         Assert.Equal("Mjod", snapshot.Upgrades.Single(upgrade => upgrade.Id == "upgHpL111").Label);
         Assert.Equal(560, snapshot.Upgrades.Count);

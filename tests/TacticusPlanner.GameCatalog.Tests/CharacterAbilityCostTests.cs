@@ -18,7 +18,7 @@ public sealed class CharacterAbilityCostTests
     [Fact]
     public void ShippedLadderMatchesTheDatamineRowCountAndSampledRows()
     {
-        var snapshot = GameCatalogLoader.Load();
+        var snapshot = GameCatalogCompiler.Compile();
 
         Assert.Equal(59, snapshot.CharacterAbilityCosts.Count);
         // Sampled from the datamine units/abilityUpgradeCosts.json.
@@ -35,7 +35,7 @@ public sealed class CharacterAbilityCostTests
     [Fact]
     public void ServedLadderIsKeyedByLevelRaisedTo()
     {
-        var views = GameCatalogLoader.Load().CharacterAbilityCostViews;
+        var views = GameCatalogCompiler.Compile().CharacterAbilityCostViews;
 
         Assert.Equal(Enumerable.Range(2, 59), views.Select(view => view.Level));
         Assert.Equal(new GameCatalogCharacterAbilityCostView(2, 25, new GameCatalogAmountByRarity("Common", 1)), views[0]);
@@ -58,7 +58,7 @@ public sealed class CharacterAbilityCostTests
     [InlineData(60, "Mythic")]
     public void ShippedRaritiesFollowV1Bands(int level, string rarity)
     {
-        var view = GameCatalogLoader.Load().CharacterAbilityCostViews.Single(view => view.Level == level);
+        var view = GameCatalogCompiler.Compile().CharacterAbilityCostViews.Single(view => view.Level == level);
 
         Assert.Equal(rarity, view.Badges.Rarity);
     }

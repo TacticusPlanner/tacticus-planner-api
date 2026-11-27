@@ -8,7 +8,7 @@ namespace TacticusPlanner.GameCatalog.Tests;
 
 public sealed class SurvivalEventsDenormalizerTests
 {
-    private static readonly IReadOnlyList<GameCatalogSurvivalEvent> Shipped = GameCatalogLoader.Load().SurvivalEventViews;
+    private static readonly IReadOnlyList<GameCatalogSurvivalEvent> Shipped = GameCatalogCompiler.Compile().SurvivalEventViews;
 
     private static GameCatalogSurvivalEvent Event(string id) => Shipped.Single(survivalEvent => survivalEvent.Id == id);
 

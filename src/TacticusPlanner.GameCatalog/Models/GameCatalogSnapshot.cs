@@ -1,83 +1,22 @@
+using System.Runtime.CompilerServices;
+
 namespace TacticusPlanner.GameCatalog.Models;
 
+/// <summary>
+/// The catalog the API reads at runtime: release metadata, every served dataset (<paramref name="Views"/> plus the
+/// day's <paramref name="EventsCalendar"/>) and <paramref name="Runtime"/>, the calendar inputs and the few raw facts
+/// no served view carries. It holds no other raw source collection: those exist only in the compile-time
+/// <see cref="GameCatalogCompilation"/>.
+/// </summary>
 public sealed record GameCatalogSnapshot(
     string Version,
     string SchemaHash,
     string GameVersion,
     string SourceHash,
     IReadOnlyDictionary<string, string> DatasetHashes,
-    // Raw source collections — kept for validation and the existing derived views.
-    IReadOnlyDictionary<string, GameCatalogFactionUnits> UnitsByFaction,
-    IReadOnlyList<GameCatalogMowUpgradeCost> MowUpgradeCosts,
-    IReadOnlyList<GameCatalogCharacterAbilityCost> CharacterAbilityCosts,
-    IReadOnlyList<GameCatalogAscensionCost> AscensionCosts,
-    IReadOnlyList<GameCatalogUnlockShardCost> UnlockShardCosts,
-    IReadOnlyList<GameCatalogOnslaughtReward> OnslaughtRewards,
-    IReadOnlyList<GameCatalogEventDefinition> EventDefinitions,
-    IReadOnlyList<GameCatalogEventOccurrence> EventOccurrences,
-    IReadOnlyList<GameCatalogHseScoring> HseScoring,
-    IReadOnlyDictionary<string, GameCatalogFactionNpcs> NpcsByFaction,
-    // Equipment from the datamine items.json, keyed by item type (I_Crit, ...).
-    IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>> EquipmentByType,
-    IReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>> UpgradesByRarity,
-    IReadOnlyDictionary<string, GameCatalogCampaignGroup> CampaignGroups,
-    IReadOnlyList<GameCatalogDropChance> DropChances,
-    IReadOnlyDictionary<string, GameCatalogLre> LresByEvent,
-    // Raw daily-shop source files, keyed by source dataset key (shops-guild, ...). Kept for validation
-    // (reward/free-offer/cost parse checks run over the raw "type:qty" strings).
-    IReadOnlyDictionary<string, GameCatalogRawShop> RawShopsBySourceKey,
-    // Seasonal event shops as discovered (merchant + calendar week per week). Kept for validation (week, merchant,
-    // currency and variant checks) and for event shop plan writes.
-    IReadOnlyList<GameCatalogRawEventShop> RawEventShops,
-    // Raw raid-boss source (one file, ported from V1's guild_boss.json). Kept for validation — the
-    // encounter unit / field-npc / modifier cross-reference checks run over the raw collections.
-    GameCatalogRaidBossRawData RaidBossRawData,
-    GameCatalogGuildRaidMetaRawData GuildRaidMetaRawData,
-    // Raw mythic quests (reward strings unparsed). Kept for validation — the reward parse and character /
-    // equipment cross-reference checks run over the raw strings.
-    IReadOnlyList<GameCatalogRawMythicQuests> MythicQuests,
-    // Raw unit-power file. Kept for validation — the lineup / damage-type / upgrade-stat checks run over
-    // the raw maps against the raw unit, npc and upgrade collections.
-    GameCatalogRawUnitPower UnitPower,
-    // Raw quest events (V1 shape) and crates. Kept for validation — the tier split, references and the 8,800-point
-    // check run over the raw battles.
-    IReadOnlyList<GameCatalogRawQuestEvent> QuestEvents,
-    IReadOnlyList<GameCatalogQuestCrate> QuestCrates,
-    // Served (denormalized) payloads — the public catalog surface.
-    IReadOnlyList<GameCatalogCharacterView> CharacterViews,
-    IReadOnlyList<GameCatalogNpc> NpcList,
-    IReadOnlyList<GameCatalogMow> MowList,
-    IReadOnlyList<GameCatalogMowUpgradeCostView> MowUpgradeCostViews,
-    IReadOnlyList<GameCatalogCharacterAbilityCostView> CharacterAbilityCostViews,
-    IReadOnlyList<GameCatalogAscensionCostView> AscensionCostViews,
-    IReadOnlyList<GameCatalogUnlockShardCostView> UnlockShardCostViews,
-    IReadOnlyList<GameCatalogUpgradeView> UpgradeViews,
-    IReadOnlyList<GameCatalogEquipmentView> EquipmentViews,
-    IReadOnlyList<GameCatalogCampaignBattleView> CampaignBattleViews,
-    IReadOnlyList<GameCatalogCampaignDefinitionView> CampaignDefinitionViews,
-    IReadOnlyList<GameCatalogLreView> LreViews,
-    IReadOnlyList<GameCatalogLreBattleView> LreBattleViews,
-    IReadOnlyList<GameCatalogHordeModeTiers> HordeModeTiersViews,
-    IReadOnlyList<GameCatalogNpcTiers> NpcTiersViews,
-    IReadOnlyList<GameCatalogEventDefinition> EventDefinitionViews,
+    GameCatalogServedViews Views,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> EventsCalendar,
-    IReadOnlyList<GameCatalogShopView> ShopViews,
-    IReadOnlyList<GameCatalogEventShopView> EventShopViews,
-    GameCatalogRaidBossesView RaidBossesView,
-    GameCatalogGuildRaidMetaView GuildRaidMetaView,
-    IReadOnlyList<GameCatalogMythicQuestsView> MythicQuestViews,
-    IReadOnlyList<GameCatalogUnitPower> UnitPowerViews,
-    IReadOnlyList<GameCatalogQuestEventView> QuestEventViews,
-    IReadOnlyList<GameCatalogQuestCrate> QuestCrateViews,
-    IReadOnlyList<GameCatalogFaction> FactionViews,
-    IReadOnlyList<GameCatalogDamageType> DamageTypeViews,
-    IReadOnlyList<GameCatalogGlobalValues> GlobalValuesViews,
-    IReadOnlyList<GameCatalogProgressionRules> ProgressionRulesViews,
-    IReadOnlyList<GameCatalogHre> HreViews,
-    IReadOnlyList<GameCatalogIncursion> IncursionViews,
-    IReadOnlyList<GameCatalogNpcEncounter> NpcEncounterViews,
-    IReadOnlyList<GameCatalogGuildWarSeason> GuildWarViews,
-    IReadOnlyList<GameCatalogSurvivalEvent> SurvivalEventViews
+    GameCatalogRuntimeData Runtime
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the
@@ -93,26 +32,93 @@ public sealed record GameCatalogSnapshot(
                 pair.Key, pair.Value, $"{GameCatalogDatasets.RoutePrefix}/{pair.Key}"))
             .ToArray());
 
-    // Flat views over the split datasets, so derived lookups and validation operate on the whole
-    // catalog regardless of how the data is chunked across files. Each references constructor
-    // parameters (never another computed property — that is illegal in a field initializer).
-    public IReadOnlyList<GameCatalogCharacter> Characters { get; } =
-        UnitsByFaction.Values.SelectMany(faction => faction.Characters).ToArray();
+    private static readonly ConditionalWeakTable<GameCatalogServedViews, IReadOnlyDictionary<string, IReadOnlyList<GameCatalogCampaignBattleView>>>
+        CampaignBattleIndexes = new();
 
-    public IReadOnlyList<GameCatalogMow> Mows { get; } =
-        UnitsByFaction.Values.SelectMany(faction => faction.Mows).ToArray();
+    /// <summary>Each campaign group's battles in the group's own battle order (campaign-definitions
+    /// <c>battleIds</c>), keyed by group id. Built once per <see cref="Views"/>, so a copy with other views gets
+    /// its own index.</summary>
+    public IReadOnlyDictionary<string, IReadOnlyList<GameCatalogCampaignBattleView>> CampaignBattlesByGroup =>
+        CampaignBattleIndexes.GetValue(Views, IndexCampaignBattles);
 
-    public IReadOnlyList<GameCatalogRawNpc> Npcs { get; } =
-        NpcsByFaction.Values.SelectMany(faction => faction.Npcs).ToArray();
+    public IReadOnlyList<GameCatalogEventDefinition> EventDefinitions => Runtime.EventDefinitions;
 
-    public IReadOnlyList<GameCatalogEquipment> Equipment { get; } =
-        EquipmentByType.Values.SelectMany(items => items).ToArray();
+    public IReadOnlyList<GameCatalogEventOccurrence> EventOccurrences => Runtime.EventOccurrences;
 
-    public IReadOnlyList<GameCatalogUpgrade> Upgrades { get; } =
-        UpgradesByRarity.Values.SelectMany(items => items).ToArray();
+    public IReadOnlyList<GameCatalogCharacterView> CharacterViews => Views.CharacterViews;
 
-    public IReadOnlyList<GameCatalogCampaignBattle> CampaignBattles { get; } =
-        CampaignGroups.Values.SelectMany(group => group.Battles).ToArray();
+    public IReadOnlyList<GameCatalogNpc> NpcList => Views.NpcList;
 
-    public IReadOnlyList<GameCatalogLre> Lres { get; } = LresByEvent.Values.ToArray();
+    public IReadOnlyList<GameCatalogMow> MowList => Views.MowList;
+
+    public IReadOnlyList<GameCatalogMowUpgradeCostView> MowUpgradeCostViews => Views.MowUpgradeCostViews;
+
+    public IReadOnlyList<GameCatalogCharacterAbilityCostView> CharacterAbilityCostViews => Views.CharacterAbilityCostViews;
+
+    public IReadOnlyList<GameCatalogAscensionCostView> AscensionCostViews => Views.AscensionCostViews;
+
+    public IReadOnlyList<GameCatalogUnlockShardCostView> UnlockShardCostViews => Views.UnlockShardCostViews;
+
+    public IReadOnlyList<GameCatalogOnslaughtReward> OnslaughtRewards => Views.OnslaughtRewards;
+
+    public IReadOnlyList<GameCatalogUpgradeView> UpgradeViews => Views.UpgradeViews;
+
+    public IReadOnlyList<GameCatalogEquipmentView> EquipmentViews => Views.EquipmentViews;
+
+    public IReadOnlyList<GameCatalogCampaignBattleView> CampaignBattleViews => Views.CampaignBattleViews;
+
+    public IReadOnlyList<GameCatalogCampaignDefinitionView> CampaignDefinitionViews => Views.CampaignDefinitionViews;
+
+    public IReadOnlyList<GameCatalogLreView> LreViews => Views.LreViews;
+
+    public IReadOnlyList<GameCatalogLreBattleView> LreBattleViews => Views.LreBattleViews;
+
+    public IReadOnlyList<GameCatalogHordeModeTiers> HordeModeTiersViews => Views.HordeModeTiersViews;
+
+    public IReadOnlyList<GameCatalogNpcTiers> NpcTiersViews => Views.NpcTiersViews;
+
+    public IReadOnlyList<GameCatalogEventDefinition> EventDefinitionViews => Views.EventDefinitionViews;
+
+    public IReadOnlyList<GameCatalogShopView> ShopViews => Views.ShopViews;
+
+    public IReadOnlyList<GameCatalogEventShopView> EventShopViews => Views.EventShopViews;
+
+    public GameCatalogRaidBossesView RaidBossesView => Views.RaidBossesView;
+
+    public GameCatalogGuildRaidMetaView GuildRaidMetaView => Views.GuildRaidMetaView;
+
+    public IReadOnlyList<GameCatalogMythicQuestsView> MythicQuestViews => Views.MythicQuestViews;
+
+    public IReadOnlyList<GameCatalogUnitPower> UnitPowerViews => Views.UnitPowerViews;
+
+    public IReadOnlyList<GameCatalogQuestEventView> QuestEventViews => Views.QuestEventViews;
+
+    public IReadOnlyList<GameCatalogQuestCrate> QuestCrateViews => Views.QuestCrateViews;
+
+    public IReadOnlyList<GameCatalogFaction> FactionViews => Views.FactionViews;
+
+    public IReadOnlyList<GameCatalogDamageType> DamageTypeViews => Views.DamageTypeViews;
+
+    public IReadOnlyList<GameCatalogGlobalValues> GlobalValuesViews => Views.GlobalValuesViews;
+
+    public IReadOnlyList<GameCatalogProgressionRules> ProgressionRulesViews => Views.ProgressionRulesViews;
+
+    public IReadOnlyList<GameCatalogHre> HreViews => Views.HreViews;
+
+    public IReadOnlyList<GameCatalogIncursion> IncursionViews => Views.IncursionViews;
+
+    public IReadOnlyList<GameCatalogNpcEncounter> NpcEncounterViews => Views.NpcEncounterViews;
+
+    public IReadOnlyList<GameCatalogGuildWarSeason> GuildWarViews => Views.GuildWarViews;
+
+    public IReadOnlyList<GameCatalogSurvivalEvent> SurvivalEventViews => Views.SurvivalEventViews;
+
+    private static IReadOnlyDictionary<string, IReadOnlyList<GameCatalogCampaignBattleView>> IndexCampaignBattles(GameCatalogServedViews views)
+    {
+        var battles = views.CampaignBattleViews.ToDictionary(battle => battle.Id, StringComparer.Ordinal);
+        return views.CampaignDefinitionViews.ToDictionary(
+            definition => definition.GroupId,
+            IReadOnlyList<GameCatalogCampaignBattleView> (definition) => [.. definition.BattleIds.Select(id => battles[id])],
+            StringComparer.Ordinal);
+    }
 }

@@ -178,7 +178,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     [Fact]
     public async Task LegacyNamesAndAliasesResolveToCatalogIds()
     {
-        var named = catalog.Characters.Where(character => Alpha.Contains(character.Id) && character.Id != Alpha[0]).Take(3).ToList();
+        var named = catalog.CharacterViews.Where(character => Alpha.Contains(character.Id) && character.Id != Alpha[0]).Take(3).ToList();
         var (client, _) = await ClientAsync();
         await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, new V1LreTeam(
             Name: "Names", Section: "alpha", CharactersIds: [.. named.Select(character => character.Name.ToUpperInvariant())]))));
@@ -188,7 +188,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
             .SelectMany(view => new[] { ("alpha", view.Alpha), ("beta", view.Beta), ("gamma", view.Gamma) }
                 .Select(lane => (View: view, LaneId: lane.Item1, Lane: lane.Item2)))
             .First(entry => entry.Lane.AvailableUnitIds.Contains("genesPatriarch"));
-        var v1Id = catalog.Lres.Single(lre => lre.UnitSnowprintId == aliasLane.View.Id).Id;
+        var v1Id = catalog.Runtime.LreUnitIdsByV1Id.Single(pair => pair.Value == aliasLane.View.Id).Key;
         (client, _) = await ClientAsync();
         var others = aliasLane.Lane.AvailableUnitIds.Where(unitId => unitId != "genesPatriarch").Take(2).ToList();
         await ImportAsync(client, Configure(TeamsJson(v1Id, Team("Alias", aliasLane.LaneId, ["Patermine", .. others]))));
@@ -330,7 +330,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     {
         var (client, _) = await ClientAsync();
         var uthar = catalog.LreViews.Single(view => view.Id == "votanUthar");
-        var utharV1Id = catalog.Lres.Single(lre => lre.UnitSnowprintId == uthar.Id).Id;
+        var utharV1Id = catalog.Runtime.LreUnitIdsByV1Id.Single(pair => pair.Value == uthar.Id).Key;
         await client.PostAsJsonAsync($"/api/v1/legendary-event-plans/{uthar.Id}/teams",
             new CreateLegendaryEventTeamRequest(0, LegendaryEventLaneId.Alpha, "Mine", [.. uthar.Alpha.AvailableUnitIds.Take(3)], null, [], 1, null, null), Ct);
         var json = $$"""

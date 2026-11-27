@@ -11,7 +11,7 @@ namespace TacticusPlanner.GameCatalog.Tests;
 /// <c>legendary-event-battles-dataset</c> capability: wave enemies carry a 1-based <c>ladderIndex</c>.</summary>
 public sealed class LreDenormalizerTests
 {
-    private static readonly GameCatalogSnapshot Snapshot = GameCatalogLoader.Load();
+    private static readonly GameCatalogCompilation Snapshot = GameCatalogCompiler.Compile();
 
     private static GameCatalogLreView View(string id) => Snapshot.LreViews.Single(view => view.Id == id);
 

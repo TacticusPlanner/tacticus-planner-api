@@ -120,7 +120,7 @@ public sealed class UpdateCampaignEventProgressEndpoint
     {
         foreach (var entry in progress)
         {
-            var group = catalog.CampaignGroups.Values.FirstOrDefault(value =>
+            var group = catalog.CampaignDefinitionViews.FirstOrDefault(value =>
                 string.Equals(value.GroupId, entry.CampaignGroupId, StringComparison.Ordinal));
             if (group is null || !string.Equals(group.ReleaseType, "event", StringComparison.OrdinalIgnoreCase))
             {
@@ -128,7 +128,7 @@ public sealed class UpdateCampaignEventProgressEndpoint
                 return false;
             }
 
-            var typeBattles = group.Battles
+            var typeBattles = catalog.CampaignBattlesByGroup[group.GroupId]
                 .Where(battle => string.Equals(battle.Type, entry.Type, StringComparison.Ordinal))
                 .ToArray();
             if (typeBattles.Length == 0)

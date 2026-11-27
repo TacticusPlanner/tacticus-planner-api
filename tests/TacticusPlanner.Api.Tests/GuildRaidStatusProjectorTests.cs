@@ -116,13 +116,12 @@ public sealed class GuildRaidStatusProjectorTests(GameCatalogApiFactory factory)
 
         var invalidCatalog = catalog with
         {
-            RaidBossRawData = catalog.RaidBossRawData with
+            Runtime = catalog.Runtime with
             {
-                Seasons = catalog.RaidBossRawData.Seasons.ToDictionary(
-                    pair => pair.Key,
-                    pair => pair.Key == configId
-                        ? pair.Value with { LoopFromTier = -1, LoopFromSet = -1 }
-                        : pair.Value),
+                RaidBossSeasonLoops = new Dictionary<string, GameCatalogRaidBossSeasonLoop>(catalog.Runtime.RaidBossSeasonLoops)
+                {
+                    [configId] = new(-1, -1),
+                },
             },
         };
 
@@ -169,7 +168,7 @@ public sealed class GuildRaidStatusProjectorTests(GameCatalogApiFactory factory)
         var (configId, config) = FirstConfig();
         var withoutPrimes = catalog with
         {
-            RaidBossesView = catalog.RaidBossesView with { Primes = [] },
+            Views = catalog.Views with { RaidBossesView = catalog.RaidBossesView with { Primes = [] } },
         };
 
         var response = Project(Season(configId), withoutPrimes);
@@ -188,7 +187,7 @@ public sealed class GuildRaidStatusProjectorTests(GameCatalogApiFactory factory)
     {
         var (configId, _) = FirstConfig();
         var season = Season(configId);
-        var withoutOccurrences = catalog with { EventOccurrences = [] };
+        var withoutOccurrences = catalog with { Runtime = catalog.Runtime with { EventOccurrences = [] } };
         Assert.Null(Project(season, withoutOccurrences).Season!.EndsAt);
 
         var occurrence = new GameCatalogEventOccurrence(
@@ -200,7 +199,7 @@ public sealed class GuildRaidStatusProjectorTests(GameCatalogApiFactory factory)
             {
                 ["season"] = JsonSerializer.SerializeToElement(season.SeasonNumber),
             });
-        var withOccurrence = catalog with { EventOccurrences = [.. catalog.EventOccurrences, occurrence] };
+        var withOccurrence = catalog with { Runtime = catalog.Runtime with { EventOccurrences = [.. catalog.EventOccurrences, occurrence] } };
         Assert.Equal(occurrence.EndUtc, Project(season, withOccurrence).Season!.EndsAt);
     }
 

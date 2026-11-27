@@ -9,7 +9,7 @@ namespace TacticusPlanner.GameCatalog.Tests;
 /// lane where the two disagree or <c>defeatAll</c> is empty.</summary>
 public sealed class LreLanePointsTests
 {
-    private static readonly GameCatalogSnapshot Snapshot = GameCatalogLoader.Load();
+    private static readonly GameCatalogCompilation Snapshot = GameCatalogCompiler.Compile();
 
     private static GameCatalogLre Raw(string id) => Snapshot.Lres.Single(lre => lre.UnitSnowprintId == id);
 

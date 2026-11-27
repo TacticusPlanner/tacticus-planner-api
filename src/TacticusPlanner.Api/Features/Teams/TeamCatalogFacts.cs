@@ -19,16 +19,16 @@ public static class TeamCatalogFacts
 
     private static TeamRuleFacts Build(GameCatalogSnapshot catalog)
     {
-        var characterFactions = catalog.UnitsByFaction.Values
-            .SelectMany(faction => faction.Characters.Select(character => (character.Id, faction.FactionId)))
-            .ToDictionary(unit => unit.Id, unit => unit.FactionId, StringComparer.Ordinal);
-        var mowIds = catalog.Mows.Select(mow => mow.Id).ToHashSet(StringComparer.Ordinal);
-        var campaigns = catalog.CampaignGroups.Values
+        var characterFactions = catalog.CharacterViews
+            .ToDictionary(character => character.Id, character => character.Faction, StringComparer.Ordinal);
+        var mowIds = catalog.MowList.Select(mow => mow.Id).ToHashSet(StringComparer.Ordinal);
+        // Every battle of a group serves the group's allies.
+        var campaigns = catalog.CampaignDefinitionViews
             .Where(group => !IsElite(group))
             .ToDictionary(
                 group => group.GroupId,
                 group => new TeamCampaignFacts(
-                    group.AlliesFactions.ToHashSet(StringComparer.Ordinal),
+                    AlliesFactions(catalog.CampaignBattlesByGroup[group.GroupId]).ToHashSet(StringComparer.Ordinal),
                     group.CoreCharacters.ToArray()),
                 StringComparer.Ordinal);
         var incursions = catalog.IncursionViews.ToDictionary(
@@ -48,7 +48,10 @@ public static class TeamCatalogFacts
         return new TeamRuleFacts(characterFactions, mowIds, campaigns, incursions, survivalEvents);
     }
 
+    private static IReadOnlyList<string> AlliesFactions(IReadOnlyList<GameCatalogCampaignBattleView> battles) =>
+        battles.Count > 0 ? battles[0].AlliesFactions : [];
+
     /// <summary>A group is Elite when any of its campaign types is Elite or EliteMirror.</summary>
-    private static bool IsElite(GameCatalogCampaignGroup group) =>
+    private static bool IsElite(GameCatalogCampaignDefinitionView group) =>
         group.Types.Any(type => type is "Elite" or "EliteMirror");
 }
