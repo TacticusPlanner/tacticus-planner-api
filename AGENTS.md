@@ -24,8 +24,9 @@ and .NET Aspire for local orchestration.
   (used to validate personal API keys).
 - `src/TacticusPlanner.BackgroundJobs`: Hangfire setup (`AddBackgroundJobs`),
   run inside the API process. Job classes stay with their API feature. It stores
-  jobs in the `hangfire` schema that Hangfire manages itself (EF never
-  touches it). Jobs take ids, never entities or secrets, and must be safe to
+  jobs in its own database (`hangfire-db`, `tacticus_planner_hangfire`; the
+  planner database when unset, as in tests), in a `hangfire` schema Hangfire
+  manages itself (EF never touches it). Jobs take ids, never entities or secrets, and must be safe to
   re-run. The test hosts set `BackgroundJobs:ServerEnabled=false` (a host
   setting via `UseSetting`, since `Program` reads it while registering
   services); test jobs by calling them directly. See README "Background jobs".

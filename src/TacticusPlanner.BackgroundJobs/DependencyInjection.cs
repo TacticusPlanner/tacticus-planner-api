@@ -13,7 +13,16 @@ public static class DependencyInjection
     public const string SchemaName = "hangfire";
 
     /// <summary>
-    /// Hangfire with PostgreSQL storage in the planner database (<see cref="SchemaName"/> schema). Enqueuing works
+    /// Hangfire's own database (<c>tacticus_planner_hangfire</c> on the planner server in Azure and under Aspire).
+    /// Without it, as in the test hosts, Hangfire keeps its schema in the planner database.
+    /// </summary>
+    public const string ConnectionStringName = "hangfire-db";
+
+    private const string PlannerConnectionStringName = "planner-db";
+
+    /// <summary>
+    /// Hangfire with PostgreSQL storage in the <see cref="SchemaName"/> schema of <see cref="ConnectionStringName"/>,
+    /// or of the planner database when that is not configured. Enqueuing works
     /// everywhere through <see cref="IBackgroundJobClient"/>; the server that executes jobs runs only when
     /// <paramref name="runServer"/> and <see cref="BackgroundJobsOptions.ServerEnabled"/> are both true.
     /// </summary>
@@ -60,12 +69,15 @@ public static class DependencyInjection
         return services;
     }
 
-    private static string StorageConnectionString(IConfiguration configuration, BackgroundJobsOptions options)
+    internal static string StorageConnectionString(IConfiguration configuration, BackgroundJobsOptions options)
     {
-        var connectionString = configuration.GetConnectionString("planner-db")
-            ?? throw new InvalidOperationException("ConnectionStrings:planner-db is required for background jobs.");
+        var connectionString = configuration.GetConnectionString(ConnectionStringName)
+            ?? configuration.GetConnectionString(PlannerConnectionStringName)
+            ?? throw new InvalidOperationException(
+                $"ConnectionStrings:{ConnectionStringName} or ConnectionStrings:{PlannerConnectionStringName} is required for background jobs.");
 
-        // A different connection string is a different Npgsql pool, so Hangfire never takes API connections.
+        // A different connection string is a different Npgsql pool, so Hangfire never takes API connections, and
+        // the pool size is fixed here so the infra connection budget holds whatever the configured string says.
         return new NpgsqlConnectionStringBuilder(connectionString)
         {
             MaxPoolSize = options.StoragePoolSize,

@@ -145,7 +145,7 @@ aspire run --project orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHo
 PostgreSQL uses a persistent container lifetime and a named Docker volume.
 Stopping AppHost leaves the container available for the next run, and the
 database data survives both AppHost and container restarts. Aspire supplies the
-`planner-db` connection string to the API.
+`planner-db` and `hangfire-db` (Hangfire's `tacticus_planner_hangfire` database) connection strings to the API.
 
 ## Run the API directly
 
@@ -168,6 +168,7 @@ do not commit secrets.
 | Setting | Purpose |
 | --- | --- |
 | `ConnectionStrings__planner-db` | PostgreSQL connection string |
+| `ConnectionStrings__hangfire-db` | Optional. Hangfire's own database on the same server (`tacticus_planner_hangfire` in Azure and under Aspire); without it Hangfire uses the planner database. See [Background jobs](#background-jobs) |
 | `Authentication__Authority` | Microsoft Entra External ID token authority |
 | `Authentication__Audience` | Exact access-token `aud` claim for the API |
 | `Cors__AllowedOrigins__0` | First allowed frontend origin; add more by index |
@@ -192,7 +193,7 @@ do not commit secrets.
 | `ExternalIdentity__PermanentlyDelete` | Default `true`: also removes the user from deleted items so the email can sign up again at once |
 | `BackgroundJobs__ServerEnabled` | Default `true`. Runs the Hangfire server (the workers that execute queued jobs) in the API process; the test hosts set it to `false` and only enqueue (see [Background jobs](#background-jobs)) |
 | `BackgroundJobs__WorkerCount` | Optional, default `2`. Hangfire workers per replica |
-| `BackgroundJobs__StoragePoolSize` | Optional, default `2`. Hangfire's own Npgsql pool per replica, derived from `planner-db`; counted in the infra connection budget |
+| `BackgroundJobs__StoragePoolSize` | Optional, default `2`. Hangfire's own Npgsql pool per replica, applied to whichever connection string it uses; counted in the infra connection budget |
 | `StagingTransfer__ServiceKey` | **Secret.** Shared by production and staging; staging presents it when redeeming a transfer code. Set alone (production) it serves the code and export endpoints; see [Copy production data to staging](#copy-production-data-to-staging) |
 | `StagingTransfer__SourceBaseUrl` | Staging only. Production API base URL (`https://api.tacticusplanner.app`); with the service key it serves `POST account/import-from-production` |
 | `FeatureManagement__<Flag>` | `true` turns a feature flag on (see [Feature flags](#feature-flags)) |
@@ -210,8 +211,9 @@ configuration (Key Vault-backed), never through a committed `appsettings*.json`.
 
 ### Background jobs
 
-The API runs [Hangfire](https://www.hangfire.io/) in process, with PostgreSQL storage in the planner database's
-`hangfire` schema. Hangfire creates and upgrades that schema itself on first use; EF Core migrations never
+The API runs [Hangfire](https://www.hangfire.io/) in process, with PostgreSQL storage in the `hangfire` schema of its
+own database, `tacticus_planner_hangfire`, on the planner server (`ConnectionStrings__hangfire-db`; the test hosts
+have none and use the planner database). Hangfire creates and upgrades that schema itself on first use; EF Core migrations never
 touch it. Endpoints enqueue through `IBackgroundJobClient`; each replica's server runs the `default` queue with
 `BackgroundJobs__WorkerCount` workers. There is no dashboard and there are no recurring jobs yet. The Hangfire setup lives in
 `src/TacticusPlanner.BackgroundJobs` (`AddBackgroundJobs`); job classes stay with their feature in the API.
