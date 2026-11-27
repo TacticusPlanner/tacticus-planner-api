@@ -29,6 +29,7 @@ No **BREAKING** changes. No endpoint, OpenAPI, served-shape or manifest change. 
 ### Modified Capabilities
 
 - `game-events-calendar-dataset`: the day change re-projects the calendar only, instead of rebuilding the whole served catalog.
+- `game-catalog-datamine-source`: the pin and the datamine copies live under `src/TacticusPlanner.GameCatalog.Compiler/Data/datamine/`.
 
 ## Impact
 
@@ -36,5 +37,5 @@ No **BREAKING** changes. No endpoint, OpenAPI, served-shape or manifest change. 
 - **API features reading raw collections:** campaign battle and campaign event progress overrides, the player-data transformer, team and Guild War catalog facts, guild raid status, the V1 importers and `GameCatalogLreLookups`.
 - **Build:** `TacticusPlanner.slnx`, the Dockerfile's restore and copy steps, and lock files for the new projects. A build whose compiler inputs changed runs the compiler once (about 4 s).
 - **Tests:** `TacticusPlanner.GameCatalog.Tests` references the compiler and adds a test that the runtime snapshot serves exactly what the compiler produced. The manifest snapshot test does not move.
-- **Skill and docs:** the `game-catalog-data` skill and `AGENTS.md` describe the new layout.
+- **Skill and docs:** the `game-catalog-data` skill and `AGENTS.md` describe the new layout. Raw data moves from `src/TacticusPlanner.GameCatalog/Data/` to `src/TacticusPlanner.GameCatalog.Compiler/Data/`, so `scripts/pull-datamine.cs`, `DatamineSourceTests`, `.coderabbit.yaml`, the labeler and the workspace skills that edit catalog data (`tp-calendar-events`, `tp-bump-datamine` in `tacticus-planner-dev`) follow the new path.
 - **Related:** the `catalog-version-window` proposal (two releases loaded side by side) would double today's startup cost. With a compiled catalog the compiler emits one compiled set per release.

@@ -8,6 +8,16 @@
         "resolved": "10.0.15",
         "contentHash": "KczR2nV7ooeimtZxAawPht/FJUHnX+uoWy7y4pba+iaRQBwUM2NwtiqZg+/FpZDHUf2RkkzveGkhMTWDNzmDUA=="
       },
+      "tacticusplanner.gamecatalog.compiler": {
+        "type": "Project",
+        "dependencies": {
+          "TacticusPlanner.GameCatalog.Models": "[1.0.0, )",
+          "TacticusPlanner.GameDomain": "[1.0.0, )"
+        }
+      },
+      "tacticusplanner.gamecatalog.models": {
+        "type": "Project"
+      },
       "tacticusplanner.gamedomain": {
         "type": "Project"
       }

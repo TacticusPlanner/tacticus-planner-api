@@ -42,7 +42,7 @@ if ((source is null) == (reference is null))
 }
 
 var repoRoot = FindRepoRoot(Directory.GetCurrentDirectory());
-var datamineDir = Path.Combine(repoRoot, "src", "TacticusPlanner.GameCatalog", "Data", "datamine");
+var datamineDir = Path.Combine(repoRoot, "src", "TacticusPlanner.GameCatalog.Compiler", "Data", "datamine");
 var rawDir = Path.Combine(datamineDir, "raw");
 var paths = ReadAllowlist(Path.Combine(datamineDir, "files.txt"));
 

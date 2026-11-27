@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The catalog's record types (raw and served) and hashing helpers, shared by the build-time compiler and the
+       runtime. Namespaces stay TacticusPlanner.GameCatalog.*. -->
+  <PropertyGroup>
+    <RootNamespace>TacticusPlanner.GameCatalog</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="TacticusPlanner.GameCatalog.Compiler" />
+    <InternalsVisibleTo Include="TacticusPlanner.GameCatalog.Tests" />
+  </ItemGroup>
+</Project>
