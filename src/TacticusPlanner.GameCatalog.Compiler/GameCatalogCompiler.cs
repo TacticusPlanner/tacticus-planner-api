@@ -93,7 +93,8 @@ public static class GameCatalogCompiler
                 shopProducts),
             JsonOptions);
         var guildWarViews = GameCatalogDenormalizer.ReadDatamineGuildWar(
-            LoadDatamine<DatamineGuildWar>(GameCatalogDenormalizer.DatamineGuildWarPath));
+            LoadDatamine<DatamineGuildWar>(GameCatalogDenormalizer.DatamineGuildWarPath),
+            boardId => LoadDatamine<DatamineBoard>(GameCatalogDenormalizer.DatamineBoardPath(boardId)));
         var incursionViews = GameCatalogDenormalizer.ReadDatamineIncursions(
             LoadDatamine<List<DatamineMowEvent>>(GameCatalogDenormalizer.DatamineMowEventPath),
             chests);

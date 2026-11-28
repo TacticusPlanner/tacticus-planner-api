@@ -13249,6 +13249,55 @@
           }
         }
       },
+      "GameCatalogGuildWarBoard": {
+        "required": [
+          "columns",
+          "rows",
+          "visualColumns",
+          "visualRows",
+          "visualFirstColumn",
+          "visualFirstRow",
+          "tiles",
+          "attackerSpawns",
+          "defenderSpawns"
+        ],
+        "type": "object",
+        "properties": {
+          "columns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rows": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "visualColumns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "visualRows": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "visualFirstColumn": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "visualFirstRow": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tiles": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarTile"
+          },
+          "attackerSpawns": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarCell"
+          },
+          "defenderSpawns": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGuildWarCell"
+          }
+        }
+      },
       "GameCatalogGuildWarBuff": {
         "required": [
           "id",
@@ -13287,6 +13336,23 @@
           },
           "variables": {
             "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndIReadOnlyListOfInt32"
+          }
+        }
+      },
+      "GameCatalogGuildWarCell": {
+        "required": [
+          "column",
+          "row"
+        ],
+        "type": "object",
+        "properties": {
+          "column": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "row": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -13359,7 +13425,8 @@
       "GameCatalogGuildWarMap": {
         "required": [
           "boardId",
-          "spawnPointsSet"
+          "spawnPointsSet",
+          "board"
         ],
         "type": "object",
         "properties": {
@@ -13369,6 +13436,9 @@
           "spawnPointsSet": {
             "type": "integer",
             "format": "int32"
+          },
+          "board": {
+            "$ref": "#/components/schemas/GameCatalogGuildWarBoard"
           }
         }
       },
@@ -13464,6 +13534,36 @@
           },
           "rarityCaps": {
             "$ref": "#/components/schemas/IReadOnlyListOfString"
+          }
+        }
+      },
+      "GameCatalogGuildWarTile": {
+        "required": [
+          "column",
+          "row",
+          "terrain",
+          "elevation",
+          "blocked"
+        ],
+        "type": "object",
+        "properties": {
+          "column": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "row": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "terrain": {
+            "type": "string"
+          },
+          "elevation": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "blocked": {
+            "type": "boolean"
           }
         }
       },
@@ -18524,6 +18624,12 @@
           "$ref": "#/components/schemas/GameCatalogGuildWarBuffAbility"
         }
       },
+      "IReadOnlyListOfGameCatalogGuildWarCell": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarCell"
+        }
+      },
       "IReadOnlyListOfGameCatalogGuildWarLevel": {
         "type": "array",
         "items": {
@@ -18558,6 +18664,12 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogGuildWarTier"
+        }
+      },
+      "IReadOnlyListOfGameCatalogGuildWarTile": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGuildWarTile"
         }
       },
       "IReadOnlyListOfGameCatalogGuildWarZone": {

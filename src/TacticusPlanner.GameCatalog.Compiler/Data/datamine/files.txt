@@ -1,6 +1,23 @@
 # raw/-relative paths copied from tacticus-planner-data-mines by scripts/pull-datamine.cs.
 # List a file only when a denormalizer reads it. Sorted, one per line, no globs.
 VERSION                                                      # manifest gameVersion
+boards/C1_15.json                                            # guild-war (map pool boards)
+boards/C1_18.json                                            # guild-war (map pool boards)
+boards/C1_23.json                                            # guild-war (map pool boards)
+boards/C1_37.json                                            # guild-war (map pool boards)
+boards/C1_70.json                                            # guild-war (map pool boards)
+boards/CE2_06.json                                           # guild-war (map pool boards)
+boards/EC1_09.json                                           # guild-war (map pool boards)
+boards/EMC1_06.json                                          # guild-war (map pool boards)
+boards/LE1_21.json                                           # guild-war (map pool boards)
+boards/LHE_Desert_02.json                                    # guild-war (map pool boards)
+boards/LHE_Desert_03.json                                    # guild-war (map pool boards)
+boards/LHE_Desert_04.json                                    # guild-war (map pool boards)
+boards/LHE_Desert_05.json                                    # guild-war (map pool boards)
+boards/LHE_Desert_06.json                                    # guild-war (map pool boards)
+boards/MC1_11.json                                           # guild-war (map pool boards)
+boards/MC1_31.json                                           # guild-war (map pool boards)
+boards/PVP_desert_10.json                                    # guild-war (map pool boards)
 gameconfig/battles/battleSets.json                           # lres, lre-battles
 gameconfig/battles/campaigns.json                            # campaign-battles, campaign-definitions
 gameconfig/battles/onslaught.json                            # onslaught-rewards

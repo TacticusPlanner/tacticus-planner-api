@@ -66,7 +66,31 @@ public sealed record GameCatalogGuildWarBuffAbility(
     IReadOnlyDictionary<string, IReadOnlyList<int>> Variables
 );
 
-public sealed record GameCatalogGuildWarMap(string BoardId, int SpawnPointsSet);
+// A map-pool board with the battle grid the game plays it on (datamine raw/boards/<boardId>.json): spawnPointsSet is the
+// 0-based index of the board's spawn point set the season uses.
+public sealed record GameCatalogGuildWarMap(string BoardId, int SpawnPointsSet, GameCatalogGuildWarBoard Board);
+
+// A board's battle grid: columns x rows pointy-top hexes, row 0 on the attacker's side. The game's visual board is a
+// larger visualColumns x visualRows grid with logical (0, 0) at (visualFirstColumn, visualFirstRow); a row whose
+// visual row index is odd is shifted half a hex to the right. Tiles are row 0 first, each row left to right; the
+// spawns are the cells of the season's spawn point set, attacker (the player's team) and defender.
+public sealed record GameCatalogGuildWarBoard(
+    int Columns,
+    int Rows,
+    int VisualColumns,
+    int VisualRows,
+    int VisualFirstColumn,
+    int VisualFirstRow,
+    IReadOnlyList<GameCatalogGuildWarTile> Tiles,
+    IReadOnlyList<GameCatalogGuildWarCell> AttackerSpawns,
+    IReadOnlyList<GameCatalogGuildWarCell> DefenderSpawns
+);
+
+// A hex: terrain is the game's tile id (Grass, Water, Bridge, DryBush, Swamp, Block), elevation the game's level (2 is
+// ground), blocked whether units can't stand on it (a Block tile or one the game forces unplayable).
+public sealed record GameCatalogGuildWarTile(int Column, int Row, string Terrain, int Elevation, bool Blocked);
+
+public sealed record GameCatalogGuildWarCell(int Column, int Row);
 
 // What a kill and an eliminated lineup score (scoreFromUnitKilled, scoreForLineupEliminated in game order).
 public sealed record GameCatalogGuildWarScoring(
@@ -123,3 +147,28 @@ public sealed record DatamineGuildWarZoneTier(string? ZoneTierId, List<string>? 
 public sealed record DatamineGuildWarLineupScore(int? MaxAttempts, int? MaxUnitsLost, int? Score);
 
 public sealed record DatamineGuildWarBuff(string? AbilityId, string? Scope);
+
+// The fields of Data/datamine/raw/boards/<boardId>.json the catalog reads: the game's BoardConfiguration ("board")
+// and IdunBoardType ("visual") MonoBehaviours, as data-mines extract.py writes them.
+public sealed record DatamineBoard(DatamineBoardConfiguration? Board, DatamineBoardVisual? Visual);
+
+public sealed record DatamineBoardConfiguration(
+    string? Id,
+    int? Width,
+    int? Height,
+    List<DatamineBoardColumn>? Tiles,
+    List<DatamineBoardSpawnPointSet>? SpawnPointSets
+);
+
+// Tiles[column].Tile[row].
+public sealed record DatamineBoardColumn(List<DatamineBoardTile>? Tile);
+
+public sealed record DatamineBoardTile(string? TileId, int? Elevation, int? ForceUnplayable);
+
+public sealed record DatamineBoardSpawnPointSet(List<DatamineBoardSpawnPointGroup>? SpawnPointGroups);
+
+public sealed record DatamineBoardSpawnPointGroup(int? TeamWithPlayerIndex, List<DatamineBoardSpawnPoint>? SpawnPoints);
+
+public sealed record DatamineBoardSpawnPoint(int? Column, int? Row);
+
+public sealed record DatamineBoardVisual(int? Width, int? Height, int? PlayableMinCol, int? PlayableMinRow);

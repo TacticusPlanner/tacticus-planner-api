@@ -8,6 +8,11 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>Raw path of the datamine Guild War config.</summary>
     public const string DatamineGuildWarPath = "globalconfig/guildWar.json";
 
+    /// <summary>Raw path of a datamine battle board.</summary>
+    public static string DatamineBoardPath(string boardId) => $"boards/{boardId}.json";
+
+    private const string BlockTile = "Block";
+
     private static readonly string[] GuildWarRarities = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"];
 
     private const int GuildWarSlots = 5;
@@ -18,10 +23,12 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>
     /// Builds one guild-war record per live season (key <c>guildWarSeason[A-Z]</c>; test configs dropped), ordered by
     /// key, per the guild-war-dataset spec: zones in layout order, tiers lowest first, levels ascending, buffs by id with
-    /// their abilities resolved by id or by rarity suffix, the map pool, scoring and the shared power caps.
+    /// their abilities resolved by id or by rarity suffix, the map pool with each board's grid
+    /// (<paramref name="loadBoard"/> reads <c>boards/{boardId}.json</c>), scoring and the shared power caps.
     /// </summary>
     /// <exception cref="InvalidOperationException">A season does not hold together (see the spec's load failures).</exception>
-    public static IReadOnlyList<GameCatalogGuildWarSeason> ReadDatamineGuildWar(DatamineGuildWar guildWar)
+    public static IReadOnlyList<GameCatalogGuildWarSeason> ReadDatamineGuildWar(
+        DatamineGuildWar guildWar, Func<string, DatamineBoard> loadBoard)
     {
         var seasons = guildWar.GuildWarSeasonConfigs ?? throw InvalidGuildWar("'guildWarSeasonConfigs' is missing.");
         var powerCaps = ReadGuildWarPowerCaps(guildWar.GuildWarConfig?.MaxHeroPowerCap);
@@ -35,14 +42,27 @@ internal static partial class GameCatalogDenormalizer
         }
 
         var ids = live.Select(pair => pair.Key).ToHashSet(StringComparer.Ordinal);
-        return [.. live.Select(pair => ReadGuildWarSeason(pair.Key, pair.Value, ids, powerCaps))];
+        var boards = new Dictionary<string, DatamineBoard>(StringComparer.Ordinal);
+        DatamineBoard Board(string boardId)
+        {
+            if (!boards.TryGetValue(boardId, out var board))
+            {
+                board = loadBoard(boardId);
+                boards[boardId] = board;
+            }
+
+            return board;
+        }
+
+        return [.. live.Select(pair => ReadGuildWarSeason(pair.Key, pair.Value, ids, powerCaps, Board))];
     }
 
     private static GameCatalogGuildWarSeason ReadGuildWarSeason(
         string id,
         DatamineGuildWarSeason season,
         HashSet<string> seasonIds,
-        IReadOnlyList<GameCatalogGuildWarPowerCap> powerCaps)
+        IReadOnlyList<GameCatalogGuildWarPowerCap> powerCaps,
+        Func<string, DatamineBoard> loadBoard)
     {
         InvalidOperationException Invalid(string message) => InvalidGuildWar($"season '{id}': {message}");
 
@@ -58,9 +78,13 @@ internal static partial class GameCatalogDenormalizer
         var tiers = ReadGuildWarTiers(season, Invalid);
         var levels = ReadGuildWarLevels(season, zones, tiers, Invalid);
         var maps = (season.MapPool ?? throw Invalid("'mapPool' is missing."))
-            .Select(map => new GameCatalogGuildWarMap(
-                string.IsNullOrEmpty(map.BoardId) ? throw Invalid("a map has no boardId.") : map.BoardId,
-                map.SpawnPointsSet ?? 0))
+            .Select(map =>
+            {
+                var boardId = string.IsNullOrEmpty(map.BoardId) ? throw Invalid("a map has no boardId.") : map.BoardId;
+                var spawnPointsSet = map.SpawnPointsSet ?? 0;
+                return new GameCatalogGuildWarMap(
+                    boardId, spawnPointsSet, ReadGuildWarBoard(boardId, spawnPointsSet, loadBoard(boardId), Invalid));
+            })
             .ToArray();
         if (maps.Length == 0)
         {
@@ -77,6 +101,92 @@ internal static partial class GameCatalogDenormalizer
 
         return new GameCatalogGuildWarSeason(
             id, next, maxAttempts, zones, tiers, levels, [.. buffs.Values], maps, scoring, powerCaps);
+    }
+
+    private static GameCatalogGuildWarBoard ReadGuildWarBoard(
+        string boardId, int spawnPointsSet, DatamineBoard source, Func<string, InvalidOperationException> invalid)
+    {
+        InvalidOperationException Invalid(string message) => invalid($"board '{boardId}': {message}");
+
+        var board = source.Board ?? throw Invalid("'board' is missing.");
+        var visual = source.Visual ?? throw Invalid("'visual' is missing.");
+        if (board.Id != boardId)
+        {
+            throw Invalid($"the file is board '{board.Id}'.");
+        }
+
+        var columns = board.Width is { } width and > 0 ? width : throw Invalid("'Width' must be positive.");
+        var rows = board.Height is { } height and > 0 ? height : throw Invalid("'Height' must be positive.");
+        var grid = board.Tiles ?? throw Invalid("'Tiles' is missing.");
+        if (grid.Count != columns || grid.Any(column => column.Tile?.Count != rows))
+        {
+            throw Invalid($"'Tiles' is not {columns} columns of {rows} tiles.");
+        }
+
+        var visualColumns = visual.Width ?? throw Invalid("visual 'Width' is missing.");
+        var visualRows = visual.Height ?? throw Invalid("visual 'Height' is missing.");
+        var firstColumn = visual.PlayableMinCol ?? throw Invalid("'PlayableMinCol' is missing.");
+        var firstRow = visual.PlayableMinRow ?? throw Invalid("'PlayableMinRow' is missing.");
+        if (firstColumn < 0 || firstRow < 0 || firstColumn + columns > visualColumns || firstRow + rows > visualRows)
+        {
+            throw Invalid("the grid does not fit its visual board.");
+        }
+
+        var tiles = new List<GameCatalogGuildWarTile>(columns * rows);
+        for (var row = 0; row < rows; row++)
+        {
+            for (var column = 0; column < columns; column++)
+            {
+                var tile = grid[column].Tile![row];
+                var terrain = string.IsNullOrEmpty(tile.TileId)
+                    ? throw Invalid($"tile ({column}, {row}) has no TileId.")
+                    : tile.TileId;
+                tiles.Add(new GameCatalogGuildWarTile(
+                    column,
+                    row,
+                    terrain,
+                    tile.Elevation ?? throw Invalid($"tile ({column}, {row}) has no Elevation."),
+                    terrain == BlockTile || tile.ForceUnplayable is not (null or 0)));
+            }
+        }
+
+        var sets = board.SpawnPointSets ?? throw Invalid("'SpawnPointSets' is missing.");
+        if (spawnPointsSet < 0 || spawnPointsSet >= sets.Count)
+        {
+            throw Invalid($"spawnPointsSet {spawnPointsSet} is not one of its {sets.Count} spawn point sets.");
+        }
+
+        var spawns = new[] { new List<GameCatalogGuildWarCell>(), new List<GameCatalogGuildWarCell>() };
+        foreach (var group in sets[spawnPointsSet].SpawnPointGroups ?? throw Invalid("a spawn point set has no groups."))
+        {
+            // Other teams (2, 3, 6: extra sides of other modes) can share a set; Guild War plays teams 0 and 1 only.
+            if (group.TeamWithPlayerIndex is not (0 or 1))
+            {
+                continue;
+            }
+
+            var team = group.TeamWithPlayerIndex.Value;
+            foreach (var point in group.SpawnPoints ?? throw Invalid("a spawn point group has no points."))
+            {
+                var cell = new GameCatalogGuildWarCell(
+                    point.Column ?? throw Invalid("a spawn point has no Column."),
+                    point.Row ?? throw Invalid("a spawn point has no Row."));
+                if (cell.Column < 0 || cell.Column >= columns || cell.Row < 0 || cell.Row >= rows)
+                {
+                    throw Invalid($"spawn point ({cell.Column}, {cell.Row}) is off the grid.");
+                }
+
+                spawns[team].Add(cell);
+            }
+        }
+
+        if (spawns[0].Count == 0 || spawns[1].Count == 0)
+        {
+            throw Invalid($"spawn point set {spawnPointsSet} lacks attacker or defender spawns.");
+        }
+
+        return new GameCatalogGuildWarBoard(
+            columns, rows, visualColumns, visualRows, firstColumn, firstRow, tiles, spawns[0], spawns[1]);
     }
 
     private static SortedDictionary<string, GameCatalogGuildWarBuff> ReadGuildWarBuffs(
