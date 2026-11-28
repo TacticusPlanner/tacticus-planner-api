@@ -33,7 +33,11 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
             );
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status429TooManyRequests, UpstreamRateLimit.ResponseDescription);
-            summary.Response(StatusCodes.Status403Forbidden, "The caller is absent from the guild or below Co-Leader.");
+            summary.Response(
+                StatusCodes.Status403Forbidden,
+                "The caller is absent from the guild or below Co-Leader; or guildVerificationRequired: the guild has a "
+                    + "confirmed leader and the caller is not confirmed, so the stored key was kept."
+            );
             summary.Response(
                 StatusCodes.Status404NotFound,
                 "The authenticated account/profile has not been provisioned."
@@ -106,7 +110,7 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
             return;
         }
 
-        AddError(GuildSyncResultMapper.GetMessage(result));
+        AddError(GuildSyncResultMapper.GetMessage(result), GuildSyncResultMapper.GetIssueCode(result));
         await Send.ErrorsAsync(GuildSyncResultMapper.GetStatusCode(result), ct);
     }
 }

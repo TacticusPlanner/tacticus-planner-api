@@ -159,9 +159,10 @@ public sealed class PurgeGuildEndpointTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task CurrentCoLeaderCanPurge()
+    public async Task ConfirmedCoLeaderCanPurge()
     {
-        var (leaderClient, coLeaderClient, _, _, _, _) = await RegisterWithCoLeaderAsync();
+        var (leaderClient, coLeaderClient, _, _, _, coLeaderId) = await RegisterWithCoLeaderAsync();
+        await GuildTestHelpers.ConfirmClaimAsync(leaderClient, coLeaderId);
 
         var response = await coLeaderClient.DeleteAsync("/api/v1/guild", TestContext.Current.CancellationToken);
 
@@ -169,6 +170,20 @@ public sealed class PurgeGuildEndpointTests : IAsyncLifetime
         var after = await (await leaderClient.GetAsync("/api/v1/guild", TestContext.Current.CancellationToken))
             .Content.ReadFromJsonAsync<MyGuildResponse>(TestContext.Current.CancellationToken);
         Assert.Equal(MyGuildState.Unregistered, after!.State);
+    }
+
+    [Fact]
+    public async Task CoLeaderNobodyConfirmedIsRefusedWithoutAnUpstreamCall()
+    {
+        var (leaderClient, coLeaderClient, token, _, _, _) = await RegisterWithCoLeaderAsync();
+        var calls = factory.TacticusApi.GuildCallCount(token);
+
+        var response = await coLeaderClient.DeleteAsync("/api/v1/guild", TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        Assert.Contains("guildVerificationRequired", await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
+        Assert.Equal(calls, factory.TacticusApi.GuildCallCount(token));
+        await AssertStillRegisteredAsync(leaderClient);
     }
 
     [Fact]

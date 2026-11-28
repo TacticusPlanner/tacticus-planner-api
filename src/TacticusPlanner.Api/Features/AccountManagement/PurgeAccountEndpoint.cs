@@ -2,6 +2,7 @@ using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Domain.Guilds;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
 
@@ -54,12 +55,27 @@ public sealed class PurgeAccountEndpoint : Endpoint<PurgeAccountRequest>
             await db.Database.CreateExecutionStrategy().ExecuteAsync(async () =>
             {
                 await using var transaction = await db.Database.BeginTransactionAsync(ct);
+
+                // A name leaders gave the player behind a verified claim goes with the account; under a claim nobody
+                // verified it may be someone else's name, so it stays.
+                await db.GuildPlayers
+                    .Where(player => db.GuildMembers.Any(member => member.ProfileId == profileId
+                        && member.VerifiedProfileId == profileId
+                        && member.GuildId == player.GuildId
+                        && member.TacticusUserIdHash == player.TacticusUserIdHash))
+                    .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(player => player.AssignedName, (string?)null)
+                        .SetProperty(player => player.Revision, player => player.Revision + 1), ct);
                 await db.GuildMembers
                     .Where(entity => entity.ProfileId == profileId)
                     .ExecuteUpdateAsync(setters => setters
                         .SetProperty(entity => entity.ProfileId, (ProfileId?)null)
                         .SetProperty(entity => entity.LinkedPlayerName, (string?)null)
                         .SetProperty(entity => entity.LastActiveInPlannerOn, (DateTimeOffset?)null)
+                        .SetProperty(entity => entity.VerifiedProfileId, (ProfileId?)null)
+                        .SetProperty(entity => entity.VerificationMethod, (GuildClaimVerificationMethod?)null)
+                        .SetProperty(entity => entity.VerifiedAt, (DateTimeOffset?)null)
+                        .SetProperty(entity => entity.RejectedProfileId, (ProfileId?)null)
                         .SetProperty(entity => entity.Revision, entity => entity.Revision + 1), ct);
                 await db.Profiles
                     .Where(entity => entity.Id == profileId)

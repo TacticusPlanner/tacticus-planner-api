@@ -21,6 +21,7 @@ namespace TacticusPlanner.Persistence;
 [EfCoreConverter<ProfileId>]
 [EfCoreConverter<GuildId>]
 [EfCoreConverter<GuildMemberId>]
+[EfCoreConverter<GuildPlayerId>]
 [EfCoreConverter<GuildRaidSeasonId>]
 [EfCoreConverter<GuildRaidAttackId>]
 [EfCoreConverter<TacticusUserId>]

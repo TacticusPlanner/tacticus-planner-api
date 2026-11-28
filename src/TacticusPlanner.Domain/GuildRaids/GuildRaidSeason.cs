@@ -30,6 +30,11 @@ public class GuildRaidSeason : BaseEntity<GuildRaidSeasonId>
     public DateTimeOffset ObservedAt { get; set; }
 
     /// <summary>
+    /// When the season was read after it ended and its hits are complete; <see langword="null"/> otherwise.
+    /// </summary>
+    public DateTimeOffset? FinalizedAt { get; set; }
+
+    /// <summary>
     /// Registered guild navigation for <see cref="GuildId"/>.
     /// </summary>
     public virtual Guild? Guild { get; set; }

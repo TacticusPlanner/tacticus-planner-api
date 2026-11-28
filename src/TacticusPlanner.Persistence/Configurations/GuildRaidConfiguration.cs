@@ -15,6 +15,9 @@ public sealed class GuildRaidSyncStateConfiguration : IEntityTypeConfiguration<G
         builder.Property(entity => entity.State).HasConversion<string>().HasMaxLength(32).IsRequired();
         builder.Property(entity => entity.ObservedAt);
         builder.Property(entity => entity.LastAttemptedAt).IsRequired();
+        builder.Property(entity => entity.EndedSeasonNumber);
+        builder.Property(entity => entity.EndedSeasonAttemptedAt);
+        builder.Property(entity => entity.EndedSeasonNotFoundCount).IsRequired();
         builder.Property(entity => entity.ActiveSeasonId)
             .HasConversion(
                 id => id.HasValue ? id.Value.Value : (Guid?)null,
@@ -41,6 +44,7 @@ public sealed class GuildRaidSeasonConfiguration : IEntityTypeConfiguration<Guil
         builder.Property(entity => entity.SeasonNumber).IsRequired();
         builder.Property(entity => entity.SeasonConfigId).HasMaxLength(128).IsRequired();
         builder.Property(entity => entity.ObservedAt).IsRequired();
+        builder.Property(entity => entity.FinalizedAt);
         builder.Property(entity => entity.CreatedAt).IsRequired();
         builder.Property(entity => entity.UpdatedAt).IsRequired();
         builder.HasIndex(entity => new { entity.GuildId, entity.SeasonNumber }).IsUnique();
@@ -62,6 +66,7 @@ public sealed class GuildRaidAttackConfiguration : IEntityTypeConfiguration<Guil
             .HasConversion(hash => hash.Value, value => TacticusUserIdHash.From(value))
             .HasMaxLength(32)
             .IsRequired();
+        builder.Property(entity => entity.TacticusUserIdSuffix).HasMaxLength(4);
         builder.Property(entity => entity.EncounterType).HasConversion<string>().HasMaxLength(32).IsRequired();
         builder.Property(entity => entity.UnitSetId).HasMaxLength(128).IsRequired();
         builder.Property(entity => entity.Difficulty).HasConversion<string>().HasMaxLength(32).IsRequired();

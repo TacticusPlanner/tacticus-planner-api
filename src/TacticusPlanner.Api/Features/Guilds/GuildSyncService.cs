@@ -1,3 +1,4 @@
+using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using Refit;
 using TacticusPlanner.Domain.Guilds;
@@ -15,11 +16,14 @@ namespace TacticusPlanner.Api.Features.Guilds;
 /// transaction. Registration additionally persists the encrypted Guild API token; explicit sync never
 /// replaces it (<paramref name="persistToken"/> in <see cref="SynchronizeAsync"/> distinguishes the two).
 /// </summary>
-public sealed class GuildSyncService(
+public sealed partial class GuildSyncService(
     PlannerDbContext db,
     ITacticusApi tacticusApi,
     IColumnHashService hashService,
-    TimeProvider timeProvider
+    GuildClaimEvaluator claimEvaluator,
+    GuildPlayerRegistry playerRegistry,
+    TimeProvider timeProvider,
+    ILogger<GuildSyncService> logger
 )
 {
     /// <summary>Minimum spacing between upstream roster fetches through <c>POST guild/sync</c> for one guild,
@@ -71,37 +75,10 @@ public sealed class GuildSyncService(
             return new GuildSyncResult.InvalidRequest("The configured Tacticus User ID is not valid.");
         }
 
-        TacticusApi.Models.Guild.GuildResponse response;
-        try
+        var (upstream, fetchFailure) = await FetchGuildAsync(guildApiToken, ct);
+        if (upstream is null)
         {
-            response = await tacticusApi.GetGuildAsync(guildApiToken, ct);
-        }
-        catch (ApiException exception) when ((int)exception.StatusCode is 400 or 401 or 403 or 404)
-        {
-            return new GuildSyncResult.UpstreamRejected(
-                "The Tacticus API could not fetch guild data for the supplied Guild API token."
-            );
-        }
-        catch (Exception exception) when (exception is ApiExceptionBase or HttpRequestException or TaskCanceledException)
-        {
-            return new GuildSyncResult.UpstreamUnavailable(
-                "The Tacticus API is currently unavailable. Try again shortly."
-            );
-        }
-
-        var upstream = response.Guild;
-        if (upstream is null
-            || upstream.GuildId == Guid.Empty
-            || string.IsNullOrWhiteSpace(upstream.GuildTag)
-            || string.IsNullOrWhiteSpace(upstream.Name)
-            || upstream.Members.Count == 0)
-        {
-            return new GuildSyncResult.InvalidUpstreamData("The Tacticus API returned an incomplete guild response.");
-        }
-
-        if (upstream.Members.Select(member => member.UserId).Distinct().Count() != upstream.Members.Count)
-        {
-            return new GuildSyncResult.InvalidUpstreamData("The Tacticus API returned duplicate guild members.");
+            return fetchFailure!;
         }
 
         var callerUpstreamMember = upstream.Members.FirstOrDefault(member => member.UserId == callerTacticusGuid);
@@ -134,14 +111,20 @@ public sealed class GuildSyncService(
         };
 
         var persistsToken = persistToken && (!persistTokenOnlyIfNew || isNewGuild);
+
+        // A guild with a verified leader keeps its key until a verified leader replaces it. Judged on the members as
+        // stored, with the roles of the fresh roster, before anything changes.
+        if (persistsToken && !isNewGuild && IsKeyReplacementRefused(guild, upstream.Members, callerProfileId))
+        {
+            return new GuildSyncResult.VerificationRequired(
+                "A confirmed Leader or Co-Leader must confirm you in Planner before you can replace this guild's key."
+            );
+        }
+
         if (persistsToken && await CheckGuildRaidAccessAsync(guildApiToken, ct) is { } accessFailure)
         {
             return accessFailure;
         }
-
-        guild.Tag = upstream.GuildTag;
-        guild.Name = upstream.Name;
-        guild.Level = upstream.Level;
 
         if (persistsToken)
         {
@@ -154,7 +137,108 @@ public sealed class GuildSyncService(
             db.Guilds.Add(guild);
         }
 
+        if (await SaveRosterAsync(guild, upstream, ct) is { } conflict)
+        {
+            return conflict;
+        }
+
+        var callerId = TacticusUserId.From(callerTacticusGuid.ToString());
+        var callerMember = guild.Members.First(member => member.TacticusUserId == callerId);
+
+        return new GuildSyncResult.Success(guild, callerMember, isNewGuild);
+    }
+
+    /// <summary>
+    /// Refreshes a registered guild's roster with its stored key, without a caller: members, roles, links and claims as
+    /// a sync saves them. Saves nothing when the key now answers for another guild. Never replaces the key.
+    /// </summary>
+    /// <returns>The failure, or <see langword="null"/> once saved.</returns>
+    public async Task<GuildSyncResult?> RefreshRosterAsync(GuildId guildId, CancellationToken ct)
+    {
+        var guild = await db.Guilds.Include(entity => entity.Members).SingleOrDefaultAsync(entity => entity.Id == guildId, ct);
+        if (guild?.GuildApiToken is not { } token)
+        {
+            return new GuildSyncResult.InvalidRequest("The guild has no stored Guild API token.");
+        }
+
+        var (upstream, fetchFailure) = await FetchGuildAsync(token, ct);
+        if (upstream is null)
+        {
+            return fetchFailure;
+        }
+
+        if (TacticusGuildIdHash.FromNullable(hashService.ComputeHash(upstream.GuildId.ToString())) != guild.TacticusGuildIdHash)
+        {
+            return new GuildSyncResult.CallerNotAuthorized("The stored Guild API token now answers for another guild.");
+        }
+
+        return await SaveRosterAsync(guild, upstream, ct);
+    }
+
+    private async Task<(TacticusApi.Models.Guild.Guild? Guild, GuildSyncResult? Failure)> FetchGuildAsync(
+        string guildApiToken, CancellationToken ct)
+    {
+        TacticusApi.Models.Guild.GuildResponse response;
+        try
+        {
+            response = await tacticusApi.GetGuildAsync(guildApiToken, ct);
+        }
+        catch (ApiException exception) when ((int)exception.StatusCode is 400 or 401 or 403 or 404)
+        {
+            return (null, new GuildSyncResult.UpstreamRejected(
+                "The Tacticus API could not fetch guild data for the supplied Guild API token."
+            ));
+        }
+        catch (Exception exception) when (exception is ApiExceptionBase or HttpRequestException or TaskCanceledException)
+        {
+            return (null, new GuildSyncResult.UpstreamUnavailable(
+                "The Tacticus API is currently unavailable. Try again shortly."
+            ));
+        }
+
+        var upstream = response.Guild;
+        if (upstream is null
+            || upstream.GuildId == Guid.Empty
+            || string.IsNullOrWhiteSpace(upstream.GuildTag)
+            || string.IsNullOrWhiteSpace(upstream.Name)
+            || upstream.Members.Count == 0)
+        {
+            return (null, new GuildSyncResult.InvalidUpstreamData("The Tacticus API returned an incomplete guild response."));
+        }
+
+        if (upstream.Members.Select(member => member.UserId).Distinct().Count() != upstream.Members.Count)
+        {
+            return (null, new GuildSyncResult.InvalidUpstreamData("The Tacticus API returned duplicate guild members."));
+        }
+
+        return (upstream, null);
+    }
+
+    private static bool IsKeyReplacementRefused(
+        Guild guild, List<TacticusApi.Models.Guild.GuildMember> upstreamMembers, ProfileId callerProfileId)
+    {
+        var upstreamLeaders = upstreamMembers
+            .Where(member => member.Role is TacticusApi.Models.Guild.GuildRole.LEADER or TacticusApi.Models.Guild.GuildRole.CO_LEADER)
+            .Select(member => TacticusUserId.From(member.UserId.ToString()))
+            .ToHashSet();
+        var hasVerifiedLeader = guild.Members.Any(member => upstreamLeaders.Contains(member.TacticusUserId)
+            && GuildClaimEvaluator.StateOf(member) == GuildClaimState.Verified);
+        var callerVerified = guild.Members.Any(member => member.ProfileId == callerProfileId
+            && GuildClaimEvaluator.StateOf(member) == GuildClaimState.Verified);
+        return hasVerifiedLeader && !callerVerified;
+    }
+
+    /// <summary>Upserts the roster, re-evaluates claims, saves, and records the players it saw.</summary>
+    /// <returns>A conflict, or <see langword="null"/> once saved.</returns>
+    private async Task<GuildSyncResult?> SaveRosterAsync(
+        Guild guild, TacticusApi.Models.Guild.Guild upstream, CancellationToken ct)
+    {
+        guild.Tag = upstream.GuildTag;
+        guild.Name = upstream.Name;
+        guild.Level = upstream.Level;
+
         await LinkAndUpsertMembersAsync(guild, upstream.Members, ct);
+        await claimEvaluator.ApplyAsync(guild, ct);
 
         var now = timeProvider.GetUtcNow();
         guild.LastSyncAttemptedAt = now;
@@ -179,11 +263,25 @@ public sealed class GuildSyncService(
             );
         }
 
-        var callerId = TacticusUserId.From(callerTacticusGuid.ToString());
-        var callerMember = guild.Members.First(member => member.TacticusUserId == callerId);
+        // After the save, as a new guild must exist first. Idempotent, so a failure here only waits for the next save.
+        try
+        {
+            await playerRegistry.AddMembersAsync(guild, ct);
+        }
+        catch (DbException exception)
+        {
+            LogPlayersNotRecorded(logger, exception, guild.Id);
+        }
 
-        return new GuildSyncResult.Success(guild, callerMember, isNewGuild);
+        return null;
     }
+
+    [LoggerMessage(
+        EventId = 1,
+        Level = LogLevel.Warning,
+        Message = "The players of guild {GuildId}'s roster could not be recorded; the next roster save retries."
+    )]
+    private static partial void LogPlayersNotRecorded(ILogger logger, Exception exception, GuildId guildId);
 
     private async Task LinkAndUpsertMembersAsync(
         Guild guild,
@@ -258,6 +356,7 @@ public sealed class GuildSyncService(
                 staleLink.ProfileId = null;
                 staleLink.LinkedPlayerName = null;
                 staleLink.LastActiveInPlannerOn = null;
+                GuildClaimEvaluator.ClearVerification(staleLink);
             }
         }
 
@@ -348,4 +447,11 @@ public abstract record GuildSyncResult
 
     /// <summary>A database uniqueness/concurrency conflict — 409.</summary>
     public sealed record Conflict(string Message) : GuildSyncResult;
+
+    /// <summary>Only a verified Leader or Co-Leader may replace the key of a guild that has one — 403
+    /// <c>guildVerificationRequired</c>.</summary>
+    public sealed record VerificationRequired(string Message) : GuildSyncResult
+    {
+        public const string IssueCode = "guildVerificationRequired";
+    }
 }

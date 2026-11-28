@@ -17,6 +17,7 @@ internal static class GuildSyncResultMapper
             GuildSyncResult.UpstreamUnavailable => StatusCodes.Status503ServiceUnavailable,
             GuildSyncResult.CallerNotAuthorized => StatusCodes.Status403Forbidden,
             GuildSyncResult.Conflict => StatusCodes.Status409Conflict,
+            GuildSyncResult.VerificationRequired => StatusCodes.Status403Forbidden,
             GuildSyncResult.Success => StatusCodes.Status200OK,
             _ => StatusCodes.Status500InternalServerError,
         };
@@ -32,7 +33,12 @@ internal static class GuildSyncResultMapper
             GuildSyncResult.UpstreamUnavailable upstreamUnavailable => upstreamUnavailable.Message,
             GuildSyncResult.CallerNotAuthorized callerNotAuthorized => callerNotAuthorized.Message,
             GuildSyncResult.Conflict conflict => conflict.Message,
+            GuildSyncResult.VerificationRequired verificationRequired => verificationRequired.Message,
             _ => "The request failed.",
         };
     }
+
+    /// <summary>The issue code a failure carries, when it has one.</summary>
+    public static string? GetIssueCode(GuildSyncResult result) =>
+        result is GuildSyncResult.VerificationRequired ? GuildSyncResult.VerificationRequired.IssueCode : null;
 }

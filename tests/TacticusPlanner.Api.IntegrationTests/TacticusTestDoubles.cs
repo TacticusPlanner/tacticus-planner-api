@@ -32,6 +32,8 @@ internal sealed class FakeTacticusApi : ITacticusApi
     private readonly ConcurrentDictionary<string, bool> GuildRaidUnavailableTokens = new();
     private readonly ConcurrentDictionary<string, int> GuildRaidCallsByToken = new();
     private readonly ConcurrentDictionary<string, TaskCompletionSource> GuildRaidGatesByToken = new();
+    private readonly ConcurrentDictionary<(string Token, int Season), Func<Task<GuildRaidResponse>>> GuildRaidSeasonsByToken = new();
+    private readonly ConcurrentDictionary<string, ConcurrentQueue<int>> GuildRaidSeasonCallsByToken = new();
 
     /// <summary>Registers the <see cref="GuildResponse"/> <see cref="GetGuildAsync"/> returns for
     /// <paramref name="guildApiToken"/>. Build the response via <see cref="BuildGuildResponse"/>.</summary>
@@ -101,7 +103,7 @@ internal sealed class FakeTacticusApi : ITacticusApi
     public int GuildRaidCallCount(string guildApiToken) =>
         GuildRaidCallsByToken.GetValueOrDefault(guildApiToken);
 
-    private static async Task<ApiException> CreateGuildApiExceptionAsync(HttpStatusCode statusCode)
+    internal static async Task<ApiException> CreateGuildApiExceptionAsync(HttpStatusCode statusCode)
     {
         using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.tacticusgame.com/guild");
         using var response = new HttpResponseMessage(statusCode) { RequestMessage = request };
@@ -332,11 +334,32 @@ internal sealed class FakeTacticusApi : ITacticusApi
     /// <summary>Forgets calls made so far, so a test can count refreshes without the one registration makes.</summary>
     public void ResetGuildRaidCallCount(string guildApiToken) => GuildRaidCallsByToken.TryRemove(guildApiToken, out _);
 
+    /// <summary>What one past season answers; throw to simulate an upstream failure.</summary>
+    public void ConfigureGuildRaidSeason(string guildApiToken, int season, Func<Task<GuildRaidResponse>> answer) =>
+        GuildRaidSeasonsByToken[(guildApiToken, season)] = answer;
+
+    public void ConfigureGuildRaidSeason(string guildApiToken, GuildRaidResponse response) =>
+        ConfigureGuildRaidSeason(guildApiToken, response.Season, () => Task.FromResult(response));
+
+    public void ConfigureGuildRaidSeasonRejection(string guildApiToken, int season, HttpStatusCode statusCode) =>
+        ConfigureGuildRaidSeason(
+            guildApiToken, season, async () => throw await CreateGuildApiExceptionAsync(statusCode));
+
+    /// <summary>The past seasons requested for <paramref name="guildApiToken"/>, in order.</summary>
+    public IReadOnlyList<int> GuildRaidSeasonCalls(string guildApiToken) =>
+        GuildRaidSeasonCallsByToken.TryGetValue(guildApiToken, out var calls) ? [.. calls] : [];
+
     public Task<GuildRaidResponse> GetGuildRaidBySeasonAsync(
         string guildApiToken,
         int season,
         CancellationToken cancellationToken = default
-    ) => throw new NotSupportedException();
+    )
+    {
+        GuildRaidSeasonCallsByToken.GetOrAdd(guildApiToken, _ => new()).Enqueue(season);
+        return GuildRaidSeasonsByToken.TryGetValue((guildApiToken, season), out var answer)
+            ? answer().WaitAsync(cancellationToken)
+            : throw new InvalidOperationException($"No Guild Raid season {season} configured for '{guildApiToken}'.");
+    }
 }
 
 /// <summary>

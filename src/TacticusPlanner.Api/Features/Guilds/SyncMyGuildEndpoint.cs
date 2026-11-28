@@ -153,7 +153,7 @@ public sealed class SyncMyGuildEndpoint : EndpointWithoutRequest<RegisteredGuild
             return;
         }
 
-        AddError(GuildSyncResultMapper.GetMessage(result));
+        AddError(GuildSyncResultMapper.GetMessage(result), GuildSyncResultMapper.GetIssueCode(result));
         await Send.ErrorsAsync(GuildSyncResultMapper.GetStatusCode(result), ct);
     }
 }

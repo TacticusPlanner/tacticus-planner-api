@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Domain.GuildRaids;
@@ -57,6 +59,11 @@ public sealed class GuildRaidPersistencePostgresTests
             .AddScoped(_ => new PlannerDbContext(options, new PassthroughEncryption(), new NoProfile()))
             .AddScoped<GuildRaidStatusService>()
             .AddSingleton<GuildRaidRefreshCoordinator>()
+            .AddScoped<GuildRaidEndedSeasonService>()
+            .AddScoped<GuildPlayerRegistry>()
+            .AddScoped<GuildClaimEvaluator>()
+            .AddScoped<GuildSyncService>()
+            .AddScoped<GuildRosterRefreshService>()
             .BuildServiceProvider();
 
         var coordinator = services.GetRequiredService<GuildRaidRefreshCoordinator>();
@@ -133,6 +140,56 @@ public sealed class GuildRaidPersistencePostgresTests
         db.GuildRaidAttacks.Add(duplicate);
         await Assert.ThrowsAsync<DbUpdateException>(() =>
             db.SaveChangesAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    public async Task MigrationKeepsExistingAttacksAndGuildDeletionCascades()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        await using var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
+        await postgres.StartAsync(ct);
+        var options = new DbContextOptionsBuilder<PlannerDbContext>()
+            .UseNpgsql(postgres.GetConnectionString())
+            .UseSnakeCaseNamingConvention()
+            .Options;
+        await using var db = new PlannerDbContext(options, new PassthroughEncryption(), new NoProfile());
+        await db.GetService<IMigrator>().MigrateAsync("AddGuildWars", ct);
+
+        // Raw SQL: the model already has the columns this migration adds.
+        await db.Database.ExecuteSqlRawAsync(
+            """
+            INSERT INTO guilds (id, tacticus_guild_id, tag, name, level, revision, created_at, updated_at)
+            VALUES ('00000000-0000-0000-0000-000000000001', 'guild', 'TAG', 'Guild', 1, 0, now(), now());
+            INSERT INTO guild_raid_seasons (id, guild_id, season_number, season_config_id, observed_at, created_at, updated_at)
+            VALUES ('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000001', 77, 'config', now(), now(), now());
+            INSERT INTO guild_raid_attacks (id, guild_raid_season_id, content_hash, tacticus_user_id_hash, tier, set,
+                encounter_index, remaining_hp, maximum_hp, encounter_type, unit_set_id, progression_index, difficulty,
+                damage_dealt, damage_type, completed_at, units)
+            VALUES ('00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000002', 'old',
+                decode(repeat('02', 32), 'hex'), 0, 0, 0, 0, 0, 'Boss', 'boss', 4, 'Common', 1, 'Battle', now(), '[]');
+            """,
+            ct);
+        await db.Database.MigrateAsync(ct);
+
+        var existing = await db.GuildRaidAttacks.AsNoTracking().SingleAsync(ct);
+        Assert.Equal(4, existing.ProgressionIndex);
+        Assert.Null(existing.TacticusUserIdSuffix);
+
+        var guildId = GuildId.From(Guid.Parse("00000000-0000-0000-0000-000000000001"));
+        var captured = Attack(
+            GuildRaidSeasonId.From(Guid.Parse("00000000-0000-0000-0000-000000000002")),
+            TacticusUserIdHash.From(Enumerable.Repeat((byte)2, 32).ToArray()),
+            "captured",
+            DateTimeOffset.UtcNow);
+        captured.ProgressionIndex = null;
+        captured.TacticusUserIdSuffix = "3bc4";
+        db.GuildRaidAttacks.Add(captured);
+        await db.SaveChangesAsync(ct);
+        db.ChangeTracker.Clear();
+        Assert.Null((await db.GuildRaidAttacks.AsNoTracking().SingleAsync(attack => attack.Id == captured.Id, ct)).ProgressionIndex);
+
+        await db.Guilds.Where(guild => guild.Id == guildId).ExecuteDeleteAsync(ct);
+        Assert.Equal(0, await db.GuildRaidAttacks.CountAsync(ct) + await db.GuildRaidSeasons.CountAsync(ct));
     }
 
     private static GuildRaidAttack Attack(

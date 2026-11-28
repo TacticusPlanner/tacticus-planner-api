@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Guilds;
@@ -6,6 +7,7 @@ using TacticusPlanner.Api.Features.Teams;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Teams;
 using TacticusPlanner.GameCatalog;
+using TacticusPlanner.Persistence;
 using TacticusPlanner.TacticusApi.Models.Guild;
 using TacticusPlanner.TacticusApi.Models.GuildRaid;
 using TacticusPlanner.TacticusApi.Models.Shared;
@@ -31,6 +33,9 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     private const int RaidStatus = 7;
     // Plus the automatic roster snapshot check: its savepoint, the setting, the profile lock and one recency read.
     private const int PlayerSync = 10;
+    // The caller and guild checks, recording current members, players, last hits, assigned and synced names: the same
+    // however many members or former players there are.
+    private const int GuildPlayers = 10;
     // Teams: the caller lookup, then (writes) the profile lock, one count or set read, and one write or list read.
     private const int ListTeams = 2;
     private const int CreateTeam = 5;
@@ -234,6 +239,38 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
         var response = await client.PostGoalAsync(Rank);
         response.EnsureSuccessStatusCode();
         return (await response.ReadCreatedGoalAsync())!;
+    }
+
+    [Fact]
+    public async Task GuildPlayersStayWithinCeiling()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var (client, tacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var token = $"ceiling-token-{Guid.NewGuid()}";
+        var tag = $"P{Guid.NewGuid():N}"[..10];
+        factory.TacticusApi.ConfigureGuildResponse(
+            token,
+            FakeTacticusApi.BuildGuildResponse(
+                Guid.NewGuid(), tag, "Ceiling Players", 10,
+                [(tacticusUserId, GuildRole.LEADER, 50, null),
+                    .. Enumerable.Range(0, 29).Select(_ => (Guid.NewGuid(), GuildRole.MEMBER, 30, (long?)null))]));
+        (await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), ct)).EnsureSuccessStatusCode();
+
+        await using (var scope = factory.Services.CreateAsyncScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+            var guildId = await db.Guilds.Where(guild => guild.Tag == tag).Select(guild => guild.Id).SingleAsync(ct);
+            await scope.ServiceProvider.GetRequiredService<GuildPlayerRegistry>().AddAsync(
+                guildId,
+                Enumerable.Range(0, 50).Select(_ => (
+                    Domain.Profiles.TacticusUserIdHash.From(Guid.NewGuid().ToByteArray().Concat(Guid.NewGuid().ToByteArray()).ToArray()),
+                    (string?)"abcd")),
+                ct);
+        }
+
+        var response = await client.GetAsync("/api/v1/guild/players", ct);
+        Assert.Equal(80, (await response.Content.ReadFromJsonAsync<GuildPlayersResponse>(ct))!.Players.Count);
+        AssertWithin(GuildPlayers, response);
     }
 
     private void AssertWithin(int ceiling, HttpResponseMessage response)

@@ -193,7 +193,7 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("maximum_hp");
 
-                    b.Property<int>("ProgressionIndex")
+                    b.Property<int?>("ProgressionIndex")
                         .HasColumnType("integer")
                         .HasColumnName("progression_index");
 
@@ -214,6 +214,11 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("bytea")
                         .HasColumnName("tacticus_user_id_hash");
+
+                    b.Property<string>("TacticusUserIdSuffix")
+                        .HasMaxLength(4)
+                        .HasColumnType("character varying(4)")
+                        .HasColumnName("tacticus_user_id_suffix");
 
                     b.Property<int>("Tier")
                         .HasColumnType("integer")
@@ -247,6 +252,10 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset?>("FinalizedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("finalized_at");
 
                     b.Property<Guid>("GuildId")
                         .HasColumnType("uuid")
@@ -293,6 +302,18 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset?>("EndedSeasonAttemptedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ended_season_attempted_at");
+
+                    b.Property<int>("EndedSeasonNotFoundCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("ended_season_not_found_count");
+
+                    b.Property<int?>("EndedSeasonNumber")
+                        .HasColumnType("integer")
+                        .HasColumnName("ended_season_number");
 
                     b.Property<DateTimeOffset>("LastAttemptedAt")
                         .HasColumnType("timestamp with time zone")
@@ -565,6 +586,10 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("profile_id");
 
+                    b.Property<Guid?>("RejectedProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("rejected_profile_id");
+
                     b.Property<long>("Revision")
                         .IsConcurrencyToken()
                         .HasColumnType("bigint")
@@ -589,6 +614,19 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
+                    b.Property<string>("VerificationMethod")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("verification_method");
+
+                    b.Property<DateTimeOffset?>("VerifiedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("verified_at");
+
+                    b.Property<Guid?>("VerifiedProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("verified_profile_id");
+
                     b.HasKey("Id")
                         .HasName("pk_guild_members");
 
@@ -602,6 +640,55 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasDatabaseName("ix_guild_members_guild_id_tacticus_user_id_hash");
 
                     b.ToTable("guild_members", (string)null);
+                });
+
+            modelBuilder.Entity("TacticusPlanner.Domain.Guilds.GuildPlayer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AssignedName")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("assigned_name");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("GuildId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("guild_id");
+
+                    b.Property<long>("Revision")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("revision");
+
+                    b.Property<byte[]>("TacticusUserIdHash")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("bytea")
+                        .HasColumnName("tacticus_user_id_hash");
+
+                    b.Property<string>("TacticusUserIdSuffix")
+                        .HasMaxLength(4)
+                        .HasColumnType("character varying(4)")
+                        .HasColumnName("tacticus_user_id_suffix");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_guild_players");
+
+                    b.HasIndex("GuildId", "TacticusUserIdHash")
+                        .IsUnique()
+                        .HasDatabaseName("ix_guild_players_guild_id_tacticus_user_id_hash");
+
+                    b.ToTable("guild_players", (string)null);
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventPlan", b =>
@@ -1824,6 +1911,18 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Navigation("Guild");
 
                     b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("TacticusPlanner.Domain.Guilds.GuildPlayer", b =>
+                {
+                    b.HasOne("TacticusPlanner.Domain.Guilds.Guild", "Guild")
+                        .WithMany()
+                        .HasForeignKey("GuildId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_guild_players_guilds_guild_id");
+
+                    b.Navigation("Guild");
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventPlan", b =>

@@ -50,6 +50,18 @@ public class GuildMember : BaseEntity<GuildMemberId>, IRevisionedEntity
 
     public DateTimeOffset LastSyncedAt { get; set; }
 
+    /// <summary>The profile whose claim on this member is verified. The claim counts as verified only while it equals
+    /// <see cref="ProfileId"/>, so any path that changes or severs the link ends verification at once.</summary>
+    public ProfileId? VerifiedProfileId { get; set; }
+
+    public GuildClaimVerificationMethod? VerificationMethod { get; set; }
+
+    public DateTimeOffset? VerifiedAt { get; set; }
+
+    /// <summary>The profile whose claim on this member a leader rejected; rejected only while it equals
+    /// <see cref="ProfileId"/>.</summary>
+    public ProfileId? RejectedProfileId { get; set; }
+
     public virtual Guild? Guild { get; set; }
 
     public virtual Profile? Profile { get; set; }

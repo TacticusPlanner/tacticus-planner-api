@@ -1,19 +1,14 @@
-using System.Globalization;
-using System.Security.Cryptography;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Refit;
 using TacticusPlanner.Domain.GuildRaids;
 using TacticusPlanner.Domain.GuildRaids.Enums;
 using TacticusPlanner.Domain.Guilds;
-using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
 using TacticusPlanner.TacticusApi;
 using TacticusPlanner.TacticusApi.Models.GuildRaid;
-using TacticusPlanner.TacticusApi.Models.Shared;
 
 namespace TacticusPlanner.Api.Features.Guilds;
 
@@ -23,6 +18,9 @@ public sealed partial class GuildRaidStatusService(
     IColumnHashService hashService,
     IGameCatalogProvider catalogProvider,
     GuildRaidRefreshCoordinator coordinator,
+    GuildRaidEndedSeasonService endedSeasons,
+    GuildRosterRefreshService rosterRefresh,
+    GuildPlayerRegistry playerRegistry,
     TimeProvider timeProvider,
     ILogger<GuildRaidStatusService> logger)
 {
@@ -105,7 +103,9 @@ public sealed partial class GuildRaidStatusService(
         try
         {
             var persisted = await PersistAsync(guild.Id, response, attemptedAt, ct);
-            return Project(persisted, guild, GuildRaidFreshness.Fresh);
+            var result = Project(persisted, guild, GuildRaidFreshness.Fresh);
+            await RunFollowUpsAsync(guild, persisted.SyncState.ActiveSeasonId is not null, ct);
+            return result;
         }
         catch (DbUpdateException)
         {
@@ -120,6 +120,20 @@ public sealed partial class GuildRaidStatusService(
             LogObservationRejected(logger, exception, guild.Id);
             return new GuildRaidRefreshResult.Rejected(exception.Message);
         }
+    }
+
+    /// <summary>
+    /// Work due at most once per season or day, inside the shared operation so joined callers wait for it. Each step
+    /// contains its own failures: none may change or fail the refresh that already succeeded.
+    /// </summary>
+    private async Task RunFollowUpsAsync(Guild guild, bool seasonActive, CancellationToken ct)
+    {
+        if (seasonActive)
+        {
+            await endedSeasons.ReadIfDueAsync(guild.Id, guild.GuildApiToken!, ct);
+        }
+
+        await rosterRefresh.RunIfDueAsync(guild.Id, ct);
     }
 
     /// <summary>
@@ -307,6 +321,7 @@ public sealed partial class GuildRaidStatusService(
         if (db.Entry(season).State == EntityState.Detached)
         {
             db.GuildRaidSeasons.Add(season);
+            await MarkEndedSeasonAsync(state, guildId, response.Season, ct);
         }
         season.SeasonConfigId = response.SeasonConfigId;
         season.ObservedAt = observedAt;
@@ -314,67 +329,19 @@ public sealed partial class GuildRaidStatusService(
         var existingAttacks = season.Attacks.ToDictionary(attack => attack.ContentHash, StringComparer.Ordinal);
         foreach (var entry in response.Entries)
         {
-            Validate(entry);
-            var contentHash = BuildContentHash(entry);
-            var (unitSetId, explicitProgressionIndex) = ParseUnitId(entry.UnitId);
+            GuildRaidEntryNormalizer.Validate(entry);
+            var contentHash = GuildRaidEntryNormalizer.BuildContentHash(entry);
+            var (unitSetId, explicitProgressionIndex) = GuildRaidEntryNormalizer.ParseUnitId(entry.UnitId);
             var progressionIndex = ResolveProgressionIndex(config, entry, unitSetId, explicitProgressionIndex);
             if (existingAttacks.TryGetValue(contentHash, out var existingAttack))
             {
                 existingAttack.ProgressionIndex = progressionIndex;
+                existingAttack.TacticusUserIdSuffix ??= GuildRaidEntryNormalizer.UserIdSuffix(entry.UserId);
                 continue;
             }
 
-            var attack = new GuildRaidAttack
-            {
-                Id = GuildRaidAttackId.From(Guid.CreateVersion7()),
-                ContentHash = contentHash,
-                TacticusUserIdHash = TacticusUserIdHash.From(hashService.ComputeHash(entry.UserId.ToString())!),
-                Tier = entry.Tier,
-                Set = entry.Set,
-                EncounterIndex = entry.EncounterIndex,
-                RemainingHp = entry.RemainingHp,
-                MaximumHp = entry.MaxHp,
-                EncounterType = entry.EncounterType switch
-                {
-                    EncounterType.SideBoss => GuildRaidEncounterType.SideBoss,
-                    EncounterType.Boss => GuildRaidEncounterType.Boss,
-                    _ => throw new InvalidOperationException($"Unknown Guild Raid encounter type '{entry.EncounterType}'."),
-                },
-                UnitSetId = unitSetId,
-                ProgressionIndex = progressionIndex,
-                Difficulty = entry.Rarity switch
-                {
-                    Rarity.Common => GuildRaidDifficulty.Common,
-                    Rarity.Uncommon => GuildRaidDifficulty.Uncommon,
-                    Rarity.Rare => GuildRaidDifficulty.Rare,
-                    Rarity.Epic => GuildRaidDifficulty.Epic,
-                    Rarity.Legendary => GuildRaidDifficulty.Legendary,
-                    Rarity.Mythic => GuildRaidDifficulty.Mythic,
-                    _ => throw new InvalidOperationException($"Unknown Guild Raid rarity '{entry.Rarity}'."),
-                },
-                DamageDealt = entry.DamageDealt,
-                DamageType = entry.DamageType switch
-                {
-                    DamageType.Bomb => GuildRaidDamageType.Bomb,
-                    DamageType.Battle => GuildRaidDamageType.Battle,
-                    _ => throw new InvalidOperationException($"Unknown Guild Raid damage type '{entry.DamageType}'."),
-                },
-                StartedAt = entry.StartedOn is { } started
-                    ? DateTimeOffset.FromUnixTimeSeconds(started)
-                    : null,
-                CompletedAt = DateTimeOffset.FromUnixTimeSeconds(entry.CompletedOn!.Value),
-            };
-            for (var index = 0; index < entry.HeroDetails.Count; index++)
-            {
-                attack.Units.Add(BuildUnit(
-                    entry.HeroDetails[index],
-                    GuildRaidAttackUnitKind.Hero,
-                    index));
-            }
-            if (entry.MachineOfWarDetails is { } mow)
-            {
-                attack.Units.Add(BuildUnit(mow, GuildRaidAttackUnitKind.MachineOfWar, 0));
-            }
+            var attack = GuildRaidEntryNormalizer.BuildAttack(
+                entry, unitSetId, progressionIndex, contentHash, hashService);
             season.Attacks.Add(attack);
             existingAttacks.Add(contentHash, attack);
         }
@@ -382,48 +349,27 @@ public sealed partial class GuildRaidStatusService(
         state.State = GuildRaidObservationState.Active;
         state.ActiveSeasonId = season.Id;
         await db.SaveChangesAsync(ct);
+        await playerRegistry.AddAsync(
+            guildId,
+            season.Attacks.Select(attack => (attack.TacticusUserIdHash, attack.TacticusUserIdSuffix)),
+            ct);
         return new RetainedObservation(state, season);
     }
 
-    private static GuildRaidAttackUnit BuildUnit(
-        GuildRaidUnit unit,
-        GuildRaidAttackUnitKind kind,
-        int position) => new()
-        {
-            UnitId = unit.UnitId,
-            Kind = kind,
-            Position = position,
-            Power = unit.Power,
-        };
-
-    private static void Validate(GuildRaidEntry entry)
+    /// <summary>
+    /// On the first observation of a season, the latest earlier one the guild stored becomes its ended season, to be
+    /// read once more by <see cref="GuildRaidEndedSeasonService"/>. Seasons the guild never stored are not read.
+    /// </summary>
+    private async Task MarkEndedSeasonAsync(GuildRaidSyncState state, GuildId guildId, int season, CancellationToken ct)
     {
-        if (entry.UserId == Guid.Empty || entry.CompletedOn is null || string.IsNullOrWhiteSpace(entry.UnitId)
-            || entry.RemainingHp < 0 || entry.MaxHp < 0)
-        {
-            throw new InvalidOperationException("The Tacticus API returned an invalid Guild Raid entry.");
-        }
-    }
-
-    private static (string UnitSetId, int? ProgressionIndex) ParseUnitId(string value)
-    {
-        var separator = value.LastIndexOf(':');
-        if (separator < 0)
-        {
-            return (value, null);
-        }
-
-        if (!int.TryParse(
-                value[(separator + 1)..],
-                NumberStyles.None,
-                CultureInfo.InvariantCulture,
-                out var progressionIndex)
-            || progressionIndex <= 0)
-        {
-            throw new InvalidOperationException($"The Tacticus API returned invalid Guild Raid unit id '{value}'.");
-        }
-
-        return (value[..separator], progressionIndex);
+        var ended = await db.GuildRaidSeasons.AsNoTracking()
+            .Where(entity => entity.GuildId == guildId && entity.SeasonNumber < season)
+            .OrderByDescending(entity => entity.SeasonNumber)
+            .Select(entity => new { entity.SeasonNumber, entity.FinalizedAt })
+            .FirstOrDefaultAsync(ct);
+        state.EndedSeasonNumber = ended is { FinalizedAt: null } ? ended.SeasonNumber : null;
+        state.EndedSeasonAttemptedAt = null;
+        state.EndedSeasonNotFoundCount = 0;
     }
 
     private static int ResolveProgressionIndex(
@@ -452,25 +398,6 @@ public sealed partial class GuildRaidStatusService(
         }
 
         return encounter.ProgressionIndex;
-    }
-
-    private static string BuildContentHash(GuildRaidEntry entry)
-    {
-        var canonical = string.Join('|',
-            entry.UserId,
-            entry.Tier,
-            entry.Set,
-            entry.EncounterIndex,
-            entry.UnitId,
-            entry.EncounterType,
-            entry.RemainingHp,
-            entry.MaxHp,
-            entry.DamageDealt,
-            entry.DamageType,
-            entry.StartedOn,
-            entry.CompletedOn,
-            entry.GlobalConfigHash);
-        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(canonical)));
     }
 
     private sealed record RetainedObservation(GuildRaidSyncState SyncState, GuildRaidSeason? Season);

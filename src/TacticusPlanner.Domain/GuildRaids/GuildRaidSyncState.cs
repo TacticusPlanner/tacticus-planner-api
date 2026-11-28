@@ -36,6 +36,21 @@ public class GuildRaidSyncState : BaseEntity
     public GuildRaidSeasonId? ActiveSeasonId { get; set; }
 
     /// <summary>
+    /// The season this guild last observed as active before a higher one, still to be read once more so its last hits
+    /// are kept; <see langword="null"/> when none is due.
+    /// </summary>
+    public int? EndedSeasonNumber { get; set; }
+
+    /// <summary>
+    /// When the read of <see cref="EndedSeasonNumber"/> was last attempted. Written only by conditional updates, because
+    /// it is what keeps two instances from reading at once.
+    /// </summary>
+    public DateTimeOffset? EndedSeasonAttemptedAt { get; set; }
+
+    /// <summary>How often upstream answered 404 for <see cref="EndedSeasonNumber"/>.</summary>
+    public int EndedSeasonNotFoundCount { get; set; }
+
+    /// <summary>
     /// Registered guild navigation for <see cref="GuildId"/>.
     /// </summary>
     public virtual Guild? Guild { get; set; }
