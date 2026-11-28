@@ -103,10 +103,50 @@ public sealed class GuildWarDenormalizerTests
         Assert.Equal(10, season.MaxAttempts);
         Assert.Equal("guildWarSeasonB", season.NextSeasonId);
         Assert.Equal(15, season.Maps.Count);
-        Assert.Equal(new GameCatalogGuildWarMap("EC1_09", 2), season.Maps[0]);
+        Assert.Equal(("EC1_09", 2), (season.Maps[0].BoardId, season.Maps[0].SpawnPointsSet));
         Assert.Equal(200, season.Scoring.UnitKilled);
         Assert.Equal(new GameCatalogGuildWarLineupScore(1, 0, 600), season.Scoring.LineupEliminated[0]);
         Assert.Equal(["Common", "Uncommon", "Rare", "Epic", "Legendary"], season.PowerCaps.Select(cap => cap.Rarity));
+    }
+
+    [Fact]
+    public void MapsCarryTheirBoardGrid()
+    {
+        var map = Season("guildWarSeasonA").Maps.Single(map => map.BoardId == "PVP_desert_10");
+        var board = map.Board;
+
+        Assert.Equal(1, map.SpawnPointsSet);
+        Assert.Equal((7, 10), (board.Columns, board.Rows));
+        Assert.Equal((13, 15, 3, 2), (board.VisualColumns, board.VisualRows, board.VisualFirstColumn, board.VisualFirstRow));
+        Assert.Equal(70, board.Tiles.Count);
+        Assert.Equal(new GameCatalogGuildWarTile(0, 0, "Block", 2, true), board.Tiles[0]);
+        Assert.Equal(new GameCatalogGuildWarTile(0, 1, "Grass", 2, false), board.Tiles[7]); // row 0 first, then row 1
+        Assert.Equal(
+            [new(0, 2), new(1, 3), new(3, 1), new(5, 0), new(6, 0)],
+            board.AttackerSpawns.ToArray<GameCatalogGuildWarCell>());
+        Assert.Equal(20, board.DefenderSpawns.Count);
+    }
+
+    [Fact]
+    public void SpawnPointsSetIsZeroBased()
+    {
+        var board = Season("guildWarSeasonA").Maps.Single(map => map.BoardId == "LHE_Desert_06").Board;
+
+        Assert.Equal(5, board.AttackerSpawns.Count);
+        Assert.True(board.Tiles.Single(tile => (tile.Column, tile.Row) == (1, 0)).Blocked); // forced unplayable Grass
+    }
+
+    [Theory]
+    [InlineData("spawnPointsSet 3 is not one of its 1 spawn point sets", 3, "C1_01", 0)]
+    [InlineData("the file is board 'C1_02'", 0, "C1_02", 0)]
+    [InlineData("lacks attacker or defender spawns", 0, "C1_01", 1)]
+    public void ABoardThatDoesNotFitFailsTheLoad(string message, int spawnPointsSet, string fileId, int attackerTeam)
+    {
+        var season = Valid() with { MapPool = [new DatamineGuildWarMap("C1_01", spawnPointsSet)] };
+
+        var error = Assert.Throws<InvalidOperationException>(() => Read(season, Board(fileId, attackerTeam)));
+
+        Assert.Contains(message, error.Message);
     }
 
     [Fact]
@@ -149,7 +189,11 @@ public sealed class GuildWarDenormalizerTests
     }
 
     private static IReadOnlyList<GameCatalogGuildWarSeason> Read(
-        DatamineGuildWarSeason season, params (string Id, DatamineGuildWarSeason Season)[] extra)
+        DatamineGuildWarSeason season, params (string Id, DatamineGuildWarSeason Season)[] extra) =>
+        Read(season, Board("C1_01", 0), extra);
+
+    private static IReadOnlyList<GameCatalogGuildWarSeason> Read(
+        DatamineGuildWarSeason season, DatamineBoard board, params (string Id, DatamineGuildWarSeason Season)[] extra)
     {
         var configs = new Dictionary<string, DatamineGuildWarSeason> { ["guildWarSeasonA"] = season };
         foreach (var (id, other) in extra)
@@ -158,8 +202,25 @@ public sealed class GuildWarDenormalizerTests
         }
 
         return GameCatalogDenormalizer.ReadDatamineGuildWar(
-            new DatamineGuildWar(configs, new DatamineGuildWarConfig(new() { ["Common"] = 330 })));
+            new DatamineGuildWar(configs, new DatamineGuildWarConfig(new() { ["Common"] = 330 })),
+            _ => board);
     }
+
+    // A one-hex board whose single spawn point set puts team attackerTeam on (0, 0) and the other team on (0, 0) too.
+    private static DatamineBoard Board(string id, int attackerTeam) => new(
+        new DatamineBoardConfiguration(
+            id,
+            1,
+            1,
+            [new DatamineBoardColumn([new DatamineBoardTile("Grass", 2, 0)])],
+            [
+                new DatamineBoardSpawnPointSet(
+                [
+                    new DatamineBoardSpawnPointGroup(attackerTeam, [new DatamineBoardSpawnPoint(0, 0)]),
+                    new DatamineBoardSpawnPointGroup(1, [new DatamineBoardSpawnPoint(0, 0)]),
+                ]),
+            ]),
+        new DatamineBoardVisual(3, 3, 1, 1));
 
     private static DatamineGuildWarSeason Valid() => new(
         MaxAttempts: 10,
@@ -167,7 +228,7 @@ public sealed class GuildWarDenormalizerTests
         ScoreFromUnitKilled: 200,
         DefaultZoneTypeLayout: [["Zone1", "Zone2"]],
         ZoneTypeConfigs: new() { ["Zone1"] = new("z", true, "Buff_Global"), ["Zone2"] = new("z", true, null) },
-        MapPool: [new DatamineGuildWarMap("C1_01", 1)],
+        MapPool: [new DatamineGuildWarMap("C1_01", 0)],
         Abilities: new() { ["Buff"] = new(new() { ["hpPct"] = [10, 20] }) },
         Levels:
         [
