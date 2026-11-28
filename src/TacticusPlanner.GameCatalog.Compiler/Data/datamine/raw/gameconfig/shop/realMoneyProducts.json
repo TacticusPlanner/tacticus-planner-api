@@ -23997,7 +23997,7 @@
     "mercadoId": "offer_01999",
     "rewards": [
       "ShardsMoW:160",
-      "machinesOfWarTokens:100",
+      "draft_machinesOfWarTokens:100",
       "machinesOfWarAmmo:40"
     ]
   },
@@ -24009,7 +24009,7 @@
     "mercadoId": "offer_01499",
     "rewards": [
       "ShardsMoW:120",
-      "machinesOfWarTokens:75",
+      "draft_machinesOfWarTokens:75",
       "machinesOfWarAmmo:30"
     ]
   },
@@ -24021,7 +24021,7 @@
     "mercadoId": "offer_00999",
     "rewards": [
       "ShardsMoW:80",
-      "machinesOfWarTokens:50",
+      "draft_machinesOfWarTokens:50",
       "machinesOfWarAmmo:20"
     ]
   },
@@ -24033,7 +24033,7 @@
     "mercadoId": "offer_00499",
     "rewards": [
       "ShardsMoW:40",
-      "machinesOfWarTokens:25",
+      "draft_machinesOfWarTokens:25",
       "machinesOfWarAmmo:10"
     ]
   },

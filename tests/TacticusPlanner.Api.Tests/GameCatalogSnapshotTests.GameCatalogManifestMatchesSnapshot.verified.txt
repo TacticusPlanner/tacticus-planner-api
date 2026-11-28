@@ -1,7 +1,7 @@
 ﻿{
-  version: 1.44.88.3089+2e9830276c23,
+  version: 1.44.126.3127+9825249084c2,
   schemaHash: 643ada73c113ec297371a455b9f5689ae7bedd3eae668ae3b4cdbc00461afd61,
-  gameVersion: 1.44.88.3089,
+  gameVersion: 1.44.126.3127,
   sourceHash: {time-dependent},
   datasets: [
     {
@@ -71,7 +71,7 @@
     },
     {
       key: guild-war,
-      hash: 4db1bf46c21ab69730a6a6cceb28e76cf3ef4ef88274f7e701d75044197a5766,
+      hash: 2e5c3452025c6c65abdf31ff371150dd99a6ed6e191465ec2302d5788af9c0ae,
       url: /api/v1/game-catalog/guild-war/{envelopeHash}
     },
     {
